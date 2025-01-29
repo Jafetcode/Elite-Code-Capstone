@@ -14,7 +14,10 @@ function LoginScreen() {
         <Layout>
             <Text>Login</Text>
             <Button onPress={() => navigation.navigate('Home')}>
-          Go to Details
+          Go to Home
+            </Button>
+            <Button onPress={() => navigation.navigate('Settings')}>
+          Go to Settings
             </Button>
         </Layout>
     );

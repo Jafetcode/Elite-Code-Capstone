@@ -6,18 +6,14 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
+import SettingsScreen from './SettingsScreen';
 
-const MyTabs = createBottomTabNavigator({
-  screens:{
-    Home:HomeScreen,
-    Login: LoginScreen,
-  }
-})
 
 const RootStack = createNativeStackNavigator({
   screens: {
     Login: LoginScreen,
     Home: HomeScreen,
+    Settings: SettingsScreen
   },
 })
 
