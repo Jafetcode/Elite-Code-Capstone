@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
-
 import {default as theme} from './custom-theme.json'
 import { ApplicationProvider,Button,Layout } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';

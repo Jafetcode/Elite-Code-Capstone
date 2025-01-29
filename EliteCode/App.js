@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as eva from '@eva-design/eva';
-import {BottomNavigation, BottomNavigationTab, IconRegistry, Icon, IconElement} from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStaticNavigation } from '@react-navigation/native';
@@ -30,7 +29,6 @@ const Navigation = createStaticNavigation(RootStack)
 export default function App() {
   return(
     <>
-    <IconRegistry icons={EvaIconsPack} />
     <Navigation/>
     </>
   )
