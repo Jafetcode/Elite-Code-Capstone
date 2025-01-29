@@ -1,48 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider } from '@ui-kitten/components';
-// import { Button } from '@ui-kitten/components';
-import {Link} from 'expo-router'
+import {BottomNavigation, BottomNavigationTab, IconRegistry, Icon, IconElement} from '@ui-kitten/components'
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStaticNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './LoginScreen';
+import HomeScreen from './HomeScreen';
+
+const MyTabs = createBottomTabNavigator({
+  screens:{
+    Home:HomeScreen,
+    Login: LoginScreen,
+  }
+})
+
+const RootStack = createNativeStackNavigator({
+  screens: {
+    Login: LoginScreen,
+    Home: HomeScreen,
+  },
+})
+
+
+
+
+const Navigation = createStaticNavigation(RootStack)
 
 export default function App() {
-  const [counter, setCounter] = React.useState(0);
-  return (
-    <ApplicationProvider {...eva} theme={eva.light}>
-    <View style={styles.container}>
-      <Text>Open up App.js to start working start</Text>
-      <Link href ="/profile" style={{color: 'blue'}}>
-        Go To Profile 
-      </Link>
-      <StatusBar style="auto" />
-    </View>
-    </ApplicationProvider>
-  );
- 
+  return(
+    <>
+    <IconRegistry icons={EvaIconsPack} />
+    <Navigation/>
+    </>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-<ApplicationProvider></ApplicationProvider>
-// import React from 'react';
-// import * as eva from '@eva-design/eva';
-// import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
-
-// const HomeScreen = () => (
-//   <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-//     <Text category='h1'>HOME</Text>
-//   </Layout>
-// );
-
-// export default () => (
-//   <ApplicationProvider {...eva} theme={eva.light}>
-//     <HomeScreen />
-//   </ApplicationProvider>
-// );
