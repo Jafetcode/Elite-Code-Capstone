@@ -2,19 +2,26 @@ import * as React from 'react';
 import {Text } from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
 import {default as theme} from './custom-theme.json'
-import { ApplicationProvider, Button, Layout } from '@ui-kitten/components';
+import { ApplicationProvider, Button, Layout, Input} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
+import react from 'react';
 
 
 
 function LoginScreen() {
     const navigation = useNavigation();
-  
+    const [value, setValue] = react.useState('')
     return (
         <Layout>
-            <Text>Login</Text>
+            <Input label='Username'
+            placeHolder = 'Enter username'
+            value={value}
+            onChangeText={nextValue=> setValue(nextValue)}></Input>
             <Button onPress={() => navigation.navigate('Home')}>
-          Go to Details
+          Go to Home
+            </Button>
+            <Button onPress={() => navigation.navigate('Settings')}>
+          Go to Settings
             </Button>
         </Layout>
     );
