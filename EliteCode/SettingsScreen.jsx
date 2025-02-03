@@ -22,13 +22,10 @@ function SettingsScreen(){
       
       <ListItem title="Language" description="Change language" />
   
-      <ListItem title="Help" description="Get support" />
+      <ListItem title="FAQ" description="Frequently asked questions" />
    
       <ListItem title="About" description="App information" />
 
-                    <Button onPress={() => navigation.navigate('Home')}>
-                    Go to Home
-                    </Button>
                     </Layout>
         );
 }
