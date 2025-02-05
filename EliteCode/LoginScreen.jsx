@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {Text,  StyleSheet,View} from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
-import {default as theme} from './custom-theme.json'
 import { Button, Layout, Input, Divider,} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import react from 'react';
@@ -23,7 +22,7 @@ function LoginScreen() {
          <Text
         style={styles.text}
         category='H1'
-      >User Login</Text>
+      >Login</Text>
       <Divider/>
       <View style= {styles.InputContainer}>
             <Input style={styles.inputs}
@@ -56,13 +55,14 @@ function LoginScreen() {
       backgroundColor: 808080,
       width: 400,
       height: 200,
+      
     },
     text: {
       flexDirection: 'column',
       alignItems: 'center',
       margin: 2,
       fontSize: 20,
-      
+      color: 'white',
     },
     inputs: {
       width: 250,

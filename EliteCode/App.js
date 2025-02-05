@@ -13,6 +13,7 @@ import SignUp from './SignUp';
 import StudentRegister from './StudentRegister';
 import FirstScreen from './FirstScreen'
 import TeacherRegister from './TeacherRegister'
+import ProfileScreen from './ProfileScreen';
 // const Login = createBottomTabNavigator({
 //   screens: {
 //     Feed: FeedScreen,
@@ -29,7 +30,9 @@ const RegisterTabs = createNativeStackNavigator({
 const HomeTabs = createBottomTabNavigator({
   screens:{
     Home: HomeScreen,
+    Profile: ProfileScreen,
     Settings: SettingsScreen,
+    
   },
   screenOptions:{
     title: 'EliteCode'

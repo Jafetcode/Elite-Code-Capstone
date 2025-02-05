@@ -89,9 +89,8 @@ function ProfileScreen() {
 }
 
 export default () => (
-  <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+ 
     <Layout style={{ flex: 1 }}>
-      <ProfileScreen />
+      <ProfileScreen/>
     </Layout>
-  </ApplicationProvider>
 );
