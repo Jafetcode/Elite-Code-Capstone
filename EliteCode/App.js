@@ -51,7 +51,10 @@ const LoginTabs = createNativeStackNavigator({
 
 const RootStack = createNativeStackNavigator({
   screens: {
-    First:FirstScreen,
+    First:{
+      screen: FirstScreen,
+      options:{headerShown:false},
+    },
     LoginGroup: {
       screen: LoginTabs,
     },
@@ -62,6 +65,7 @@ const RootStack = createNativeStackNavigator({
       }
     },
   },
+  
 })
 
 

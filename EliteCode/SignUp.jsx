@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet,View } from 'react-native'
 import React from 'react'
 import {  Layout, Button,Text, Divider} from '@ui-kitten/components'
 import {useNavigation} from '@react-navigation/native';
@@ -7,11 +7,11 @@ const SignUp = () => {
   return (
     <Layout style={styles.containerMain}>
     <Text style={styles.outer}>Welcome</Text>
-
+    <View style={styles.containerInner}>
         <Text
         style={styles.text}
         >Register</Text>
-        <Layout style={styles.containerInner}>
+
         <Button style={styles.button} onPress={() => navigation.navigate('RegisterGroup',{screen:'Student'})}>
           Student
             </Button>
@@ -19,8 +19,7 @@ const SignUp = () => {
             <Button style={styles.button} onPress={() => navigation.navigate('RegisterGroup',{screen:'Teacher'})}>
           Teacher
         </Button>
-       </Layout>
-
+       </View>
     </Layout>
 
   )
@@ -42,11 +41,16 @@ const styles = StyleSheet.create({
     containerInner:{
         justifyContent: 'center',
         alignItems: 'center', 
+         backgroundColor: 80808,
+         width: 300,
+         height: 200,
+         paddingBottom:80,
+         paddingTop: 40,
     },
     text:{
         fontSize:30,
-        marginLeft: 100,
-        alignSelf: "flex-start",
+        marginLeft: 20,
+        alignSelf: 'flex-start',
     },
     button:{
         width:200,
