@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
-import {default as theme} from './custom-theme.json'
-import { ApplicationProvider,Button,Layout, ListItem } from '@ui-kitten/components';
+import {Button,Layout, ListItem } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 
   
-function SettingsScreen(){
+const SettingsScreen = () =>{
     const navigation = useNavigation();
     return (
         <Layout>
@@ -30,7 +29,7 @@ function SettingsScreen(){
         );
 }
 export default ()=> (
-    <ApplicationProvider {...eva} theme={{...eva.dark, ...theme}}>
+
         <Layout style={
             { flex: 1, 
                 // justifyContent: 'center', 
@@ -39,6 +38,5 @@ export default ()=> (
             }>
         <SettingsScreen/>
         </Layout>
-    </ApplicationProvider>
 
 );
