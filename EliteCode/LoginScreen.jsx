@@ -52,7 +52,7 @@ function LoginScreen() {
     row: {
       flexDirection: 'column',
       alignItems: 'center',
-      backgroundColor: 808080,
+      backgroundColor: '#526F8C',
       width: 400,
       height: 200,
       

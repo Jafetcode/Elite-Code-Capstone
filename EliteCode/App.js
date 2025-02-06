@@ -14,6 +14,7 @@ import StudentRegister from './StudentRegister';
 import FirstScreen from './FirstScreen'
 import TeacherRegister from './TeacherRegister'
 import ProfileScreen from './ProfileScreen';
+import NavigateScreen from './NavigateScreen';
 // const Login = createBottomTabNavigator({
 //   screens: {
 //     Feed: FeedScreen,
@@ -29,8 +30,21 @@ const RegisterTabs = createNativeStackNavigator({
 
 const HomeTabs = createBottomTabNavigator({
   screens:{
-    Home: HomeScreen,
-    Profile: ProfileScreen,
+    Navigate:{screen:NavigateScreen,
+      options: {
+        title: 'Navigate'
+      }
+    } ,
+    Home: {screen:HomeScreen,
+      options: {
+        title: 'Home'
+      }
+    } ,
+    Profile:{screen:ProfileScreen,
+      options: {
+        title: 'Profile'
+      }
+    } ,
     Settings: SettingsScreen,
     
   },
