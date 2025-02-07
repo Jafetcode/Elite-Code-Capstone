@@ -15,16 +15,32 @@ import FirstScreen from './FirstScreen'
 import TeacherRegister from './TeacherRegister'
 import ProfileScreen from './ProfileScreen';
 import NavigateScreen from './NavigateScreen';
-// const Login = createBottomTabNavigator({
-//   screens: {
-//     Feed: FeedScreen,
-//     Messages: MessagesScreen,
-//   },
-// });
+
 const RegisterTabs = createNativeStackNavigator({
   screens:{
-    Student: StudentRegister,
-    Teacher: TeacherRegister,
+    Student:{ 
+      screen: StudentRegister,
+      options: {
+        title: 'Student Register',
+        headerShown: false 
+      }
+    },
+    Teacher: { 
+      screen: TeacherRegister,
+      options: {
+        title: 'Teacher Register',
+        headerShown: false 
+      }
+    },
+  },
+  screenOptions: {
+    headerStyle: {
+      backgroundColor: '#526F8C',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
   }
 })
 
@@ -55,15 +71,27 @@ const HomeTabs = createBottomTabNavigator({
 
 const LoginTabs = createNativeStackNavigator({
   screens: {
-    Login: LoginScreen,
-    SignUp:SignUp,
+    Login: {
+      screen: LoginScreen,
+      options: {
+        headerShown: false
+      }
+    },
+    SignUp: {
+      screen: SignUp,
+      options: {
+        headerShown: false
+      }
+    },
     RegisterGroup:{
       screen: RegisterTabs,
-    }},
-  screenOptions:{
-    headerShown: false
-
+      options: {
+        title: 'Register',
+        headerShown: false
+      }
+    }
   },
+ 
 })
 
 const RootStack = createNativeStackNavigator({
@@ -74,6 +102,9 @@ const RootStack = createNativeStackNavigator({
     },
     LoginGroup: {
       screen: LoginTabs,
+      options:{
+        headerShown: false
+      }
     },
     HomeGroup: {
       screen: HomeTabs,

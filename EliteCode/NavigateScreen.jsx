@@ -3,6 +3,7 @@ import { Text, StyleSheet } from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
 import {Button,Layout } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
+import FirstScreen from './FirstScreen';
 
 function HomeScreen() {
   const navigation = useNavigation();
@@ -11,9 +12,9 @@ function HomeScreen() {
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Navigate</Text>
       <Button onPress={() => navigation.push('HomeGroup')}>
-        Go to Home
+        Go back to Navigate
       </Button>
-      <Button onPress={()=>navigation.popTo('LoginGroup')}>Go to Login</Button>
+      <Button onPress={() => navigation.popToTop('FirstScreen')}>Go to First Screen</Button>
       <Button onPress={() => navigation.goBack()}>Go back</Button>
     </Layout>
   );
