@@ -45,6 +45,7 @@ const RegisterTabs = createNativeStackNavigator({
 })
 
 const HomeTabs = createBottomTabNavigator({
+
   screens:{
     Navigate:{screen:NavigateScreen,
       options: {
@@ -61,8 +62,11 @@ const HomeTabs = createBottomTabNavigator({
         title: 'Profile'
       }
     } ,
-    Settings: SettingsScreen,
-    
+    Settings: {screen: SettingsScreen,
+        options: {
+            title: 'Settings'
+        }
+    }
   },
   screenOptions:{
     title: 'EliteCode'
