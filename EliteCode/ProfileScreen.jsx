@@ -1,9 +1,7 @@
 import * as React from "react";
-import { View, Image, ScrollView } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { default as theme } from "./custom-theme.json";
 import { ApplicationProvider, Button, Layout, Text, Card } from "@ui-kitten/components";
-import * as eva from "@eva-design/eva";
 
 function ProfileScreen() {
   const navigation = useNavigation();
@@ -19,44 +17,50 @@ function ProfileScreen() {
           Elite Code
         </Text>
       </View>
-
-      {/* Profile Section */}
-      <View style={{ alignItems: "center", marginBottom: 20 }}>
-        <Image
+      <ScrollView>
+        {/* Profile Section */}
+        <View style={{ alignItems: "center", marginBottom: 20 }}>
+          <Image
             source={require("./assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
-        />
-        <Text category="h6">Nickname</Text>
-        <Text appearance="hint">Username</Text>
-        <Button size="small" style={{ marginTop: 10 }}>Edit Profile</Button>
-      </View>
+          />
+          <Text category="h6">Nickname</Text>
+          <Text appearance="hint">Username</Text>
+          <Button size="small" style={{ marginTop: 10 }}>Edit Profile</Button>
+        </View>
 
-      <ScrollView>
+
         {/* My Courses Section */}
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">My Courses</Text>
             <Text appearance="hint">edit</Text>
           </View>
+
           <Card style={{ marginBottom: 10 }}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-              <View style={{ flex: 1 }}>
-                <Text>Course Name</Text>
-                <Text appearance="hint">Description</Text>
+            <TouchableOpacity onPress={() => console.log("Card Pressed")}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
+                <View style={{ flex: 1 }}>
+                  <Text>Course Name</Text>
+                  <Text appearance="hint">Description</Text>
+                </View>
+                <Text category="s2">Grade: A</Text>
               </View>
-              <Text category="s2">Grade: A</Text>
-            </View>
+            </TouchableOpacity>
           </Card>
+
           <Card>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-              <View style={{ flex: 1 }}>
-                <Text>Course Name</Text>
-                <Text appearance="hint">Description</Text>
+            <TouchableOpacity onPress={() => console.log("Card Pressed")}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
+                <View style={{ flex: 1 }}>
+                  <Text>Course Name</Text>
+                  <Text appearance="hint">Description</Text>
+                </View>
+                <Text category="s2">Grade: A</Text>
               </View>
-              <Text category="s2">Grade: A</Text>
-            </View>
+            </TouchableOpacity>
           </Card>
         </View>
 
@@ -89,8 +93,8 @@ function ProfileScreen() {
 }
 
 export default () => (
- 
-    <Layout style={{ flex: 1 }}>
-      <ProfileScreen/>
-    </Layout>
+
+  <Layout style={{ flex: 1 }}>
+    <ProfileScreen />
+  </Layout>
 );
