@@ -26,19 +26,20 @@ function ProfileScreen() {
           />
           <Text category="h6">Nickname</Text>
           <Text appearance="hint">Username</Text>
-          <Button size="small" style={{ marginTop: 10 }}>Edit Profile</Button>
+          <Button size="small" style={{ marginTop: 10 }} onPress={() => console.log("Edit profile button pressed")}>Edit Profile</Button>
         </View>
-
 
         {/* My Courses Section */}
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">My Courses</Text>
-            <Text appearance="hint">edit</Text>
+            <TouchableOpacity onPress={() => console.log("Edit courses button pressed")}>
+              <Text appearance="hint">edit</Text>
+            </TouchableOpacity>
           </View>
 
           <Card style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() => console.log("Card Pressed")}>
+            <TouchableOpacity onPress={() => console.log("Course card 1 pressed")}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
                 <View style={{ flex: 1 }}>
@@ -51,7 +52,7 @@ function ProfileScreen() {
           </Card>
 
           <Card>
-            <TouchableOpacity onPress={() => console.log("Card Pressed")}>
+            <TouchableOpacity onPress={() => console.log("Course Card 2 pressed")}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
                 <View style={{ flex: 1 }}>
@@ -68,7 +69,9 @@ function ProfileScreen() {
         <View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">Languages</Text>
-            <Text appearance="hint">edit</Text>
+            <TouchableOpacity onPress={() => console.log("Language edit button pressed")}>
+              <Text appearance="hint">edit</Text>
+            </TouchableOpacity>
           </View>
           <Layout
             style={{
