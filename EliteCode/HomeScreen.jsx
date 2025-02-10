@@ -17,8 +17,7 @@ function ProfileScreen() {
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">Course Library</Text>
-            <Text appearance="hint">add course </Text>
-            <Text appearance="hint">edit</Text>
+            <Text appearance="hint">Join Course</Text>
           </View>
           <Card style={{ marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -45,8 +44,6 @@ function ProfileScreen() {
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">Personal Library</Text>
-            <Text appearance="hint">add course </Text>
-            <Text appearance="hint">edit</Text>
           </View>
           <Card style={{ marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
