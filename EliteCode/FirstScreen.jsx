@@ -54,5 +54,6 @@ button:{
 outer:{
     fontSize: 40,
     marginBottom: 40,
+    color:'white'
 }
 })

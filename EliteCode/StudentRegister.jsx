@@ -14,7 +14,7 @@ function StudentRegister() {
         <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
                  {"<"}
                </Button>
-        <Text category="h5" style={styles.headerText}>
+        <Text category="h1" style={styles.headerText}>
           Elite Code
         </Text>
       </View>
