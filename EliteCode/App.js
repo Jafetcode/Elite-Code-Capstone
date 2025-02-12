@@ -15,6 +15,13 @@ import FirstScreen from './FirstScreen'
 import TeacherRegister from './TeacherRegister'
 import ProfileScreen from './ProfileScreen';
 import NavigateScreen from './NavigateScreen';
+import TeacherHome from './TeacherView/TeacherHome';
+import TeacherCourse from './TeacherView/TeacherCourse';
+import TeacherLesson from './TeacherView/TeacherLesson';
+import TeacherQuestion from './TeacherView/TeacherQuestion';
+import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
+import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
+import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 
 const RegisterTabs = createNativeStackNavigator({
   screens:{
@@ -66,6 +73,11 @@ const HomeTabs = createBottomTabNavigator({
         options: {
             title: 'Settings'
         }
+    },
+    TeacherHome: {screen: TeacherHome,
+      options: {
+          title: 'Teacher View Home'
+      }
     }
   },
   screenOptions:{
@@ -98,6 +110,57 @@ const LoginTabs = createNativeStackNavigator({
  
 })
 
+const TeacherTabs = createNativeStackNavigator({
+  screens: {
+    Home: {
+      screen: TeacherHome,
+      options:{
+        title: 'Teacher Home'
+      }
+    },
+    Course: {
+      screen: TeacherCourse,
+      options:{
+        title: 'Course Name'
+      }
+    },
+    Lesson: {
+      screen: TeacherLesson,
+      options: {
+        title: 'Lesson Name',
+        headerBackVisible: false
+      }
+    },
+    Question: {
+      screen: TeacherQuestion,
+      options: {
+        title: 'Question #',
+        headerBackVisible: false
+      }
+    },
+    CreateCourse: {
+      screen: TeacherCreateCourse,
+      options: {
+        title: 'Create Course'
+      }
+    },
+    CreateLesson: {
+      screen: TeacherCreateLesson,
+      options: {
+        title: 'Create Lesson'
+      }
+    },
+    CreateQuestion: {
+      screen: TeacherCreateQuestion,
+      options: {
+        title: 'Create Question',
+        headerBackVisible: false
+      }
+    }
+
+  },
+})
+
 const RootStack = createNativeStackNavigator({
   screens: {
     First:{
@@ -116,12 +179,14 @@ const RootStack = createNativeStackNavigator({
         headerShown: false
       }
     },
+    TeacherGroup: {
+      screen: TeacherTabs,
+      options: {
+        headerShown: false
+      }
+    }
   },
-  
 })
-
-
-
 
 const Navigation = createStaticNavigation(RootStack)
 

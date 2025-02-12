@@ -1,13 +1,14 @@
 import * as React from "react";
 import { View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ApplicationProvider, Button, Layout, Text, Card } from "@ui-kitten/components";
+import { Button, Layout, Text, Card } from "@ui-kitten/components";
 
 function ProfileScreen() {
   const navigation = useNavigation();
 
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+
       {/* Header */}
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
         <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
@@ -17,7 +18,9 @@ function ProfileScreen() {
           Elite Code
         </Text>
       </View>
+
       <ScrollView>
+
         {/* Profile Section */}
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Image
@@ -31,6 +34,7 @@ function ProfileScreen() {
 
         {/* My Courses Section */}
         <View style={{ marginBottom: 20 }}>
+
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">My Courses</Text>
             <TouchableOpacity onPress={() => console.log("Edit courses button pressed")}>
@@ -63,16 +67,19 @@ function ProfileScreen() {
               </View>
             </TouchableOpacity>
           </Card>
+
         </View>
 
         {/* Languages Section */}
         <View>
+
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">Languages</Text>
             <TouchableOpacity onPress={() => console.log("Language edit button pressed")}>
               <Text appearance="hint">edit</Text>
             </TouchableOpacity>
           </View>
+
           <Layout
             style={{
               flexDirection: "row",
@@ -89,14 +96,15 @@ function ProfileScreen() {
               </Button>
             ))}
           </Layout>
+
         </View>
+        
       </ScrollView>
     </Layout>
   );
 }
 
 export default () => (
-
   <Layout style={{ flex: 1 }}>
     <ProfileScreen />
   </Layout>
