@@ -1,7 +1,11 @@
 import * as React from "react";
 import { View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Button, Layout, Text, Card } from "@ui-kitten/components";
+import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
+import * as eva from "@eva-design/eva";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
+
+const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function ProfileScreen() {
   const navigation = useNavigation();
@@ -11,9 +15,12 @@ function ProfileScreen() {
 
       {/* Header */}
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-        <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-          {"<"}
-        </Button>
+        <Button
+          appearance="ghost"
+          status="basic"
+          accessoryLeft={BackIcon}
+          onPress={() => navigation.goBack()}
+        />
         <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
           Elite Code
         </Text>
@@ -98,14 +105,18 @@ function ProfileScreen() {
           </Layout>
 
         </View>
-        
+
       </ScrollView>
     </Layout>
   );
 }
 
 export default () => (
-  <Layout style={{ flex: 1 }}>
-    <ProfileScreen />
-  </Layout>
+  <>
+    <IconRegistry icons={EvaIconsPack} />
+    <ApplicationProvider {...eva} theme={eva.dark}>
+      <ProfileScreen />
+    </ApplicationProvider>
+  </>
 );
+
