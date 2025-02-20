@@ -66,7 +66,8 @@ const HomeTabs = createBottomTabNavigator({
     } ,
     Profile:{screen:ProfileScreen,
       options: {
-        title: 'Profile'
+        title: 'Profile',
+        headerShown: false
       }
     } ,
     Settings: {screen: SettingsScreen,

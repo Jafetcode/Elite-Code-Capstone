@@ -14,14 +14,14 @@ function ProfileScreen() {
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
 
       {/* Header */}
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10, marginTop: 40 }}>
         <Button
           appearance="ghost"
           status="basic"
           accessoryLeft={BackIcon}
           onPress={() => navigation.goBack()}
         />
-        <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
+        <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 62 }}>
           Elite Code
         </Text>
       </View>
