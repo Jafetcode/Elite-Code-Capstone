@@ -1,12 +1,44 @@
-import { StyleSheet, View } from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { useNavigation} from '@react-navigation/native';
 import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
+import { FIREBASE_AUTH } from './firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-function StudentRegister() {
+const StudentRegister = () => {
   const navigation = useNavigation()
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const auth = FIREBASE_AUTH;
+
+  const signUp = async () => {
+    setLoading(true);
+    try {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(response);
+      alert("Check your emails!")
+    } catch (error) {
+      console.log(error);
+      alert("Sign up failed: " + error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
+  
+  const signIn = async () => {
+    setLoading(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      alert("Sign in failed: " + error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
   
   return (
     <Layout style={styles.container}>
@@ -26,21 +58,32 @@ function StudentRegister() {
         >Register Student</Text>
         <Input
           style={styles.inputs}
-          label='Username'
-          placeholder='Enter username'
-          value={username}
-          onChangeText={nextUsername => setUsername(nextUsername)}
+          label='Email'
+          placeholder='Enter Email'
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          autoCapitalize='none'
         />
         <Input
           style={styles.inputs}
           label='Password'
           placeholder='Enter Password'
           value={password}
-          onChangeText={nextPassword => setPassword(nextPassword)}
+          onChangeText={(text) => setPassword(text)}
+          autoCapitalize='none'
+          secureTextEntry={true}
         />
-        <Button style={styles.submit} onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+
+        { loading? (
+          <ActivityIndicator size='small' />
+        ) : (
+          <>
+          <Button style={styles.submit} onPress={signUp}>
           Submit
         </Button>
+          </>
+        )
+        }
       </View>
       <View style={styles.tempButtons}>
         <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
@@ -108,8 +151,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => (
-  <Layout style={{ flex: 1 }}>
-    <StudentRegister />
-  </Layout>
-);
+export default StudentRegister;
