@@ -4,14 +4,26 @@ import {useNavigation,} from '@react-navigation/native';
 import { Button, Layout, Input, Divider,} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import react from 'react';
-
-
-
-
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { Alert } from 'react-native';
+import { useState } from 'react';
 function LoginScreen() {
     const navigation = useNavigation();
-    const [username, setUsername] = react.useState('');
+    const [email, setEmail] = react.useState('');
     const [password, setPassword] = react.useState('');
+    const [error, setError] = useState('');
+
+    const handleLogin = async () => {
+    const auth = getAuth(); 
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        Alert.alert('Login successful! Welcome, ', email);
+        navigation.navigate('HomeGroup', { screen: 'Home' }); 
+    } catch (error) {
+        
+        Alert.alert('Invalid Login');
+    }
+};
     return (
         <Layout style={styles.container}>
       <View style={styles.header}>
@@ -30,19 +42,19 @@ function LoginScreen() {
       >Login</Text>
           <Input 
             style={styles.inputs}
-            label='Username'
-            placeholder='Enter username'
-            value={username}
-            onChangeText={nextUsername => setUsername(nextUsername)} />
+            label='Email'
+            placeholder='Enter email'
+            value={email}
+            onChangeText={nextEmail => setEmail(nextEmail)} />
           <Input style={styles.inputs}
             label='Password'
             placeholder = 'Enter Password'
             value={password}
             onChangeText={nextPassword=> setPassword(nextPassword)}
           />
-      <Button style={styles.submit} onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-    Submit
-      </Button>
+      <Button style={styles.submit} onPress={handleLogin}>
+                    Submit
+                </Button>
       </View>
 <View style={styles.tempButtons}>
             <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
