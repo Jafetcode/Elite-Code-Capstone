@@ -21,7 +21,7 @@ const StudentRegister = () => {
       alert("Check your emails!")
     } catch (error) {
       console.log(error);
-      alert("Sign up failed: " + error.message)
+      alert("Invalid Email or Password. Must have valid Email & Password > 6 characters long.")
     } finally {
       setLoading(false);
     }
