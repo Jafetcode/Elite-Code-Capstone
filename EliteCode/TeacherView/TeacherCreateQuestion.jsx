@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup } from "@ui-kitten/components";
+import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup, Datepicker } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
@@ -11,7 +11,7 @@ function TeacherCreateQuestion() {
     const navigation = useNavigation();
     const [value, setValue] = React.useState('');
     const [selectedIndex, setSelectedIndex] = React.useState(0);
-
+    const [date, setDate] = React.useState(new Date());
     return (
 
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
@@ -56,6 +56,16 @@ function TeacherCreateQuestion() {
                             Short Answer
                         </Radio>
                     </RadioGroup>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                                            <Text category="h5">Due Date *</Text>
+                                        </View>
+                                        <View>
+                                        <Text category='h7'> {`Selected date: ${date.toLocaleDateString()}`} </Text>
+                                        <Datepicker
+                                            date={date}
+                                            onSelect={nextDate => setDate(nextDate)}
+                                        />
+                                        </View>
                 </View>
                 <Button> Submit Question</Button>
             </ScrollView>
