@@ -1,20 +1,52 @@
-import { StyleSheet, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
+import { FIREBASE_AUTH } from './firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 function TeacherRegister() {
   const navigation = useNavigation()
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const auth = FIREBASE_AUTH;
+
+  const signUp = async () => {
+    setLoading(true);
+    try {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(response);
+      alert("Check your emails!")
+    } catch (error) {
+      console.log(error);
+      alert("Invalid Email or Password. Must have valid Email & Password > 6 characters long.")
+    } finally {
+      setLoading(false);
+    }
+  }
+  
+  const signIn = async () => {
+    setLoading(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      alert("Sign in failed: " + error.message)
+    } finally {
+      setLoading(false);
+    }
+  }
   
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
-       <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-                {"<"}
-              </Button>
-        <Text category="H1" style={styles.headerText}>
+        <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
+          {"<"}
+        </Button>
+        <Text category="h1" style={styles.headerText}>
           Elite Code
         </Text>
       </View>
@@ -26,26 +58,36 @@ function TeacherRegister() {
         >Register Teacher</Text>
         <Input
           style={styles.inputs}
-          label='Username'
-          placeholder='Enter username'
-          value={username}
-          onChangeText={nextUsername => setUsername(nextUsername)}
+          label='Email'
+          placeholder='Enter Email'
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          autoCapitalize='none'
         />
         <Input
           style={styles.inputs}
           label='Password'
           placeholder='Enter Password'
           value={password}
-          onChangeText={nextPassword => setPassword(nextPassword)}
+          onChangeText={(text) => setPassword(text)}
+          autoCapitalize='none'
+          secureTextEntry={true}
         />
-         <Button style={styles.submit} onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-                  Submit
-                </Button>
+
+        {loading ? (
+          <ActivityIndicator size='small' />
+        ) : (
+          <>
+            <Button style={styles.submit} onPress={signUp}>
+              Submit
+            </Button>
+          </>
+        )}
       </View>
       <View style={styles.tempButtons}>
-          <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-                Skip to Home
-              </Button>
+        <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+          Skip to Home
+        </Button>
         <Button onPress={() => navigation.navigate('Login')}>
           Back to Login
         </Button>
@@ -108,8 +150,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default () => (
-  <Layout style={{ flex: 1 }}>
-    <TeacherRegister />
-  </Layout>
-);
+export default TeacherRegister;
