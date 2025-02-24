@@ -43,13 +43,16 @@ function LoginScreen() {
           <Input 
             style={styles.inputs}
             label='Email'
-            placeholder='Enter email'
+            placeholder='Enter Email'
             value={email}
+            autoCapitalize='none'
             onChangeText={nextEmail => setEmail(nextEmail)} />
+
           <Input style={styles.inputs}
             label='Password'
             placeholder = 'Enter Password'
             value={password}
+            secureTextEntry={true}
             onChangeText={nextPassword=> setPassword(nextPassword)}
           />
       <Button style={styles.submit} onPress={handleLogin}>
