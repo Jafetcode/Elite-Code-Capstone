@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as eva from '@eva-design/eva';
 
 import {default as theme} from './custom-theme.json'
-import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import { ApplicationProvider, ModalService} from '@ui-kitten/components';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -22,6 +22,9 @@ import TeacherQuestion from './TeacherView/TeacherQuestion';
 import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
+
+
+ModalService.setShouldUseTopInsets = true
 
 const RegisterTabs = createNativeStackNavigator({
   screens:{
