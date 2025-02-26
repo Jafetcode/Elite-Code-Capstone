@@ -19,6 +19,7 @@ const StudentRegister = () => {
       const response = await createUserWithEmailAndPassword(auth, email, password);
       console.log(response);
       alert("Check your emails!")
+      // navigation.navigate('LoginScreen')
     } catch (error) {
       console.log(error);
       alert("Invalid Email or Password. Must have valid Email & Password > 6 characters long.")
@@ -32,6 +33,7 @@ const StudentRegister = () => {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
+    
     } catch (error) {
       console.log(error);
       alert("Sign in failed: " + error.message)

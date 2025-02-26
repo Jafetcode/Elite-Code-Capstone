@@ -31,7 +31,7 @@ function ProfileScreen() {
         {/* Profile Section */}
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Image
-            source={require("./assets/images/profile-picture.png")}
+            source={require("../assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
           />
           <Text category="h6">Nickname</Text>

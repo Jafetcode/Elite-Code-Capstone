@@ -20,7 +20,6 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-
 initializeConnection()
     .then((connection) => {
         const port = process.env.PORT || 3000;
