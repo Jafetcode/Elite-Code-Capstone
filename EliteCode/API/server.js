@@ -26,6 +26,10 @@ const db = mysql.createConnection({
   database: DB_NAME
 });
 
+
+app.get('/api/welcome', (req, res)=> {
+  res.status(200).send({message: "Welcome to elitecode API"});
+})
 // get user role 
 app.get('/userRole', (req, res) => {
   const { email } = req.query;
