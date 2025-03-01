@@ -8,6 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "start-backend": "cd EliteCode/API && node server.js",
     "pm2-start": "pm2 start 'npx expo start' --name 'Elitecode'"
   },
   "dependencies": {
