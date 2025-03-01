@@ -8,12 +8,12 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "start-backend": "cd EliteCode/API && node server.js",
-    "pm2-start": "pm2 start 'npx expo start' --name 'Elitecode'"
+    "start-backend": "cd EliteCode/API && node server.js"
   },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
-    "@react-navigation/drawer": "^7.1.1",
+    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/native-stack": "^7.2.0",
     "@ui-kitten/components": "^5.3.1",
     "@ui-kitten/eva-icons": "^5.3.1",
     "bcrypt": "^5.1.1",

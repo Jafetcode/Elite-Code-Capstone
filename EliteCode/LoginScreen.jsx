@@ -4,13 +4,23 @@ import {useNavigation,} from '@react-navigation/native';
 import {default as theme} from './custom-theme.json'
 import { ApplicationProvider, Button, Layout, Input} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
-import react from 'react';
+import {react, useEffect, useState} from 'react';
 
 
 
 function LoginScreen() {
     const navigation = useNavigation();
-    const [value, setValue] = react.useState('')
+    const [value, setValue] = useState('');
+    useEffect(() => {
+      fetch('https://elitecodecapstone24.onrender.com/user')
+        .then(response => response.json()) 
+        .then(data => {
+          console.log(data); 
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }, []);
     return (
         <Layout>
             <Input label='Username'
