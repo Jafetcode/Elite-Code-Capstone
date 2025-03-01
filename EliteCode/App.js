@@ -8,6 +8,7 @@ import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import SettingsScreen from './SettingsScreen';
 
+
 require('./server');
 
 const RootStack = createNativeStackNavigator({

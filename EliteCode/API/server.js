@@ -1,16 +1,24 @@
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const port = 3006;
+const port = 3306;
 const app = express();
+require('dotenv').config();
+
 app.use(cors());
 app.use(express.json());
 
+const DB_HOST = process.env.DB_HOST;
+const DB_NAME = process.env.DB_NAME;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+
 const db = mysql.createConnection({
-  host: 'elitecode1.cl424e684zjo.us-east-2.rds.amazonaws.com',
-  user: 'admin',
-  password: 'jeea34Redpanda',
-  database: 'elitecode'
+  host: DB_HOST,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME
 });
 
 // get user role 
