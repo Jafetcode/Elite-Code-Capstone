@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as eva from '@eva-design/eva';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
-// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import {default as theme} from './custom-theme.json'
-import { ApplicationProvider, ModalService} from '@ui-kitten/components';
+import { default as theme } from './custom-theme.json'
+import { ApplicationProvider, ModalService } from '@ui-kitten/components';
 import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import SettingsScreen from './SettingsScreen';
@@ -29,19 +28,19 @@ import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 ModalService.setShouldUseTopInsets = true
 
 const RegisterTabs = createNativeStackNavigator({
-  screens:{
-    Student:{ 
+  screens: {
+    Student: {
       screen: StudentRegister,
       options: {
         title: 'Student Register',
-        headerShown: false 
+        headerShown: false
       }
     },
-    Teacher: { 
+    Teacher: {
       screen: TeacherRegister,
       options: {
         title: 'Teacher Register',
-        headerShown: false 
+        headerShown: false
       }
     },
   },
@@ -58,42 +57,47 @@ const RegisterTabs = createNativeStackNavigator({
 
 const HomeTabs = createBottomTabNavigator({
 
-  screens:{
-    Navigate:{screen:NavigateScreen,
+  screens: {
+    Navigate: {
+      screen: NavigateScreen,
       options: {
         title: 'Navigate'
       }
-    } ,
-    Home: {screen:HomeScreen,
+    },
+    Home: {
+      screen: HomeScreen,
       options: {
         title: 'Home'
       }
-    } ,
-    Profile:{screen:ProfileScreen,
+    },
+    Profile: {
+      screen: ProfileScreen,
       options: {
         title: 'Profile',
         headerShown: false
       }
-    } ,
-    Settings: {screen: SettingsScreen,
-        options: {
-            title: 'Settings'
-        }
     },
-    TeacherHome: {screen: TeacherHome,
+    Settings: {
+      screen: SettingsScreen,
       options: {
-          title: 'Teacher View Home'
+        title: 'Settings'
+      }
+    },
+    TeacherHome: {
+      screen: TeacherHome,
+      options: {
+        title: 'Teacher View Home'
       }
     }
   },
-  screenOptions:{
+  screenOptions: {
     title: 'EliteCode'
   }
 })
 
 const LoginTabs = createNativeStackNavigator({
   screens: {
-    Login: {
+    LoginScreen: {
       screen: LoginScreen,
       options: {
         headerShown: false
@@ -105,7 +109,7 @@ const LoginTabs = createNativeStackNavigator({
         headerShown: false
       }
     },
-    RegisterGroup:{
+    RegisterGroup: {
       screen: RegisterTabs,
       options: {
         title: 'Register',
@@ -113,20 +117,20 @@ const LoginTabs = createNativeStackNavigator({
       }
     }
   },
- 
+
 })
 
 const TeacherTabs = createNativeStackNavigator({
   screens: {
     Home: {
       screen: TeacherHome,
-      options:{
+      options: {
         title: 'Teacher Home'
       }
     },
     Course: {
       screen: TeacherCourse,
-      options:{
+      options: {
         title: 'Course Name'
       }
     },
@@ -169,19 +173,19 @@ const TeacherTabs = createNativeStackNavigator({
 
 const RootStack = createNativeStackNavigator({
   screens: {
-    First:{
+    First: {
       screen: FirstScreen,
-      options:{headerShown:false},
+      options: { headerShown: false },
     },
     LoginGroup: {
       screen: LoginTabs,
-      options:{
+      options: {
         headerShown: false
       }
     },
     HomeGroup: {
       screen: HomeTabs,
-      options:{
+      options: {
         headerShown: false
       }
     },
@@ -198,11 +202,11 @@ const Navigation = createStaticNavigation(RootStack)
 
 export default function App() {
 
-  return(
+  return (
     <>
-    <ApplicationProvider {...eva} theme={eva.dark}>
-    <Navigation/>
-  </ApplicationProvider>
+      <ApplicationProvider {...eva} theme={eva.dark}>
+        <Navigation />
+      </ApplicationProvider>
     </>
   )
 }
