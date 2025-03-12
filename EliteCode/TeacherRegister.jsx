@@ -54,7 +54,7 @@ function TeacherRegister() {
       <View style={styles.inputContainer}>
         <Text
           style={styles.innerText}
-          category='H1'
+          category='h1'
         >Register Teacher</Text>
         <Input
           style={styles.inputs}

@@ -31,10 +31,12 @@ const StudentRegister = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, fname, lname, role })
       });
-      // Log raw response before parsing
-      const textResponse = await response.text();
-      console.log("Raw API Response:", textResponse);
-      const data = await response.json();
+       // Log raw response before parsing
+       const textResponse = await response.text();
+       console.log("Raw API Response:", textResponse);
+
+       // Parse JSON only if response is valid
+       const data = JSON.parse(textResponse);
       if (!response.ok) {
         throw new Error(data.error || "Failed to create user in MySQL.");
       }
