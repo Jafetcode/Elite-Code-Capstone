@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Image, ScrollView, StyleSheet } from "react-native";
+import { View, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
   ApplicationProvider,
@@ -36,6 +36,7 @@ function ProfileScreen() {
               backdropStyle={styles.backdrop}
               onBackdropPress={() => setVisible(false)}
             >
+
               <Card disabled={true}>
                 <Text  style={{marginBottom: 20}}>Enter a class code</Text>
                 <Input 
@@ -46,8 +47,11 @@ function ProfileScreen() {
             onChangeText={nextClassCode => setClassCode(nextClassCode)} />
                 <Button onPress={() => setVisible(false)}>Join</Button>
               </Card>
+
             </Modal>
           </View>
+
+          <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
           <Card style={{ marginBottom: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
@@ -65,6 +69,8 @@ function ProfileScreen() {
               <Text category="s2">Grade: A</Text>
             </View>
           </Card>
+          </TouchableOpacity>
+
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
@@ -82,6 +88,7 @@ function ProfileScreen() {
               <Text category="s2">Grade: A</Text>
             </View>
           </Card>
+
         </View>
 
         <View style={{ marginBottom: 20 }}>
@@ -111,6 +118,7 @@ function ProfileScreen() {
               <Text category="s2">Lessons: 11/24</Text>
             </View>
           </Card>
+
           <Card>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
@@ -128,6 +136,7 @@ function ProfileScreen() {
               <Text category="s2">Lessons: 6/18</Text>
             </View>
           </Card>
+
         </View>
       </ScrollView>
     </Layout>

@@ -23,7 +23,7 @@ import TeacherQuestion from './TeacherView/TeacherQuestion';
 import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
-
+import StudentCourse from './StudentCourse';
 
 ModalService.setShouldUseTopInsets = true
 
@@ -88,7 +88,8 @@ const HomeTabs = createBottomTabNavigator({
       options: {
         title: 'Teacher View Home'
       }
-    }
+    },
+    
   },
   screenOptions: {
     title: 'EliteCode'
@@ -171,6 +172,37 @@ const TeacherTabs = createNativeStackNavigator({
   },
 })
 
+const StudentTabs = createNativeStackNavigator({
+  screens: {
+    // Home: {
+    //   screen: StudentHome,
+    //   options: {
+    //     title: 'Student Home'
+    //   }
+    // },
+    Course: {
+      screen: StudentCourse,
+      options: {
+        title: 'Course Name'
+      }
+    },
+    // Lesson: {
+    //   screen: StudentLesson,
+    //   options: {
+    //     title: 'Lesson Name',
+    //     headerBackVisible: false
+    //   }
+    // },
+    // Question: {
+    //   screen: StudentQuestion,
+    //   options: {
+    //     title: 'Question #',
+    //     headerBackVisible: false
+    //   }
+    // },
+
+  },
+})
 const RootStack = createNativeStackNavigator({
   screens: {
     First: {
@@ -193,6 +225,12 @@ const RootStack = createNativeStackNavigator({
       screen: TeacherTabs,
       options: {
         headerShown: false
+      }
+    },
+    StudentGroup: {
+      screen: StudentTabs,
+      options: {
+          headerShown: false
       }
     }
   },
