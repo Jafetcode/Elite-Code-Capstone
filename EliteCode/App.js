@@ -23,7 +23,7 @@ import TeacherQuestion from './TeacherView/TeacherQuestion';
 import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
-
+import { AuthProvider } from './AuthContext';
 
 ModalService.setShouldUseTopInsets = true
 
@@ -201,11 +201,12 @@ const RootStack = createNativeStackNavigator({
 const Navigation = createStaticNavigation(RootStack)
 
 export default function App() {
-
   return (
     <>
       <ApplicationProvider {...eva} theme={eva.dark}>
-        <Navigation />
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
       </ApplicationProvider>
     </>
   )

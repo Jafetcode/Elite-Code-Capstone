@@ -71,7 +71,7 @@ app.get('/user', (req, res) => {
     });
 });
 
-app.post('/users', (req, res) => {
+app.post('/newUser', (req, res) => {
   const { email, fname, lname, role } = req.body;
   if (!email || !fname || !lname || !role) {
     return res.status(400).json({ error: 'Missing required fields' });
