@@ -24,6 +24,8 @@ import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 import StudentCourse from './StudentCourse';
+import StudentLesson from './StudentLesson';
+
 
 ModalService.setShouldUseTopInsets = true
 
@@ -184,6 +186,12 @@ const StudentTabs = createNativeStackNavigator({
         title: 'Student Course'
       }
     },
+    Lesson: {
+      screen: StudentLesson,
+      options: {
+        title: 'Student Lesson'
+      }
+    }
   }
 })
 

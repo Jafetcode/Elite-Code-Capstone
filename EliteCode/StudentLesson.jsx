@@ -7,7 +7,7 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
-function StudentCourse() {
+function StudentLesson() {
     const navigation = useNavigation();
 
     return (
@@ -27,31 +27,44 @@ function StudentCourse() {
 
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
+
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="s1">Lessons</Text>
-                            <Text appearance="hint">Grade: 95%</Text>
+                        <Text category="s1">Questions</Text>
+                            <Text appearance="hint">Lesson Grade: 92%</Text>
                     </View>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('StudentGroup', { screen: 'Lesson' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('StudentGroup', { screen: 'Question' })}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
-                                    <Text>Lesson Name</Text>
+                                    <Text>Question 1</Text>
                                     <Text appearance="hint">Description</Text>
                                 </View>
-                                <Text category="s2">Progress: 4/4</Text>
+                                <Text category="s2">Type: MC</Text>
                             </View>
                         </TouchableOpacity>
                     </Card>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('StudentGroup', { screen: 'Lesson' })}>
+                         <TouchableOpacity onPress={() => navigation.navigate('StudentGroup', { screen: 'Question' })}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
-                                    <Text>Lesson Name</Text>
+                                    <Text>Question 2</Text>
                                     <Text appearance="hint">Description</Text>
                                 </View>
-                                <Text category="s2">Progress: 2/2</Text>
+                                <Text category="s2">Type: SA</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </Card>
+
+                    <Card style={{ marginBottom: 10 }}>
+                         <TouchableOpacity onPress={() => navigation.navigate('StudentGroup', { screen: 'Question' })}>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flex: 1 }}>
+                                    <Text>Question 3</Text>
+                                    <Text appearance="hint">Description</Text>
+                                </View>
+                                <Text category="s2">Type: SA</Text>
                             </View>
                         </TouchableOpacity>
                     </Card>
@@ -66,7 +79,7 @@ export default () => (
     <>
         <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={eva.dark}>
-            <StudentCourse />
+            <StudentLesson />
         </ApplicationProvider>
     </>
 );
