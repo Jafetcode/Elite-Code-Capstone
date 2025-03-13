@@ -56,7 +56,6 @@ const RegisterTabs = createNativeStackNavigator({
 })
 
 const HomeTabs = createBottomTabNavigator({
-
   screens: {
     Navigate: {
       screen: NavigateScreen,
@@ -118,7 +117,6 @@ const LoginTabs = createNativeStackNavigator({
       }
     }
   },
-
 })
 
 const TeacherTabs = createNativeStackNavigator({
@@ -174,35 +172,21 @@ const TeacherTabs = createNativeStackNavigator({
 
 const StudentTabs = createNativeStackNavigator({
   screens: {
-    // Home: {
-    //   screen: StudentHome,
-    //   options: {
-    //     title: 'Student Home'
-    //   }
-    // },
+    Home: {
+      screen: HomeScreen,
+      options: {
+        title: 'Student Home'
+      }
+    },
     Course: {
       screen: StudentCourse,
       options: {
-        title: 'Course Name'
+        title: 'Student Course'
       }
     },
-    // Lesson: {
-    //   screen: StudentLesson,
-    //   options: {
-    //     title: 'Lesson Name',
-    //     headerBackVisible: false
-    //   }
-    // },
-    // Question: {
-    //   screen: StudentQuestion,
-    //   options: {
-    //     title: 'Question #',
-    //     headerBackVisible: false
-    //   }
-    // },
-
-  },
+  }
 })
+
 const RootStack = createNativeStackNavigator({
   screens: {
     First: {
@@ -233,7 +217,7 @@ const RootStack = createNativeStackNavigator({
           headerShown: false
       }
     }
-  },
+  }
 })
 
 const Navigation = createStaticNavigation(RootStack)
