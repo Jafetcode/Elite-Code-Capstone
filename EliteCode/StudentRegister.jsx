@@ -40,7 +40,11 @@ const StudentRegister = () => {
       if (!response.ok) {
         throw new Error(data.error || "Failed to create user in MySQL.");
       }
-      alert("Check your email for verification before logging in!");
+      alert("Account created!");
+      setTimeout(() => {
+        navigation.navigate('Login');  // Redirect to login screen
+      }, 2000);
+      
     } catch (error) {
       console.error("Sign-up error:", error);
       alert(error.message || "Invalid Email or Password. Must have a valid Email & Password > 6 characters long.");
@@ -121,7 +125,7 @@ const StudentRegister = () => {
         <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
         </Button>
-        <Button onPress={() => navigation.navigate('Login')}>
+        <Button onPress={() => navigation.navigate('LoginScreen')}>
           Back to Login
         </Button>
       </View>
