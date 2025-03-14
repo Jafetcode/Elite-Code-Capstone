@@ -7,24 +7,25 @@ import { react, useEffect, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Alert } from 'react-native';
 import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
+import {useAuth} from './AuthContext';
 
 
 
 function LoginScreen() {
   const navigation = useNavigation();
-  const [value, setValue] = useState('');
+  const {login} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
   const handleLogin = async () => {
-    const auth = getAuth();
+    // const auth = getAuth();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await login(email, password);
+      // await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login successful! Welcome, ', email);
       navigation.navigate('HomeGroup', { screen: 'Home' });
-
     } catch (error) {
-
       Alert.alert('Invalid Login');
     }
   }

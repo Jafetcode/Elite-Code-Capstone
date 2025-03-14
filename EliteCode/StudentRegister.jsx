@@ -1,69 +1,107 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
-import { useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
 import { FIREBASE_AUTH } from './firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+// import auth from '@react-native-firebase/auth';
+import { Picker } from '@react-native-picker/picker';
+
 
 const StudentRegister = () => {
   const navigation = useNavigation()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('student');
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
   const signUp = async () => {
     setLoading(true);
     try {
-      const response = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(response);
-      alert("Check your emails!")
+      // Step 1: Register in Firebase
+      const userCredential = createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const response = await fetch('https://elitecodecapstone24.onrender.com/newUser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, fname, lname, role })
+      });
+       // Log raw response before parsing
+       const textResponse = await response.text();
+       console.log("Raw API Response:", textResponse);
+
+       // Parse JSON only if response is valid
+       const data = JSON.parse(textResponse);
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create user in MySQL.");
+      }
+      alert("Account created!");
+      setTimeout(() => {
+        navigation.navigate('Login');  // Redirect to login screen
+      }, 2000);
+      
     } catch (error) {
-      console.log(error);
-      alert("Invalid Email or Password. Must have valid Email & Password > 6 characters long.")
+      console.error("Sign-up error:", error);
+      alert(error.message || "Invalid Email or Password. Must have a valid Email & Password > 6 characters long.");
     } finally {
       setLoading(false);
     }
   }
-  
-  const signIn = async () => {
-    setLoading(true);
-    try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      alert("Sign in failed: " + error.message)
-    } finally {
-      setLoading(false);
-    }
-  }
-  
+
+  // const signIn = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await signInWithEmailAndPassword(auth, email, password);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //     alert("Sign in failed: " + error.message)
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
         <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-                 {"<"}
-               </Button>
+          {"<"}
+        </Button>
         <Text category="h1" style={styles.headerText}>
           Elite Code
         </Text>
       </View>
-   
       <View style={styles.inputContainer}>
-        <Text
-          style={styles.innerText}
-          category='H1'
-        >Register Student</Text>
+        <Text style={styles.innerText} category='h1'> Register </Text>
+        <Picker selectedValue={role} onValueChange={setRole}>
+          <Picker.Item label="Student" value="student" />
+          <Picker.Item label="Teacher" value="teacher" />
+        </Picker>
         <Input
           style={styles.inputs}
-          label='Email'
-          placeholder='Enter Email'
-          value={email}
+          label='FirstName'
+          placeholder='First Name'
+          value={fname}
+          onChangeText={(text) => setFname(text)}
+          autoCapitalize='none' />
+        <Input
+          style={styles.inputs}
+          label='LastName'
+          placeholder='Last Name'
+          value={lname}
+          onChangeText={(text) => setLname(text)}
+          autoCapitalize='none' />
+
+        <Input style={styles.inputs} label='Email'
+          placeholder='Enter Email' value={email}
           onChangeText={(text) => setEmail(text)}
-          autoCapitalize='none'
-        />
+          autoCapitalize='none' />
+
         <Input
           style={styles.inputs}
           label='Password'
@@ -71,16 +109,14 @@ const StudentRegister = () => {
           value={password}
           onChangeText={(text) => setPassword(text)}
           autoCapitalize='none'
-          secureTextEntry={true}
-        />
-
-        { loading? (
+          secureTextEntry={true} />
+        {loading ? (
           <ActivityIndicator size='small' />
         ) : (
           <>
-          <Button style={styles.submit} onPress={signUp}>
-          Submit
-        </Button>
+            <Button style={styles.submit} onPress={signUp}>
+              Submit
+            </Button>
           </>
         )
         }
@@ -89,7 +125,7 @@ const StudentRegister = () => {
         <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
         </Button>
-        <Button onPress={() => navigation.navigate('Login')}>
+        <Button onPress={() => navigation.navigate('LoginScreen')}>
           Back to Login
         </Button>
       </View>
@@ -124,7 +160,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     justifyContent: 'center',
-    alignItems:'center', 
+    alignItems: 'center',
     alignSelf: 'center',
     marginTop: 'auto',
     marginBottom: 'auto'

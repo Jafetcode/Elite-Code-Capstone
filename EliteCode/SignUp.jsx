@@ -10,7 +10,7 @@ const SignUp = () => {
           <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
                    {"<"}
                  </Button>
-           <Text category="H1" style={styles.headerText}>
+           <Text category="h1" style={styles.headerText}>
              Elite Code
            </Text>
          </View>
@@ -18,7 +18,7 @@ const SignUp = () => {
          <View style={styles.inputContainer}>
            <Text
              style={styles.innerText}
-             category='H1'
+             category='h1'
            >Register</Text>
            <Button style={styles.button} onPress={() => navigation.navigate('RegisterGroup',{screen:'Student'})}>
             Student Account
