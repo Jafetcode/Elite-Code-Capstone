@@ -56,7 +56,6 @@ const RegisterTabs = createNativeStackNavigator({
 })
 
 const HomeTabs = createBottomTabNavigator({
-
   screens: {
     Navigate: {
       screen: NavigateScreen,
