@@ -89,19 +89,20 @@ app.post('/newUser', (req, res) => {
 
 app.post('/question', (req, res) => {
   const { teacherID, question, pointVal, topic, type, imgfile, language } = req.body;
-  if (!teacherID ||!question || !pointVal || !topic || !type) {
+  if (!teacherID || !question || !pointVal || !topic || !type) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   const sql = 'INSERT INTO Questions(email, fname, lname, role) VALUES (?, ?, ?, ?)';
   db.query(sql, [email, fname, lname, role], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
-    
+    }
     res.json({ message: 'User added successfully', userId: results.insertId });
   });
+});
 
 
 
-  app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
-    console.log(`Server running on port ${port}`);
-  });
+app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
+  console.log(`Server running on port ${port}`);
+});

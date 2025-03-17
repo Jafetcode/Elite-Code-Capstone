@@ -52,7 +52,7 @@ const StudentRegister = () => {
       setLoading(false);
     }
   }
-
+  
   // const signIn = async () => {
   //   setLoading(true);
   //   try {
@@ -65,7 +65,6 @@ const StudentRegister = () => {
   //     setLoading(false);
   //   }
   // }
-
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
@@ -125,7 +124,7 @@ const StudentRegister = () => {
         <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
         </Button>
-        <Button onPress={() => navigation.navigate('LoginScreen')}>
+        <Button onPress={() => navigation.navigate('Login')}>
           Back to Login
         </Button>
       </View>
