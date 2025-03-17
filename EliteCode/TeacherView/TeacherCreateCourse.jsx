@@ -71,13 +71,13 @@ function TeacherCreateCourse() {
             
                                 </View>
             
-                                <Input placeholder='Type Description Here' value={desc} onChangeText={nextValue => setDesc(nextValue)} />
+                                <Input placeholder='Type Description Here' value={desc} onChangeText={setDesc} />
             
                                 {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                     <Text category="h5">Course Code *</Text>
                                 </View>
                                 <Input placeholder='Write the code for the course here. This is what your students will type to join your course' 
-                                value={courseCode} onChangeText={nextValue => setCourseCode(nextValue)} /> */}
+                                value={courseCode} onChangeText={setCourseCode} /> */}
                             </View>
                             <Button onPress={handleCreateCourse}> Create Course</Button>
                         </ScrollView>
