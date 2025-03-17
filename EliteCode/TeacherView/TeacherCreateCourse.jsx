@@ -23,7 +23,7 @@ function TeacherCreateCourse() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     courseName,
-                    courseCode,
+                    // courseCode,
                     tid,
                 }),
             });
