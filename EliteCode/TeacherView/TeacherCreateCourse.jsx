@@ -1,18 +1,19 @@
-import * as React from "react";
+import {useState} from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import { text } from "body-parser";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherCreateCourse() {
     const navigation = useNavigation();
-    const [courseName, setCourseName] = React.useState('');
-    const [desc, setDesc] = React.useState('');
-    const [value, setValue] = React.useState('');
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [courseName, setCourseName] = useState('');
+    const [desc, setDesc] = useState('');
+    const [value, setValue] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleCreateCourse = async () => {
         try {
@@ -28,12 +29,17 @@ function TeacherCreateCourse() {
                 }),
             });
 
-            const data = await response.json();
+            const textResponse = await response.json();
+            console.log("RAW API Response: ", textResponse);
+
+            const data = JSON.parse(textResponse);
+
+
             if (response.ok) {
                 alert("Course Created!");
-                navigation.goBack(); 
+                navigation.goBack();
             } else {
-                alert(`Error: ${data.error}`);
+                throw new Error(data.error || "Failed to create course in MYSQL")
             }
         } catch (error) {
             alert("Network error: " + error.message);
@@ -44,7 +50,6 @@ function TeacherCreateCourse() {
     return (
 
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
                 <Button
                     appearance="ghost"
@@ -58,30 +63,21 @@ function TeacherCreateCourse() {
             </View>
 
             <ScrollView>
-                            <View style={{ marginBottom: 20 }}>
-            
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                    <Text category="h5">Course Name *</Text>
-                                </View>
-            
-                                <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
-            
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                    <Text category="h5">Description</Text>
-            
-                                </View>
-            
-                                <Input placeholder='Type Description Here' value={desc} onChangeText={setDesc} />
-            
-                                {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                    <Text category="h5">Course Code *</Text>
-                                </View>
-                                <Input placeholder='Write the code for the course here. This is what your students will type to join your course' 
-                                value={courseCode} onChangeText={setCourseCode} /> */}
-                            </View>
-                            <Button onPress={handleCreateCourse}> Create Course</Button>
-                        </ScrollView>
-                    </Layout>
+                <View style={{ marginBottom: 20 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                        <Text category="h5">Course Name *</Text>
+                    </View>
+                    <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
+
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                        <Text category="h5">Description</Text>
+                    </View>
+                    <Input placeholder='Type Description Here' value={desc} onChangeText={setDesc} />
+                </View>
+
+                <Button onPress={handleCreateCourse}> Create Course</Button>
+            </ScrollView>
+        </Layout>
     );
 }
 

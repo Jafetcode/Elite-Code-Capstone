@@ -109,7 +109,7 @@ app.post('/newUser', (req, res) => {
     }
 
     const sql = 'INSERT INTO Classes (courseName, tid, description) VALUES (?, ?, ?)';
-    db.query(sql, [courseName, courseCode, tid, description], (err, results) => {
+    db.query(sql, [courseName, tid, description], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
