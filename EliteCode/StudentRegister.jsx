@@ -13,7 +13,7 @@ const StudentRegister = () => {
   const navigation = useNavigation()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student');
+  const [role, setRole] = useState('');
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [error, setError] = useState('');
@@ -40,11 +40,7 @@ const StudentRegister = () => {
       if (!response.ok) {
         throw new Error(data.error || "Failed to create user in MySQL.");
       }
-      alert("Account created!");
-      setTimeout(() => {
-        navigation.navigate('Login');  // Redirect to login screen
-      }, 2000);
-      
+      alert("Check your email for verification before logging in!");
     } catch (error) {
       console.error("Sign-up error:", error);
       alert(error.message || "Invalid Email or Password. Must have a valid Email & Password > 6 characters long.");
@@ -77,10 +73,7 @@ const StudentRegister = () => {
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.innerText} category='h1'> Register </Text>
-        <Picker selectedValue={role} onValueChange={setRole}>
-          <Picker.Item label="Student" value="student" />
-          <Picker.Item label="Teacher" value="teacher" />
-        </Picker>
+ 
         <Input
           style={styles.inputs}
           label='FirstName'
@@ -109,6 +102,14 @@ const StudentRegister = () => {
           onChangeText={(text) => setPassword(text)}
           autoCapitalize='none'
           secureTextEntry={true} />
+        <View style={styles.roleSelect}>
+          <Text style={styles.outerText}>Select your role</Text>
+          <Picker selectedValue={role} onValueChange={(itemValue) => setRole(itemValue)} style={styles.pickerStyle}>
+            <Picker.Item label="Student" value="student" style={{fontSize : 5}} />
+            <Picker.Item label="Teacher" value="teacher"  style={{fontSize : 5}}/>
+          </Picker>
+        </View>
+
         {loading ? (
           <ActivityIndicator size='small' />
         ) : (
@@ -119,6 +120,7 @@ const StudentRegister = () => {
           </>
         )
         }
+          
       </View>
       <View style={styles.tempButtons}>
         <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
@@ -161,10 +163,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    marginTop: 'auto',
+    marginTop: 50,
     marginBottom: 'auto'
   },
   outerText: {
+    alignItems: 'center',
+    alignSelf: 'center',
     fontSize: 20,
     color: 'white',
   },
@@ -174,8 +178,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
   },
-  inputs: {
-    width: 250,
+    inputs: {
+      width: 250,
+      marginTop: 'auto',
+    },
+  roleSelect: {
+    backgroundColor: '#526F8C',
+    marginTop: 50 ,
+    marginBottom: 20,
+    fontSize: 100,
+    width: 200,
+    borderRadius: 10,
   },
   tempButtons: {
     marginTop: 200,
@@ -183,6 +196,13 @@ const styles = StyleSheet.create({
   submit: {
     position: 'relative',
     marginTop: 20,
+  },
+  pickerStyle: {
+    height: 200,
+    color: 'white',
+    backgroundColor: '#526F8C',
+    borderRadius: 10,
+    fontSize: 10,
   }
 });
 
