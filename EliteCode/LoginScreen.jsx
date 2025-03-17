@@ -26,7 +26,7 @@ function LoginScreen() {
       Alert.alert('Login successful! Welcome, ', email);
       navigation.navigate('HomeGroup', { screen: 'Home' });
     } catch (error) {
-      Alert.alert('Invalid Login');
+      Alert.alert('Invalid Login:', error);
     }
   }
   useEffect(() => {
@@ -36,7 +36,7 @@ function LoginScreen() {
         console.log(data);
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('error:', error);
       });
   }, []);
 
@@ -46,16 +46,14 @@ function LoginScreen() {
         <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
           {"<"}
         </Button>
-        <Text category="H1" style={styles.headerText}>
-          Elite Code
-        </Text>
+        <Text category="h1" style={styles.headerText}> Elite Code </Text>
       </View>
       <Divider />
       <View style={styles.inputContainer}>
         <Text
           style={styles.innerText}
-          category='H1'
-        >Login</Text>
+          category='h1'
+        > Login </Text>
         <Input
           style={styles.inputs}
           label='Email'
@@ -79,9 +77,7 @@ function LoginScreen() {
         <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
         </Button>
-        <Button onPress={() => navigation.popToTop()}>
-          Back to First Screen
-        </Button>
+        <Button onPress={() => navigation.popToTop()}> Back to First Screen </Button>
       </View>
     </Layout>
   );

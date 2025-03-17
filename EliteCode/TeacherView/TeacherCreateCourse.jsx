@@ -9,8 +9,35 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherCreateCourse() {
     const navigation = useNavigation();
+    const [courseName, setCourseName] = React.useState('');
+    const [desc, setDesc] = React.useState('');
     const [value, setValue] = React.useState('');
     const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+    const handleCreateCourse = async () => {
+        try {
+            const tid = "T1";
+
+            const response = await fetch('https://elitecodecapstone24.onrender.com/createCourse', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    courseName, tid, desc
+                }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert("Course Created!");
+                navigation.goBack();
+            } else {
+                alert('Error: ');
+            }
+        } catch (error) {
+            alert("Network error: " + error.message);
+        }
+
+    }
 
     return (
 
@@ -31,12 +58,26 @@ function TeacherCreateCourse() {
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
 
-                    
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                        <Text category="h5">Course Name *</Text>
+                    </View>
 
-                    
-            
+                    <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
+
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                        <Text category="h5">Description</Text>
+
+                    </View>
+
+                    <Input placeholder='Type Description Here' value={desc} onChangeText={setDesc} />
+
+                    {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                                    <Text category="h5">Course Code *</Text>
+                                </View>
+                                <Input placeholder='Write the code for the course here. This is what your students will type to join your course' 
+                                value={courseCode} onChangeText={setCourseCode} /> */}
                 </View>
-                <Button> Create Course</Button>
+                <Button onPress={handleCreateCourse}> Create Course</Button>
             </ScrollView>
         </Layout>
     );
@@ -50,4 +91,3 @@ export default () => (
         </ApplicationProvider>
     </>
 );
-
