@@ -1,94 +1,78 @@
 import * as React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import { useNavigation, } from '@react-navigation/native';
-import { Button, Layout, Input, Divider, } from '@ui-kitten/components';
+import {Text,  StyleSheet,View} from 'react-native';
+import {useNavigation,} from '@react-navigation/native';
+import { Button, Layout, Input, Divider,} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
-import { react, useEffect, useState } from 'react';
+import react from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Alert } from 'react-native';
-import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
-import {useAuth} from './AuthContext';
-
-
+import { useState } from 'react';
 
 function LoginScreen() {
-  const navigation = useNavigation();
-  const {login} = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+    const navigation = useNavigation();
+    const [email, setEmail] = react.useState('');
+    const [password, setPassword] = react.useState('');
+    const [error, setError] = useState('');
 
-  const handleLogin = async () => {
-    // const auth = getAuth();
+    const handleLogin = async () => {
+    const auth = getAuth(); 
     try {
-      await login(email, password);
-      // await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Login successful! Welcome, ', email);
-      navigation.navigate('HomeGroup', { screen: 'Home' });
+        await signInWithEmailAndPassword(auth, email, password);
+        Alert.alert('Login successful! Welcome, ', email);
+        navigation.navigate('HomeGroup', { screen: 'Home' }); 
     } catch (error) {
-      Alert.alert('Invalid Login');
+       Alert.alert('Invalid Login');
     }
-  }
-  useEffect(() => {
-    fetch('https://elitecodecapstone24.onrender.com/user')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }, []);
-
-  return (
-    <Layout style={styles.container}>
+};
+    return (
+        <Layout style={styles.container}>
       <View style={styles.header}>
-        <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-          {"<"}
-        </Button>
-        <Text category="H1" style={styles.headerText}>
-          Elite Code
-        </Text>
-      </View>
-      <Divider />
+              <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
+                       {"<"}
+                     </Button>
+               <Text category="H1" style={styles.headerText}>
+                 Elite Code
+               </Text>
+             </View>
+      <Divider/>
       <View style={styles.inputContainer}>
-        <Text
-          style={styles.innerText}
-          category='H1'
-        >Login</Text>
-        <Input
-          style={styles.inputs}
-          label='Email'
-          placeholder='Enter Email'
-          value={email}
-          autoCapitalize='none'
-          onChangeText={nextEmail => setEmail(nextEmail)} />
+      <Text
+        style={styles.innerText}
+        category='H1'
+      >Login</Text>
+          <Input 
+            style={styles.inputs}
+            label='Email'
+            placeholder='Enter Email'
+            value={email}
+            autoCapitalize='none'
+            onChangeText={nextEmail => setEmail(nextEmail)} />
 
-        <Input style={styles.inputs}
-          label='Password'
-          placeholder='Enter Password'
-          value={password}
-          secureTextEntry={true}
-          onChangeText={nextPassword => setPassword(nextPassword)}
-        />
-        <Button style={styles.submit} onPress={handleLogin}>
-          Submit
-        </Button>
+          <Input style={styles.inputs}
+            label='Password'
+            placeholder = 'Enter Password'
+            value={password}
+            secureTextEntry={true}
+            onChangeText={nextPassword=> setPassword(nextPassword)}
+          />
+      <Button style={styles.submit} onPress={handleLogin}>
+                    Submit
+                </Button>
       </View>
-      <View style={styles.tempButtons}>
-        <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-          Skip to Home
-        </Button>
-        <Button onPress={() => navigation.popToTop()}>
+<View style={styles.tempButtons}>
+            <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+                  Skip to Home
+                </Button>
+                   <Button onPress={() => navigation.popToTop()}>
           Back to First Screen
-        </Button>
-      </View>
-    </Layout>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
+                   </Button>
+         </View>
+        </Layout>
+    );
+  }
+  const styles = StyleSheet.create({
+ 
+ container: {
     flex: 1,
   },
   header: {
@@ -114,7 +98,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems:'center', 
     alignSelf: 'center',
     marginTop: 'auto',
     marginBottom: 'auto'
@@ -135,18 +119,20 @@ const styles = StyleSheet.create({
   tempButtons: {
     marginTop: 200,
   },
-  submit: {
+    submit: {
     position: 'relative',
     marginTop: 20,
   }
-})
+    
+  });
+  
+export default ()=> (
 
-export default () => (
-  <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <LoginScreen />
-
-    </Layout>
-  </ApplicationProvider>
+        <Layout style={{ flex: 1 }}>
+        <LoginScreen/>
+        </Layout>
 
 );
+  
+
+// ... other code from the previous section

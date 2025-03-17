@@ -1,16 +1,19 @@
 import { StyleSheet,View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {  Layout, Button,Text, Divider} from '@ui-kitten/components'
 import {useNavigation} from '@react-navigation/native';
+
 const SignUp = () => {
     const navigation = useNavigation();
+    
+    
   return (
    <Layout style={styles.container}>
          <View style={styles.header}>
           <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
                    {"<"}
                  </Button>
-           <Text category="h1" style={styles.headerText}>
+           <Text category="H1" style={styles.headerText}>
              Elite Code
            </Text>
          </View>
@@ -18,7 +21,7 @@ const SignUp = () => {
          <View style={styles.inputContainer}>
            <Text
              style={styles.innerText}
-             category='h1'
+             category='H1'
            >Register</Text>
            <Button style={styles.button} onPress={() => navigation.navigate('RegisterGroup',{screen:'Student'})}>
             Student Account
@@ -96,3 +99,4 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
 });
+
