@@ -18,7 +18,6 @@ function TeacherCreateCourse() {
     const handleCreateCourse = async () => {
         try {
             const tid = "T1";
-
             const response = await fetch('https://elitecodecapstone24.onrender.com/createCourse', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
