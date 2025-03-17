@@ -18,7 +18,7 @@ function TeacherCreateCourse() {
         try {
             const tid = 1; 
 
-            const response = await fetch('https://elitecodecapstone24.onrender.com/server/createCourse', {
+            const response = await fetch('https://elitecodecapstone24.onrender.com/createCourse', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
