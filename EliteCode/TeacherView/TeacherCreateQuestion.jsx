@@ -57,15 +57,15 @@ function TeacherCreateQuestion() {
                         </Radio>
                     </RadioGroup>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                            <Text category="h5">Due Date *</Text>
-                                        </View>
-                                        <View>
-                                        <Text category='h7'> {`Selected date: ${date.toLocaleDateString()}`} </Text>
-                                        <Datepicker
-                                            date={date}
-                                            onSelect={nextDate => setDate(nextDate)}
-                                        />
-                                        </View>
+                        <Text category="h5">Due Date *</Text>
+                    </View>
+                    <View>
+                        <Text category='h7'> {`Selected date: ${date.toLocaleDateString()}`} </Text>
+                        <Datepicker
+                        date={date}
+                        onSelect={nextDate => setDate(nextDate)}
+                        />
+                    </View>
                 </View>
                 <Button> Submit Question</Button>
             </ScrollView>

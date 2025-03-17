@@ -103,7 +103,6 @@ app.post('/newUser', (req, res) => {
 
   app.post('/createCourse', (req, res) => {
     const { courseName, tid, description } = req.body;
-    tid = "T1";
     if (!courseName || !tid) {
       return res.status(400).json({ error: 'Missing required fields' });
 
