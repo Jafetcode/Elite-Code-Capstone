@@ -19,14 +19,11 @@ const SignUp = () => {
          </View>
       
          <View style={styles.inputContainer}>
-           <Text
-             style={styles.innerText}
-             category='H1'
-           >Register</Text>
+           <Text style={styles.innerText} category='h1'> Register </Text>
            <Button style={styles.button} onPress={() => navigation.navigate('RegisterGroup',{screen:'Student'})}>
             Student Account
            </Button>
-           <Button onPress={() => navigation.navigate('RegisterGroup', { screen: 'Teacher' })}>
+           <Button onPress={() => navigation.navigate('RegisterGroup', { screen: 'Student' })}>
              Teacher Account
            </Button>
          </View>

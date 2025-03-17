@@ -21,32 +21,43 @@ function LoginScreen() {
         Alert.alert('Login successful! Welcome, ', email);
         navigation.navigate('HomeGroup', { screen: 'Home' }); 
     } catch (error) {
-       Alert.alert('Invalid Login');
+      Alert.alert('Invalid Login:', error);
     }
-};
-    return (
-        <Layout style={styles.container}>
+  }
+  useEffect(() => {
+    fetch('https://elitecodecapstone24.onrender.com/user')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  return (
+    <Layout style={styles.container}>
       <View style={styles.header}>
-              <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-                       {"<"}
-                     </Button>
-               <Text category="H1" style={styles.headerText}>
-                 Elite Code
-               </Text>
-             </View>
-      <Divider/>
+        <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
+          {"<"}
+        </Button>
+        <Text category="H1" style={styles.headerText}>
+          Elite Code
+        </Text>
+      </View>
+      <Divider />
       <View style={styles.inputContainer}>
-      <Text
-        style={styles.innerText}
-        category='H1'
-      >Login</Text>
-          <Input 
-            style={styles.inputs}
-            label='Email'
-            placeholder='Enter Email'
-            value={email}
-            autoCapitalize='none'
-            onChangeText={nextEmail => setEmail(nextEmail)} />
+        <Text
+          style={styles.innerText}
+          category='H1'
+        >Login</Text>
+        <Input
+          style={styles.inputs}
+          label='Email'
+          placeholder='Enter Email'
+          value={email}
+          autoCapitalize='none'
+          onChangeText={nextEmail => setEmail(nextEmail)} />
 
           <Input style={styles.inputs}
             label='Password'
@@ -59,20 +70,20 @@ function LoginScreen() {
                     Submit
                 </Button>
       </View>
-<View style={styles.tempButtons}>
-            <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-                  Skip to Home
-                </Button>
-                   <Button onPress={() => navigation.popToTop()}>
+      <View style={styles.tempButtons}>
+        <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+          Skip to Home
+        </Button>
+        <Button onPress={() => navigation.popToTop()}>
           Back to First Screen
-                   </Button>
-         </View>
-        </Layout>
-    );
-  }
-  const styles = StyleSheet.create({
- 
- container: {
+        </Button>
+      </View>
+    </Layout>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
   },
   header: {

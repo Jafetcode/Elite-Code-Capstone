@@ -25,8 +25,8 @@ import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 import StudentCourse from './StudentCourse';
 import StudentLesson from './StudentLesson';
-import StudentQuestion from './StudentQuestion';
 import { AuthProvider } from './AuthContext';
+
 ModalService.setShouldUseTopInsets = true
 
 const RegisterTabs = createNativeStackNavigator({
