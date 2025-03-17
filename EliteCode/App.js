@@ -23,8 +23,10 @@ import TeacherQuestion from './TeacherView/TeacherQuestion';
 import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
+import StudentCourse from './StudentCourse';
+import StudentLesson from './StudentLesson';
+import StudentQuestion from './StudentQuestion';
 import { AuthProvider } from './AuthContext';
-
 ModalService.setShouldUseTopInsets = true
 
 const RegisterTabs = createNativeStackNavigator({
@@ -87,7 +89,8 @@ const HomeTabs = createBottomTabNavigator({
       options: {
         title: 'Teacher View Home'
       }
-    }
+    },
+    
   },
   screenOptions: {
     title: 'EliteCode'
@@ -116,7 +119,6 @@ const LoginTabs = createNativeStackNavigator({
       }
     }
   },
-
 })
 
 const TeacherTabs = createNativeStackNavigator({
@@ -170,6 +172,35 @@ const TeacherTabs = createNativeStackNavigator({
   },
 })
 
+const StudentTabs = createNativeStackNavigator({
+  screens: {
+    Home: {
+      screen: HomeScreen,
+      options: {
+        title: 'Student Home'
+      }
+    },
+    Course: {
+      screen: StudentCourse,
+      options: {
+        title: 'Student Course'
+      }
+    },
+    Lesson: {
+      screen: StudentLesson,
+      options: {
+        title: 'Student Lesson'
+      }
+    },
+    Question: {
+      screen: StudentQuestion,
+      options: {
+        title: 'Student Question'
+      }
+    }
+  }
+})
+
 const RootStack = createNativeStackNavigator({
   screens: {
     First: {
@@ -193,18 +224,25 @@ const RootStack = createNativeStackNavigator({
       options: {
         headerShown: false
       }
+    },
+    StudentGroup: {
+      screen: StudentTabs,
+      options: {
+          headerShown: false
+      }
     }
-  },
+  }
 })
 
 const Navigation = createStaticNavigation(RootStack)
 
 export default function App() {
+
   return (
     <>
       <ApplicationProvider {...eva} theme={eva.dark}>
         <AuthProvider>
-          <Navigation />
+        <Navigation />
         </AuthProvider>
       </ApplicationProvider>
     </>
