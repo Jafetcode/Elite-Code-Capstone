@@ -77,7 +77,7 @@ function TeacherCreateCourse() {
                                 <Input placeholder='Write the code for the course here. This is what your students will type to join your course' 
                                 value={courseCode} onChangeText={setCourseCode} /> */}
                 </View>
-                <Button onPress={handleCreateCourse}> Create Course</Button>
+                <Button onPress={handleCreateCourse} disabled={!courseName}> Create Course</Button>
             </ScrollView>
         </Layout>
     );
