@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import {getAuth} from 'firebase/auth';
+import {getAuth, signInWithEmailAndPassword, signOut} from 'firebase/auth';
 import { FIREBASE_AUTH } from './firebaseConfig';
 
 
@@ -34,11 +34,11 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        await FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
+        return signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
     };
 
     const logout = async () => {
-        await FIREBASE_AUTH.signOut();
+        return signOut(FIREBASE_AUTH);
     };
 
     return (

@@ -19,16 +19,17 @@ function LoginScreen() {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    // const auth = getAuth();
     try {
       await login(email, password);
-      // await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert('Login successful! Welcome, ', email);
+      // Changed: Using template literal to display email in the alert
+      Alert.alert('Login successful!', `Welcome, ${email}`);
       navigation.navigate('HomeGroup', { screen: 'Home' });
     } catch (error) {
-      Alert.alert('Invalid Login:', error);
+      // Changed: Using error.message instead of error object for the Alert
+      Alert.alert('Invalid Login', error.message);
     }
-  }
+  };
+
   useEffect(() => {
     fetch('https://elitecodecapstone24.onrender.com/user')
       .then(response => response.json())
