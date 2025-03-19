@@ -22,11 +22,11 @@ const StudentRegister = () => {
 
   const validateForm = () => {
     let errorsObj = {};
-
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$/;
     if (!email) {
       errorsObj.email = 'Email is required';
-    } else if (!email.includes('@') || !email.includes('.')) {
-      errorsObj.email = 'Invalid email';
+    } else if (!emailRegex.test(email)) {
+      errorsObj.email = 'Invalid email, Please enter a valid email';
     }
 
     if (!password) {
