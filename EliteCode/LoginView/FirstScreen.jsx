@@ -11,11 +11,11 @@ function FirstScreen() {
     <Layout style={styles.containerMain}>
     <Text style={styles.outer}>EliteCode</Text>
         <Layout style={styles.containerInner}>
-        <Button style={styles.button} onPress={() => navigation.push('LoginGroup')}>
+        <Button style={styles.button} onPress={() => navigation.navigate('LoginScreen')}>
           Login
             </Button>
             <Divider></Divider>
-            <Button style={styles.button} onPress={() => navigation.push('LoginGroup', {screen:'SignUp'})}>
+            <Button style={styles.button} onPress={() => navigation.navigate('SignUp')}>
           SignUp
         </Button>
        </Layout>

@@ -2,9 +2,12 @@ import { StyleSheet,View } from 'react-native'
 import React from 'react'
 import {  Layout, Button,Text, Divider} from '@ui-kitten/components'
 import {useNavigation} from '@react-navigation/native';
-const SignUp = () => {
+
+function SignUp() {
+
     const navigation = useNavigation();
   return (
+
    <Layout style={styles.container}>
          <View style={styles.header}>
           <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
@@ -17,17 +20,17 @@ const SignUp = () => {
       
          <View style={styles.inputContainer}>
            <Text style={styles.innerText} category='h1'> Register </Text>
-           <Button style={styles.button} onPress={() => navigation.navigate('RegisterGroup',{screen:'Student'})}>
+           <Button style={styles.button} onPress={() => navigation.navigate('StudentRegister')}>
             Student Account
            </Button>
-           <Button onPress={() => navigation.navigate('RegisterGroup', { screen: 'Student' })}>
+           <Button onPress={() => navigation.navigate('TeacherRegister')}>
              Teacher Account
            </Button>
          </View>
          <View style={styles.tempButtons}>
-           <Button onPress={() => navigation.navigate('HomeGroup')}>
+           {/* <Button onPress={() => navigation.navigate('HomeGroup')}>
              Continue
-           </Button>
+           </Button> */}
            <Button onPress={() => navigation.navigate('Login')}>
              Back to Login
            </Button>

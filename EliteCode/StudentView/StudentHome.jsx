@@ -11,7 +11,7 @@ import {
   Input,
 } from "@ui-kitten/components";
 
-function HomeScreen() {
+function StudentHome() {
   const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);
   const [classCode, setClassCode] = React.useState('');
@@ -22,7 +22,9 @@ function HomeScreen() {
         <View style={{ marginBottom: 20 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5,}}>
             <Text category="s1">Course Library</Text>
-            <Button onPress={() => setVisible(true)}>Join Course</Button>
+            <TouchableOpacity onPress={() => setVisible(true)}>
+                          <Text appearance="hint">Join Course</Text>
+                        </TouchableOpacity>
             <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
 
               <Card disabled={true}>
@@ -35,9 +37,9 @@ function HomeScreen() {
           </View>
 
           <Card style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('StudentGroup', { screen: 'Course' })}>
+            <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={{ width: 40, height: 40, backgroundColor: "red", marginRight: 10,}}/>
+              <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10,}}/>
                 <View style={{ flex: 1 }}>
                   <Text>Course Name</Text>
                   <Text appearance="hint">Description</Text>
@@ -50,6 +52,7 @@ function HomeScreen() {
           
 
           <Card>
+            <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
                 style={{width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10}}
@@ -60,6 +63,7 @@ function HomeScreen() {
               </View>
               <Text category="s2">Grade: A</Text>
             </View>
+            </TouchableOpacity>
           </Card>
 
         </View>
@@ -75,6 +79,7 @@ function HomeScreen() {
             <Text category="s1">Personal Library</Text>
           </View>
           <Card style={{ marginBottom: 10 }}>
+          <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
                 style={{
@@ -90,9 +95,11 @@ function HomeScreen() {
               </View>
               <Text category="s2">Lessons: 11/24</Text>
             </View>
+            </TouchableOpacity>
           </Card>
 
-          <Card>
+          <Card style={{ marginBottom: 10 }}>
+          <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
                 style={{
@@ -106,8 +113,9 @@ function HomeScreen() {
                 <Text>Course Name</Text>
                 <Text appearance="hint">Description</Text>
               </View>
-              <Text category="s2">Lessons: 6/18</Text>
+              <Text category="s2">Lessons: 11/24</Text>
             </View>
+            </TouchableOpacity>
           </Card>
 
         </View>
@@ -118,7 +126,7 @@ function HomeScreen() {
 
 export default () => (
   <Layout style={{ flex: 1 }}>
-    <HomeScreen />
+    <StudentHome />
   </Layout>
 );
 const styles = StyleSheet.create({

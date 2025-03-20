@@ -29,13 +29,13 @@ function TeacherCourse() {
                 <View style={{ marginBottom: 20 }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1">Lessons</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'CreateLesson' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateLesson')}>
                             <Text appearance="hint">Create Lesson</Text>
                         </TouchableOpacity>
                     </View>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'Lesson' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherLesson')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Lesson Name</Text>
@@ -47,7 +47,7 @@ function TeacherCourse() {
                     </Card>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'Lesson' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherLesson')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Lesson Name</Text>

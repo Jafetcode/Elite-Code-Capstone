@@ -4,11 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
-function ProfileScreen() {
+function StudentProfile() {
   const navigation = useNavigation();
   const { user, logout } = useAuth();  // Get the user and logout function
 
@@ -23,7 +23,7 @@ function ProfileScreen() {
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
 
       {/* Header */}
-      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10, marginTop: 40 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10}}>
       <Button
           appearance="ghost"
           status="basic"
@@ -40,7 +40,7 @@ function ProfileScreen() {
         {/* Profile Section */}
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Image
-            source={require("./assets/images/profile-picture.png")}
+            source={require("../assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
           />
           <Text category="h6">{user.name}</Text>
@@ -124,7 +124,7 @@ export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.dark}>
-      <ProfileScreen />
+      <StudentProfile />
     </ApplicationProvider>
   </>
 );

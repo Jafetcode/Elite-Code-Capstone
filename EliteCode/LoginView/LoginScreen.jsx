@@ -7,7 +7,7 @@ import { react, useEffect, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Alert } from 'react-native';
 import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
-import {useAuth} from './AuthContext';
+import {useAuth, user} from '../AuthContext';
 
 
 
@@ -23,7 +23,6 @@ function LoginScreen() {
       await login(email, password);
       // Changed: Using template literal to display email in the alert
       Alert.alert('Login successful!', `Welcome, ${email}`);
-      navigation.navigate('HomeGroup', { screen: 'Home' });
     } catch (error) {
       // Changed: Using error.message instead of error object for the Alert
       Alert.alert('Invalid Login', error.message);
@@ -31,15 +30,14 @@ function LoginScreen() {
   };
 
   useEffect(() => {
-    fetch('https://elitecodecapstone24.onrender.com/user')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('error:', error);
-      });
-  }, []);
+    if (user) {
+      if (user.role === 'teacher') {
+        navigation.navigate('TeacherHome');
+      } else if (user.role === 'student') {
+        navigation.navigate('StudentHome');
+      }
+    }
+  }, [user, navigation]);
 
   return (
     <Layout style={styles.container}>
@@ -75,10 +73,10 @@ function LoginScreen() {
         </Button>
       </View>
       <View style={styles.tempButtons}>
-        <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+        {/* <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
-        </Button>
-        <Button onPress={() => navigation.popToTop()}> Back to First Screen </Button>
+        </Button> */}
+        <Button onPress={() => navigation.navigate('FirstScreen')}> Back to First Screen </Button>
       </View>
     </Layout>
   );

@@ -5,22 +5,22 @@ import {Button,Layout } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import FirstScreen from './FirstScreen';
 
-function HomeScreen() {
+function NavigateScreen() {
   const navigation = useNavigation();
 
   return (
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Navigate</Text>
-      <Button onPress={() => navigation.push('HomeGroup')}>
+      {/* <Button onPress={() => navigation.push('HomeGroup')}>
         Go back to Navigate
-      </Button>
-      <Button onPress={() => navigation.popToTop('FirstScreen')}>Go to First Screen</Button>
+      </Button> */}
+      <Button onPress={() => navigation.navigate('FirstScreen')}>Go to First Screen</Button>
       <Button onPress={() => navigation.goBack()}>Go back</Button>
     </Layout>
   );
 }
   export default ()=> (
-        <HomeScreen/>
+        <NavigateScreen/>
 );
 
 const styles = StyleSheet.create({

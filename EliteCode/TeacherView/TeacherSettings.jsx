@@ -4,10 +4,10 @@ import {useNavigation,} from '@react-navigation/native';
 import {Button,Layout, ListItem } from '@ui-kitten/components';
 import {useEffect} from 'react';
 import * as eva from '@eva-design/eva';
-import {useAuth} from './AuthContext';
+import {useAuth} from '../AuthContext';
 
   
-const SettingsScreen = () =>{
+function TeacherSettings() {
     const navigation = useNavigation();
     const {logout} = useAuth();
 
@@ -64,7 +64,7 @@ export default ()=> (
                 // alignItems: 'center' 
             }
             }>
-        <SettingsScreen/>
+        <TeacherSettings/>
         </Layout>
 
 );

@@ -2,14 +2,14 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
-import { FIREBASE_AUTH } from './firebaseConfig';
+import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 // import auth from '@react-native-firebase/auth';
 import { Picker } from '@react-native-picker/picker';
 
 
-const StudentRegister = () => {
+function StudentRegister() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -137,10 +137,10 @@ const StudentRegister = () => {
         )}
       </View>
       <View style={styles.tempButtons}>
-        <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+        {/* <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
-        </Button>
-        <Button onPress={() => navigation.navigate('Login')}>
+        </Button> */}
+        <Button onPress={() => navigation.navigate('LoginScreen')}>
           Back to Login
         </Button>
       </View>
@@ -220,4 +220,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default StudentRegister;
+export default () => (
+    <>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider {...eva} theme={eva.dark}>
+            <StudentRegister />
+        </ApplicationProvider>
+    </>
+);

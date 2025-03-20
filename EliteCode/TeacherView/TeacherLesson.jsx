@@ -30,13 +30,13 @@ function TeacherLesson() {
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1">Questions</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'CreateQuestion' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
                             <Text appearance="hint">Create Question</Text>
                         </TouchableOpacity>
                     </View>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'Question' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherQuestion')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Question 1</Text>
@@ -48,7 +48,7 @@ function TeacherLesson() {
                     </Card>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'Question' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherQuestion')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Question 2</Text>
@@ -60,7 +60,7 @@ function TeacherLesson() {
                     </Card>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherGroup', { screen: 'Question' })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherQuestion')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Question 3</Text>
