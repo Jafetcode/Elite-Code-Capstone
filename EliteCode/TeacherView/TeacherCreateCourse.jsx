@@ -10,7 +10,7 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 function TeacherCreateCourse() {
     const navigation = useNavigation();
     const [courseName, setCourseName] = React.useState('');
-    const [desc, setDesc] = React.useState('');
+    const [description, setDescription] = React.useState('');
     const [value, setValue] = React.useState('');
     const [selectedIndex, setSelectedIndex] = React.useState(0);
 
@@ -22,7 +22,7 @@ function TeacherCreateCourse() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    courseName, tid, desc
+                    courseName, tid, description
                 }),
             });
 
@@ -61,15 +61,12 @@ function TeacherCreateCourse() {
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Course Name *</Text>
                     </View>
-
                     <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Description</Text>
-
                     </View>
-
-                    <Input placeholder='Type Description Here' value={desc} onChangeText={setDesc} />
+                    <Input placeholder='Type Description Here' value={description} onChangeText={setDescription} />
 
                     {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                     <Text category="h5">Course Code *</Text>

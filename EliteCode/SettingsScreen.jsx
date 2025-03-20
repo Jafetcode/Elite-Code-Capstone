@@ -1,12 +1,38 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import { Text, Alert } from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
 import {Button,Layout, ListItem } from '@ui-kitten/components';
+import {useEffect} from 'react';
 import * as eva from '@eva-design/eva';
+import {useAuth} from './AuthContext';
 
   
 const SettingsScreen = () =>{
     const navigation = useNavigation();
+    const {logout} = useAuth();
+
+    const handleLogout = async () => {
+        try {
+          await logout();
+          // Changed: Using template literal to display email in the alert
+          Alert.alert('Logout successful!');
+        } catch (error) {
+          // Changed: Using error.message instead of error object for the Alert
+          Alert.alert('Invalid Logout');
+        }
+    };
+
+    useEffect(() => {
+        fetch('https://elitecodecapstone24.onrender.com/user')
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('error:', error);
+          });
+      }, []);
+
     return (
         <Layout>
       <ListItem title="Profile" description="Manage your account" />
@@ -25,8 +51,10 @@ const SettingsScreen = () =>{
    
       <ListItem title="About" description="App information" />
 
+      <ListItem title="Logout" onPress={handleLogout} />
+
                     </Layout>
-        );
+    );
 }
 export default ()=> (
 
