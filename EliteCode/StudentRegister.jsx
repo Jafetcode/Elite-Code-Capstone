@@ -23,10 +23,12 @@ const StudentRegister = () => {
   const validateForm = () => {
     let errorsObj = {};
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$/;
+    
     if (!email) {
       errorsObj.email = 'Email is required';
     } else if (!emailRegex.test(email)) {
       errorsObj.email = 'Invalid email, Please enter a valid email';
+      return;
     }
 
     if (!password) {
@@ -46,7 +48,9 @@ const StudentRegister = () => {
   const handleSubmit = () => {
     if (validateForm()) {
       console.log('Valid email and password');
+  
       setErrorsObj({});
+      signUp();
     }
   };
 
@@ -131,7 +135,7 @@ const StudentRegister = () => {
         {loading ? (
           <ActivityIndicator size="small" />
         ) : (
-          <Button style={styles.submit} onPress={() => { handleSubmit(); signUp(); }}>
+          <Button style={styles.submit} onPress={() => { handleSubmit(); }}>
             Submit
           </Button>
         )}
