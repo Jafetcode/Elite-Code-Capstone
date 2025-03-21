@@ -9,7 +9,6 @@ import { ApplicationProvider} from '@ui-kitten/components';
 // import auth from '@react-native-firebase/auth';
 import { Picker } from '@react-native-picker/picker';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
 
 
 function StudentRegister() {
@@ -46,7 +45,7 @@ function StudentRegister() {
     return Object.keys(errorsObj).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
       console.log('Valid email and password');
       signUp();
@@ -57,7 +56,7 @@ function StudentRegister() {
     setLoading(true);
     try {
       const userCredential = createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      // const user = userCredential.user;
 
       const response = await fetch('https://elitecodecapstone24.onrender.com/newUser', {
         method: 'POST',
@@ -73,6 +72,7 @@ function StudentRegister() {
         throw new Error(data.error || 'Failed to create user in MySQL.');
       }
       alert('Check your email for verification before logging in!');
+      navigation.navigate('LoginScreen');
     } catch (error) {
       console.error('Sign-up error:', error);
       alert(error.message || 'Invalid Email or Password. Must have a valid Email & Password > 6 characters long.');
@@ -134,7 +134,7 @@ function StudentRegister() {
         {loading ? (
           <ActivityIndicator size="small" />
         ) : (
-          <Button style={styles.submit} onPress={() => { handleSubmit(); }}>
+          <Button style={styles.submit} onPress={handleSubmit}>
             Submit
           </Button>
         )}
@@ -143,7 +143,7 @@ function StudentRegister() {
         {/* <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
         </Button> */}
-        <Button onPress={() => navigation.navigate('LoginScreen')}>
+        <Button onPress={() => navigation.navigate('LoginScreen') }>
           Back to Login
         </Button>
       </View>
