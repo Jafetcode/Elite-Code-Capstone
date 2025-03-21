@@ -7,6 +7,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 // import auth from '@react-native-firebase/auth';
 import { Picker } from '@react-native-picker/picker';
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
 
 
 function StudentRegister() {
@@ -222,7 +224,7 @@ const styles = StyleSheet.create({
 
 export default () => (
     <>
-        <IconRegistry icons={EvaIconsPack} />
+        {/* <IconRegistry icons={EvaIconsPack} /> */}
         <ApplicationProvider {...eva} theme={eva.dark}>
             <StudentRegister />
         </ApplicationProvider>

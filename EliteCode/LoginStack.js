@@ -6,6 +6,7 @@ import NavigateScreen from './LoginView/NavigateScreen';
 import StudentRegister from './LoginView/StudentRegister';
 import TeacherRegister from './LoginView/TeacherRegister';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ResetPassword from './LoginView/ResetPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const LoginStack = () => (
     <Stack.Screen name="NavigateScreen" component={NavigateScreen} />
     <Stack.Screen name="StudentRegister" component={StudentRegister} />
     <Stack.Screen name="TeacherRegister" component={TeacherRegister} />
+    <Stack.Screen name="ResetPassword" component={ResetPassword} />
   </Stack.Navigator>
 );
 

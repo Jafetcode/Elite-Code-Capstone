@@ -28,6 +28,7 @@ function LoginScreen() {
       Alert.alert('Invalid Login', error.message);
     }
   };
+ 
 
   useEffect(() => {
     if (user) {
@@ -68,6 +69,9 @@ function LoginScreen() {
           secureTextEntry={true}
           onChangeText={nextPassword => setPassword(nextPassword)}
         />
+
+        <Text style={styles.resetLink} onPress= {() => navigation.navigate('ResetPassword')}> Forgot Password? </Text>
+        
         <Button style={styles.submit} onPress={handleLogin}>
           Submit
         </Button>
@@ -128,11 +132,19 @@ const styles = StyleSheet.create({
     width: 250,
   },
   tempButtons: {
-    marginTop: 200,
+    marginTop: 50,
   },
   submit: {
     position: 'relative',
     marginTop: 20,
+  },
+  resetLink: {
+    fontSize : 14,
+    color: "white",
+    paddingTop: 10,
+    alignSelf: "flex-end",
+    paddingRight: 25,
+    fontWeight: 600
   }
 })
 
@@ -140,7 +152,6 @@ export default () => (
   <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <LoginScreen />
-
     </Layout>
   </ApplicationProvider>
 

@@ -2,6 +2,7 @@ import { StyleSheet,View } from 'react-native'
 import React from 'react'
 import {  Layout, Button,Text, Divider} from '@ui-kitten/components'
 import {useNavigation} from '@react-navigation/native';
+import * as eva from '@eva-design/eva';
 
 function SignUp() {
 
