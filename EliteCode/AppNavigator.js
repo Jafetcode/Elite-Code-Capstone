@@ -3,8 +3,6 @@ import LoginStack from './LoginStack';
 import { useAuth } from './AuthContext';
 import TeacherTabs from './TeacherTabs';
 import StudentTabs from './StudentTabs';
-import StudentStack from './StudentStack';
-import TeacherStack from './TeacherStack';
 import { NavigationContainer } from '@react-navigation/native';
 
 
