@@ -118,6 +118,19 @@ app.post('/createCourse', (req, res) => {
 })
 
 
+app.get('/getCourses', (req, res) => {
+  const tid = 'T1';
+  const sql = 'SELECT * FROM Classes WHERE tid = ?';
+
+  db.query(sql, [tid], (err, results) =>{
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+});
+
+
 app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);
 });

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, Image, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -9,7 +9,23 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherHome() {
     const navigation = useNavigation();
+    const [courses, setCourses] = React.useState([]);
 
+    const fetchCourses = async () => {
+        try{
+        const res = await fetch('https://elitecodecapstone24.onrender.com/getCourses');
+        const data = await res.json();
+        setCourses(data); } catch (error) {
+            console.error("Failed to fetch", error);
+        }
+    }; 
+    
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchCourses();
+        }, [])
+    );
+    
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
 
@@ -60,7 +76,21 @@ function TeacherHome() {
                             </View>
                         </TouchableOpacity>
                     </Card>
-
+                    
+                    {courses.map((course) => (
+                           <Card key={course.cid} style={{ marginBottom: 10 }}>
+                           <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
+                               <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                   <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
+                                   <View style={{ flex: 1 }}>
+                                       <Text>{course.courseName}</Text>
+                                       <Text appearance="hint">{course.description}</Text>
+                                   </View>
+                                   <Text category="s2">Students: {course.students || 0}</Text>
+                               </View>
+                           </TouchableOpacity>
+                       </Card>
+                    ))}
                 </View>
             </ScrollView>
         </Layout>
