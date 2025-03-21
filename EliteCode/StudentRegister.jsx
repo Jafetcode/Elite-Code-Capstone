@@ -22,21 +22,22 @@ const StudentRegister = () => {
 
   const validateForm = () => {
     let errorsObj = {};
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     
     if (!email) {
       errorsObj.email = 'Email is required';
     } else if (!emailRegex.test(email)) {
-      errorsObj.email = 'Invalid email, Please enter a valid email';
-      return;
+      errorsObj.email = 'Invalid email format. Must be like example@domain.com';
     }
 
     if (!password) {
       errorsObj.password = 'Password is required';
     } else if (password.length < 6 || password.length > 20) {
       errorsObj.password = 'Password must be between 6 and 20 characters';
-    } else if (password.search(/[A-Z][a-z]/i) < 0) {
-      errorsObj.password = 'Password must contain at least one letter';
+    } else if (password.search(/[A-Z]/) < 0) {
+      errorsObj.password = 'Password must contain at least one uppercase letter';
+    } else if (password.search(/[a-z]/) < 0) {
+      errorsObj.password = 'Password must contain at least one lowercase letter';
     } else if (password.search(/[0-9]/) < 0) {
       errorsObj.password = 'Password must contain at least one digit';
     }
@@ -46,10 +47,9 @@ const StudentRegister = () => {
   };
 
   const handleSubmit = () => {
+
     if (validateForm()) {
       console.log('Valid email and password');
-  
-      setErrorsObj({});
       signUp();
     }
   };
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#526F8C',
     borderRadius: 10,
     width: 300,
-    height: 300,
+    height: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
   },
   submit: {
     position: 'relative',
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 20,
   },
   pickerStyle: {
     height: 200,
