@@ -10,7 +10,7 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function StudentProfile() {
   const navigation = useNavigation();
-  const { user, logout } = useAuth();  // Get the user and logout function
+  const { user} = useAuth();  // Get the user and logout function
 
   if (!user) {
     Alert.alert("Unauthorized", "You need to log in first.", [

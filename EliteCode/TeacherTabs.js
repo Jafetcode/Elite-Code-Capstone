@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 const TeacherTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator lazy={true}>
     <Tab.Screen 
       name="Home" 
       component={TeacherStack} 

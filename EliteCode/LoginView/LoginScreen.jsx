@@ -7,22 +7,19 @@ import { react, useEffect, useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Alert } from 'react-native';
 import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
-import {useAuth, user} from '../AuthContext';
+import {useAuth} from '../AuthContext';
 
 
 
 function LoginScreen() {
   const navigation = useNavigation();
-  const {login} = useAuth();
+  const {login, user} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   const handleLogin = async () => {
     try {
       await login(email, password);
-      // Changed: Using template literal to display email in the alert
-      Alert.alert('Login successful!', `Welcome, ${email}`);
     } catch (error) {
       // Changed: Using error.message instead of error object for the Alert
       Alert.alert('Invalid Login', error.message);
@@ -33,9 +30,15 @@ function LoginScreen() {
   useEffect(() => {
     if (user) {
       if (user.role === 'teacher') {
-        navigation.navigate('TeacherHome');
+        navigation.reset({
+          index: 0,
+          routes: [{name:'TecaherHome'}],
+        });
       } else if (user.role === 'student') {
-        navigation.navigate('StudentHome');
+        navigation.reset({
+          index: 0,
+          routes: [{name:'StudentHome'}],
+        });
       }
     }
   }, [user, navigation]);
