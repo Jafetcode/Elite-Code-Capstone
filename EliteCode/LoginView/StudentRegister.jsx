@@ -5,6 +5,7 @@ import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { ApplicationProvider} from '@ui-kitten/components';
 // import auth from '@react-native-firebase/auth';
 import { Picker } from '@react-native-picker/picker';
 import * as eva from '@eva-design/eva';
@@ -24,7 +25,7 @@ function StudentRegister() {
 
   const validateForm = () => {
     let errorsObj = {};
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email) {
       errorsObj.email = 'Email is required';
     } else if (!emailRegex.test(email)) {
@@ -48,8 +49,8 @@ function StudentRegister() {
   const handleSubmit = () => {
     if (validateForm()) {
       console.log('Valid email and password');
-      setErrorsObj({});
-    }
+      signUp();
+  }
   };
 
   const signUp = async () => {
@@ -133,7 +134,7 @@ function StudentRegister() {
         {loading ? (
           <ActivityIndicator size="small" />
         ) : (
-          <Button style={styles.submit} onPress={() => { handleSubmit(); signUp(); }}>
+          <Button style={styles.submit} onPress={() => { handleSubmit(); }}>
             Submit
           </Button>
         )}
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#526F8C',
     borderRadius: 10,
     width: 300,
-    height: 300,
+    height: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -212,6 +213,7 @@ const styles = StyleSheet.create({
   submit: {
     position: 'relative',
     marginTop: 20,
+    marginBottom: 20,
   },
   pickerStyle: {
     height: 200,
@@ -227,6 +229,6 @@ export default () => (
         {/* <IconRegistry icons={EvaIconsPack} /> */}
         <ApplicationProvider {...eva} theme={eva.dark}>
             <StudentRegister />
-        </ApplicationProvider>
+    </ApplicationProvider>
     </>
 );
