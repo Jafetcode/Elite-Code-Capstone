@@ -2,17 +2,11 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
-import { FIREBASE_AUTH } from '../firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { createUserWithEmailAndPassword, inMemoryPersistence, setPersistence } from 'firebase/auth';
 import { ApplicationProvider} from '@ui-kitten/components';
-// import auth from '@react-native-firebase/auth';
-import { Picker } from '@react-native-picker/picker';
 import * as eva from '@eva-design/eva';
-import { useRoute } from '@react-navigation/native';
+import {useAuth} from '../AuthContext';
 
 const StudentRegister = () =>{
-  const route = useRoute();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +14,10 @@ const StudentRegister = () =>{
   const [lname, setLname] = useState('');
   const [errorsObj, setErrorsObj] = useState("");
   const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
+  const {signUp, logout} = useAuth();
+
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 
   const validateForm = () => {
     let errorsObj = {};
@@ -47,32 +44,49 @@ const StudentRegister = () =>{
   const handleSubmit = async () => {
     if (validateForm()) {
       console.log('Valid email and password');
-      signUp(route.params?.role);
+      handleSignUp();
   }
   };
 
-  const signUp = async (role) => {
+  const handleLogout = async () => {
+          try {
+            await logout();
+          } catch (error) {
+            Alert.alert('Invalid Logout');
+          }
+  };
+
+  const handleSignUp = async () => {
     setLoading(true);
-    console.log("inside sign up:",  role)
     try {
-      const userCredential = createUserWithEmailAndPassword(auth, email, password);
-      // const user = userCredential.user;
-      console.log(role)
+      const userCredential = await signUp(email, password);
+      const newUser = userCredential.user;
+      const userRole = 'student';
+      
       const response = await fetch('https://elitecodecapstone24.onrender.com/newUser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, fname, lname, role }),
+        body: JSON.stringify({ email, fname, lname, role: userRole }),
       });
+
       // Log raw response before parsing
       const textResponse = await response.text();
       console.log('Raw API Response:', textResponse);
+
       // Parse JSON only if response is valid
       const data = JSON.parse(textResponse);
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create user in MySQL.');
       }
-      alert('Check your email for verification before logging in!');
-      // navigation.navigate('LoginScreen');
+
+      await handleLogout();
+      await delay(500);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'FirstScreen' }],
+      });
+
     } catch (error) {
       console.error('Sign-up error:', error);
       alert(error.message || 'Invalid Email or Password. Must have a valid Email & Password > 6 characters long.');

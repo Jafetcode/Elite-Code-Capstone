@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import {getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, fetchSignInMethodsForEmail } from "firebase/auth";
+import {getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, fetchSignInMethodsForEmail, createUserWithEmailAndPassword } from "firebase/auth";
 
 import { FIREBASE_AUTH } from './firebaseConfig';
 
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
                     if (response.ok) {
                         setUser({ uid: authUser.uid, email: authUser.email, ...userData });
                     } else {
-                        console.error("Error fetching user role:", userData.error);
+                        setUser(null);
                     }
                 } catch (error) {
                     console.error("Failed to fetch user data:", error);
@@ -50,8 +50,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const signUp = async (email, password) => {
+        return createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, changePassword }}>
+        <AuthContext.Provider value={{ user, login, logout, changePassword, signUp }}>
             {!loading && children}
         </AuthContext.Provider>
     );
