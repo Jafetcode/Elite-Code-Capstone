@@ -1,24 +1,24 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, inMemoryPersistence, setPersistence } from 'firebase/auth';
 import { ApplicationProvider} from '@ui-kitten/components';
 // import auth from '@react-native-firebase/auth';
 import { Picker } from '@react-native-picker/picker';
 import * as eva from '@eva-design/eva';
+import { useRoute } from '@react-navigation/native';
 
-
-function StudentRegister() {
+const StudentRegister = () =>{
+  const route = useRoute();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('Test');
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
-  const [errorsObj, setErrorsObj] = useState({});
+  const [errorsObj, setErrorsObj] = useState("");
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
 
@@ -30,7 +30,6 @@ function StudentRegister() {
     } else if (!emailRegex.test(email)) {
       errorsObj.email = 'Invalid email, Please enter a valid email';
     }
-
     if (!password) {
       errorsObj.password = 'Password is required';
     } else if (password.length < 6 || password.length > 20) {
@@ -48,16 +47,17 @@ function StudentRegister() {
   const handleSubmit = async () => {
     if (validateForm()) {
       console.log('Valid email and password');
-      signUp();
+      signUp(route.params?.role);
   }
   };
 
-  const signUp = async () => {
+  const signUp = async (role) => {
     setLoading(true);
+    console.log("inside sign up:",  role)
     try {
       const userCredential = createUserWithEmailAndPassword(auth, email, password);
       // const user = userCredential.user;
-
+      console.log(role)
       const response = await fetch('https://elitecodecapstone24.onrender.com/newUser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,7 +72,7 @@ function StudentRegister() {
         throw new Error(data.error || 'Failed to create user in MySQL.');
       }
       alert('Check your email for verification before logging in!');
-      navigation.navigate('LoginScreen');
+      // navigation.navigate('LoginScreen');
     } catch (error) {
       console.error('Sign-up error:', error);
       alert(error.message || 'Invalid Email or Password. Must have a valid Email & Password > 6 characters long.');

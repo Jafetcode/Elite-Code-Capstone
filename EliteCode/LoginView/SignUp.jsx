@@ -5,8 +5,8 @@ import {useNavigation} from '@react-navigation/native';
 import * as eva from '@eva-design/eva';
 
 function SignUp() {
+  const navigation = useNavigation();
 
-    const navigation = useNavigation();
   return (
 
    <Layout style={styles.container}>
@@ -21,10 +21,10 @@ function SignUp() {
       
          <View style={styles.inputContainer}>
            <Text style={styles.innerText} category='h1'> Register </Text>
-           <Button style={styles.button} onPress={() => navigation.navigate('StudentRegister')}>
+           <Button style={styles.button} onPress={() => navigation.navigate('StudentRegister', {role: "student"})}>
             Student Account
            </Button>
-           <Button onPress={() => navigation.navigate('TeacherRegister')}>
+           <Button onPress={() => navigation.navigate('StudentRegister', {role: "instructor"})}>
              Teacher Account
            </Button>
          </View>

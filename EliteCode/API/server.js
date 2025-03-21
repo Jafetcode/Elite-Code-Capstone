@@ -97,7 +97,7 @@ app.post('/question', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'User added successfully', userId: results.insertId });
+    res.json({ message: 'User added successfully', email: results.email, role:results.role });
   });
 });
 

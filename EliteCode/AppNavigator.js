@@ -19,7 +19,7 @@ const AppNavigator = () => {
   }
 
   // Once logged in, check the role
-  if (user.role === 'teacher') {
+  if (user.role === 'instructor') {
     return (
       <NavigationContainer>
         <TeacherTabs />
@@ -32,7 +32,13 @@ const AppNavigator = () => {
       </NavigationContainer>
     );
   }
-
+  else{
+    return (
+      <NavigationContainer>
+        <LoginStack />
+      </NavigationContainer>
+    );
+  }
 };
 
 export default AppNavigator;
