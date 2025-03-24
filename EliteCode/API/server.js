@@ -87,17 +87,17 @@ app.post('/newUser', (req, res) => {
   });
 });
 
-app.post('/question', (req, res) => {
-  const { teacherID, question, pointVal, topic, type, imgfile, language } = req.body;
-  if (!teacherID || !question || !pointVal || !topic || !type) {
+app.post('/createQuestion', (req, res) => {
+  const { questionID, question, pointVal, topic, type, imgfile, language, dueDate } = req.body;
+  if (!questionID || !question || !pointVal || !topic || !type || !imgfile || !language || !dueDate) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO Questions(email, fname, lname, role) VALUES (?, ?, ?, ?)';
-  db.query(sql, [email, fname, lname, role], (err, results) => {
+  const sql = 'INSERT INTO Questions(teacherID, question, pointVal, topic, type, imgfile, language, dueDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(sql, [questionID, question, pointVal, topic, type, imgfile, language, dueDate], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'User added successfully', email: results.email, role:results.role });
+    res.json({ message: 'Question successfully added', email: results.email, role:results.role });
   });
 });
 
