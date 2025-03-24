@@ -61,6 +61,9 @@ function TeacherHome() {
                                 </View>
                                 <Text category="s2">Students: 20</Text>
                             </View>
+                            <View>
+                                <Text category="s2">Course Code: 100000 </Text>
+                            </View>
                         </TouchableOpacity>
                     </Card>
 
@@ -72,7 +75,10 @@ function TeacherHome() {
                                     <Text>Course Name</Text>
                                     <Text appearance="hint">Description</Text>
                                 </View>
-                                <Text category="s2">Students: 13</Text>
+                                <Text category="s2">Students: 13</Text>         
+                            </View>
+                            <View>
+                                <Text category="s2">Course Code: 100000 </Text>
                             </View>
                         </TouchableOpacity>
                     </Card>
