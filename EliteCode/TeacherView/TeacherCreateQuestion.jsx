@@ -3,6 +3,7 @@ import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup, Datepicker } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
+
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -12,6 +13,11 @@ function TeacherCreateQuestion() {
     const [value, setValue] = React.useState('');
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [date, setDate] = React.useState(new Date());
+    const [question, setQuestion] = React.useState('');
+    const [pointVal, setPointVal] = React.useState('');
+    const [topic, setTopic] = React.useState('');
+    const [language, setLanguage] = React.useState('');
+
     return (
 
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
@@ -36,14 +42,20 @@ function TeacherCreateQuestion() {
 
                     </View>
 
-                    <Input placeholder='Type Question Here' value={value} onChangeText={nextValue => setValue(nextValue)} />
+                    <Input
+                        placeholder="Enter question"
+                        value={question}
+                        onChangeText={text => setQuestion(text)}
+                    />
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Description</Text>
 
                     </View>
 
-                    <Input placeholder='Type Description Here' value={value} onChangeText={nextValue => setValue(nextValue)} />
+                    <Input placeholder='Type Description Here' 
+                    value={value}
+                     onChangeText={nextValue => setValue(nextValue)} />
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Type *</Text>
@@ -56,16 +68,42 @@ function TeacherCreateQuestion() {
                             Short Answer
                         </Radio>
                     </RadioGroup>
+
+                    <Input
+                        placeholder="Point value"
+                        value={pointVal}
+                        onChangeText={value => setPointVal(value)}
+                        keyboardType="numeric"
+                        style={{ marginBottom: 5 }}
+                    />
+                    <Input
+                        placeholder="Topic"
+                        value={topic}
+                        onChangeText={value => setTopic(value)}
+                        style={{ marginBottom: 5 }}
+                    />
+                    <Input
+                        placeholder="Language"
+                        value={language}
+                        onChangeText={value => setLanguage(value)}
+                        style={{ marginBottom: 5 }}
+                    />
+                    <Button onPress={() => {
+                        console.log('Add Image');
+                    }}>
+                        Add Image
+                    </Button>
+
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                            <Text category="h5">Due Date *</Text>
-                                        </View>
-                                        <View>
-                                        <Text category='h7'> {`Selected date: ${date.toLocaleDateString()}`} </Text>
-                                        <Datepicker
-                                            date={date}
-                                            onSelect={nextDate => setDate(nextDate)}
-                                        />
-                                        </View>
+                        <Text category="h5">Due Date *</Text>
+                    </View>
+                    <View>
+                        <Text category='h7'> {`Selected date: ${date.toLocaleDateString()}`} </Text>
+                        <Datepicker
+                            date={date}
+                            onSelect={nextDate => setDate(nextDate)}
+                        />
+                    </View>
                 </View>
                 <Button> Submit Question</Button>
             </ScrollView>
