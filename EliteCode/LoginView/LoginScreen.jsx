@@ -3,10 +3,9 @@ import { Text, StyleSheet, View } from 'react-native';
 import { useNavigation, } from '@react-navigation/native';
 import { Button, Layout, Input, Divider, } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
-import { react, useEffect, useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { ApplicationProvider, ModalService, theme } from '@ui-kitten/components';
+import { ApplicationProvider, theme } from '@ui-kitten/components';
 import {useAuth} from '../AuthContext';
 
 
@@ -25,7 +24,6 @@ function LoginScreen() {
       Alert.alert('Invalid Login', error.message);
     }
   };
- 
 
   useEffect(() => {
     if (user) {
