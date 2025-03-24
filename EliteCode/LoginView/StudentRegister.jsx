@@ -5,8 +5,10 @@ import { Layout, Button, Text, Divider, Input } from '@ui-kitten/components'
 import { ApplicationProvider} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import {useAuth} from '../AuthContext';
+import { useRoute } from '@react-navigation/native';
 
 const StudentRegister = () =>{
+  const route = useRoute();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -44,7 +46,7 @@ const StudentRegister = () =>{
   const handleSubmit = async () => {
     if (validateForm()) {
       console.log('Valid email and password');
-      handleSignUp();
+      handleSignUp(route.params?.role);
   }
   };
 
@@ -56,12 +58,12 @@ const StudentRegister = () =>{
           }
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (role) => {
     setLoading(true);
     try {
       const userCredential = await signUp(email, password);
       const newUser = userCredential.user;
-      const userRole = 'student';
+      const userRole = role;
       
       const response = await fetch('https://elitecodecapstone24.onrender.com/newUser', {
         method: 'POST',

@@ -13,7 +13,7 @@ function TeacherHome() {
 
     const fetchCourses = async () => {
         try{
-        const res = await fetch('https://elitecodecapstone24.onrender.com/getCourses');
+        const res = await fetch('https://elitecodecapstone24.onrender.com/instructor/getCourses');
         const data = await res.json();
         setCourses(data); } catch (error) {
             console.error("Failed to fetch", error);
@@ -61,6 +61,9 @@ function TeacherHome() {
                                 </View>
                                 <Text category="s2">Students: 20</Text>
                             </View>
+                            <View>
+                                <Text category="s2">Course Code: 100000 </Text>
+                            </View>
                         </TouchableOpacity>
                     </Card>
 
@@ -72,7 +75,10 @@ function TeacherHome() {
                                     <Text>Course Name</Text>
                                     <Text appearance="hint">Description</Text>
                                 </View>
-                                <Text category="s2">Students: 13</Text>
+                                <Text category="s2">Students: 13</Text>         
+                            </View>
+                            <View>
+                                <Text category="s2">Course Code: 100000 </Text>
                             </View>
                         </TouchableOpacity>
                     </Card>
