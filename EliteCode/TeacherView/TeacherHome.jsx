@@ -13,7 +13,7 @@ function TeacherHome() {
 
     const fetchCourses = async () => {
         try{
-        const res = await fetch('https://elitecodecapstone24.onrender.com/getCourses');
+        const res = await fetch('https://elitecodecapstone24.onrender.com/instructor/getCourses');
         const data = await res.json();
         setCourses(data); } catch (error) {
             console.error("Failed to fetch", error);
