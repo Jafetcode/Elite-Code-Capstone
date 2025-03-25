@@ -12,11 +12,11 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed: ' + err.stack);
-    return;
-  }
-  console.log('Connected to the database');
-});
+    if (err) {
+      console.error('Error connecting to the database:', err.stack);
+      return;
+    }
+    console.log('Connected to the database as ID ' + db.threadId);
+  });
 
 module.exports = db;
