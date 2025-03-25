@@ -5,8 +5,8 @@ const cors = require('cors');
 const port = 3306;
 const app = express();
 const db = require('./db');
-const studentRoutes = require('./routes/studentRoutes')(db);
-const instructorRoutes = require('./routes/instructorRoutes')(db);
+const studentRoutes = require('./routes/studentRoutes');
+const instructorRoutes = require('./routes/instructorRoutes');
 
 require('dotenv').config();
 
@@ -15,8 +15,8 @@ require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
-app.use("/student", studentRoutes(db));
-app.use("/instructor", instructorRoutes(db));
+app.use("/student", studentRoutes);
+app.use("/instructor", instructorRoutes);
 
 
 app.get('/api/welcome', (req, res) => {
