@@ -4,8 +4,8 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const port = 3306;
 const app = express();
-const studentRoutes = require('./routes/studentRoutes');
-const instructorRoutes = require('./routes/instructorRoutes');
+const studentRoutes = require('./routes/studentRoutes')(db);
+const instructorRoutes = require('./routes/instructorRoutes')(db);
 const db = require('./db');
 require('dotenv').config();
 
