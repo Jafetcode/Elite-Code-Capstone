@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
     
   });
   
-export default ()=> (
 
 export default () => (
   <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
@@ -160,5 +159,4 @@ export default () => (
       <LoginScreen />
     </Layout>
   </ApplicationProvider>
-
-// ... other code from the previous section
+)

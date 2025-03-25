@@ -4,7 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { text } from "body-parser";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
