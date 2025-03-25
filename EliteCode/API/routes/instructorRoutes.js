@@ -1,7 +1,8 @@
-import { useAuth } from "../../AuthContext";
+
 const express = require('express');
 const router = express.Router();
-const { user} = useAuth(); ;
+const { getUser } = require("../../AuthContext"); 
+
 
 // Define your routes
 router.get('/', (req, res) => {
@@ -25,6 +26,7 @@ app.post('/createCourse', (req, res) => {
 })
 
 app.get('/getCourses', (req, res) => {
+  const user = getUser();
   const tid = user.uid;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
