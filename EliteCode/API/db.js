@@ -13,10 +13,19 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
     if (err) {
-      console.error('Error connecting to the database:', err.stack);
+      console.error('Database connection failed: ' + err.stack);
       return;
     }
-    console.log('Connected to the database as ID ' + db.threadId);
-  });
+    console.log('Connected to database');
+    
+    // Log the current database
+    db.query('SELECT DATABASE()', (err, results) => {
+      if (err) {
+        console.error('Error fetching database name:', err);
+      } else {
+        console.log('Currently connected to database:', results[0]['DATABASE()']);
+      }
+    });
+});
 
 module.exports = db;

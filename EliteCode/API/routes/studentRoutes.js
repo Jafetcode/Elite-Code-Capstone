@@ -6,5 +6,6 @@ router.get('/', (req, res) => {
   res.send('Student route');
 });
 
+
 // Export the router
 module.exports = router;
