@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { getUser } = require("../../AuthContext"); 
+const { useAuth } = require("../../AuthContext"); 
 
 
 // Define your routes
@@ -26,7 +26,7 @@ app.post('/createCourse', (req, res) => {
 })
 
 app.get('/getCourses', (req, res) => {
-  const user = getUser();
+  const user = useAuth();
   const tid = user.uid;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
