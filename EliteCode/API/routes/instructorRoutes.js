@@ -28,6 +28,10 @@ router.post('/createCourse', (req, res) => {
     res.json({ message: 'Course created', courseId: results.insertId });
   });
 })
+router.get('/test', (req, res) => {
+  console.log("Test route hit");
+  res.send("Test route works!");
+});
 
 router.get('/getCourses', (req, res) => {
   console.log("in get courses")
