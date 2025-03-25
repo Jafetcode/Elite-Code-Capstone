@@ -1,7 +1,9 @@
 
 const express = require('express');
 const router = express.Router();
-const { useAuth } = require("../../../EliteCode/AuthContext"); 
+const path = require("path");
+const { getUser } = require(path.join(__dirname, "../../AuthContext"));
+// const { useAuth } = require("../../../EliteCode/AuthContext"); 
 
 
 // Define your routes
