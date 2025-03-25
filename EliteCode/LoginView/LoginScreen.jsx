@@ -3,37 +3,43 @@ import {Text,  StyleSheet,View} from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
 import { Button, Layout, Input, Divider,} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
-import react from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { useState } from 'react';
+import { ApplicationProvider, theme } from '@ui-kitten/components';
+import {useAuth} from '../AuthContext';
+
+
 
 function LoginScreen() {
-    const navigation = useNavigation();
-    const [email, setEmail] = react.useState('');
-    const [password, setPassword] = react.useState('');
-    const [error, setError] = useState('');
+  const navigation = useNavigation();
+  const {login, user} = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const handleLogin = async () => {
-    const auth = getAuth(); 
+  const handleLogin = async () => {
     try {
-        await signInWithEmailAndPassword(auth, email, password);
-        Alert.alert('Login successful! Welcome, ', email);
-        navigation.navigate('HomeGroup', { screen: 'Home' }); 
+      await login(email, password);
     } catch (error) {
-      Alert.alert('Invalid Login:', error);
+      // Changed: Using error.message instead of error object for the Alert
+      Alert.alert('Invalid Login', error.message);
     }
-  }
+  };
+
   useEffect(() => {
-    fetch('https://elitecodecapstone24.onrender.com/user')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }, []);
+    if (user) {
+      if (user.role === 'teacher') {
+        navigation.reset({
+          index: 0,
+          routes: [{name:'TecaherHome'}],
+        });
+      } else if (user.role === 'student') {
+        navigation.reset({
+          index: 0,
+          routes: [{name:'StudentHome'}],
+        });
+      }
+    }
+  }, [user, navigation]);
 
   return (
     <Layout style={styles.container}>
@@ -59,24 +65,25 @@ function LoginScreen() {
           autoCapitalize='none'
           onChangeText={nextEmail => setEmail(nextEmail)} />
 
-          <Input style={styles.inputs}
-            label='Password'
-            placeholder = 'Enter Password'
-            value={password}
-            secureTextEntry={true}
-            onChangeText={nextPassword=> setPassword(nextPassword)}
-          />
-      <Button style={styles.submit} onPress={handleLogin}>
-                    Submit
-                </Button>
+        <Input style={styles.inputs}
+          label='Password'
+          placeholder='Enter Password'
+          value={password}
+          secureTextEntry={true}
+          onChangeText={nextPassword => setPassword(nextPassword)}
+        />
+
+        <Text style={styles.resetLink} onPress= {() => navigation.navigate('ResetPassword')}> Forgot Password? </Text>
+        
+        <Button style={styles.submit} onPress={handleLogin}>
+          Submit
+        </Button>
       </View>
       <View style={styles.tempButtons}>
-        <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
+        {/* <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
           Skip to Home
-        </Button>
-        <Button onPress={() => navigation.popToTop()}>
-          Back to First Screen
-        </Button>
+        </Button> */}
+        <Button onPress={() => navigation.navigate('FirstScreen')}> Back to First Screen </Button>
       </View>
     </Layout>
   );
@@ -128,22 +135,30 @@ const styles = StyleSheet.create({
     width: 250,
   },
   tempButtons: {
-    marginTop: 200,
+    marginTop: 50,
   },
     submit: {
     position: 'relative',
     marginTop: 20,
+  },
+  resetLink: {
+    fontSize : 14,
+    color: "white",
+    paddingTop: 10,
+    alignSelf: "flex-end",
+    paddingRight: 25,
+    fontWeight: 600
   }
     
   });
   
 export default ()=> (
 
-        <Layout style={{ flex: 1 }}>
-        <LoginScreen/>
-        </Layout>
-
-);
-  
+export default () => (
+  <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <LoginScreen />
+    </Layout>
+  </ApplicationProvider>
 
 // ... other code from the previous section

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import {getAuth} from 'firebase/auth';
+import {getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, fetchSignInMethodsForEmail, createUserWithEmailAndPassword } from "firebase/auth";
+
 import { FIREBASE_AUTH } from './firebaseConfig';
 
 
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
                     if (response.ok) {
                         setUser({ uid: authUser.uid, email: authUser.email, ...userData });
                     } else {
-                        console.error("Error fetching user role:", userData.error);
+                        setUser(null);
                     }
                 } catch (error) {
                     console.error("Failed to fetch user data:", error);
@@ -34,15 +35,27 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        await FIREBASE_AUTH.signInWithEmailAndPassword(email, password);
+        return signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
     };
 
     const logout = async () => {
-        await FIREBASE_AUTH.signOut();
+        return signOut(FIREBASE_AUTH);
+    };
+    
+    const changePassword = async (email) => {
+        try{
+            return sendPasswordResetEmail(FIREBASE_AUTH, email);
+        }  catch (error){
+            console.log("Error", error.message)
+        }
+    };
+
+    const signUp = async (email, password) => {
+        return createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, changePassword, signUp }}>
             {!loading && children}
         </AuthContext.Provider>
     );
