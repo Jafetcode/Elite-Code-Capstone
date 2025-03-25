@@ -43,4 +43,4 @@ router.get('/getCourses', (req, res) => {
 });
 
 // Export the router
-module.exports = (db) => router;
+module.exports = router;

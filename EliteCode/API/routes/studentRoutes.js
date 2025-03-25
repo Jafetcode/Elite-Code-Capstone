@@ -7,4 +7,4 @@ router.get('/', (req, res) => {
 });
 
 // Export the router
-module.exports = (db) => router;
+module.exports = router;
