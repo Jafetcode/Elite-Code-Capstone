@@ -1,6 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
+const db = require('../db');
 // const path = require("path");
 // const { getUser } = require(path.join(__dirname, "../../AuthContext.jsx"));
 // const { useAuth } = require("../../../EliteCode/AuthContext"); 
