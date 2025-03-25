@@ -11,8 +11,6 @@ const db = mysql.createConnection({
   database: DB_NAME
 });
 
-const mysql = require('mysql');
-
 db.connect((err) => {
   if (err) {
     console.error('Database connection failed: ' + err.stack);
