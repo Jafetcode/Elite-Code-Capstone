@@ -16,9 +16,10 @@ function TeacherCreateCourse() {
 
     const handleCreateCourse = async () => {
         try {
-            const tid = "T1";
+            const { user} = useAuth(); 
+            const tid = user.uid;
 
-            const response = await fetch('https://elitecodecapstone24.onrender.com/createCourse', {
+            const response = await fetch('https://elitecodecapstone24.onrender.com/instryctor/createCourse', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

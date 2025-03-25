@@ -101,22 +101,6 @@ app.post('/createQuestion', (req, res) => {
   });
 });
 
-app.post('/createCourse', (req, res) => {
-  const { courseName, tid, description } = req.body;
-  if (!courseName || !tid) {
-    return res.status(400).json({ error: 'Missing required fields' });
-
-  }
-
-  const sql = 'INSERT INTO Classes (courseName, tid, description) VALUES (?, ?, ?)';
-  db.query(sql, [courseName, tid, description], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ message: 'Course created', courseId: results.insertId });
-  });
-})
-
 
 
 
