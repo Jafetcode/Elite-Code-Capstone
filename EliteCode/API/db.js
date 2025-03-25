@@ -23,7 +23,7 @@ db.connect((err) => {
       if (err) {
         console.error('Error fetching database name:', err);
       } else {
-        console.log('Currently connected to database:', results[0]['DATABASE()']);
+        console.log('Currently connected to database:', results[0]);
       }
     });
 });
