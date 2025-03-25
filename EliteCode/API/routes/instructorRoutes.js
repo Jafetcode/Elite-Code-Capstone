@@ -30,6 +30,7 @@ router.post('/createCourse', (req, res) => {
 })
 
 router.get('/getCourses', (req, res) => {
+  console.log("in get courses")
   const { tid } = req.query;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
