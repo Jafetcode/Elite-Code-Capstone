@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { useAuth } = require("../../AuthContext"); 
+const { useAuth } = require("../../../EliteCode/AuthContext"); 
 
 
 // Define your routes
