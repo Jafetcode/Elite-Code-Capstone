@@ -87,37 +87,24 @@ app.post('/newUser', (req, res) => {
   });
 });
 
-app.post('/question', (req, res) => {
-  const { teacherID, question, pointVal, topic, type, imgfile, language } = req.body;
-  if (!teacherID || !question || !pointVal || !topic || !type) {
+app.post('/createQuestion', (req, res) => {
+  const { questionID, question, pointVal, topic, type, imgfile, language, dueDate } = req.body;
+  if (!questionID || !question || !pointVal || !topic || !type || !imgfile || !language || !dueDate) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO Questions(email, fname, lname, role) VALUES (?, ?, ?, ?)';
-  db.query(sql, [email, fname, lname, role], (err, results) => {
+  const sql = 'INSERT INTO Questions(teacherID, question, pointVal, topic, type, imgfile, language, dueDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(sql, [questionID, question, pointVal, topic, type, imgfile, language, dueDate], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'User added successfully', userId: results.insertId });
+    res.json({ message: 'Question successfully added', email: results.email, role:results.role });
   });
 });
 
-app.post('/createCourse', (req, res) => {
-  const { courseName, tid, description } = req.body;
-  if (!courseName || !tid) {
-    return res.status(400).json({ error: 'Missing required fields' });
 
-  }
-
-  const sql = 'INSERT INTO Classes (courseName, tid, description) VALUES (?, ?, ?)';
-  db.query(sql, [courseName, tid, description], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ message: 'Course created', courseId: results.insertId });
-  });
-})
 
 
 app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);
 });
+
