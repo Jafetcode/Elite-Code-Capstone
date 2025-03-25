@@ -6,13 +6,7 @@ const port = 3306;
 const app = express();
 const studentRoutes = require('./routes/studentRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
-
 require('dotenv').config();
-
-app.use(cors());
-app.use(express.json());
-app.use("/student", studentRoutes);
-app.use("/instructor", instructorRoutes);
 
 const DB_HOST = process.env.DB_HOST;
 const DB_NAME = process.env.DB_NAME;
@@ -25,6 +19,13 @@ const db = mysql.createConnection({
   password: DB_PASSWORD,
   database: DB_NAME
 });
+
+
+
+app.use(cors());
+app.use(express.json());
+app.use("/student", studentRoutes(db));
+app.use("/instructor", instructorRoutes(db));
 
 
 app.get('/api/welcome', (req, res) => {

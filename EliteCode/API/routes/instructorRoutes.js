@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
   res.send('Instructor route');
 });
 
-app.post('/createCourse', (req, res) => {
+router.post('/createCourse', (req, res) => {
   const { tid } = req.query;
   const { courseName, description } = req.body;
   if (!courseName || !tid) {
@@ -28,7 +28,7 @@ app.post('/createCourse', (req, res) => {
   });
 })
 
-app.get('/getCourses', (req, res) => {
+router.get('/getCourses', (req, res) => {
   const { tid } = req.query;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
@@ -41,4 +41,4 @@ app.get('/getCourses', (req, res) => {
 });
 
 // Export the router
-module.exports = router;
+module.exports = (db) => router;
