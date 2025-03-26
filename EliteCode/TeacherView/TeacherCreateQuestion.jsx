@@ -25,11 +25,11 @@ function TeacherCreateQuestion() {
     const handleCreateQuestion = async () => {
         try {
 
-            const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/createQuestion', {
+            const response = await fetch('https://elitecodecapstone24.onrender.com/createQuestion', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                question,description, pointVal, imgFile, language, topic, type, dueDate: formattedDate
+                question, description, pointVal, imgFile, language, topic, type, dueDate: formattedDate
                 }),
             });
 
