@@ -18,18 +18,18 @@ function TeacherCreateQuestion() {
     const [pointVal, setPointVal] = React.useState('');
     const [topic, setTopic] = React.useState('');
     const [language, setLanguage] = React.useState('');
-    const [imgfile, setImgFile] = React.useState('');
+    const [imgFile, setImgFile] = React.useState('');
 
     const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
     console.log(qid)
     const handleCreateQuestion = async () => {
         try {
 
-            const response = await fetch('https://elitecodecapstone24.onrender.com/createQuestion', {
+            const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/createQuestion', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                question,description, pointVal, imgfile, language, topic, type, dueDate: formattedDate
+                question,description, pointVal, imgFile, language, topic, type, dueDate: formattedDate
                 }),
             });
 
@@ -39,9 +39,11 @@ function TeacherCreateQuestion() {
                 navigation.goBack();
             } else {
                 alert('Error:' + (data.error || 'Failed to create question'));
+                
             }
         } catch (error) {
             alert("Network error: " + error.message);
+            console.log(error.message);
         }
         
 
@@ -133,12 +135,12 @@ function TeacherCreateQuestion() {
                         Add Image
                     </Button> */}
                     <Input
-                        placeholder="Imgfile"
-                        value={imgfile}
+                        placeholder="ImgFile"
+                        value={imgFile}
                         onChangeText={value => setImgFile(value)}
                         style={{ marginBottom: 5 }}
                     />
-                    {console.log('Imgfile:', imgfile)}
+                    {console.log('ImgFile:', imgFile)}
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Due Date *</Text>
