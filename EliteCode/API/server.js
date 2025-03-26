@@ -77,12 +77,12 @@ app.post('/newUser', (req, res) => {
 
 app.post('/createQuestion', (req, res) => {
   console.log(req.body);
-  const { question, description, pointVal, imgfile, language, topic, type, dueDate } = req.body;
-  if (!question || !description || !pointVal || !topic || !type || !imgfile || !language || !dueDate) {
+  const { question, description, pointVal, imgFile, language, topic, type, dueDate } = req.body;
+  if (!question || !description || !pointVal || !topic || !type || !imgFile || !language || !dueDate) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO Questions(question, description, pointVal, imgfile, language, topic, type, dueDate) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)';
-  db.query(sql, [question, description, pointVal, imgfile, language, topic, type, dueDate], (err, results) => {
+  const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile, language, topic, type, dueDate) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(sql, [question, description, pointVal, imgFile, language, topic, type, dueDate], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
