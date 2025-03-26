@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -9,9 +8,6 @@ const studentRoutes = require('./routes/studentRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
 
 require('dotenv').config();
-
-
-
 
 app.use(cors());
 app.use(express.json());
