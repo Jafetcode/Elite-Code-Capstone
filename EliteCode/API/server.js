@@ -88,16 +88,17 @@ app.post('/newUser', (req, res) => {
 });
 
 app.post('/createQuestion', (req, res) => {
-  const { questionID, question, pointVal, topic, type, imgfile, language, dueDate } = req.body;
-  if (!questionID || !question || !pointVal || !topic || !type || !imgfile || !language || !dueDate) {
+  console.log(req.body);
+  const { question, description, pointVal, imgfile, language, topic, type, dueDate } = req.body;
+  if (!question || !description || !pointVal || !topic || !type || !imgfile || !language || !dueDate) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO Questions(teacherID, question, pointVal, topic, type, imgfile, language, dueDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-  db.query(sql, [questionID, question, pointVal, topic, type, imgfile, language, dueDate], (err, results) => {
+  const sql = 'INSERT INTO Questions(question, description, pointVal, imgfile, language, topic, type, dueDate) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(sql, [question, description, pointVal, imgfile, language, topic, type, dueDate], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'Question successfully added', email: results.email, role:results.role });
+    res.json({ message: 'Question successfully added', question: question, role: results.role, questionId: results.insertId });
   });
 });
 
