@@ -1,14 +1,20 @@
+
 const express = require('express');
 const router = express.Router();
-const { user} = useAuth(); ;
+const db = require('../db');
+// const path = require("path");
+// const { getUser } = require(path.join(__dirname, "../../AuthContext.jsx"));
+// const { useAuth } = require("../../../EliteCode/AuthContext"); 
+
 
 // Define your routes
 router.get('/', (req, res) => {
   res.send('Instructor route');
 });
 
-app.post('/createCourse', (req, res) => {
-  const { courseName, tid, description } = req.body;
+router.post('/createCourse', (req, res) => {
+  const { tid } = req.query;
+  const { courseName, description } = req.body;
   if (!courseName || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
 
@@ -22,12 +28,17 @@ app.post('/createCourse', (req, res) => {
     res.json({ message: 'Course created', courseId: results.insertId });
   });
 })
+router.get('/test', (req, res) => {
+  console.log("Test route hit");
+  res.send("Test route works!");
+});
 
-app.get('/getCourses', (req, res) => {
-  const tid = user.uid;
+router.get('/getCourses', (req, res) => {
+  console.log("in get courses")
+  const { tid } = req.query;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
-  db.query(sql, [tid], (err, results) =>{
+  db.query(sql, tid, (err, results) =>{
     if (err) {
       return res.status(500).json({ error: err.message });
     }

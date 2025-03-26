@@ -22,7 +22,7 @@ function ResetPassword() {
         }
         try {
             console.log("Checking email:", email); 
-            const signInMethods = await fetchSignInMethodsForEmail(FIREBASE_AUTH, email);
+            const signInMethods = fetchSignInMethodsForEmail(FIREBASE_AUTH, email);
             console.log("Sign-in methods:", signInMethods); 
             if(signInMethods.length === 0) {
                 console.log("Email not registered, alerting user.");

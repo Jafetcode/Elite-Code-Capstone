@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import { useNavigation, } from '@react-navigation/native';
-import { Button, Layout, Input, Divider, } from '@ui-kitten/components';
+import {Text,  StyleSheet,View} from 'react-native';
+import {useNavigation,} from '@react-navigation/native';
+import { Button, Layout, Input, Divider,} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -47,14 +47,16 @@ function LoginScreen() {
         <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
           {"<"}
         </Button>
-        <Text category="h1" style={styles.headerText}> Elite Code </Text>
+        <Text category="H1" style={styles.headerText}>
+          Elite Code
+        </Text>
       </View>
       <Divider />
       <View style={styles.inputContainer}>
         <Text
           style={styles.innerText}
-          category='h1'
-        > Login </Text>
+          category='H1'
+        >Login</Text>
         <Input
           style={styles.inputs}
           label='Email'
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems:'center', 
     alignSelf: 'center',
     marginTop: 'auto',
     marginBottom: 'auto'
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
   tempButtons: {
     marginTop: 50,
   },
-  submit: {
+    submit: {
     position: 'relative',
     marginTop: 20,
   },
@@ -147,7 +149,9 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     fontWeight: 600
   }
-})
+    
+  });
+  
 
 export default () => (
   <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
@@ -155,5 +159,4 @@ export default () => (
       <LoginScreen />
     </Layout>
   </ApplicationProvider>
-
-);
+)

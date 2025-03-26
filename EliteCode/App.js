@@ -7,6 +7,7 @@ import { ApplicationProvider} from '@ui-kitten/components';
 
 enableScreens();
 export default function App() {
+
   return (
     <>
       <ApplicationProvider {...eva} theme={eva.dark}>

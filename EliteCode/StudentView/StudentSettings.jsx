@@ -31,21 +31,14 @@ const StudentSettings = () =>{
       }, []);
 
     return (
-        <Layout>
-      <ListItem title="Profile" description="Manage your account" />
-     
+      <Layout>
+      <ListItem title="Profile" description="Manage your account" />    
       <ListItem title="Notifications" description="Turn on or off" />
-    
       <ListItem title="Font-size" description="Change font size" />
-
       <ListItem title="Security" description="Change your password" />
-    
       <ListItem title="Brightness" description="Light or dark mode" />
-      
       <ListItem title="Language" description="Change language" />
-  
       <ListItem title="FAQ" description="Frequently asked questions" />
-   
       <ListItem title="About" description="App information" />
 
       <ListItem title="Logout" onPress={handleLogout} />
@@ -57,8 +50,6 @@ export default ()=> (
 
         <Layout style={
             { flex: 1, 
-                // justifyContent: 'center', 
-                // alignItems: 'center' 
             }
             }>
         <StudentSettings/>

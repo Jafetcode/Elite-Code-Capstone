@@ -4,16 +4,18 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import { useAuth } from "../AuthContext";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherHome() {
     const navigation = useNavigation();
     const [courses, setCourses] = React.useState([]);
-
+    const { user} = useAuth();  // Get the user and logout function
+    
     const fetchCourses = async () => {
         try{
-        const res = await fetch('https://elitecodecapstone24.onrender.com/instructor/getCourses');
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/getCourses?tid=${user.uid}`);
         const data = await res.json();
         setCourses(data); } catch (error) {
             console.error("Failed to fetch", error);

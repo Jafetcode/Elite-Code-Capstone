@@ -1,4 +1,4 @@
-import * as React from "react";
+import {useState} from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup } from "@ui-kitten/components";
@@ -43,7 +43,6 @@ function TeacherCreateCourse() {
     return (
 
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
                 <Button
                     appearance="ghost"
@@ -58,6 +57,10 @@ function TeacherCreateCourse() {
 
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                        <Text category="h5">Course Name *</Text>
+                    </View>
+                    <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Course Name *</Text>

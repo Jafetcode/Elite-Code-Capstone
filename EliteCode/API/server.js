@@ -1,9 +1,9 @@
-
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const port = 3306;
 const app = express();
+const db = require('./db');
 const studentRoutes = require('./routes/studentRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
 
@@ -13,18 +13,6 @@ app.use(cors());
 app.use(express.json());
 app.use("/student", studentRoutes);
 app.use("/instructor", instructorRoutes);
-
-const DB_HOST = process.env.DB_HOST;
-const DB_NAME = process.env.DB_NAME;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-
-const db = mysql.createConnection({
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME
-});
 
 
 app.get('/api/welcome', (req, res) => {
@@ -108,3 +96,4 @@ app.post('/createQuestion', (req, res) => {
 app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);
 });
+
