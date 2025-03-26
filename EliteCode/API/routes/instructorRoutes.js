@@ -17,7 +17,6 @@ router.post('/createCourse', (req, res) => {
   const { courseName, description } = req.body;
   if (!courseName || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
-
   }
 
   const sql = 'INSERT INTO Classes (courseName, tid, description) VALUES (?, ?, ?)';
@@ -46,5 +45,55 @@ router.get('/getCourses', (req, res) => {
   });
 });
 
+router.post('/specificAssignment', (req, res) => {
+    const sql = 'INSERT into AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
+    db.query(sql, [qid, sid, viewable], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: 'Student assigned specific question'});
+    });
+});
+router.get('/submission', (req, res) => {
+  const sql = 'Select * from Submission where qid= ? and sid = ?';
+  db.query(sql, [qid, sid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Student response gathered'});
+  });
+});
+
+router.get('/submission', (req, res) => {
+  const sql = 'Select * from Submission where qid= ? and sid = ?';
+  db.query(sql, [qid, sid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Student response gathered'});
+  });
+});
+router.get('/classlist', (req, res) => {
+  const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email'
+  + 'From elitecode.Users join elitecode.Enrolled where Enrolled.cid = ? and Enrolled.sid = Users.userID';
+  db.query(sql, [cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'classlist gathered'});
+  });
+});
+
+router.get('/courses', (req, res) => {
+  const sql = 'Select Classes.cid, Classes.courseName, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled' +
+  'FROM elitecode.Classes left join elitecode.Enrolled on Classes.cid = Enrolled.cid' +
+  'GROUP BY Classes.cid, Classes.courseName where tid = ?';
+  db.query(sql, [tid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'course class count gathered'});
+  });
+});
 // Export the router
 module.exports = router;
