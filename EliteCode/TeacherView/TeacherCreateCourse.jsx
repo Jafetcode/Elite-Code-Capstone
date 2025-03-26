@@ -6,13 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-<<<<<<< HEAD
 
 
-=======
-import {useAuth} from '../AuthContext';
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
->>>>>>> 6e822915122a48837e7fa67217d23b13f71768e2
 
 function TeacherCreateCourse() {
     const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -26,14 +21,7 @@ function TeacherCreateCourse() {
     const handleCreateCourse = async () => {
         
         try {
-<<<<<<< HEAD
             const response = await fetch(`https://elitecodecapstone24.onrender.com/instructor/createCourse?tid=${user.userID}`, {
-=======
-            const { user} = useAuth(); 
-            const tid = user.uid;
-
-            const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/createCourse', {
->>>>>>> 6e822915122a48837e7fa67217d23b13f71768e2
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -58,6 +46,7 @@ function TeacherCreateCourse() {
     }
 
     return (
+
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
                 <Button
