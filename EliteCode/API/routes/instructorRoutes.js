@@ -94,7 +94,7 @@ router.get('/courses', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'course class count gathered'});
+    res.json({results});
   });
 });
 // Export the router
