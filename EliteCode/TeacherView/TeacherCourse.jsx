@@ -1,20 +1,21 @@
 import * as React from "react";
-import useState from 'react';
+import {useState} from 'react';
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-
+import {useAuth} from '../AuthContext';
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherCourse(){
+    const {user} = useAuth(); 
     const navigation = useNavigation();
     const [courses, setCourses] = useState({});
     const getQuestions = async() => {
         try {
-            setCourses =  await fetch('https://elitecodecapstone24.onrender.com/instructor/questions');
-            console.log(setCourses)
+            setCourses =  await fetch(`https://elitecodecapstone24.onrender.com/instructor/questions?tid=${user.uid}`);
+            console.log(courses)
         } catch(error){
             console.log('Error occurred')
         }
