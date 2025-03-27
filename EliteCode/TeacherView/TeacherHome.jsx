@@ -108,7 +108,13 @@ function TeacherHome() {
                                    </View>
                                    <Text category="s2">Students: ADD HERE</Text>
                                </View>
+                               <View>
+                                <Text category="s2">Course Code: {course.cid} </Text>
+                            </View>
                            </TouchableOpacity>
+                           <Button onPress={() => navigation.navigate('TeacherCourseClasslist', {cid : course.cid})}>
+                            View Classlist
+                        </Button>
                        </Card>
                     ))}
                 </View>
