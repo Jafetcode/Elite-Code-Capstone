@@ -87,8 +87,9 @@ router.get('/classlist', (req, res) => {
 router.get('/courses', (req, res) => {
   const tid = req.query.tid;
   const sql = 'Select Classes.cid, Classes.courseName, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled' +
-  'FROM elitecode.Classes left join elitecode.Enrolled on Classes.cid = Enrolled.cid' +
-  'GROUP BY Classes.cid, Classes.courseName where tid = ?';
+  'FROM Classes left join Enrolled on Classes.cid = Enrolled.cid' +
+  'where  Classes.tid = ?' +
+  'GROUP BY Classes.cid, Classes.courseName';
   db.query(sql, [tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
