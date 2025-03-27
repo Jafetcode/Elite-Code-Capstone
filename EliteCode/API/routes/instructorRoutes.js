@@ -54,26 +54,21 @@ router.post('/specificAssignment', (req, res) => {
       res.json({ message: 'Student assigned specific question'});
     });
 });
+
 router.get('/submission', (req, res) => {
+  const sid = req.query.sid;
+  const qid = req.query.qid;
   const sql = 'Select * from Submission where qid= ? and sid = ?';
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'Student response gathered'});
+    res.json({results});
   });
 });
 
-router.get('/submission', (req, res) => {
-  const sql = 'Select * from Submission where qid= ? and sid = ?';
-  db.query(sql, [qid, sid], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ message: 'Student response gathered'});
-  });
-});
-router.get('/classlist', (req, res) => {
+
+router.get('/classlist', (req, res) => { //working
   const cid = req.query.cid;
   const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email '
   + 'From Users join Enrolled where Enrolled.cid = ? and Enrolled.sid = Users.userID';
@@ -85,7 +80,7 @@ router.get('/classlist', (req, res) => {
   });
 });
 
-router.get('/courses', (req, res) => {
+router.get('/courses', (req, res) => { //working
   const tid = req.query.tid;
   const sql = 'Select Classes.cid, Classes.courseName, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled ' +
   'FROM Classes left join Enrolled on Classes.cid = Enrolled.cid ' +

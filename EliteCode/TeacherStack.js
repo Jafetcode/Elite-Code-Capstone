@@ -9,6 +9,7 @@ import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import TeacherCourseClasslist from './TeacherView/TeacherCourseClasslist';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
     <Stack.Screen name="TeacherCreateLesson" component={TeacherCreateLesson} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
+    <Stack.Screen name="TeacherCourseClasslist" component={TeacherCourseClasslist} />
   </Stack.Navigator>
 );
 

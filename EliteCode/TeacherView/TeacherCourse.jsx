@@ -14,7 +14,7 @@ function TeacherCourse(){
     const [courses, setCourses] = useState({});
     const getQuestions = async() => {
         try {
-            setCourses =  await fetch(`https://elitecodecapstone24.onrender.com/instructor/questions?tid=${user.uid}`);
+            setCourses =  await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.uid}`);
             console.log(courses)
         } catch(error){
             console.log('Error occurred')
@@ -67,6 +67,7 @@ function TeacherCourse(){
                                 </View>
                                 <Text category="s2">Completion: 9/20</Text>
                             </View>
+
                         </TouchableOpacity>
                     </Card>
 
