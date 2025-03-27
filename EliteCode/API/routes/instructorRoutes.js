@@ -74,13 +74,14 @@ router.get('/submission', (req, res) => {
   });
 });
 router.get('/classlist', (req, res) => {
-  const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email'
-  + 'From elitecode.Users join elitecode.Enrolled where Enrolled.cid = ? and Enrolled.sid = Users.userID';
+  const cid = req.query.cid;
+  const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email '
+  + 'From Users join Enrolled where Enrolled.cid = ? and Enrolled.sid = Users.userID';
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'classlist gathered'});
+    res.json({results});
   });
 });
 
