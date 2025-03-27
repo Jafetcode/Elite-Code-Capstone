@@ -14,21 +14,38 @@ function TeacherHome() {
     const { user } = useAuth();  // Get the user and logout function
 
     const fetchCourses = async () => {
+<<<<<<< Updated upstream
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/getCourses?tid=${user.uid}`);
             const data = await res.json();
             setCourses(data);
         } catch (error) {
+=======
+        try{
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/getCourses?tid=104193`);
+        const data = await res.json();
+        console.log("Using tid:", user.userID);
+        console.log("Fetched courses data:", data);
+        setCourses(data); } catch (error) {
+>>>>>>> Stashed changes
             console.error("Failed to fetch", error);
         }
     };
 
     useFocusEffect(
         React.useCallback(() => {
+          if (user?.userID) {
             fetchCourses();
+<<<<<<< Updated upstream
         }, [])
     );
 
+=======
+          }
+        }, [user])
+      );
+    
+>>>>>>> Stashed changes
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
 
@@ -95,6 +112,7 @@ function TeacherHome() {
                     </Card>
 
                     {courses.map((course) => (
+<<<<<<< Updated upstream
                         <Card key={course.cid} style={{ marginBottom: 10 }}>
                             <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -107,6 +125,20 @@ function TeacherHome() {
                                 </View>
                             </TouchableOpacity>
                         </Card>
+=======
+                           <Card key={course.cid} style={{ marginBottom: 10 }}>
+                           <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
+                               <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                   <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
+                                   <View style={{ flex: 1 }}>
+                                       <Text>{course.courseName}</Text>
+                                       <Text appearance="hint">{course.description}</Text>
+                                   </View>
+                                   <Text category="s2">Students: ADD HERE</Text>
+                               </View>
+                           </TouchableOpacity>
+                       </Card>
+>>>>>>> Stashed changes
                     ))}
                 </View>
             </ScrollView>

@@ -37,7 +37,7 @@ router.get('/getCourses', (req, res) => {
   const { tid } = req.query;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
-  db.query(sql, tid, (err, results) =>{
+  db.query(sql, [tid], (err, results) =>{
     if (err) {
       return res.status(500).json({ error: err.message });
     }
