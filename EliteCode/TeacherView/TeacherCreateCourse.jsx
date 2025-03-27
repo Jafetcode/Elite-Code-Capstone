@@ -1,29 +1,32 @@
-import {useState} from "react";
+import React from 'react';
+import {useState} from 'react';
+import {useAuth} from '../AuthContext';
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Input, Radio, RadioGroup } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import {useAuth} from '../AuthContext';
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
+
+
 
 function TeacherCreateCourse() {
+    const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
     const navigation = useNavigation();
-    const [courseName, setCourseName] = React.useState('');
-    const [description, setDescription] = React.useState('');
-    const [value, setValue] = React.useState('');
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [courseName, setCourseName] = useState('');
+    const [description, setDescription] = useState('');
+    const {user} = useAuth(); 
+    const [value, setValue] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleCreateCourse = async () => {
+        
         try {
-            const { user} = useAuth(); 
-            const tid = user.uid;
-
-            const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/createCourse', {
+            const response = await fetch(`https://elitecodecapstone24.onrender.com/instructor/createCourse?tid=${user.userID}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    courseName, tid, description
+                    courseName: courseName.trim(), 
+                    description: description.trim()
                 }),
             });
 
@@ -32,15 +35,18 @@ function TeacherCreateCourse() {
                 alert("Course Created!");
                 navigation.goBack();
             } else {
-                alert('Error: ');
+                alert('Error: ' + JSON.stringify(data));
             }
         } catch (error) {
+            console.log(courseName);
+            console.log(description);
             alert("Network error: " + error.message);
         }
 
     }
 
     return (
+
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
                 <Button
@@ -56,11 +62,6 @@ function TeacherCreateCourse() {
 
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="h5">Course Name *</Text>
-                    </View>
-                    <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
-
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Course Name *</Text>
                     </View>
