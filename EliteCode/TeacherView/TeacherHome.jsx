@@ -65,7 +65,7 @@ function TeacherHome() {
                                     <Text>Course Name</Text>
                                     <Text appearance="hint">Description</Text>
                                 </View>
-                                <Text category="s2">Students: 20</Text>
+                                <Text category="s2">Students: {/* {couse.NumEnrolled} */} </Text>
                             </View>
                             <View>
                                 <Text category="s2">Course Code: 100000 </Text>
