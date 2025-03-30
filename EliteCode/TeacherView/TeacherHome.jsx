@@ -15,11 +15,9 @@ function TeacherHome() {
 
     const fetchCourses = async () => {
         try{
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/getCourses?tid=104193`);
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
         const data = await res.json();
-        console.log("Using tid:", user.userID);
-        console.log("Fetched courses data:", data);
-        setCourses(data); } catch (error) {
+        setCourses(data.results); } catch (error) {
             console.error("Failed to fetch", error);
         }
     };
@@ -65,7 +63,7 @@ function TeacherHome() {
                                     <Text>Course Name</Text>
                                     <Text appearance="hint">Description</Text>
                                 </View>
-                                <Text category="s2">Students: {/* {couse.NumEnrolled} */} </Text>
+                                <Text category="s2">Students: {/*course.NumEnrolled*/} </Text>
                             </View>
                             <View>
                                 <Text category="s2">Course Code: 100000 </Text>
@@ -98,6 +96,7 @@ function TeacherHome() {
                     </Card>
 
                     {courses.map((course) => (
+                        
                            <Card key={course.cid} style={{ marginBottom: 10 }}>
                            <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
                                <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -106,7 +105,7 @@ function TeacherHome() {
                                        <Text>{course.courseName}</Text>
                                        <Text appearance="hint">{course.description}</Text>
                                    </View>
-                                   <Text category="s2">Students: ADD HERE</Text>
+                                   <Text category="s2">Students: {course.NumEnrolled}</Text>
                                </View>
                                <View>
                                 <Text category="s2">Course Code: {course.cid} </Text>

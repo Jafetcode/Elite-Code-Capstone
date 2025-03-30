@@ -82,7 +82,7 @@ router.get('/classlist', (req, res) => { //working
 
 router.get('/courses', (req, res) => { //working
   const tid = req.query.tid;
-  const sql = 'Select Classes.cid, Classes.courseName, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled ' +
+  const sql = 'Select Classes.cid, Classes.courseName, Classes.description, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled ' +
   'FROM Classes left join Enrolled on Classes.cid = Enrolled.cid ' +
   'where  Classes.tid = ? ' +
   'GROUP BY Classes.cid, Classes.courseName';
