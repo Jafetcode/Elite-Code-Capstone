@@ -13,7 +13,6 @@ const StudentStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="StudentHome">
     <Stack.Screen name="StudentHome" component={StudentHome} />
     <Stack.Screen name="StudentCourse" component={StudentCourse} />
-    <Stack.Screen name="StudentLesson" component={StudentLesson} />
     <Stack.Screen name="StudentProfile" component={StudentProfile} />
     <Stack.Screen name="StudentQuestion" component={StudentQuestion} />
     <Stack.Screen name="StudentSettings" component={StudentSettings} />

@@ -38,19 +38,6 @@ function QuestionsAssignedToStudent() {
 
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Button
-                    appearance="ghost"
-                    status="basic"
-                    accessoryLeft={BackIcon}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
-                    Elite Code
-                </Text>
-            </View>
-
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
 

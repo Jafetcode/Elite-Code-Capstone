@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, ScrollView} from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -23,13 +23,15 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
-function TeacherCreateQuestion() {
+function Question() {
   const navigation = useNavigation();
-  const [qid] = React.useState(0);
+  const route = useRoute();
+  const {qid} = route.params || {};
+  const [question, setQuestion] = useState("");
+
   const [description, setDescription] = React.useState("");
   const [type, setType] = React.useState("MCQ");
   const [dueDate, setDate] = React.useState(new Date());
-  const [question, setQuestion] = React.useState("");
   const [pointVal, setPointVal] = React.useState("");
   const [topic, setTopic] = React.useState("");
   const [language, setLanguage] = React.useState("");
@@ -38,76 +40,29 @@ function TeacherCreateQuestion() {
   const [option2, setOption2] = React.useState("");
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
-
+  const [selectedItem, setSelectedItem] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
   console.log(qid);
-  const handleCreateQuestion = async () => {
-    try {
-      const response = await fetch(
-        "https://elitecodecapstone24.onrender.com/createQuestion",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question,
-            description,
-            pointVal,
-            imgFile,
-            language,
-            topic,
-            type,
-            dueDate: formattedDate,
-          }),
-        }
-      );
 
+
+  const fetchQuestion = async () => {
+    try {
+      const response = await fetch("https://elitecodecapstone24.onrender.com/instructor/getQuestion?qid=${qid}")
       const data = await response.json();
-   
       if (response.ok) {
-        alert("Question Created!");
-        alert(data.message)
-       
-        navigation.goBack();
+        setQuestion({data})
       } else {
-        alert("Error:" + (data.error  || "Failed to create question"));
+        alert("Error:" + (data.error  || "Failed to fetch question"));
       }
     } catch (error) {
       alert("Network error: " + error.message);
       console.log(error.message);
     }
     if (type === "MCQ") {
-        handleCreateMCQ();
+        handleUpdateMCQ();
     }
-
   };
-  const handleCreateMCQ = async () => {
-    try {
-        const response = await fetch(
-            "https://elitecodecapstone24.onrender.com/createMCQ",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    correctAns,
-                    option1,
-                    option2,
-                    option3,
-                }),
-            }
-        );
-        const data = await response.json();
-        if (response.ok) {
-            alert("MCQ Created!");
-            alert(data.message)
-            navigation.goBack();
-        } else {
-            alert("Error:" + (data.error || "Failed to create MCQ"));
-        }
-    } catch (error) {
-        alert("Network error: " + error.message);
-        console.log(error.message);
-    }
-    };
   
   const handleTypeChange = (selectedIndex) => {
     setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
@@ -140,24 +95,19 @@ function TeacherCreateQuestion() {
               flexDirection: "row",
               justifyContent: "space-between",
               marginBottom: 5,
-            }}
-          >
-            <Text category="h5">Question *</Text>
+            }} >
+            <Text category="h5"> Question * </Text>
           </View>
-
           <Input
             placeholder="Enter question"
             value={question}
-            onChangeText={(question) => setQuestion(question)}
-          />
-
+            onChangeText={(question) => setQuestion(question)} />
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
               marginBottom: 5,
-            }}
-          >
+            }}  >
             <Text category="h5">Description</Text>
           </View>
 
@@ -248,11 +198,6 @@ function TeacherCreateQuestion() {
             onChangeText={(value) => setLanguage(value)}
             style={{ marginBottom: 5 }}
           />
-          {/* <Button onPress={() => {
-                        console.log('Add Image');
-                    }}>
-                        Add Image
-                    </Button> */}
           <Input
             placeholder="ImgFile"
             value={imgFile}
@@ -287,7 +232,7 @@ export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.dark}>
-      <TeacherCreateQuestion />
+      <Question />
     </ApplicationProvider>
   </>
 );

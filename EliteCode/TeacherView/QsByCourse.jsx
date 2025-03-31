@@ -41,7 +41,6 @@ function QsByCourse() {
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-
                     <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
                         <Text category="s1"> </Text>
                         <TouchableOpacity>
