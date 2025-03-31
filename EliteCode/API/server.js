@@ -91,8 +91,8 @@ app.post('/createQuestion', (req, res) => {
 });
 
 app.post('/createMCQ', (req, res) => {
-  const { opt1, opt2, opt3, correctAns } = req.body;
-  if (!opt1 || !opt2 || !opt3 || !correctAns) {
+  const { correctAns, opt1, opt2, opt3 } = req.body;
+  if (!correctAns || !opt1 || !opt2 || !opt3) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   const sql = 'INSERT INTO MCQ(correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?)';
