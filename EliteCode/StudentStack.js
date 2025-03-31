@@ -1,7 +1,6 @@
 import React from 'react';
 import StudentHome from './StudentView/StudentHome';
 import StudentCourse from './StudentView/StudentCourse';
-import StudentLesson from './StudentView/StudentLesson';
 import StudentProfile from './StudentView/StudentProfile';
 import StudentQuestion from './StudentView/StudentQuestion';
 import StudentSettings from './StudentView/StudentSettings';
