@@ -41,32 +41,6 @@ function TeacherCreateQuestion() {
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
-<<<<<<< Updated upstream
-    const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
-    console.log(qid)
-    const handleCreateQuestion = async () => {
-        try {
-
-            const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/createQuestion', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                question,description, pointVal, imgFile, language, topic, type, dueDate: formattedDate
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert("Question Created!");
-                navigation.goBack();
-            } else {
-                alert('Error:' + (data.error || 'Failed to create question'));
-                
-            }
-        } catch (error) {
-            alert("Network error: " + error.message);
-            console.log(error.message);
-=======
   const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
   console.log(qid);
   const handleCreateQuestion = async () => {
@@ -86,61 +60,57 @@ function TeacherCreateQuestion() {
             type,
             dueDate: formattedDate,
           }),
->>>>>>> Stashed changes
         }
       );
 
       const data = await response.json();
+   
       if (response.ok) {
         alert("Question Created!");
+        alert(data.message)
+       
         navigation.goBack();
       } else {
-        alert("Error:" + (data.error || "Failed to create question"));
+        alert("Error:" + (data.error  || "Failed to create question"));
       }
     } catch (error) {
       alert("Network error: " + error.message);
       console.log(error.message);
     }
-  };
-  const handleMCQ = async () => {
-    try {
-      fetch("https://elitecodecapstone24.onrender.com/questions", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      const response = await fetch(
-        "https://elitecodecapstone24.onrender.com/createMCQ",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            option1,
-            option2,
-            option3,
-            correctAns,
-          }),
-        }
-      );
+    if (type === "MCQ") {
+        handleCreateMCQ();
+    }
 
-      const data = await response.json();
-      if (response.ok) {
-        alert("MCQ Created!");
-        navigation.goBack();
-      } else {
-        alert("Error:" + (data.error || "Failed to create question"));
-      }
-    } catch (error) {
-      alert("Network error: " + error.message);
-      console.log(error.message);
-    }
   };
+  const handleCreateMCQ = async () => {
+    try {
+        const response = await fetch(
+            "https://elitecodecapstone24.onrender.com/createMCQ",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    correctAns,
+                    option1,
+                    option2,
+                    option3,
+                }),
+            }
+        );
+        const data = await response.json();
+        if (response.ok) {
+            alert("MCQ Created!");
+            alert(data.message)
+            navigation.goBack();
+        } else {
+            alert("Error:" + (data.error || "Failed to create MCQ"));
+        }
+    } catch (error) {
+        alert("Network error: " + error.message);
+        console.log(error.message);
+    }
+    };
+  
   const handleTypeChange = (selectedIndex) => {
     setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
     console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
@@ -248,9 +218,12 @@ function TeacherCreateQuestion() {
               {/* work on tommorow*/}
               <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
                 <Select
-                    selectedIndex={selectedItem}
-                    onSelect={(index) => setSelectedItem(index)}
-                >
+                  onSelect={index => {
+                    setSelectedItem(index);
+                    const options = [option1, option2, option3];
+                    setCorrectAns(options[index.row]);
+                    console.log('Selected correct answer:', options[index.row]);
+                }}>
                     <SelectItem title='Option 1' index={option1}/>
                     <SelectItem title='Option 2' index={option2}/>
                     <SelectItem title='Option 3' index={option3}/>

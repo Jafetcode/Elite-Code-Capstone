@@ -91,16 +91,16 @@ app.post('/createQuestion', (req, res) => {
 });
 
 app.post('/createMCQ', (req, res) => {
-  const { option1, option2, option3, correctAns } = req.body;
-  if (!option1 || !option2 || !option3 || !correctAns) {
+  const { opt1, opt2, opt3, correctAns } = req.body;
+  if (!opt1 || !opt2 || !opt3 || !correctAns) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO MCQ(correctAns, option1, option2, option3) VALUES (?, ?, ?, ?)';
-  db.query(sql, [correctAns, option1, option2, option3], (err, results) => {
+  const sql = 'INSERT INTO MCQ(correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?)';
+  db.query(sql, [correctAns, opt1, opt2, opt3], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'MCQ successfully added', correctAns: correctAns, option1: option1, option2: option2, option3: option3, mcqId: results.insertId });
+    res.json({ message: 'MCQ successfully added', correctAns: correctAns, option1: opt1, option2: opt2, option3: opt3, mcqId: results.insertId });
   });
 });
 
