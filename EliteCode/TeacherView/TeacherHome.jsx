@@ -60,7 +60,6 @@ function TeacherHome() {
                            <Card key={course.cid} style={{ marginBottom: 10 }}>
                            <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                   <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
                                    <View style={{ flex: 1 }}>
                                        <Text>{course.courseName}</Text>
                                        <Text appearance="hint">{course.description}</Text>
