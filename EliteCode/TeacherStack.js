@@ -10,7 +10,8 @@ import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TeacherCourseClasslist from './TeacherView/TeacherCourseClasslist';
-
+import QsAssginedToStudent from './TeacherView/QsAssignedToStudent';
+import QsByCourse from './TeacherView/QsByCourse';
 const Stack = createNativeStackNavigator();
 
 const TeacherStack = () => (
@@ -25,6 +26,8 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherCreateLesson" component={TeacherCreateLesson} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
     <Stack.Screen name="TeacherCourseClasslist" component={TeacherCourseClasslist} />
+    <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>
+    <Stack.Screen name="QuestionsAssignedToCourse" component={QsByCourse}/>
   </Stack.Navigator>
 );
 

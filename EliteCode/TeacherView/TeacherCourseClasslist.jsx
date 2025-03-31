@@ -51,14 +51,14 @@ const TeacherCourseClasslist = () => {
 
                     {classlist.map((student) => (
                         <Card key={student.userID} style={{ marginBottom: 10 }}>
-                            <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
+                            <TouchableOpacity onPress={() => navigation.navigate('QuestionsAssignedToStudent')}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
                                     <View style={{ flex: 1 }}>
                                         <Text>{student.fname} {student.lname}</Text>
                                         <Text appearance="hint">{student.email}</Text>
                                     </View>
-                                </View>
+                                </View >
                             </TouchableOpacity>
                         </Card>
                     ))}
