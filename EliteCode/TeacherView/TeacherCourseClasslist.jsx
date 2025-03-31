@@ -50,8 +50,8 @@ const TeacherCourseClasslist = () => {
                     </View>
 
                     {classlist.map((student) => (
-                        <Card key={student.userID} style={{ marginBottom: 10 }} onPress={() => navigation.navigate('TeacherCreateCourse', {studentOB: student, cid: cid})}>
-                            <TouchableOpacity onPress={() => navigation.navigate('QuestionsAssignedToStudent')}>
+                        <Card key={student.userID} style={{ marginBottom: 10 }}>
+                            <TouchableOpacity  onPress={() => navigation.navigate('QuestionsAssignedToStudent', {student: student, cid: cid})}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
                                     <View style={{ flex: 1 }}>

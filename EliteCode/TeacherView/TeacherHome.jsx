@@ -113,6 +113,10 @@ function TeacherHome() {
                            </TouchableOpacity>
                            <Button onPress={() => navigation.navigate('TeacherCourseClasslist', {cid : course.cid})}>
                             View Classlist
+                            
+                        </Button>
+                        <Button onPress={() => navigation.navigate('QsByCourse', {cid : course.cid, cName : course.courseName})}>
+                            View Questions Assinged to Course
                         </Button>
                        </Card>
                     ))}

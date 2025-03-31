@@ -6,23 +6,31 @@ import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
 import { useRoute} from '@react-navigation/native';
+import { SlideInDown } from "react-native-reanimated";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function QuestionsAssignedToStudent() {
+    console.log("rendering component")
     const navigation = useNavigation();
     const route = useRoute();
     const [questions, setQuestions] = React.useState([]);
     const { user } = useAuth();  
     const { student } = route.params || {};
     const { cid } = route.params || {};
+    if (!student?.userID ) {
+        console.error("Missing sid!");
+    }
+    if (!cid) {
+        console.error("missing cid")
+    }
 
-    const fetchCourses = async () => {
+    const fetchQuestions = async () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
-            console.log(questions)
+            console.log(data.results)
         } catch (error) {
             console.error("Failed to fetch", error);
         }
@@ -31,9 +39,10 @@ function QuestionsAssignedToStudent() {
     useFocusEffect(
         React.useCallback(() => {
             if (student?.userID) {
-                fetchCourses();
+                console.log("going to fetch the questions")
+                fetchQuestions();
             }
-        }, [student])
+        }, [student, cid])
     );
 
     return (
@@ -56,7 +65,7 @@ function QuestionsAssignedToStudent() {
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1"> </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>
+                        <TouchableOpacity>
                             <Text appearance="hint"> student name here  {/* {student.fname}  */ }</Text>
                         </TouchableOpacity>
                     </View>

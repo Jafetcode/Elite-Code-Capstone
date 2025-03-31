@@ -27,10 +27,7 @@ router.post('/createCourse', (req, res) => {
     res.json({ message: 'Course created', courseId: results.insertId });
   });
 })
-router.get('/test', (req, res) => {
-  console.log("Test route hit");
-  res.send("Test route works!");
-});
+
 
 router.get('/getCourses', (req, res) => {
   console.log("in get courses")
@@ -68,7 +65,18 @@ router.get('/submission', (req, res) => {
 });
 
 
-
+router.get('/questions', (req, res) => {
+  const sid = req.query.sid;
+  const cid = req.query.cid;
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.language, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+    'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';
+  db.query(sql, [cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+});
 
 router.get('/classlist', (req, res) => { //working
   const cid = req.query.cid;
