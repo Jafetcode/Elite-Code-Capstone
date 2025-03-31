@@ -90,6 +90,20 @@ app.post('/createQuestion', (req, res) => {
   });
 });
 
+app.post('/createMCQ', (req, res) => {
+  const { option1, option2, option3, correctAns } = req.body;
+  if (!option1 || !option2 || !option3 || !correctAns) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  const sql = 'INSERT INTO MCQ(correctAns, option1, option2, option3) VALUES (?, ?, ?, ?)';
+  db.query(sql, [correctAns, option1, option2, option3], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'MCQ successfully added', correctAns: correctAns, option1: option1, option2: option2, option3: option3, mcqId: results.insertId });
+  });
+});
+
 
 app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);
