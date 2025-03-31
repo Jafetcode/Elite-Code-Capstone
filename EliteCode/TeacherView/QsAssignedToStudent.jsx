@@ -5,13 +5,15 @@ import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } f
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
+import { useRoute} from '@react-navigation/native';
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function QuestionsAssignedToStudent() {
     const navigation = useNavigation();
+    const route = useRoute();
     const [questions, setQuestions] = React.useState([]);
-    const { user } = useAuth();  // Get the user and logout function
+    const { user } = useAuth();  
     const { student } = route.params || {};
     const { cid } = route.params || {};
 
@@ -20,6 +22,7 @@ function QuestionsAssignedToStudent() {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
+            console.log(questions)
         } catch (error) {
             console.error("Failed to fetch", error);
         }
@@ -27,10 +30,10 @@ function QuestionsAssignedToStudent() {
 
     useFocusEffect(
         React.useCallback(() => {
-            if (user?.userID) {
+            if (student?.userID) {
                 fetchCourses();
             }
-        }, [sid])
+        }, [student])
     );
 
     return (
@@ -54,7 +57,7 @@ function QuestionsAssignedToStudent() {
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1"> </Text>
                         <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>
-                            <Text appearance="hint"> {student.fname} </Text>
+                            <Text appearance="hint"> student name here  {/* {student.fname}  */ }</Text>
                         </TouchableOpacity>
                     </View>
 

@@ -44,13 +44,13 @@ const TeacherCourseClasslist = () => {
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1"> Course classlist </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>
+                        <TouchableOpacity>
                             <Text appearance="hint">Create Course</Text>
                         </TouchableOpacity>
                     </View>
 
                     {classlist.map((student) => (
-                        <Card key={student.userID} style={{ marginBottom: 10 }}>
+                        <Card key={student.userID} style={{ marginBottom: 10 }} onPress={() => navigation.navigate('TeacherCreateCourse', {studentOB: student, cid: cid})}>
                             <TouchableOpacity onPress={() => navigation.navigate('QuestionsAssignedToStudent')}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />

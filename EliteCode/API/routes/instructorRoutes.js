@@ -68,6 +68,8 @@ router.get('/submission', (req, res) => {
 });
 
 
+
+
 router.get('/classlist', (req, res) => { //working
   const cid = req.query.cid;
   const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email '

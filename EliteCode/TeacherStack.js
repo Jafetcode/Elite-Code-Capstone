@@ -27,7 +27,7 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
     <Stack.Screen name="TeacherCourseClasslist" component={TeacherCourseClasslist} />
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>
-    <Stack.Screen name="QuestionsAssignedToCourse" component={QsByCourse}/>
+    <Stack.Screen name="QsByCourse" component={QsByCourse}/>
   </Stack.Navigator>
 );
 
