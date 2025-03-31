@@ -1,12 +1,10 @@
 import React from 'react';
 import TeacherHome from './TeacherView/TeacherHome';
 import TeacherCourse from './TeacherView/TeacherCourse';
-import TeacherLesson from './TeacherView/TeacherLesson';
 import TeacherProfile from './TeacherView/TeacherProfile';
 import TeacherQuestion from './TeacherView/TeacherQuestion';
 import TeacherSettings from './TeacherView/TeacherSettings';
 import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
-import TeacherCreateLesson from './TeacherView/TeacherCreateLesson';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TeacherCourseClasslist from './TeacherView/TeacherCourseClasslist';
