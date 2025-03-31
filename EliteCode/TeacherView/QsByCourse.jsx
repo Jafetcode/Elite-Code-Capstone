@@ -42,9 +42,9 @@ function QsByCourse() {
             <ScrollView>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                    <Text category="s1">Course Library</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>
-                        <Text appearance="hint">Create Course</Text>
+                    <Text category="s1"> Questions for course { } </Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateLesson')}>
+                        <Text appearance="hint">Create Question</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 20 }}>
