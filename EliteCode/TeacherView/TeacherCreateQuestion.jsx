@@ -41,32 +41,6 @@ function TeacherCreateQuestion() {
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
-<<<<<<< Updated upstream
-    const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
-    console.log(qid)
-    const handleCreateQuestion = async () => {
-        try {
-
-            const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/createQuestion', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                question,description, pointVal, imgFile, language, topic, type, dueDate: formattedDate
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                alert("Question Created!");
-                navigation.goBack();
-            } else {
-                alert('Error:' + (data.error || 'Failed to create question'));
-                
-            }
-        } catch (error) {
-            alert("Network error: " + error.message);
-            console.log(error.message);
-=======
   const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
   console.log(qid);
   const handleCreateQuestion = async () => {
@@ -86,7 +60,6 @@ function TeacherCreateQuestion() {
             type,
             dueDate: formattedDate,
           }),
->>>>>>> Stashed changes
         }
       );
 
