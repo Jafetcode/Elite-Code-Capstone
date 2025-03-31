@@ -46,7 +46,7 @@ function Question() {
   console.log(qid);
 
 
-  const handleFetchQuestion = async () => {
+  const fetchQuestion = async () => {
     try {
       const response = await fetch("https://elitecodecapstone24.onrender.com/instructor/getQuestion?qid=${qid}")
       const data = await response.json();
@@ -198,11 +198,6 @@ function Question() {
             onChangeText={(value) => setLanguage(value)}
             style={{ marginBottom: 5 }}
           />
-          {/* <Button onPress={() => {
-                        console.log('Add Image');
-                    }}>
-                        Add Image
-                    </Button> */}
           <Input
             placeholder="ImgFile"
             value={imgFile}
