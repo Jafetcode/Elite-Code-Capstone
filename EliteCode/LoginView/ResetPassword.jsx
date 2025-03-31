@@ -8,8 +8,6 @@ import { FIREBASE_AUTH } from '../firebaseConfig';
 import { useAuth } from '../AuthContext';
 import { fetchSignInMethodsForEmail } from 'firebase/auth';
 
-
-
 function ResetPassword() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');

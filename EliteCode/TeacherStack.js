@@ -18,12 +18,10 @@ const TeacherStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="TeacherHome">
     <Stack.Screen name="TeacherHome" component={TeacherHome} />
     <Stack.Screen name="TeacherCourse" component={TeacherCourse} />
-    <Stack.Screen name="TeacherLesson" component={TeacherLesson} />
     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
     <Stack.Screen name="TeacherQuestion" component={TeacherQuestion} />
     <Stack.Screen name="TeacherSettings" component={TeacherSettings} />
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
-    <Stack.Screen name="TeacherCreateLesson" component={TeacherCreateLesson} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
     <Stack.Screen name="TeacherCourseClasslist" component={TeacherCourseClasslist} />
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>

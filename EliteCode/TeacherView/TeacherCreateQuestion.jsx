@@ -38,8 +38,6 @@ function TeacherCreateQuestion() {
   const [option2, setOption2] = React.useState("");
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
-  const [selectedItem, setSelectedItem] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
   const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
   console.log(qid);
