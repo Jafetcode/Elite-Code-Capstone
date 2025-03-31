@@ -2,10 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-// const path = require("path");
-// const { getUser } = require(path.join(__dirname, "../../AuthContext.jsx"));
-// const { useAuth } = require("../../../EliteCode/AuthContext"); 
-
 
 // Define your routes
 router.get('/', (req, res) => {
@@ -66,7 +62,6 @@ router.get('/submission', (req, res) => {
 
 
 router.get('/questions', (req, res) => {
-  const sid = req.query.sid;
   const cid = req.query.cid;
   const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.language, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
     'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';

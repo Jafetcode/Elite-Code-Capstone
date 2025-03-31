@@ -20,10 +20,10 @@ function QsByCourse() {
 
     const fetchQuestions = async () => {
         try {
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/teacher/questions?cid=${cid}`);
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/questions?cid=${cid}`);
             const data = await res.json();
             setQuestions(data.results);
-            console.log(data.results)
+        
         } catch (error) {
             console.error("Failed to fetch", error);
         }
@@ -32,7 +32,6 @@ function QsByCourse() {
     useFocusEffect(
         React.useCallback(() => {
             if (cid) {
-                console.log("going to fetch the questions assigned to course")
                 fetchQuestions();
             }
         }, [cid])
@@ -40,26 +39,14 @@ function QsByCourse() {
 
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Button
-                    appearance="ghost"
-                    status="basic"
-                    accessoryLeft={BackIcon}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
-                    Elite Code
-                </Text>
-            </View>
-
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
 
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
                         <Text category="s1"> </Text>
                         <TouchableOpacity>
-                            <Text appearance="hint"> Questions assgined to ${cName} {/* course name */}</Text>
+                            <Text category="h5" style={{ flex: 1, alignItems: "center", color: "white", margin:10}}> Questions Assgined To: </Text>
+                            <Text category="h5" style={{ flex: 1, alignItems: "center", color: "white", marginBottom: 20}} > {cName} </Text>
                         </TouchableOpacity>
                     </View>
 

@@ -11,8 +11,6 @@ const TeacherCourseClasslist = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const { cid } = route.params || {};
-    // 7aee93
-    console.log(cid)
     const [classlist, setClasslist] = useState([])
     const { user } = useAuth();  // Get the user and logout function
 
@@ -21,7 +19,6 @@ const TeacherCourseClasslist = () => {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/classlist?cid=${cid}`);
             const data = await res.json();
             setClasslist(data.results)
-            console.log("Using tid:", user.userID);
         } catch (error) {
             console.error("Failed to fetch", error);
         }

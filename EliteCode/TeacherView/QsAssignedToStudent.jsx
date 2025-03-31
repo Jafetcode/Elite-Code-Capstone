@@ -11,26 +11,18 @@ import { SlideInDown } from "react-native-reanimated";
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function QuestionsAssignedToStudent() {
-    console.log("rendering component")
     const navigation = useNavigation();
     const route = useRoute();
     const [questions, setQuestions] = React.useState([]);
     const { user } = useAuth();  
     const { student } = route.params || {};
     const { cid } = route.params || {};
-    if (!student?.userID ) {
-        console.error("Missing sid!");
-    }
-    if (!cid) {
-        console.error("missing cid")
-    }
 
     const fetchQuestions = async () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
-            console.log(data.results)
         } catch (error) {
             console.error("Failed to fetch", error);
         }
@@ -39,7 +31,6 @@ function QuestionsAssignedToStudent() {
     useFocusEffect(
         React.useCallback(() => {
             if (student?.userID) {
-                console.log("going to fetch the questions")
                 fetchQuestions();
             }
         }, [student, cid])
