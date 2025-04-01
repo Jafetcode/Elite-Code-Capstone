@@ -1,6 +1,8 @@
 import * as React from "react";
 import { View, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import * as eva from "@eva-design/eva";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../AuthContext";
 import {
   ApplicationProvider,
   Button,
@@ -15,6 +17,42 @@ function StudentHome() {
   const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);
   const [classCode, setClassCode] = React.useState('');
+  const { user} = useAuth();
+
+  const handleJoinClass = async () => {
+
+    if (!classCode.trim()) {
+      Alert.alert("Error", "Please enter a class code.");
+      return;
+    }
+
+    try {
+      const response = await fetch('https://elitecodecapstone24.onrender.com/student/joinCourse', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cid: classCode.trim(),
+          sid: user.userID,
+        }),
+      });
+
+      const data = await response.json();
+  
+      if (response.ok) {
+        setClassCode('');
+        Alert.alert("Success", data.message || "You joined the course!");
+      } else {
+        Alert.alert("Error", data.message || "Failed to join the course.");
+      }
+    } catch (error) {
+      console.error("Error joining course:", error);
+      Alert.alert("Error", "Something went wrong.");
+    }
+
+  };
+
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
 
@@ -30,7 +68,7 @@ function StudentHome() {
               <Card disabled={true}>
                 <Text  style={{marginBottom: 20}}>Enter a class code</Text>
                 <Input style={styles.inputs} label='Class' placeholder='class code' value={classCode} onChangeText={nextClassCode => setClassCode(nextClassCode)} />
-                <Button onPress={() => setVisible(false)}>Join</Button>
+                <Button onPress={() => { setVisible(false); handleJoinClass();}}>Join</Button>
               </Card>
 
             </Modal>
@@ -124,11 +162,16 @@ function StudentHome() {
   );
 }
 
-export default () => (
-  <Layout style={{ flex: 1 }}>
-    <StudentHome />
-  </Layout>
-);
+function AppWrapper(props = {}) {
+  return (
+    <Layout style={{ flex: 1 }}>
+      <StudentHome />
+    </Layout>
+  );
+}
+
+export default AppWrapper;
+
 const styles = StyleSheet.create({
   container: {
     minHeight: 192,
