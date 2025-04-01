@@ -9,7 +9,6 @@ import { ApplicationProvider, theme } from '@ui-kitten/components';
 import {useAuth} from '../AuthContext';
 
 
-
 function LoginScreen() {
   const navigation = useNavigation();
   const {login, user} = useAuth();

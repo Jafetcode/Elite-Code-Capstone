@@ -9,10 +9,8 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherQuestion() {
     const navigation = useNavigation();
-
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
             <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
                 <Button
                     appearance="ghost"

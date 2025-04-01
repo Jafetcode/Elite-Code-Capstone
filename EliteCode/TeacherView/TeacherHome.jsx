@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -11,79 +11,70 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 function TeacherHome() {
     const navigation = useNavigation();
     const [courses, setCourses] = React.useState([]);
-    const { user } = useAuth();  // Get the user and logout function
+    const { user } = useAuth();
 
     const fetchCourses = async () => {
-        try{
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
-        const data = await res.json();
-        setCourses(data.results); } catch (error) {
+        try {
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
+            const data = await res.json();
+            setCourses(data.results);
+        } catch (error) {
             console.error("Failed to fetch", error);
         }
     };
 
     useFocusEffect(
         React.useCallback(() => {
-          if (user?.userID) {
-            fetchCourses();
-          }
+            if (user?.userID) {
+                fetchCourses();
+            }
         }, [user])
-      );
-    
+    );
+
     return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Button
-                    appearance="ghost"
-                    status="basic"
-                    accessoryLeft={BackIcon}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
-                    Elite Code
-                </Text>
-            </View>
-
+        <Layout style={{ flex: 1, padding: 20 }}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
                         <Text category="s1">Course Library</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>
-                            <Text appearance="hint">Create Course</Text>
+                            <Text appearance="hint">Create a Course</Text>
                         </TouchableOpacity>
                     </View>
-
                     {courses.map((course) => (
-                        
-                           <Card key={course.cid} style={{ marginBottom: 10 }}>
-                           <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
-                               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                   <View style={{ flex: 1 }}>
-                                       <Text>{course.courseName}</Text>
-                                       <Text appearance="hint">{course.description}</Text>
-                                   </View>
-                                   <Text category="s2">Students: {course.NumEnrolled}</Text>
-                               </View>
-                               <View>
-                                <Text category="s2">Course Code: {course.cid} </Text>
+                        <Card key={course.cid} style={{ borderRadius: 10}}>
+                            {/* <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}> */}
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                    <View style={{ flex: 1 }}>
+                                        <Text>{course.courseName}</Text>
+                                        <Text appearance="hint">{course.description}</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                <Text category="s2">Enrolled: {course.NumEnrolled}      Course Code: {course.cid}  </Text>
+                                </View>
+                            {/* </TouchableOpacity> */}
+                            <View style={styles.container}>
+                            <Button size = "small" style= {{margin: 5, width: 140}} onPress={() => navigation.navigate('Classlist', { cid: course.cid })}>
+                                Classlist
+                            </Button>
+                            <Button size = "small" style= {{margin: 5, width: 140}} onPress={() => navigation.navigate('QsByCourse', { cid: course.cid, cName: course.courseName })}>
+                                Questions
+                            </Button>
                             </View>
-                           </TouchableOpacity>
-                           <Button onPress={() => navigation.navigate('TeacherCourseClasslist', {cid : course.cid})}>
-                            View Classlist
-                            
-                        </Button>
-                        <Button onPress={() => navigation.navigate('QsByCourse', {cid : course.cid, cName : course.courseName})}>
-                            View Questions Assinged to Course
-                        </Button>
-                       </Card>
+                        </Card>
                     ))}
                 </View>
             </ScrollView>
         </Layout>
     );
 }
+const styles = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+    },
+  });
+
 
 export default () => (
     <>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
@@ -34,20 +34,18 @@ const TeacherCourseClasslist = () => {
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1"> Course classlist </Text>
-                        <TouchableOpacity>
-                            <Text appearance="hint">Create Course</Text>
-                        </TouchableOpacity>
+                    
                     </View>
 
                     {classlist.map((student) => (
-                        <Card key={student.userID} style={{ marginBottom: 10 }}>
-                            <TouchableOpacity  onPress={() => navigation.navigate('QuestionsAssignedToStudent', {student: student, cid: cid})}>
+                        <Card key={student.userID} style={{ marginBottom: 10, borderRadius: 10 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, cid: cid })}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                                    <View style={{ flex: 1 }}>
-                                        <Text>{student.fname} {student.lname}</Text>
+                                    <Image source={require("../assets/images/profile-picture.png")}
+                                        style={{ width: 40, height: 40, borderRadius: 40, margin: 5, marginRight: 20}} />                                    <View style={{ flex: 1 }}>
+                                        <Text >{student.fname} {student.lname}</Text>
                                         <Text appearance="hint">{student.email}</Text>
-                                    </View>
+                                 </View>
                                 </View >
                             </TouchableOpacity>
                         </Card>

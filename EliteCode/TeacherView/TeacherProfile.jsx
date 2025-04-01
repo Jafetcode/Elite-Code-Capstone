@@ -43,7 +43,7 @@ function TeacherProfile() {
             source={require("../assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
           />
-          <Text category="h6">{user.name}</Text>
+          <Text category="h6">{user.name} </Text>
           <Text appearance="hint">{user.role}</Text>
           <Button size="small" style={{ marginTop: 10 }} onPress={() => console.log("Edit profile button pressed")}>Edit Profile</Button>
         </View>
@@ -87,15 +87,13 @@ function TeacherProfile() {
         </View>
 
         {/* Languages Section */}
-        <View>
-
+        {/* <View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
             <Text category="s1">Languages</Text>
             <TouchableOpacity onPress={() => console.log("Language edit button pressed")}>
               <Text appearance="hint">edit</Text>
             </TouchableOpacity>
           </View>
-
           <Layout
             style={{
               flexDirection: "row",
@@ -103,17 +101,13 @@ function TeacherProfile() {
               backgroundColor: "#526F8C",
               padding: 10,
               borderRadius: 10,
-              justifyContent: "space-evenly",
-            }}
-          >
+              justifyContent: "space-evenly",  }} >
             {["Java", "Python", "C", "Swift", "SQL"].map((lang) => (
               <Button key={lang} size="tiny" style={{ margin: 5 }}>
                 {lang}
-              </Button>
-            ))}
+              </Button>  ))}
           </Layout>
-
-        </View>
+        </View> */}
 
       </ScrollView>
     </Layout>

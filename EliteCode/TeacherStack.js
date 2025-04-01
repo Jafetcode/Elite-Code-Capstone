@@ -13,15 +13,15 @@ import QsByCourse from './TeacherView/QsByCourse';
 const Stack = createNativeStackNavigator();
 
 const TeacherStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="TeacherHome">
-    <Stack.Screen name="TeacherHome" component={TeacherHome} />
+  <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Course Library">
+    <Stack.Screen name="Course Library" component={TeacherHome} />
     <Stack.Screen name="TeacherCourse" component={TeacherCourse} />
     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
     <Stack.Screen name="TeacherQuestion" component={TeacherQuestion} />
     <Stack.Screen name="TeacherSettings" component={TeacherSettings} />
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
-    <Stack.Screen name="TeacherCourseClasslist" component={TeacherCourseClasslist} />
+    <Stack.Screen name="Classlist" component={TeacherCourseClasslist} />
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>
     <Stack.Screen name="QsByCourse" component={QsByCourse}/>
   </Stack.Navigator>
