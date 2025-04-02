@@ -12,7 +12,7 @@ const TeacherCourseClasslist = () => {
     const route = useRoute();
     const { cid } = route.params || {};
     const [classlist, setClasslist] = useState([])
-    const { user } = useAuth();  // Get the user and logout function
+    const { user } = useAuth(); 
 
     const fetchClasslist = async () => {
         try {

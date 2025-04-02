@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const signUp = async (email, password) => {
-        console.log( await fetchSignInMethodsForEmail(FIREBASE_AUTH, email));
+        // console.log( await fetchSignInMethodsForEmail(FIREBASE_AUTH, email));
         return createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
     };
 
