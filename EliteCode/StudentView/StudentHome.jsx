@@ -44,7 +44,9 @@ function StudentHome() {
         setClassCode('');
         Alert.alert("Success", data.message || "You joined the course!");
       } else {
-        Alert.alert("Error", data.message || "Failed to join the course.");
+        console.log("JOIN RESPONSE", data);
+        Alert.alert("Error", JSON.stringify(data));
+
       }
     } catch (error) {
       console.error("Error joining course:", error);
