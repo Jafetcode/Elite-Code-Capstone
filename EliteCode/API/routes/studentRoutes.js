@@ -23,7 +23,10 @@ router.get('/questions', (req, res) => {
 });
 
 router.post('/joinCourse', async (req, res) => {
-  const {cid, sid} = req.body;
+  console.log("testsetsts")
+  const cid = String(req.body.cid).trim();
+  const sid = String(req.body.sid).trim();
+  console.log("➡️ joinCourse called with:", { cid, sid });
 
   if (!sid || !cid) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -38,7 +41,7 @@ router.post('/joinCourse', async (req, res) => {
       return res.status(404).json({ error: 'No teacher found for this course' });
     }
 
-    const tid = teacherRows[0].TID;
+    const tid = teacherRows[0].tid;
 
     const [existing] = await db.promise().query(
       'SELECT * FROM Enrolled WHERE tid = ? AND sid = ? AND cid = ?',
@@ -56,7 +59,8 @@ router.post('/joinCourse', async (req, res) => {
     res.json({ message: 'Student successfully enrolled.' });
 
   } catch (err) {
-    console.error(err);
+    console.error('JOIN COURSE ERROR:', err.message);
+    console.error(err.stack); // 🔥 Shows the full trace
     res.status(500).json({ error: 'Internal server error' });
   }
 })

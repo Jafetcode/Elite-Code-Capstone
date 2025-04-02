@@ -57,7 +57,7 @@ const SignUp = () => {
     }
   };
 
-  const handleSignUp = async (role) => {
+  const handleSignUp = async () => {
     setLoading(true);
     try {
       const userCredential = await signUp(email, password);
