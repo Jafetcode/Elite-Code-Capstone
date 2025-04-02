@@ -73,6 +73,17 @@ router.get('/questions', (req, res) => {
   });
 });
 
+router.get('/questionID', (req, res) => {
+  const cid = req.query.cid;
+  const sql = 'SELECT qid FROM Questions WHERE cid = ?';
+  db.query(sql, [cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+}
+
 router.get('/classlist', (req, res) => { //working
   const cid = req.query.cid;
   const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email '

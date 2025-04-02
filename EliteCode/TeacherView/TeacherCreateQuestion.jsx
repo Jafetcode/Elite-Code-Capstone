@@ -13,7 +13,6 @@ import {
   Radio,
   RadioGroup,
   Datepicker,
-  IndexPath,
   SelectItem
 
 } from "@ui-kitten/components";
@@ -25,7 +24,6 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherCreateQuestion() {
   const navigation = useNavigation();
-  const [qid] = React.useState(0);
   const [description, setDescription] = React.useState("");
   const [type, setType] = React.useState("MCQ");
   const [dueDate, setDate] = React.useState(new Date());
@@ -39,10 +37,9 @@ function TeacherCreateQuestion() {
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
   const [selectedItem, setSelectedItem] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
-  console.log(qid);
+
   const handleCreateQuestion = async () => {
     try {
       const response = await fetch(
@@ -59,6 +56,7 @@ function TeacherCreateQuestion() {
             topic,
             type,
             dueDate: formattedDate,
+
           }),
         }
       );
@@ -84,10 +82,14 @@ function TeacherCreateQuestion() {
   };
   const handleCreateMCQ = async () => {
     try {
+      handleGetQid();
+      console.log("Question ID: " + data.qid);
+
+      
         const response = await fetch(
-            "https://elitecodecapstone24.onrender.com/createMCQ",
+            "https://elitecodecapstone24.onrender.com/createMCQ/",
             {
-                method: "POST",
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     correctAns,
@@ -100,15 +102,38 @@ function TeacherCreateQuestion() {
         const data = await response.json();
         if (response.ok) {
             alert("MCQ Created!");
-            alert(data.message)
+            
             navigation.goBack();
         } else {
             alert("Error:" + (data.error || "Failed to create MCQ"));
+            alert(data.message)
         }
     } catch (error) {
         alert("Network error: " + error.message);
         console.log(error.message);
+        alert(data.message)
     }
+    };
+
+    const handleGetQid = async () => {
+        try {
+            const response = await fetch(
+                "https://elitecodecapstone24.onrender.com/questions",
+                {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+            const data = await response.json();
+            if (response.ok) {
+                alert("Question ID: " + data.qid);
+            } else {
+                alert("Error:" + (data.error || "Failed to get question ID"));
+            }
+        } catch (error) {
+            alert("Network error: " + error.message);
+            console.log(error.message);
+        }
     };
   
   const handleTypeChange = (selectedIndex) => {
@@ -219,7 +244,7 @@ function TeacherCreateQuestion() {
               <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
                 <Select
                   onSelect={index => {
-                    setSelectedItem(index);
+                    selectedIndex={selectedIndex}
                     const options = [option1, option2, option3];
                     setCorrectAns(options[index.row]);
                     console.log('Selected correct answer:', options[index.row]);
@@ -242,12 +267,6 @@ function TeacherCreateQuestion() {
             placeholder="Topic"
             value={topic}
             onChangeText={(value) => setTopic(value)}
-            style={{ marginBottom: 5 }}
-          />
-          <Input
-            placeholder="Language"
-            value={language}
-            onChangeText={(value) => setLanguage(value)}
             style={{ marginBottom: 5 }}
           />
           {/* <Button onPress={() => {
@@ -274,7 +293,8 @@ function TeacherCreateQuestion() {
           <View>
             <Text category="p1">
               {" "}
-              {`Selected date: ${dueDate.toLocaleDateString()}`}{" "}
+              {`Selected date: ${dueDate.toLocaleDateString()}`}
+              {" "}
             </Text>
             <Datepicker date={dueDate} onSelect={(date) => setDate(date)} />
           </View>
