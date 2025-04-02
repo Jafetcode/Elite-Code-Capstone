@@ -55,52 +55,11 @@ function TeacherHome() {
                         </TouchableOpacity>
                     </View>
 
-                    <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
-                            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                                <View style={{ flex: 1 }}>
-                                    <Text>Course Name</Text>
-                                    <Text appearance="hint">Description</Text>
-                                </View>
-                                <Text category="s2">Students: {/*course.NumEnrolled*/} </Text>
-                            </View>
-                            <View>
-                                <Text category="s2">Course Code: 100000 </Text>
-                            </View>
-
-                        </TouchableOpacity>
-                        <Button onPress={() => navigation.navigate('TeacherCourseClasslist')}>
-                            View Classlist
-                        </Button>
-                    </Card>
-
-                    <Card>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
-                            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                                <View style={{ flex: 1 }}>
-                                    <Text> Data Structures </Text>
-                                    <Text appearance="hint">Description</Text>
-                                </View>
-                                <Text category="s2">Students: 13</Text>
-                            </View>
-                            <View>
-                                <Text category="s2">Course Code: 100000 </Text>
-                            </View>
-
-                        </TouchableOpacity>
-                        <Button onPress={() => navigation.navigate('TeacherCourseClasslist', {cid : '7aee93'})}>
-                            View Classlist
-                        </Button>
-                    </Card>
-
                     {courses.map((course) => (
                         
                            <Card key={course.cid} style={{ marginBottom: 10 }}>
                            <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                   <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
                                    <View style={{ flex: 1 }}>
                                        <Text>{course.courseName}</Text>
                                        <Text appearance="hint">{course.description}</Text>

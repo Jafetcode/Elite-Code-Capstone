@@ -47,7 +47,7 @@ function TeacherCourse(){
                     </View>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherLesson')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherQuestion')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Question name </Text>
@@ -59,7 +59,7 @@ function TeacherCourse(){
                     </Card>
 
                     <Card style={{ marginBottom: 10 }}>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherLesson')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherQuestion')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>Question Name</Text>

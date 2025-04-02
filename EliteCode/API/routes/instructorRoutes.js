@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/createCourse', (req, res) => {
-  const { tid } = req.query;
+  const tid = req.query;
   const { courseName, description } = req.body;
   if (!courseName || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -72,6 +72,17 @@ router.get('/questions', (req, res) => {
     res.json({ results });
   });
 });
+router.get('/getQuestion', (req, res) => {
+  const qid = req.query.qid;
+  const sql = 'SELECT * FROM Questions Where qid = ?';
+  db.query(sql, [qid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+});
+
 
 router.get('/questionID', (req, res) => {
   const cid = req.query.cid;
@@ -109,5 +120,15 @@ router.get('/courses', (req, res) => { //working
     res.json({results});
   });
 });
+
+router.put('/updateQuestion', (req, res) => {
+  const sql = ' ';
+  db.query(sql, [], (err, results) => {
+    if(err) {
+      return res.status(500).json({error: err.message});
+    }
+    res.json({results})
+  })
+})
 // Export the router
 module.exports = router;
