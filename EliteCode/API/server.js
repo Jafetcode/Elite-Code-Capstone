@@ -77,12 +77,12 @@ app.post('/newUser', (req, res) => {
 
 app.post('/createQuestion', (req, res) => {
   console.log(req.body);
-  const { question, description, pointVal, imgFile, topic, type, dueDate } = req.body;
-  if (!question || !description || !pointVal || !topic || !type || !imgFile || !dueDate) {
+  const { question, description, pointVal, imgFile, topic, type, dueDate,tid } = req.body;
+  if (!question || !description || !pointVal || !topic || !type || !imgFile || !dueDate || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile,topic, type, dueDate) VALUES ( ?, ?, ?, ?, ?, ?, ?)';
-  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate], (err, results) => {
+  const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile,topic, type, dueDate, tid) VALUES ( ?, ?, ?, ?, ?, ?, ?,?)';
+  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate,tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -91,12 +91,12 @@ app.post('/createQuestion', (req, res) => {
 });
 
 app.post('/createMCQ', (req, res) => {
-  const { correctAns, opt1, opt2, opt3 } = req.body;
-  if (!correctAns || !opt1 || !opt2 || !opt3) {
+  const { qid,correctAns, opt1, opt2, opt3 } = req.body;
+  if (!qid||correctAns || !opt1 || !opt2 || !opt3) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO MCQ(correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?)';
-  db.query(sql, [correctAns, opt1, opt2, opt3], (err, results) => {
+  const sql = 'INSERT INTO MCQ(qid, correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?, ?)';
+  db.query(sql, [qid, correctAns, opt1, opt2, opt3], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }

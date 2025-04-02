@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, ScrollView} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../AuthContext";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -30,44 +31,130 @@ function TeacherCreateQuestion() {
   const [question, setQuestion] = React.useState("");
   const [pointVal, setPointVal] = React.useState("");
   const [topic, setTopic] = React.useState("");
-  const [language, setLanguage] = React.useState("");
   const [imgFile, setImgFile] = React.useState("");
   const [option1, setOption1] = React.useState("");
   const [option2, setOption2] = React.useState("");
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
-  const [selectedItem, setSelectedItem] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [questionData, setQuestionData] = React.userState([]);
 
 
-  const handleCreateQuestion = async () => {
+  const{user} = useAuth();
+//   const handleGetQid = async () => {
+//     try {
+//         const response = await fetch(`https://elitecodecapstone24.onrender.com/questions`);
+//         if (response.ok) {
+//             alert("Question ID: " + data.qid);
+//             const json = await response.json();
+//             setQuestionData(json);
+            
+//         } else {
+//             alert("Error:" + (data.error || "Failed to get question ID"));
+//         }
+//     } catch (error) {
+//         alert("Network error: " + error.message);
+//         console.log(error.message);
+//     }
+// };
+
+// const handleCreateMCQ = async () => {
+//   try {
+//     handleGetQid();
+//     console.log("Question ID: " + data.qid);
+
+    
+//       const response = await fetch(
+//           "https://elitecodecapstone24.onrender.com/createMCQ/",
+//           {
+//               method: "PUT",
+//               headers: { "Content-Type": "application/json" },
+//               body: JSON.stringify({
+//                 qid: data.questionId, 
+//                 opt1: option1,
+//                 opt2: option2,
+//                 opt3: option3,
+//                 correctAns
+//               }),
+//           }
+//       );
+//       const data = await response.json();
+//       if (response.ok) {
+//           alert("MCQ Created!");
+          
+//           navigation.goBack();
+//       } else {
+//           alert("Error:" + (data.error || "Failed to create MCQ"));
+//           alert(data.message)
+//       }
+//   } catch (error) {
+//       alert("Network error: " + error.message);
+//       console.log(error.message);
+//       alert(data.message)
+//   }
+//   };
+/////////////////////////////////////////////////////////////////////
+//fix
+const handleCreateQuestion = async () => {
     try {
       const response = await fetch(
-        "https://elitecodecapstone24.onrender.com/createQuestion",
+        `https://elitecodecapstone24.onrender.com/createQuestion`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+            body: JSON.stringify({
             question,
             description,
             pointVal,
             imgFile,
-            language,
             topic,
             type,
             dueDate: formattedDate,
-
+            tid: user.uid,
           }),
         }
       );
 
       const data = await response.json();
-   
+      if (!response.ok) {
+        throw new Error(questionData.error || "Failed to create question");
+    }
+    if (type === "MCQ") {
+      try {
+        console.log("Question ID: " + data.qid);
+          const mcqResponse = await fetch(
+              "https://elitecodecapstone24.onrender.com/createMCQ/",
+              {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    qid: data.qid, 
+                    opt1: option1,
+                    opt2: option2,
+                    opt3: option3,
+                    correctAns
+                  }),
+              }
+          );
+          const mcqData = await mcqResponse.json();
+          if (mcqResponse.ok) {
+              alert("MCQ Created!");
+              console.log("Question ID: " + mcqData);
+              navigation.goBack();
+          } else {
+              alert("Error:" + (data.error || "Failed to create MCQ"));
+              alert(data.message)
+          }
+      } catch (error) {
+          alert("Network error: " + error.message);
+          console.log(error.message);
+          alert(data.message)
+      }
+    };
       if (response.ok) {
         alert("Question Created!");
         alert(data.message)
-       
-        navigation.goBack();
+        navigator.goBack()
       } else {
         alert("Error:" + (data.error  || "Failed to create question"));
       }
@@ -75,67 +162,11 @@ function TeacherCreateQuestion() {
       alert("Network error: " + error.message);
       console.log(error.message);
     }
-    if (type === "MCQ") {
-        handleCreateMCQ();
-    }
-
+    
   };
-  const handleCreateMCQ = async () => {
-    try {
-      handleGetQid();
-      console.log("Question ID: " + data.qid);
-
-      
-        const response = await fetch(
-            "https://elitecodecapstone24.onrender.com/createMCQ/",
-            {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    correctAns,
-                    option1,
-                    option2,
-                    option3,
-                }),
-            }
-        );
-        const data = await response.json();
-        if (response.ok) {
-            alert("MCQ Created!");
-            
-            navigation.goBack();
-        } else {
-            alert("Error:" + (data.error || "Failed to create MCQ"));
-            alert(data.message)
-        }
-    } catch (error) {
-        alert("Network error: " + error.message);
-        console.log(error.message);
-        alert(data.message)
-    }
-    };
-
-    const handleGetQid = async () => {
-        try {
-            const response = await fetch(
-                "https://elitecodecapstone24.onrender.com/questions",
-                {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-            const data = await response.json();
-            if (response.ok) {
-                alert("Question ID: " + data.qid);
-            } else {
-                alert("Error:" + (data.error || "Failed to get question ID"));
-            }
-        } catch (error) {
-            alert("Network error: " + error.message);
-            console.log(error.message);
-        }
-    };
   
+
+    
   const handleTypeChange = (selectedIndex) => {
     setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
     console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
@@ -243,16 +274,20 @@ function TeacherCreateQuestion() {
               {/* work on tommorow*/}
               <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
                 <Select
-                  onSelect={index => {
-                    selectedIndex={selectedIndex}
-                    const options = [option1, option2, option3];
-                    setCorrectAns(options[index.row]);
-                    console.log('Selected correct answer:', options[index.row]);
-                }}>
-                    <SelectItem title='Option 1' index={option1}/>
-                    <SelectItem title='Option 2' index={option2}/>
-                    <SelectItem title='Option 3' index={option3}/>
-
+                 selectedIndex={selectedIndex}
+                 value={correctAns}
+                 onSelect={(index) => {
+                     const options = [option1, option2, option3];
+                     setSelectedIndex(index);
+                     setCorrectAns(options[index.row]);
+                     console.log('Selected index:', index.row);
+                     console.log('Selected correct answer:', options[index.row]);
+                 }}
+                 style={{ marginBottom: 5 }}
+             >
+                 <SelectItem title={option1 || 'Option 1'} />
+                 <SelectItem title={option2 || 'Option 2'} />
+                 <SelectItem title={option3 || 'Option 3'} />
                 </Select>
             </View>
           )}

@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/createCourse', (req, res) => {
-  const tid = req.query;
+  const { tid } = req.query;
   const { courseName, description } = req.body;
   if (!courseName || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -63,7 +63,7 @@ router.get('/submission', (req, res) => {
 
 router.get('/questions', (req, res) => {
   const cid = req.query.cid;
-  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.language, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
     'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';
   db.query(sql, [cid], (err, results) => {
     if (err) {
@@ -93,7 +93,7 @@ router.get('/questionID', (req, res) => {
     }
     res.json({ results });
   });
-}
+});
 
 router.get('/classlist', (req, res) => { //working
   const cid = req.query.cid;

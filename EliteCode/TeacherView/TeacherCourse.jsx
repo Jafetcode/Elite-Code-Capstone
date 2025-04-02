@@ -41,7 +41,7 @@ function TeacherCourse(){
                 <View style={{ marginBottom: 20 }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1"> Questions for course {} </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateLesson')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
                             <Text appearance="hint">Create Question</Text>
                         </TouchableOpacity>
                     </View>
