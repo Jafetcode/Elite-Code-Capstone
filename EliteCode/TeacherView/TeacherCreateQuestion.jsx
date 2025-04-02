@@ -37,133 +37,101 @@ function TeacherCreateQuestion() {
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [questionData, setQuestionData] = React.userState([]);
-
+  const [questionData, setQuestionData] = React.useState([]);
+  const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
 
   const{user} = useAuth();
-//   const handleGetQid = async () => {
-//     try {
-//         const response = await fetch(`https://elitecodecapstone24.onrender.com/questions`);
-//         if (response.ok) {
-//             alert("Question ID: " + data.qid);
-//             const json = await response.json();
-//             setQuestionData(json);
-            
-//         } else {
-//             alert("Error:" + (data.error || "Failed to get question ID"));
-//         }
-//     } catch (error) {
-//         alert("Network error: " + error.message);
-//         console.log(error.message);
-//     }
-// };
 
-// const handleCreateMCQ = async () => {
-//   try {
-//     handleGetQid();
-//     console.log("Question ID: " + data.qid);
-
-    
-//       const response = await fetch(
-//           "https://elitecodecapstone24.onrender.com/createMCQ/",
-//           {
-//               method: "PUT",
-//               headers: { "Content-Type": "application/json" },
-//               body: JSON.stringify({
-//                 qid: data.questionId, 
-//                 opt1: option1,
-//                 opt2: option2,
-//                 opt3: option3,
-//                 correctAns
-//               }),
-//           }
-//       );
-//       const data = await response.json();
-//       if (response.ok) {
-//           alert("MCQ Created!");
-          
-//           navigation.goBack();
-//       } else {
-//           alert("Error:" + (data.error || "Failed to create MCQ"));
-//           alert(data.message)
-//       }
-//   } catch (error) {
-//       alert("Network error: " + error.message);
-//       console.log(error.message);
-//       alert(data.message)
-//   }
-//   };
-/////////////////////////////////////////////////////////////////////
-//fix
 const handleCreateQuestion = async () => {
-    try {
-      const response = await fetch(
-        `https://elitecodecapstone24.onrender.com/createQuestion`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-            question,
-            description,
-            pointVal,
-            imgFile,
-            topic,
-            type,
-            dueDate: formattedDate,
-            tid: user.uid,
-          }),
-        }
-      );
+  try {
+    console.log("Creating question with the following details:");
+    console.log("Question:", question);
+    console.log("Description:", description);
+    console.log("Point Value:", pointVal);
+    console.log("Image File:", imgFile);
+    console.log("Topic:", topic);
+    console.log("Type:", type);
+    console.log("Due Date:", formattedDate);
+    console.log("Teacher ID (tid):", user.userID);
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(questionData.error || "Failed to create question");
+    const response = await fetch(
+      `https://elitecodecapstone24.onrender.com/createQuestion`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question,
+          description,
+          pointVal,
+          imgFile,
+          topic,
+          type,
+          dueDate: formattedDate,
+          tid: user.userID,
+        }),
+      }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      console.log("Response Status:", response.status);
+      console.log("Response Data:", data);
+      throw new Error(data.error || "Failed to create question");
     }
+
+    console.log("Question created successfully. Response data:", data);
+
     if (type === "MCQ") {
       try {
-        console.log("Question ID: " + data.qid);
-          const mcqResponse = await fetch(
-              "https://elitecodecapstone24.onrender.com/createMCQ/",
-              {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    qid: data.qid, 
-                    opt1: option1,
-                    opt2: option2,
-                    opt3: option3,
-                    correctAns
-                  }),
-              }
-          );
-          const mcqData = await mcqResponse.json();
-          if (mcqResponse.ok) {
-              alert("MCQ Created!");
-              console.log("Question ID: " + mcqData);
-              navigation.goBack();
-          } else {
-              alert("Error:" + (data.error || "Failed to create MCQ"));
-              alert(data.message)
+        console.log("Creating MCQ with the following details:");
+        console.log("Question ID (qid):", data.qid);
+        console.log("Option 1:", option1);
+        console.log("Option 2:", option2);
+        console.log("Option 3:", option3);
+        console.log("Correct Answer:", correctAns);
+
+        const mcqResponse = await fetch(
+          "https://elitecodecapstone24.onrender.com/createMCQ/",
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              qid: data.qid,
+              opt1: option1,
+              opt2: option2,
+              opt3: option3,
+              correctAns,
+            }),
           }
+        );
+
+        const mcqData = await mcqResponse.json();
+        if (mcqResponse.ok) {
+          console.log("MCQ created successfully. Response data:", mcqData);
+          alert("MCQ Created!");
+          navigation.goBack();
+        } else {
+          console.log("MCQ Response Status:", mcqResponse.status);
+          console.log("MCQ Response Data:", mcqData);
+          alert("Error:" + (mcqData.error || "Failed to create MCQ"));
+        }
       } catch (error) {
-          alert("Network error: " + error.message);
-          console.log(error.message);
-          alert(data.message)
+        console.error("Error creating MCQ:", error.message);
+        alert("Network error: " + error.message);
       }
-    };
-      if (response.ok) {
-        alert("Question Created!");
-        alert(data.message)
-        navigator.goBack()
-      } else {
-        alert("Error:" + (data.error  || "Failed to create question"));
-      }
-    } catch (error) {
-      alert("Network error: " + error.message);
-      console.log(error.message);
     }
-    
-  };
+
+    if (response.ok) {
+      alert("Question Created!");
+      navigation.goBack();
+    } else {
+      alert("Error:" + (data.error || "Failed to create question"));
+    }
+  } catch (error) {
+    console.error("Error creating question:", error.message);
+    alert("Network error: " + error.message);
+  }
+};
   
 
     
