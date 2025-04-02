@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, ScrollView} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../AuthContext";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -13,7 +14,6 @@ import {
   Radio,
   RadioGroup,
   Datepicker,
-  IndexPath,
   SelectItem
 
 } from "@ui-kitten/components";
@@ -25,90 +25,116 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function TeacherCreateQuestion() {
   const navigation = useNavigation();
-  const [qid] = React.useState(0);
   const [description, setDescription] = React.useState("");
   const [type, setType] = React.useState("MCQ");
   const [dueDate, setDate] = React.useState(new Date());
   const [question, setQuestion] = React.useState("");
   const [pointVal, setPointVal] = React.useState("");
   const [topic, setTopic] = React.useState("");
-  const [language, setLanguage] = React.useState("");
   const [imgFile, setImgFile] = React.useState("");
   const [option1, setOption1] = React.useState("");
   const [option2, setOption2] = React.useState("");
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [questionData, setQuestionData] = React.useState([]);
+  const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
 
-  const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
-  console.log(qid);
-  const handleCreateQuestion = async () => {
-    try {
-      const response = await fetch(
-        "https://elitecodecapstone24.onrender.com/createQuestion",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question,
-            description,
-            pointVal,
-            imgFile,
-            language,
-            topic,
-            type,
-            dueDate: formattedDate,
-          }),
-        }
-      );
+  const{user} = useAuth();
 
-      const data = await response.json();
-   
-      if (response.ok) {
-        alert("Question Created!");
-        alert(data.message)
-       
-        navigation.goBack();
-      } else {
-        alert("Error:" + (data.error  || "Failed to create question"));
+const handleCreateQuestion = async () => {
+  try {
+    console.log("Creating question with the following details:");
+    console.log("Question:", question);
+    console.log("Description:", description);
+    console.log("Point Value:", pointVal);
+    console.log("Image File:", imgFile);
+    console.log("Topic:", topic);
+    console.log("Type:", type);
+    console.log("Due Date:", formattedDate);
+    console.log("Teacher ID (tid):", user.userID);
+
+    const response = await fetch(
+      `https://elitecodecapstone24.onrender.com/createQuestion`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question,
+          description,
+          pointVal,
+          imgFile,
+          topic,
+          type,
+          dueDate: formattedDate,
+          tid: user.userID,
+        }),
       }
-    } catch (error) {
-      alert("Network error: " + error.message);
-      console.log(error.message);
-    }
-    if (type === "MCQ") {
-        handleCreateMCQ();
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      console.log("Response Status:", response.status);
+      console.log("Response Data:", data);
+      throw new Error(data.error || "Failed to create question");
     }
 
-  };
-  const handleCreateMCQ = async () => {
-    try {
-        const response = await fetch(
-            "https://elitecodecapstone24.onrender.com/createMCQ",
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    correctAns,
-                    option1,
-                    option2,
-                    option3,
-                }),
-            }
+    console.log("Question created successfully. Response data:", data);
+
+    if (type === "MCQ") {
+      try {
+        console.log("Creating MCQ with the following details:");
+        console.log("Question ID (qid):", data.qid);
+        console.log("Option 1:", option1);
+        console.log("Option 2:", option2);
+        console.log("Option 3:", option3);
+        console.log("Correct Answer:", correctAns);
+
+        const mcqResponse = await fetch(
+          "https://elitecodecapstone24.onrender.com/createMCQ/",
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              qid: data.qid,
+              opt1: option1,
+              opt2: option2,
+              opt3: option3,
+              correctAns,
+            }),
+          }
         );
-        const data = await response.json();
-        if (response.ok) {
-            alert("MCQ Created!");
-            alert(data.message)
-            navigation.goBack();
+
+        const mcqData = await mcqResponse.json();
+        if (mcqResponse.ok) {
+          console.log("MCQ created successfully. Response data:", mcqData);
+          alert("MCQ Created!");
+          navigation.goBack();
         } else {
-            alert("Error:" + (data.error || "Failed to create MCQ"));
+          console.log("MCQ Response Status:", mcqResponse.status);
+          console.log("MCQ Response Data:", mcqData);
+          alert("Error:" + (mcqData.error || "Failed to create MCQ"));
         }
-    } catch (error) {
+      } catch (error) {
+        console.error("Error creating MCQ:", error.message);
         alert("Network error: " + error.message);
-        console.log(error.message);
+      }
     }
-    };
+
+    if (response.ok) {
+      alert("Question Created!");
+      navigation.goBack();
+    } else {
+      alert("Error:" + (data.error || "Failed to create question"));
+    }
+  } catch (error) {
+    console.error("Error creating question:", error.message);
+    alert("Network error: " + error.message);
+  }
+};
   
+
+    
   const handleTypeChange = (selectedIndex) => {
     setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
     console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
@@ -216,16 +242,20 @@ function TeacherCreateQuestion() {
               {/* work on tommorow*/}
               <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
                 <Select
-                  onSelect={index => {
-                    setSelectedItem(index);
-                    const options = [option1, option2, option3];
-                    setCorrectAns(options[index.row]);
-                    console.log('Selected correct answer:', options[index.row]);
-                }}>
-                    <SelectItem title='Option 1' index={option1}/>
-                    <SelectItem title='Option 2' index={option2}/>
-                    <SelectItem title='Option 3' index={option3}/>
-
+                 selectedIndex={selectedIndex}
+                 value={correctAns}
+                 onSelect={(index) => {
+                     const options = [option1, option2, option3];
+                     setSelectedIndex(index);
+                     setCorrectAns(options[index.row]);
+                     console.log('Selected index:', index.row);
+                     console.log('Selected correct answer:', options[index.row]);
+                 }}
+                 style={{ marginBottom: 5 }}
+             >
+                 <SelectItem title={option1 || 'Option 1'} />
+                 <SelectItem title={option2 || 'Option 2'} />
+                 <SelectItem title={option3 || 'Option 3'} />
                 </Select>
             </View>
           )}
@@ -240,12 +270,6 @@ function TeacherCreateQuestion() {
             placeholder="Topic"
             value={topic}
             onChangeText={(value) => setTopic(value)}
-            style={{ marginBottom: 5 }}
-          />
-          <Input
-            placeholder="Language"
-            value={language}
-            onChangeText={(value) => setLanguage(value)}
             style={{ marginBottom: 5 }}
           />
           {/* <Button onPress={() => {
@@ -272,7 +296,8 @@ function TeacherCreateQuestion() {
           <View>
             <Text category="p1">
               {" "}
-              {`Selected date: ${dueDate.toLocaleDateString()}`}{" "}
+              {`Selected date: ${dueDate.toLocaleDateString()}`}
+              {" "}
             </Text>
             <Datepicker date={dueDate} onSelect={(date) => setDate(date)} />
           </View>
