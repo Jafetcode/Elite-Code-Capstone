@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, ScrollView} from "react-native";
+import { View, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 import * as ImagePicker from "expo-image-picker";
@@ -52,12 +52,13 @@ const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
   }
 
   let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ['images'],
+    mediaTypes:['images'],
     allowsEditing: true,
     aspect: [4, 3],
     quality: 1,
   });
   if (!result.canceled) {
+    const selectedImage = await getBlobFromUri(result.assets[0].uri);
     setImgFile(result.uri);
   }
 };
@@ -88,9 +89,9 @@ const handleCreateQuestion = async () => {
       const type = match ? `image/${match[1]}` : 'image/jpeg';
 
       formData.append('imgFile', {
-        uri: imageUri,
+        uri: imgFile,
         name: filename,
-        type,
+        type: mimeType,
       });
     }
 
