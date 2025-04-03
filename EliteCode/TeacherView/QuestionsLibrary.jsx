@@ -20,7 +20,7 @@ function QuestionsLibrary() {
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-            hour12: true, 
+            hour12: true,
         });
     };
 
@@ -29,9 +29,8 @@ function QuestionsLibrary() {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/allQuestions?tid=${user.userID}`);
             const data = await res.json();
             setQuestions(data.results)
-            console.log(courses)
         } catch (error) {
-            console.log('Error occurred')
+            console.log('Error occurred in get questions')
         }
     }
     useFocusEffect(
@@ -44,35 +43,33 @@ function QuestionsLibrary() {
 
 
     return (
-        <Layout style={{ flex: 1, padding: 15 }}>
+        <Layout style={{ flex: 1, padding: 5 }}>
             <ScrollView>
-                <View style={styles.container}>
-                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('TeacherQuestion')}>
-                        Assign to course
-                    </Button>
-                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Questions Library')}>
-                        Assign to a student/students
-                    </Button>
-                </View>
-
-                <Text> Display teacher questions </Text>
                 <View style={{ marginBottom: 20 }}>
                     {questions.length > 0 ? (
                         <>
-                            {questions.map((question) => 
-                                    <Card key={question.qid} style={{}}>
-                                        <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
-                                            <View style={{ flex: 1 }}>
-                                                <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
-                                                <Text appearance="hint" >{question.description}</Text>
-                                            </View>
+                            {questions.map((question) =>
+                                <Card key={question.qid} style={{borderRadius: 10,  borderWidth: 0}}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                            <Text appearance="hint" >{question.description}</Text>
                                         </View>
-                                        <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                        <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                        <Text category="s2">{question.pointVal} Points</Text>
-                                        <View><Text category="s2">{question.imgfile}</Text></View>
-                                    </Card>
-                    
+                                    </View>
+                                    <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                    <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
+                                    <Text category="s2">{question.pointVal} Points</Text>
+                                    <View><Text category="s2">{question.imgfile}</Text></View>
+                                    <View style={styles.container}>
+                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Classlist', { cid: course.cid })}>
+                                            Assign to class
+                                        </Button>
+                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QsByCourse', { cid: course.cid, cName: course.courseName })}>
+                                            Assign to student/students
+                                        </Button>
+                                    </View>
+                                </Card>
+
                             )}
                         </>
                     ) : (
