@@ -46,7 +46,7 @@ function TeacherCreateQuestion() {
 
 const pickImage = async () => {
 const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (permissionResult.granted === false) {
+  if (!permissionResult.granted) {
     alert("Permission to access camera roll is required!");
     return;
   }
@@ -58,14 +58,8 @@ const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
     quality: 1,
   });
   if (!result.canceled) {
-    const selectedImage = await getBlobFromUri(result.assets[0].uri);
-    setImgFile(result.uri);
+    setImgFile(result.assets[0].uri);
   }
-};
-const getBlobFromUri = async (uri) => {
-  const response = await fetch(uri);
-  const blob = await response.blob();
-  return blob;
 };
 
 
@@ -84,14 +78,14 @@ const handleCreateQuestion = async () => {
     formData.append('tid', user.userID);
 
     if (imgFile) {
-      const filename = imageUri.split('/').pop();
+      const filename = imgFile.split('/').pop();
       const match = /\.(\w+)$/.exec(filename);
-      const type = match ? `image/${match[1]}` : 'image/jpeg';
-
+      const mimeType = match ? `image/${match[1]}` : 'image/jpeg';
+  
       formData.append('imgFile', {
-        uri: imgFile,
-        name: filename,
-        type: mimeType,
+        uri: Platform.OS === 'ios' ? imgFile.replace('file://', '') : imgFile,
+        name: filename || 'image.jpg',
+        type: mimeType
       });
     }
 
@@ -100,7 +94,7 @@ const handleCreateQuestion = async () => {
       {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
         },
         body: formData,
