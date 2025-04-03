@@ -18,6 +18,19 @@ function QsByCourse() {
     const { cid } = route.params || {};
     const { cName } = route.params || {};
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true, 
+        });
+    };
+
     const fetchQuestions = async () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/questions?cid=${cid}`);
