@@ -12,6 +12,7 @@ import TeacherQuestion from './TeacherView/TeacherQuestion'
 import QsAssginedToStudent from './TeacherView/QsAssignedToStudent';
 import QsByCourse from './TeacherView/QsByCourse';
 import QuestionsLibrary from './TeacherView/QuestionsLibrary';
+import Assigning from './TeacherView/Assigning';
 const Stack = createNativeStackNavigator();
 
 const TeacherStack = () => (
@@ -27,6 +28,7 @@ const TeacherStack = () => (
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>
     <Stack.Screen name="QsByCourse" component={QsByCourse}/>
     <Stack.Screen name="Questions Library" component={QuestionsLibrary}/>
+    <Stack.Screen name="Assign a question" component={Assigning}/>
   </Stack.Navigator>
 );
 
