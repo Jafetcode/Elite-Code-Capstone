@@ -2,6 +2,7 @@ import * as React from "react";
 import { View, ScrollView} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
+import * as ImagePicker from "expo-image-picker";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -31,7 +32,8 @@ function TeacherCreateQuestion() {
   const [question, setQuestion] = React.useState("");
   const [pointVal, setPointVal] = React.useState("");
   const [topic, setTopic] = React.useState("");
-  const [imgFile, setImgFile] = React.useState("");
+  // const [] = React.useState(null);
+  const [imgFile, setImgFile] = React.useState(null);
   const [option1, setOption1] = React.useState("");
   const [option2, setOption2] = React.useState("");
   const [option3, setOption3] = React.useState("");
@@ -42,41 +44,63 @@ function TeacherCreateQuestion() {
 
   const{user} = useAuth();
 
+const pickImage = async () => {
+const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (permissionResult.granted === false) {
+    alert("Permission to access camera roll is required!");
+    return;
+  }
+
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ['images'],
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  });
+  if (!result.cancelled) {
+    setImgFile(result.uri);
+  }
+};
+const getBlobFromUri = async (uri) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+  return blob;
+};
+
+
 const handleCreateQuestion = async () => {
   try {
-    console.log("Creating question with the following details:");
-    console.log("Question:", question);
-    console.log("Description:", description);
-    console.log("Point Value:", pointVal);
-    console.log("Image File:", imgFile);
-    console.log("Topic:", topic);
-    console.log("Type:", type);
-    console.log("Due Date:", formattedDate);
-    console.log("Teacher ID (tid):", user.userID);
+
+    const formData = new FormData();
+
+
+    formData.append('question', question);
+    formData.append('description', description);
+    formData.append('pointVal', pointVal);
+    formData.append('topic', topic);
+    formData.append('type', type);
+    formData.append('dueDate', formattedDate);
+    formData.append('tid', user.userID);
+
+    if (imgFile) {
+      const blob = await getBlobFromUri(imgFile);
+      formData.append('imgFile', blob, 'image.jpg');
+    }
 
     const response = await fetch(
-      `https://elitecodecapstone24.onrender.com/createQuestion`,
+      'https://elitecodecapstone24.onrender.com/createQuestion',
       {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          question,
-          description,
-          pointVal,
-          imgFile,
-          topic,
-          type,
-          dueDate: formattedDate,
-          tid: user.userID,
-        }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
       }
     );
 
     const data = await response.json();
     if (!response.ok) {
-      console.log("Response Status:", response.status);
-      console.log("Response Data:", data);
-      throw new Error(data.error || "Failed to create question");
+      throw new Error(data.error || 'Failed to create question');
     }
 
     console.log("Question created successfully. Response data:", data);
@@ -277,12 +301,14 @@ const handleCreateQuestion = async () => {
                     }}>
                         Add Image
                     </Button> */}
-          <Input
+          {/* <Input
             placeholder="ImgFile"
             value={imgFile}
             onChangeText={(value) => setImgFile(value)}
             style={{ marginBottom: 5 }}
-          />
+          /> */}
+           <Button title="Pick an image from camera roll" onPress={pickImage}>Choose a image to upload</Button>
+           {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
 
           <View
             style={{

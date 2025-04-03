@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+     "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take a photo of the assignment.",
+        "NSPhotoLibraryUsageDescription": "The app accesses your photos to let you upload them for an assignment."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,7 +36,14 @@
       }
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you upload them for an assignment.",
+          "cameraPermission": "The app requires access to the camera to take photos."
+        }
+      ]
     ]
   }
 }

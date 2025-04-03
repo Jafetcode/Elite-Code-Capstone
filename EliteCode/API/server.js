@@ -6,8 +6,11 @@ const app = express();
 const db = require('./db');
 const studentRoutes = require('./routes/studentRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
+const multer = require('multer');
 
 require('dotenv').config();
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(cors());
 app.use(express.json());
@@ -75,14 +78,15 @@ app.post('/newUser', (req, res) => {
   });
 });
 
-app.post('/createQuestion', (req, res) => {
+app.post('/createQuestion', upload.single('imgFile'), (req, res) => {
   console.log(req.body);
-  const { question, description, pointVal, imgFile, topic, type, dueDate,tid } = req.body;
-  if (!question || !pointVal || !topic || !type || !dueDate || !tid) {
+  const { question, description, pointVal, topic, type, dueDate, tid } = req.body;
+  const imgFile = req.file ? req.file.filename : null;
+  if (!question || !description || !pointVal || !topic || !type || !dueDate || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile,topic, type, dueDate, tid) VALUES ( ?, ?, ?, ?, ?, ?, ?,?)';
-  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate,tid], (err, results) => {
+  const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile, topic, type, dueDate, tid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate, tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -91,8 +95,8 @@ app.post('/createQuestion', (req, res) => {
 });
 
 app.post('/createMCQ', (req, res) => {
-  const { qid,correctAns, opt1, opt2, opt3 } = req.body;
-  if (!qid||correctAns || !opt1 || !opt2 || !opt3) {
+  const { qid, correctAns, opt1, opt2, opt3 } = req.body;
+  if (!qid || !correctAns || !opt1 || !opt2 || !opt3) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   const sql = 'INSERT INTO MCQ(qid, correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?, ?)';
