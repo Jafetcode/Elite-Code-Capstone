@@ -38,16 +38,41 @@ router.get('/getCourses', (req, res) => {
   });
 });
 
-router.post('/specificAssignment', (req, res) => {
-    const sql = 'INSERT into AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
-    db.query(sql, [qid, sid, viewable], (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ message: 'Student assigned specific question'});
-    });
+// router.post('/specificAssignment', (req, res) => {
+//     const sql = 'INSERT into AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
+//     db.query(sql, [qid, sid, viewable], (err, results) => {
+//       if (err) {
+//         return res.status(500).json({ error: err.message });
+//       }
+//       res.json({ message: 'Student assigned specific question'});
+//     });
+// });
+
+router.post('/assignQuestion', (req, res) => {
+  const { questionId, courses, students, viewable } = req.body;
+
+  if (courses.length > 0) {
+      courses.forEach((cid) => {
+          const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, viewable) VALUES (?, ?, ?)';
+          db.query(sqlClass, [questionId, cid, viewable], (err) => {
+              if (err) console.error("Error assigning to class:", err);
+          });
+      });
+  }
+
+  if (students.length > 0) {
+      students.forEach((sid) => {
+          const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
+          db.query(sqlStudent, [questionId, sid, viewable], (err) => {
+              if (err) console.error("Error assigning to student:", err);
+          });
+      });
+  }
+
+  res.json({ message: "Question assigned successfully" });
 });
 
+res.json({ message: "Question assigned successfully" });
 router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;

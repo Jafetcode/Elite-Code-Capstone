@@ -48,35 +48,25 @@ const Assigning = () => {
             Alert.alert("Select at least one course or student");
             return;
         }
-
+    
         try {
-            if(assignTo == "course"){
-            let res = await fetch("https://your-api.com/https://elitecodecapstone24.onrender.com/instructor/assignToCourse", {
+            let res = await fetch("https://elitecodecapstone24.onrender.com/instructor/assignQuestion", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    qid: question.qid,
+                    questionId,
                     courses: selectedCourses,
+                    students: selectedStudents,
+                    viewable: 1  // Assuming viewable is always 1 when assigned
                 })
             });
             let data = await res.json();
-            Alert.alert("Success", "Question assigned successfully!");}
-            else {
-                let res = await fetch("https://elitecodecapstone24.onrender.com/instructor/assignToStudent", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        qid: question.qid,
-                        students: selectedStudents
-                    })
-                });
-                let data = await res.json();
-                Alert.alert("Success", "Question assigned successfully!");
-            }
+            Alert.alert("Success", "Question assigned successfully!");
         } catch (error) {
             console.error("Error assigning question:", error);
         }
     };
+    
 
     return (
         <View style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
