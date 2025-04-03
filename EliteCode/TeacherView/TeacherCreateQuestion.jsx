@@ -57,7 +57,7 @@ const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
     aspect: [4, 3],
     quality: 1,
   });
-  if (!result.cancelled) {
+  if (!result.canceled) {
     setImgFile(result.uri);
   }
 };
@@ -83,8 +83,15 @@ const handleCreateQuestion = async () => {
     formData.append('tid', user.userID);
 
     if (imgFile) {
-      const blob = await getBlobFromUri(imgFile);
-      formData.append('imgFile', blob, 'image.jpg');
+      const filename = imageUri.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+      formData.append('imgFile', {
+        uri: imageUri,
+        name: filename,
+        type,
+      });
     }
 
     const response = await fetch(
@@ -92,6 +99,7 @@ const handleCreateQuestion = async () => {
       {
         method: 'POST',
         headers: {
+          Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
         },
         body: formData,
@@ -117,7 +125,7 @@ const handleCreateQuestion = async () => {
         const mcqResponse = await fetch(
           "https://elitecodecapstone24.onrender.com/createMCQ/",
           {
-            method: "PUT",
+            method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               qid: data.qid,
@@ -309,6 +317,16 @@ const handleCreateQuestion = async () => {
           /> */}
            <Button title="Pick an image from camera roll" onPress={pickImage}>Choose a image to upload</Button>
            {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 5,
+            }}
+          >
+            <Text category="h5">Image</Text>
+          </View>
+          <Text category="p1"> {`Selected image: ${imgFile}`} </Text>
 
           <View
             style={{
