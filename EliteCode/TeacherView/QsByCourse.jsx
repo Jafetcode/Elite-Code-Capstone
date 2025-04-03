@@ -40,7 +40,6 @@ function QsByCourse() {
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
-
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                     <Text category="s1"> Questions for course </Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
@@ -48,13 +47,8 @@ function QsByCourse() {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 20 }}>
-                    
                     {questions.length > 0 ? (
                         <>
-                            <View style={{ flexDirection: "row", marginBottom: 15 }}>
-                                <Text category="s1">Questions assigned to: </Text>
-                                <Text category="s1">{student.fname} {student.lname}</Text>
-                            </View>
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
                                     <Card key={question.qid} style={{}}>
@@ -68,7 +62,6 @@ function QsByCourse() {
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                         <Text category="s2">{question.pointVal} Points</Text>
                                         <View><Text category="s2">{question.imgfile}</Text></View>
-                                        <Button onPress={() => navigation.navigate("Question", { q: question, s: student })} > </Button>
                                     </Card>
                                 )
                             )}
@@ -78,7 +71,6 @@ function QsByCourse() {
                             <Text category="s1">No questions have been assigned this course.</Text>
                         </View>
                     )}
-
                 </View>
             </ScrollView>
         </Layout>
