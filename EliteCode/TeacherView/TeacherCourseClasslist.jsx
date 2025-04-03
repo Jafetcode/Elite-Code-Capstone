@@ -26,7 +26,7 @@ const TeacherCourseClasslist = () => {
 
     const handleRemoveStudent = async (student) => {
         try{
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/remove-student?cid=${cid}&sid=${student.userID}`, {
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/removeStudent?cid=${cid}&sid=${student.userID}`, {
                 method: "DELETE"
             });
             if (res.ok) {
@@ -54,16 +54,20 @@ const TeacherCourseClasslist = () => {
 
                     {classlist.map((student) => (
                         <Card key={student.userID} style={{ marginBottom: 10, borderRadius: 10 }}>
-                            <TouchableOpacity onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, cid: cid })}>
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <Image source={require("../assets/images/profile-picture.png")}
-                                        style={{ width: 40, height: 40, borderRadius: 40, margin: 5, marginRight: 20}} />                                    <View style={{ flex: 1 }}>
+                                        style={{ width: 40, height: 40, borderRadius: 40, margin: 5, marginRight: 20}} />                                    
+                                        <View style={{ flex: 1 }}>
                                         <Text >{student.fname} {student.lname}</Text>
                                         <Text appearance="hint">{student.email}</Text>
                                  </View>
                                 </View >
-                                <Button status="danger" onPress={() => handleRemoveStudent(student)}>REMOVE STUDENT</Button>
-                            </TouchableOpacity>
+                                <Button onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, cid: cid })}>
+                                    <Text>Assigned Questions</Text>
+                                    </Button>
+                                <Button status="danger" onPress={() => handleRemoveStudent(student)}>
+                                    <Text>REMOVE STUDENT</Text>
+                                    </Button>
                         </Card>
                     ))}
                 </View>
