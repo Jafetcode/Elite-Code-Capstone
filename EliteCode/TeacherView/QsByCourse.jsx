@@ -42,19 +42,13 @@ function QsByCourse() {
             <ScrollView>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                    <Text category="s1"> Questions for course { } </Text>
+                    <Text category="s1"> Questions for course </Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
                         <Text appearance="hint">Create Question</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 20 }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text category="s1"> </Text>
-                        <TouchableOpacity>
-                            <Text category="h5" style={{ flex: 1, alignItems: "center", color: "white", margin: 10 }}> Questions Assgined To: </Text>
-                            <Text category="h5" style={{ flex: 1, alignItems: "center", color: "white", marginBottom: 20 }} > {cName} </Text>
-                        </TouchableOpacity>
-                    </View>
+                    
                     {questions.length > 0 ? (
                         <>
                             <View style={{ flexDirection: "row", marginBottom: 15 }}>
@@ -81,7 +75,7 @@ function QsByCourse() {
                         </>
                     ) : (
                         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
-                            <Text category="s1">No questions have been assigned to {student.fname} {student.lname}.</Text>
+                            <Text category="s1">No questions have been assigned this course.</Text>
                         </View>
                     )}
 

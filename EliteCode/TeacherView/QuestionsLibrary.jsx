@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import * as eva from "@eva-design/eva";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import { useAuth } from "../AuthContext";
 
 function QuestionsLibrary() {
     const { user } = useAuth();
     const navigation = useNavigation();
     const [questions, setQuestions] = useState({});
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true, 
+        });
+    };
+
     const getQuestions = async () => {
         try {
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/allQuestions?tid=${user.uid}`);
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/allQuestions?tid=${user.userID}`);
             const data = await res.json();
             setQuestions(data.results)
             console.log(courses)
@@ -29,10 +47,10 @@ function QuestionsLibrary() {
         <Layout style={{ flex: 1, padding: 15 }}>
             <ScrollView>
                 <View style={styles.container}>
-                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('TeacherQuestion',)}>
+                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('TeacherQuestion')}>
                         Assign to course
                     </Button>
-                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QuestionsLibrary', { cid: course.cid, cName: course.courseName })}>
+                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Questions Library')}>
                         Assign to a student/students
                     </Button>
                 </View>
@@ -53,7 +71,6 @@ function QuestionsLibrary() {
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                         <Text category="s2">{question.pointVal} Points</Text>
                                         <View><Text category="s2">{question.imgfile}</Text></View>
-                                        <Button onPress={() => navigation.navigate("Question", { q: question, s: student })} > </Button>
                                     </Card>
                     
                             )}

@@ -32,40 +32,40 @@ function TeacherHome() {
     );
 
     return (
-        <Layout style={{ flex: 1,padding: 15}}>
+        <Layout style={{ flex: 1, padding: 15 }}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-                <View style={styles.container}>
-                            <Button size = "small" style= {{margin: 5, width: 140}} onPress={() => navigation.navigate('QuestionsLibrary', { cid: course.cid, cName: course.courseName })}>
-                                Questions Library
-                            </Button>
-                            </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
+                    <View >
+                        <Button size="small" style={{ margin: 5 }} onPress={() => navigation.navigate('Questions Library')}>
+                            Questions Library
+                        </Button>
+                    </View>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1">Course Library</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>
                             <Text appearance="hint">Create a Course</Text>
                         </TouchableOpacity>
                     </View>
                     {courses.map((course) => (
-                        <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10}}>
+                        <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
                             {/* <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}> */}
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <View style={{ flex: 1 }}>
-                                        <Text>{course.courseName}</Text>
-                                        <Text appearance="hint">{course.description}</Text>
-                                    </View>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <View style={{ flex: 1 }}>
+                                    <Text>{course.courseName}</Text>
+                                    <Text appearance="hint">{course.description}</Text>
                                 </View>
-                                <View>
+                            </View>
+                            <View>
                                 <Text category="s2">Enrolled: {course.NumEnrolled}      Course Code: {course.cid}  </Text>
-                                </View>
+                            </View>
                             {/* </TouchableOpacity> */}
                             <View style={styles.container}>
-                            <Button size = "small" style= {{margin: 5, width: 140}} onPress={() => navigation.navigate('Classlist', { cid: course.cid })}>
-                                Classlist
-                            </Button>
-                            <Button size = "small" style= {{margin: 5, width: 140}} onPress={() => navigation.navigate('QsByCourse', { cid: course.cid, cName: course.courseName })}>
-                                Questions
-                            </Button>
+                                <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Classlist', { cid: course.cid })}>
+                                    Classlist
+                                </Button>
+                                <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QsByCourse', { cid: course.cid, cName: course.courseName })}>
+                                    Questions
+                                </Button>
                             </View>
                         </Card>
                     ))}
@@ -76,9 +76,9 @@ function TeacherHome() {
 }
 const styles = StyleSheet.create({
     container: {
-      flexDirection: 'row',
+        flexDirection: 'row',
     },
-  });
+});
 
 
 export default () => (
