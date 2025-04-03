@@ -57,7 +57,7 @@ function QsByCourse() {
                     </View>
 
                     {questions.map((question) =>
-                        (question.classView === 1) && (
+                        (question.classView === 1) ? (
                             <Card key={question.qid} style={{ marginBottom: 10 }}>
                                 <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -82,7 +82,7 @@ function QsByCourse() {
                                     View Classlist
                                 </Button>
                             </Card>
-                        )
+                        ) : ( <Text category="s2"> No questions have been assigned yet. </Text>)
                     )}
                 </View>
             </ScrollView>

@@ -5,7 +5,7 @@ import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } f
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
-import { useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import { SlideInDown } from "react-native-reanimated";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -14,12 +14,13 @@ function QuestionsAssignedToStudent() {
     const navigation = useNavigation();
     const route = useRoute();
     const [questions, setQuestions] = React.useState([]);
-    const { user } = useAuth();  
-    const { student } = route.params || {};
-    const { cid } = route.params || {};
+    const { user } = useAuth();
+    const student = route.params?.student;
+    const cid = route.params?.cid;
 
     const fetchQuestions = async () => {
         try {
+            console.log("info passing jsx", cid, student.userID)
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
@@ -27,6 +28,18 @@ function QuestionsAssignedToStudent() {
         } catch (error) {
             console.error("Failed to fetch", error);
         }
+    };
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true, 
+        });
     };
 
     useFocusEffect(
@@ -41,41 +54,34 @@ function QuestionsAssignedToStudent() {
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="s1"> </Text>
-                        <TouchableOpacity>
-                            <Text appearance="hint"> student name here  {/* {student.fname}  */ }</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {questions.map((question) =>
-                     (question.classView === 1 || question.studentView === 1) && (
-                            <Card key={question.qid} style={{ marginBottom: 10 }}>
-                                <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
-                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                        <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                                        <View style={{ flex: 1 }}>
-                                            <Text>{question.question}</Text>
-                                            <Text appearance="hint">{question.description}</Text>
-                                        </View>
-                                        <Text category="s2"> Value: {question.pointVal}</Text>
-                                    </View>
-                                    <View>
-                                        <Text category="s2"> topic: {question.topic} </Text>
-                                    </View>
-                                    <View>
-                                        <Text category="s2"> due date: {question.dueDate} </Text>
-                                    </View>
-                                    <View>
-                                        <Text category="s2">  {question.imgfile} </Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <Button>
-                                    View Classlist
-                                </Button>
-                            </Card>
-                        )
+                    {questions.length > 0 ? (
+                        <>
+                            <View style={{ flexDirection: "row", marginBottom: 15 }}>
+                                <Text category="s1">Questions assigned to: </Text>
+                                <Text category="s1">{student.fname} {student.lname}</Text>
+                            </View>
+                            {questions.map((question) => 
+                                (question.classView === 1 || question.studentView === 1) && (
+                                    <Card key={question.qid} style={{}}>
+                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                                <View style={{ flex: 1}}>
+                                                    <Text style={{paddingBottom: 10}}>{question.question}?</Text>
+                                                    <Text appearance="hint" >{question.description}</Text>
+                                                </View>
+                                            </View>
+                                            <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                            <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
+                                            <Text category="s2">{question.pointVal} Points</Text>
+                                            <View><Text category="s2">{question.imgfile}</Text></View>
+                                            <Button onPress={() => navigation.navigate("Question", {q : question, s: student})} > </Button>
+                                    </Card>
+                                )
+                            )}
+                        </>
+                    ) : (
+                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
+                            <Text category="s1">No questions have been assigned to {student.fname} {student.lname}.</Text>
+                        </View>
                     )}
                 </View>
             </ScrollView>

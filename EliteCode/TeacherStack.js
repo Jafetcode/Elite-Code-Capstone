@@ -2,7 +2,7 @@ import React from 'react';
 import TeacherHome from './TeacherView/TeacherHome';
 import TeacherCourse from './TeacherView/TeacherCourse';
 import TeacherProfile from './TeacherView/TeacherProfile';
-import TeacherQuestion from './TeacherView/TeacherQuestion';
+import GradingScreen from './TeacherView/GradingScreen';
 import TeacherSettings from './TeacherView/TeacherSettings';
 import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
@@ -17,7 +17,7 @@ const TeacherStack = () => (
     <Stack.Screen name="Course Library" component={TeacherHome} />
     <Stack.Screen name="TeacherCourse" component={TeacherCourse} />
     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
-    <Stack.Screen name="TeacherQuestion" component={TeacherQuestion} />
+    <Stack.Screen name="Question" component={GradingScreen} />
     <Stack.Screen name="TeacherSettings" component={TeacherSettings} />
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />

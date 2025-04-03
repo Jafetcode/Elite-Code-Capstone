@@ -32,7 +32,7 @@ function TeacherHome() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20 }}>
+        <Layout style={{ flex: 1,padding: 15}}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
@@ -42,7 +42,7 @@ function TeacherHome() {
                         </TouchableOpacity>
                     </View>
                     {courses.map((course) => (
-                        <Card key={course.cid} style={{ borderRadius: 10}}>
+                        <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10}}>
                             {/* <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}> */}
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                                     <View style={{ flex: 1 }}>

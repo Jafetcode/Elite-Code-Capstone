@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
 router.get('/questions', (req, res) => {
   const sid = req.query.sid;
   const cid = req.query.cid;
+  console.log("info passing", sid, cid)
   const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate, atc.viewable as classView, ats.viewable as studentView ' +
     'From Questions q ' +
     'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
@@ -60,7 +61,7 @@ router.post('/joinCourse', async (req, res) => {
 
   } catch (err) {
     console.error('JOIN COURSE ERROR:', err.message);
-    console.error(err.stack); // 🔥 Shows the full trace
+    console.error(err.stack);
     res.status(500).json({ error: 'Internal server error' });
   }
 })

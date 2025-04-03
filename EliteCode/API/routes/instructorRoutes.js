@@ -51,7 +51,7 @@ router.post('/specificAssignment', (req, res) => {
 router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
-  const sql = 'Select * from Submission where qid= ? and sid = ?';
+  const sql = 'Select * from Submissions where qid= ? and sid = ?';
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
