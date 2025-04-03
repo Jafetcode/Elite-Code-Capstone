@@ -61,10 +61,10 @@ function QuestionsLibrary() {
                                     <Text category="s2">{question.pointVal} Points</Text>
                                     <View><Text category="s2">{question.imgfile}</Text></View>
                                     <View style={styles.container}>
-                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Classlist', { cid: course.cid })}>
+                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('AssignQuestion', {assignTo: course, q: question})}>
                                             Assign to class
                                         </Button>
-                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QsByCourse', { cid: course.cid, cName: course.courseName })}>
+                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('AssignQuestion', {assignTo: student, q: question})}>
                                             Assign to student/students
                                         </Button>
                                     </View>
