@@ -131,6 +131,17 @@ router.get('/classlist', (req, res) => { //working
   });
 });
 
+router.delete('/removeStudent', (req, res) =>{
+  const { cid, sid } = req.query;
+  const sql = 'DELETE FROM Enrolled WHERE cid = ? AND sid = ?';
+  db.query(sql, [cid, sid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Student removed from course'});
+  });
+});
+
 router.get('/courses', (req, res) => { //working
   const tid = req.query.tid;
   const sql = 'Select Classes.cid, Classes.courseName, Classes.description, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled ' +

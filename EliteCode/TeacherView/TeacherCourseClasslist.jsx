@@ -24,6 +24,21 @@ const TeacherCourseClasslist = () => {
         }
     };
 
+    const handleRemoveStudent = async (student) => {
+        try{
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/remove-student?cid=${cid}&sid=${student.userID}`, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                fetchClasslist(); 
+            } else {
+                console.error("Failed to remove student");
+            }
+        }catch (error){
+            console.error("Failed to remove student: ", error);
+        }
+    }
+
     useEffect(() => {
         fetchClasslist()
     }, [cid]);
@@ -47,6 +62,7 @@ const TeacherCourseClasslist = () => {
                                         <Text appearance="hint">{student.email}</Text>
                                  </View>
                                 </View >
+                                <Button status="danger" onPress={() => handleRemoveStudent(student)}>REMOVE STUDENT</Button>
                             </TouchableOpacity>
                         </Card>
                     ))}
