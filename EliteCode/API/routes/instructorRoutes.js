@@ -85,7 +85,7 @@ router.get('/questions', (req, res) => {
 });
 router.get('/allQuestions', (req, res) => {
   const tid = req.query.tid;
-  const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+  const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate ' +
     'From Questions q Where tid = ?';
   db.query(sql, [tid], (err, results) => {
     if (err) {
