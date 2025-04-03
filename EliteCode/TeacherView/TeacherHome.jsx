@@ -35,6 +35,11 @@ function TeacherHome() {
         <Layout style={{ flex: 1,padding: 15}}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
+                <View style={styles.container}>
+                            <Button size = "small" style= {{margin: 5, width: 140}} onPress={() => navigation.navigate('QuestionsLibrary', { cid: course.cid, cName: course.courseName })}>
+                                Questions Library
+                            </Button>
+                            </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
                         <Text category="s1">Course Library</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateCourse')}>

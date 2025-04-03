@@ -55,35 +55,36 @@ function QsByCourse() {
                             <Text category="h5" style={{ flex: 1, alignItems: "center", color: "white", marginBottom: 20 }} > {cName} </Text>
                         </TouchableOpacity>
                     </View>
-
-                    {questions.map((question) =>
-                        (question.classView === 1) ? (
-                            <Card key={question.qid} style={{ marginBottom: 10 }}>
-                                <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}>
-                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                        <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                                        <View style={{ flex: 1 }}>
-                                            <Text>{question.question}</Text>
-                                            <Text appearance="hint">{question.description}</Text>
+                    {questions.length > 0 ? (
+                        <>
+                            <View style={{ flexDirection: "row", marginBottom: 15 }}>
+                                <Text category="s1">Questions assigned to: </Text>
+                                <Text category="s1">{student.fname} {student.lname}</Text>
+                            </View>
+                            {questions.map((question) =>
+                                (question.classView === 1 || question.studentView === 1) && (
+                                    <Card key={question.qid} style={{}}>
+                                        <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                            <View style={{ flex: 1 }}>
+                                                <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                                <Text appearance="hint" >{question.description}</Text>
+                                            </View>
                                         </View>
-                                        <Text category="s2"> Value: {question.pointVal}</Text>
-                                    </View>
-                                    <View>
-                                        <Text category="s2"> topic: {question.topic} </Text>
-                                    </View>
-                                    <View>
-                                        <Text category="s2"> due date: {question.dueDate} </Text>
-                                    </View>
-                                    <View>
-                                        <Text category="s2">  {question.imgfile} </Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <Button>
-                                    View Classlist
-                                </Button>
-                            </Card>
-                        ) : ( <Text category="s2"> No questions have been assigned yet. </Text>)
+                                        <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                        <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
+                                        <Text category="s2">{question.pointVal} Points</Text>
+                                        <View><Text category="s2">{question.imgfile}</Text></View>
+                                        <Button onPress={() => navigation.navigate("Question", { q: question, s: student })} > </Button>
+                                    </Card>
+                                )
+                            )}
+                        </>
+                    ) : (
+                        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
+                            <Text category="s1">No questions have been assigned to {student.fname} {student.lname}.</Text>
+                        </View>
                     )}
+
                 </View>
             </ScrollView>
         </Layout>

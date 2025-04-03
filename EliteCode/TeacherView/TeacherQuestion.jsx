@@ -11,24 +11,7 @@ function TeacherQuestion() {
     const navigation = useNavigation();
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Button
-                    appearance="ghost"
-                    status="basic"
-                    accessoryLeft={BackIcon}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
-                    Elite Code
-                </Text>
-            </View>
-
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Text category="h5" style={{ flex: 1, textAlign: "center" }}>
-                    Question Page
-                </Text>
-            </View>
-
+    
         </Layout>
     );
 }

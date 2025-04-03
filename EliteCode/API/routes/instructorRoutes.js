@@ -60,6 +60,17 @@ router.get('/submission', (req, res) => {
   });
 });
 
+router.put('/gradeSubmission',( req, res) => {
+  const sql = 'UPDATE Submissions set grade= ?, comment = ? where qid = ? and sid = ?';
+  db.query(sql, [grade, comment, qid, sid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({message: "Submission graded successfully", results});
+  });
+
+});
+
 
 router.get('/questions', (req, res) => {
   const cid = req.query.cid;
@@ -72,6 +83,19 @@ router.get('/questions', (req, res) => {
     res.json({ results });
   });
 });
+router.get('/allQuestions', (req, res) => {
+  const tid = req.query.tid;
+  const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+    'From Questions q Where tid = ?';
+  db.query(sql, [tid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+});
+
+
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
   const sql = 'SELECT * FROM Questions Where qid = ?';

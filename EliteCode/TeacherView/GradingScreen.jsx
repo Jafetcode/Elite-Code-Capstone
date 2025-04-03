@@ -29,22 +29,22 @@ function Question() {
   }, [question, student]);
 
   const handleSubmitGrade = async () => {
-    // try {
-    //     await fetch("https://elitecodecapstone24.onrender.com/grade", {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({
-    //             qid,
-    //             sid: student.sid,
-    //             grade,
-    //             feedback
-    //         }),
-    //     });
-    //     alert("Grade submitted successfully!");
-    //     navigation.goBack();
-    // } catch (error) {
-    //     console.error("Error submitting grade", error);
-    // }
+    try {
+        await fetch("https://elitecodecapstone24.onrender.com/instructorgradeSubmission", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                qid: question.qid,
+                sid: student.sid,
+                grade,
+                comment: feedback
+            }),
+        });
+        alert("Grade submitted successfully!");
+        navigation.goBack();
+    } catch (error) {
+        console.error("Error submitting grade", error);
+    }
     console.error("Grade submitted successfully!");
 };
 

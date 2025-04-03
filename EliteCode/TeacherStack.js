@@ -8,6 +8,7 @@ import TeacherCreateCourse from './TeacherView/TeacherCreateCourse';
 import TeacherCreateQuestion from './TeacherView/TeacherCreateQuestion';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TeacherCourseClasslist from './TeacherView/TeacherCourseClasslist';
+import TeacherQuestion from './TeacherView/TeacherQuestion'
 import QsAssginedToStudent from './TeacherView/QsAssignedToStudent';
 import QsByCourse from './TeacherView/QsByCourse';
 const Stack = createNativeStackNavigator();
