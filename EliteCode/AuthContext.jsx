@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
                     // Fetch additional user details from MySQL API
                     const response = await fetch(`https://elitecodecapstone24.onrender.com/userRole?email=${authUser.email}`);
                     const userData = await response.json();
-                    
                     if (response.ok) {
                         setUser({ uid: authUser.uid, email: authUser.email, ...userData });
                     } else {
@@ -44,6 +43,7 @@ export const AuthProvider = ({ children }) => {
     
     const changePassword = async (email) => {
         try{
+            console.log("sending email")
             return sendPasswordResetEmail(FIREBASE_AUTH, email);
         }  catch (error){
             console.log("Error", error.message)
