@@ -24,16 +24,10 @@ router.get('/questions', (req, res) => {
 });
 
 router.post('/joinCourse', async (req, res) => {
-  const cid = req.query.cid;
-  const sid = req.query.sid;
-
+  const { sid, cid } = req.body;
   const sql = `
-    INSERT INTO Enrolled (tid, sid, cid)
-    SELECT tid, ?, cid
-    FROM Classes
-    WHERE cid = ?;
-  `;
-
+    INSERT INTO Enrolled (sid, cid)
+    VALUES (?, ?);`;
   db.query(sql, [sid, cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
