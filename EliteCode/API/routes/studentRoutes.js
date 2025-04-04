@@ -9,8 +9,7 @@ router.get('/', (req, res) => {
 router.get('/questions', (req, res) => {
   const sid = req.query.sid;
   const cid = req.query.cid;
-  console.log("info passing", sid, cid)
-  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate, atc.viewable as classView, ats.viewable as studentView ' +
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.language, q.topic, q.type, q.dueDate, atc.viewable as classView, ats.viewable as studentView ' +
     'From Questions q ' +
     'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
     'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' +
@@ -24,15 +23,16 @@ router.get('/questions', (req, res) => {
 });
 
 router.post('/joinCourse', async (req, res) => {
-  console.log("testsetsts")
-  const cid = String(req.body.cid).trim();
-  const sid = String(req.body.sid).trim();
+  const cid = String(req.query.cid).trim();
+  const sid = String(req.query.sid).trim();
   console.log("➡️ joinCourse called with:", { cid, sid });
 
   if (!sid || !cid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
+
   try {
+    console.log(sid);
     const [teacherRows] = await db.promise().query(
       'SELECT tid FROM Classes WHERE cid = ?',
       [cid]
@@ -60,10 +60,39 @@ router.post('/joinCourse', async (req, res) => {
     res.json({ message: 'Student successfully enrolled.' });
 
   } catch (err) {
+    console.log(cid);
+    console.log(sid);
     console.error('JOIN COURSE ERROR:', err.message);
-    console.error(err.stack);
+    console.error(err.stack); 
     res.status(500).json({ error: 'Internal server error' });
   }
 })
 
-module.exports = router;
+app.get('/student/courses', async (req, res) => {
+  const { sid } = req.query;
+
+  try {
+    const [courseIdsResult] = await db.query(
+      'SELECT cid FROM Enrolled WHERE sid = ?',
+      [sid]
+    );
+
+    const courseIds = courseIdsResult.map(row => row.cid);
+
+    if (courseIds.length === 0) {
+      return res.json({ results: [] });
+    }
+
+    const [courses] = await db.query(
+      'SELECT * FROM Classes WHERE cid IN (?)',
+      [courseIds]
+    );
+
+    res.json({ results: courses });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching student courses" });
+  }
+});
+
+

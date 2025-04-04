@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import * as eva from "@eva-design/eva";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 import {
   ApplicationProvider,
@@ -18,14 +18,32 @@ function StudentHome() {
   const [visible, setVisible] = React.useState(false);
   const [classCode, setClassCode] = React.useState('');
   const { user} = useAuth();
+  const [courses, setCourses] = React.useState([]);
+
+  const fetchCourses = async () => {
+    try {
+      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/courses?sid=${user.userID}`);
+      const data = await res.json();
+      setCourses(data.results || []);
+    } catch (error) {
+      console.error("Failed to fetch courses:", error);
+      Alert.alert("Error", "Could not load your courses.");
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user?.userID) {
+        fetchCourses();
+      }
+    }, [user])
+  );
 
   const handleJoinClass = async () => {
-
     if (!classCode.trim()) {
       Alert.alert("Error", "Please enter a class code.");
       return;
     }
-
     try {
       const response = await fetch('https://elitecodecapstone24.onrender.com/student/joinCourse', {
         method: "POST",
@@ -46,7 +64,6 @@ function StudentHome() {
       } else {
         console.log("JOIN RESPONSE", data);
         Alert.alert("Error", JSON.stringify(data));
-
       }
     } catch (error) {
       console.error("Error joining course:", error);
@@ -76,89 +93,25 @@ function StudentHome() {
             </Modal>
           </View>
 
-          <Card style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10,}}/>
-                <View style={{ flex: 1 }}>
-                  <Text>Course Name</Text>
-                  <Text appearance="hint">Description</Text>
+          {courses.map((course) => (
+            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
+              <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View style={{ flex: 1 }}>
+                    <Text>{course.courseName}</Text>
+                    <Text appearance="hint">{course.description}</Text>
+                  </View>
                 </View>
-                <Text category="s2">Grade: A</Text>
+              </TouchableOpacity>
+              <View>
+                <Text category="s2">Course Code: {course.cid}</Text>
               </View>
-            </TouchableOpacity>
-          </Card>
-
-          
-
-          <Card>
-            <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10}}
-              />
-              <View style={{ flex: 1 }}>
-                <Text>Course Name</Text>
-                <Text appearance="hint">Description</Text>
-              </View>
-              <Text category="s2">Grade: A</Text>
-            </View>
-            </TouchableOpacity>
-          </Card>
+            </Card>
+          ))}
 
         </View>
 
-        <View style={{ marginBottom: 20 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginBottom: 5,
-            }}
-          >
-            <Text category="s1">Personal Library</Text>
-          </View>
-          <Card style={{ marginBottom: 10 }}>
-          <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  backgroundColor: "#ccc",
-                  marginRight: 10,
-                }}
-              />
-              <View style={{ flex: 1 }}>
-                <Text>Course Name</Text>
-                <Text appearance="hint">Description</Text>
-              </View>
-              <Text category="s2">Lessons: 11/24</Text>
-            </View>
-            </TouchableOpacity>
-          </Card>
-
-          <Card style={{ marginBottom: 10 }}>
-          <TouchableOpacity onPress={() => navigation.navigate('StudentCourse')}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  backgroundColor: "#ccc",
-                  marginRight: 10,
-                }}
-              />
-              <View style={{ flex: 1 }}>
-                <Text>Course Name</Text>
-                <Text appearance="hint">Description</Text>
-              </View>
-              <Text category="s2">Lessons: 11/24</Text>
-            </View>
-            </TouchableOpacity>
-          </Card>
-
-        </View>
+        
       </ScrollView>
     </Layout>
   );
