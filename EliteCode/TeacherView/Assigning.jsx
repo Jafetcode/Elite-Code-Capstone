@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, FlatList, Alert, Image } from "react-native";
 import { useRoute } from '@react-navigation/native';
-import { CheckBox, Button, Card, Text, Image } from "@ui-kitten/components";
+import { CheckBox, Button, Card, Text } from "@ui-kitten/components";
 import { useAuth } from "../AuthContext";
     
 const Assigning = () => {
