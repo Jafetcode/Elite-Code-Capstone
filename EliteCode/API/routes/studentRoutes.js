@@ -12,7 +12,7 @@ router.get('/questions', (req, res) => {
   const sql = 'SELECT DISTINCT q.* FROM Questions q' +
   'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' + 
   'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
-  'LEFT JOIN Enrollments e ON atc.cid = e.cid ' + 
+  'LEFT JOIN Enrolled e ON atc.cid = e.cid ' + 
   'LEFT JOIN Classes c ON e.cid = c.cid ' +
   'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?)  OR (e.sid = ? AND i.tid = ?);'
   db.query(sql, [sid, tid], (err, results) => {
