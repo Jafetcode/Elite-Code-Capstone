@@ -14,8 +14,8 @@ router.get('/questions', (req, res) => {
   'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
   'LEFT JOIN Enrolled e ON atc.cid = e.cid ' + 
   'LEFT JOIN Classes c ON e.cid = c.cid ' +
-  'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?)  OR (e.sid = ? AND i.tid = ?);'
-  db.query(sql, [sid, tid], (err, results) => {
+  'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?) OR (e.sid = ? AND i.tid = ?);'
+  db.query(sql, [sid, tid, sid, tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
