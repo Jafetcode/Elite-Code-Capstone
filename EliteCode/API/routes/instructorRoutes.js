@@ -74,7 +74,7 @@ router.get('/getCourses', (req, res) => {
 
 //   res.json({ message: "Question assigned successfully" });
 // });
-const assignToClass = async (cid) => {
+const assignToClass = async (cid, qid, viewable) => {
   return new Promise((resolve, reject) => {
       const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, viewable) VALUES (?, ?, ?)';
       db.query(sqlClass, [qid, cid, viewable], (err, result) => {
@@ -87,7 +87,7 @@ const assignToClass = async (cid) => {
   });
 };
 
-const assignToStudent = async (sid) => {
+const assignToStudent = async (sid, qid, viewable) => {
   return new Promise((resolve, reject) => {
       const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
       db.query(sqlStudent, [qid, sid, viewable], (err, result) => {
@@ -104,8 +104,8 @@ router.post('/assignQuestion', async (req, res) => {
   const { qid, courses, students, viewable } = req.body;
 
   try {
-      const classPromises = courses.map(cid => assignToClass(cid)); // map to promises
-      const studentPromises = students.map(sid => assignToStudent(sid)); // map to promises
+      const classPromises = courses.map(cid => assignToClass(cid, qid, viewable)); // map to promises
+      const studentPromises = students.map(sid => assignToStudent(sid, qid, viewable)); // map to promises
 
       // Wait for all promises to resolve
       await Promise.all([...classPromises, ...studentPromises]);
