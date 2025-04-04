@@ -68,7 +68,7 @@ router.post('/joinCourse', async (req, res) => {
   }
 })
 
-app.get('/student/courses', async (req, res) => {
+app.get('/courses', async (req, res) => {
   const { sid } = req.query;
 
   try {
