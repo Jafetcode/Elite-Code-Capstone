@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList, Alert } from "react-native";
+import { View, TouchableOpacity, FlatList, Alert } from "react-native";
 import { useRoute } from '@react-navigation/native';
-import { Checkbox, Button, Card } from "@ui-kitten/components";
+import { CheckBox, Button, Card, Text } from "@ui-kitten/components";
 import { useAuth } from "../AuthContext";
     
 const Assigning = () => {
@@ -20,15 +20,18 @@ const Assigning = () => {
 
     const fetchCoursesAndStudents = async () => {
         try {
+            console.log(user.UserID)
             // Fetch courses the teacher teaches
-            let courseRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
-            let courseData = await courseRes.json();
-            setCourses(courseData);
+            let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
+            const data = await res.json();
+            setCourses(data.results);
+            console.log("courses", courses)
 
             // Fetch students the teacher can assign
-            let studentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/students?tid=${user.UserID}`);
-            let studentData = await studentRes.json();
-            setStudents(studentData);
+            let studentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/students?tid=${user.userID}`);
+            const studentData = await studentRes.json();
+            setStudents(studentData.results);
+            console.log("students", students)
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -57,10 +60,10 @@ const Assigning = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    questionId,
+                    qid : question.qid, 
                     courses: selectedCourses,
                     students: selectedStudents,
-                    viewable: 1  // Assuming viewable is always 1 when assigned
+                    viewable: 1  
                 })
             });
             let data = await res.json();
@@ -79,14 +82,14 @@ const Assigning = () => {
                 <Text category="s1">Assign to Courses:</Text>
                 <FlatList
                     data={courses}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.cid.toString()}
                     renderItem={({ item }) => (
-                        <Checkbox
-                            checked={selectedCourses.includes(item.id)}
-                            onChange={() => toggleSelection(item.id, "course")}
+                        <CheckBox
+                            checked={selectedCourses.includes(item.cid)}
+                            onChange={() => toggleSelection(item.cid, "course")}
                         >
                             {item.courseName}
-                        </Checkbox>
+                        </CheckBox>
                     )}
                 />
             </Card>
@@ -95,14 +98,14 @@ const Assigning = () => {
                 <Text category="s1">Assign to Specific Students:</Text>
                 <FlatList
                     data={students}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.sid.toString()}
                     renderItem={({ item }) => (
-                        <Checkbox
-                            checked={selectedStudents.includes(item.id)}
-                            onChange={() => toggleSelection(item.id, "student")}
+                        <CheckBox
+                            checked={selectedStudents.includes(item.sid)}
+                            onChange={() => toggleSelection(item.sid, "student")}
                         >
-                            {item.name}
-                        </Checkbox>
+                            {item.fname} {item.lname}
+                        </CheckBox>
                     )}
                 />
             </Card>

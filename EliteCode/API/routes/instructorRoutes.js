@@ -181,7 +181,7 @@ router.get('/courses', (req, res) => { //working
 });
 router.get('/students', (req, res) => { //working
   const tid = req.query.tid;
-  const sql = 'Select * From Users u join Enrolled e on u.UserID = e.sid where e.tid = ?';
+  const sql = 'Select distinct u.userID, u.fname, u.lname From Users u join Enrolled e on u.UserID = e.sid where e.tid = ?';
   db.query(sql, [tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
