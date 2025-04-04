@@ -36,7 +36,7 @@ function TeacherHome() {
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
                     <View >
-                        <Button size="small" style={{ margin: 5 }} onPress={() => navigation.navigate('Questions Library')}>
+                        <Button size="small" style={{ marginBottom: 20 }} onPress={() => navigation.navigate('Questions Library')}>
                             Questions Library
                         </Button>
                     </View>

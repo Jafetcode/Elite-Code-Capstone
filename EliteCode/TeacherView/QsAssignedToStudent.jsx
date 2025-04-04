@@ -62,8 +62,8 @@ function QuestionsAssignedToStudent() {
                             </View>
                             {questions.map((question) => 
                                 (question.classView === 1 || question.studentView === 1) && (
-                                    <Card key={question.qid} style={{}}>
-                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                    <Card style={{marginBottom: 10}} key={question.qid} >
+                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10}}>
                                                 <View style={{ flex: 1}}>
                                                     <Text style={{paddingBottom: 10}}>{question.question}?</Text>
                                                     <Text appearance="hint" >{question.description}</Text>
@@ -73,8 +73,8 @@ function QuestionsAssignedToStudent() {
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                             <Text category="s2">{question.pointVal} Points</Text>
                                             {/* <View><Text category="s2">{question.imgfile}</Text></View> */}
-                                            <Button onPress={() => navigation.navigate("Question", {q : question, s: student})} > </Button>
-                                    </Card>
+                                            <Button size="small" style= {{margin: 10}}onPress={() => navigation.navigate("Question", {q : question, s: student})} > Grade question </Button>
+                                    </Card> 
                                 )
                             )}
                         </>

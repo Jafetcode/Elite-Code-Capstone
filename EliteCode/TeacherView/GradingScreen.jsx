@@ -60,7 +60,7 @@ function Question() {
                     <Card style={{ marginBottom: 20 }}>
                         <Text category="h6">Question:</Text>
                         <Text>{question.question}</Text>
-                        <Image>{question.imgFile}</Image>
+                        {/* <Image>{question.imgFile}</Image> */}
                     </Card>
                 )}
 
