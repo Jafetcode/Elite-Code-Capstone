@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, ScrollView, Image } from "react-native";
+import { View, ScrollView, Image, StyleSheet, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 import * as ImagePicker from "expo-image-picker";
@@ -343,10 +343,49 @@ const handleCreateQuestion = async () => {
         </View>
         <Button onPress={handleCreateQuestion}> Submit Question</Button>
       </ScrollView>
+      
     </Layout>
+    
   );
+  
 }
-
+const styles = StyleSheet.create({
+  container: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 5,
+  },
+  image: {
+      width: 200,
+      height: 200,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+      marginVertical: 10,
+  },
+  select: {
+      marginVertical: 8,
+      width: '100%',
+  },
+  mcqContainer: {
+      backgroundColor: '#526F8C',
+      borderRadius: 10,
+      marginVertical: 10,
+      overflow: 'hidden',
+      width: '90%',
+      alignSelf: 'center',
+      padding: 10,
+  },
+  heading: {
+      marginBottom: 5,
+  },
+  input: {
+      marginBottom: 5,
+  },
+  buttonContainer: {
+      marginTop: 10,
+      marginBottom: 20,
+  }
+});
 export default () => (
   <>
     <IconRegistry icons={EvaIconsPack} />
