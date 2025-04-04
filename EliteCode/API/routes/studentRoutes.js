@@ -26,23 +26,27 @@ router.get('/questions', (req, res) => {
 router.post('/joinCourse', async (req, res) => {
   const cid = req.query.cid;
   const sid = req.query.sid;
+
   const sql = `
     INSERT INTO Enrolled (tid, sid, cid)
-    SELECT tid, ?, ?
+    SELECT tid, ?, cid
     FROM Classes
-    WHERE cid = ?;`;
-  db.query(sql, [cid, sid], (err, results) => {
+    WHERE cid = ?;
+  `;
+
+  db.query(sql, [sid, cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     res.json({ results });
   });
-})
+});
+
 
 router.get('/courses', async (req, res) => {
   const sid = req.query.sid;
   const sql = `
-    SELECT Classes.cname, Classes.desc, Classes.cid
+    SELECT Classes.courseName, Classes.description, Classes.cid
     FROM Enrolled
     JOIN Classes ON Enrolled.cid = Classes.cid
     WHERE Enrolled.sid = ?;`;
