@@ -54,7 +54,7 @@ router.post('/assignQuestion', (req, res) => {
   if (courses.length > 0) {
       courses.forEach((cid) => {
           const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, viewable) VALUES (?, ?, ?)';
-          db.query(sqlClass, [questionId, cid, viewable], (err) => {
+          db.query(sqlClass, [qid, cid, viewable], (err) => {
               if (err) console.error("Error assigning to class:", err);
           });
       });
@@ -63,7 +63,7 @@ router.post('/assignQuestion', (req, res) => {
   if (students.length > 0) {
       students.forEach((sid) => {
           const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
-          db.query(sqlStudent, [questionId, sid, viewable], (err) => {
+          db.query(sqlStudent, [qid, sid, viewable], (err) => {
               if (err) console.error("Error assigning to student:", err);
           });
       });

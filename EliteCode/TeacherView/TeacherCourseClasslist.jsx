@@ -62,12 +62,14 @@ const TeacherCourseClasslist = () => {
                                         <Text appearance="hint">{student.email}</Text>
                                  </View>
                                 </View >
+                                 <View style={styles.container}>
                                 <Button onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, cid: cid })}>
                                     <Text>Assigned Questions</Text>
                                     </Button>
                                 <Button status="danger" onPress={() => handleRemoveStudent(student)}>
                                     <Text>REMOVE STUDENT</Text>
                                     </Button>
+                                    </View>
                         </Card>
                     ))}
                 </View>
@@ -75,5 +77,10 @@ const TeacherCourseClasslist = () => {
         </Layout>
     );
 }
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+    },
+});
 
 export default TeacherCourseClasslist;
