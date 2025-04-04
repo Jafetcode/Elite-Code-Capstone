@@ -6,6 +6,10 @@ const app = express();
 const db = require('./db');
 const studentRoutes = require('./routes/studentRoutes');
 const instructorRoutes = require('./routes/instructorRoutes');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 
 require('dotenv').config();
 
@@ -75,10 +79,11 @@ app.post('/newUser', (req, res) => {
   });
 });
 
-app.post('/createQuestion', (req, res) => {
+app.post('/createQuestion', upload.single('imgFile'), (req, res) => {
   console.log(req.body);
-  const { question, description, pointVal, imgFile, topic, type, dueDate, tid } = req.body;
-  if (!question || !description || !pointVal || !imgFile || !topic || !type || !dueDate || !tid) {
+  const { question, description, pointVal, topic, type, dueDate, tid } = req.body;
+  const imgFile = req.file ? req.file.buffer : null;
+  if (!question || !description || !pointVal || !topic || !type || !dueDate || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile, topic, type, dueDate, tid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
