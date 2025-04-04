@@ -72,7 +72,6 @@ router.post('/assignQuestion', (req, res) => {
   res.json({ message: "Question assigned successfully" });
 });
 
-res.json({ message: "Question assigned successfully" });
 router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
