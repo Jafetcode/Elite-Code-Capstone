@@ -68,31 +68,31 @@ router.post('/joinCourse', async (req, res) => {
   }
 })
 
-// router.get('/courses', async (req, res) => {
-//   const { sid } = req.query;
+router.get('/courses', async (req, res) => {
+  const { sid } = req.query;
 
-//   try {
-//     const [courseIdsResult] = await db.query(
-//       'SELECT cid FROM Enrolled WHERE sid = ?',
-//       [sid]
-//     );
+  try {
+    const [courseIdsResult] = await db.query(
+      'SELECT cid FROM Enrolled WHERE sid = ?',
+      [sid]
+    );
 
-//     const courseIds = courseIdsResult.map(row => row.cid);
+    const courseIds = courseIdsResult.map(row => row.cid);
 
-//     if (courseIds.length === 0) {
-//       return res.json({ results: [] });
-//     }
+    if (courseIds.length === 0) {
+      return res.json({ results: [] });
+    }
 
-//     const [courses] = await db.query(
-//       'SELECT * FROM Classes WHERE cid IN (?)',
-//       [courseIds]
-//     );
+    const [courses] = await db.query(
+      'SELECT * FROM Classes WHERE cid IN (?)',
+      [courseIds]
+    );
 
-//     res.json({ results: courses });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Error fetching student courses" });
-//   }
-// });
+    res.json({ results: courses });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching student courses" });
+  }
+});
 
 

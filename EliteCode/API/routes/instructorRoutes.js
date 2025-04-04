@@ -49,7 +49,7 @@ router.get('/getCourses', (req, res) => {
 // });
 
 router.post('/assignQuestion', (req, res) => {
-  const { questionId, courses, students, viewable } = req.body;
+  const { qid, courses, students, viewable } = req.body;
 
   if (courses.length > 0) {
       courses.forEach((cid) => {
