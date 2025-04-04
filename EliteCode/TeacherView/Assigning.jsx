@@ -63,7 +63,7 @@ const Assigning = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     qid : question.qid, 
-                    tid: user.userId,
+                    tid: user.userID,
                     courses: selectedCourses,
                     students: selectedStudents,
                     viewable: 1  

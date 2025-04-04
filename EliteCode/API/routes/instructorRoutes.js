@@ -63,7 +63,7 @@ router.post('/assignQuestion', (req, res) => {
   if (courses.length > 0) {
     console.log("assigned to at least one course")
       courses.forEach((cid) => {
-          const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, tid viewable) VALUES (?, ?, ?)';
+          const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, tid viewable) VALUES (?, ?, ?, ?)';
           db.query(sqlClass, [qid, cid, tid, viewable], (err) => {
               if (err) console.error("Error assigning to class:", err);
           });
