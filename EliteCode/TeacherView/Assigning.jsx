@@ -20,7 +20,7 @@ const Assigning = () => {
 
     const fetchCoursesAndStudents = async () => {
         try {
-            console.log(user.UserID)
+            console.log(user.userID)
             // Fetch courses the teacher teaches
             let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
             const data = await res.json();
@@ -82,7 +82,7 @@ const Assigning = () => {
                 <Text category="s1">Assign to Courses:</Text>
                 <FlatList
                     data={courses}
-                    keyExtractor={(item) => item.cid.toString()}
+                    keyExtractor={(item) => item.cid}
                     renderItem={({ item }) => (
                         <CheckBox
                             checked={selectedCourses.includes(item.cid)}
@@ -98,7 +98,7 @@ const Assigning = () => {
                 <Text category="s1">Assign to Specific Students:</Text>
                 <FlatList
                     data={students}
-                    keyExtractor={(item) => item.sid.toString()}
+                    keyExtractor={(item) => item.sid}
                     renderItem={({ item }) => (
                         <CheckBox
                             checked={selectedStudents.includes(item.sid)}

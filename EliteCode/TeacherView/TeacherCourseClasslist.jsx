@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { View, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
