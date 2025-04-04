@@ -89,7 +89,7 @@ router.put('/gradeSubmission',( req, res) => {
 
 router.get('/questions', (req, res) => {
   const cid = req.query.cid;
-  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
     'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';
   db.query(sql, [cid], (err, results) => {
     if (err) {
@@ -101,7 +101,7 @@ router.get('/questions', (req, res) => {
 
 router.get('/allQuestions', (req, res) => {
   const tid = req.query.tid;
-  const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate ' +
+  const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate ' +
     'From Questions q Where tid = ?';
   db.query(sql, [tid], (err, results) => {
     if (err) {
