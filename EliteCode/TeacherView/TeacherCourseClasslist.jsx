@@ -83,4 +83,11 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TeacherCourseClasslist;
+export default () => (
+  <>
+    <IconRegistry icons={EvaIconsPack} />
+    <ApplicationProvider {...eva} theme={eva.dark}>
+      <TeacherCourseClasslist />
+    </ApplicationProvider>
+  </>
+);
