@@ -73,7 +73,7 @@ function QsByCourse() {
                                         </View>
                                         <View><Text category="s2">Topic: {question.topic}</Text></View>
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                        <Text category="s2">{question.pointVal} Points</Text>
+                                        {/* <Text category="s2">{question.pointVal} Points</Text> */}
                                         <View><Text category="s2">{question.imgfile}</Text></View>
                                     </Card>
                                 )

@@ -24,7 +24,7 @@ function QuestionsAssignedToStudent() {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
-            console.log(questions)
+            // console.log(questions)
         } catch (error) {
             console.error("Failed to fetch", error);
         }
@@ -72,7 +72,7 @@ function QuestionsAssignedToStudent() {
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                             <Text category="s2">{question.pointVal} Points</Text>
-                                            <View><Text category="s2">{question.imgfile}</Text></View>
+                                            {/* <View><Text category="s2">{question.imgfile}</Text></View> */}
                                             <Button onPress={() => navigation.navigate("Question", {q : question, s: student})} > </Button>
                                     </Card>
                                 )

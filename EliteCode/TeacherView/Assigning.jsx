@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, FlatList, Alert } from "react-native";
+import { useRoute } from '@react-navigation/native';
 import { Checkbox, Button, Card } from "@ui-kitten/components";
-
+import { useAuth } from "../AuthContext";
+    
 const Assigning = () => {
     const route = useRoute();
+    const { user } = useAuth();
     const { question} = route.params?.q;
     const assignTo = route.params?.assignTo
     const [courses, setCourses] = useState([]);
@@ -18,12 +21,12 @@ const Assigning = () => {
     const fetchCoursesAndStudents = async () => {
         try {
             // Fetch courses the teacher teaches
-            let courseRes = await fetch("https://your-api.com/teacher/courses");
+            let courseRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
             let courseData = await courseRes.json();
             setCourses(courseData);
 
             // Fetch students the teacher can assign
-            let studentRes = await fetch("https://your-api.com/teacher/students");
+            let studentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/students?tid=${user.UserID}`);
             let studentData = await studentRes.json();
             setStudents(studentData);
         } catch (error) {
