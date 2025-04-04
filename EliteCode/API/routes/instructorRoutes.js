@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const { default: QsAssignedToStudent } = require('../../TeacherView/QsAssignedToStudent');
 
 // Define your routes
 router.get('/', (req, res) => {
@@ -50,7 +51,10 @@ router.get('/getCourses', (req, res) => {
 
 router.post('/assignQuestion', (req, res) => {
   const { qid, courses, students, viewable } = req.body;
-
+  console.log(qid)
+  console.log(courses)
+  console.log(students)
+  console.log(viewable)
   if (courses.length > 0) {
       courses.forEach((cid) => {
           const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, viewable) VALUES (?, ?, ?)';
@@ -107,6 +111,7 @@ router.get('/questions', (req, res) => {
     res.json({ results });
   });
 });
+
 router.get('/allQuestions', (req, res) => {
   const tid = req.query.tid;
   const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.topic, q.type, q.dueDate ' +
