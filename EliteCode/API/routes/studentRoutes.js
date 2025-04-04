@@ -8,12 +8,13 @@ router.get('/', (req, res) => {
 
 router.get('/questions', (req, res) => {
   const sid = req.query.sid;
-  const cid = req.query.cid;
-  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgfile, q.language, q.topic, q.type, q.dueDate, atc.viewable as classView, ats.viewable as studentView ' +
-    'From Questions q ' +
-    'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
-    'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' +
-    'WHERE (ats.sid = ? OR atc.cid = ?)';
+  const tid = req.query.tid;
+  const sql = 'SELECT DISTINCT q.* FROM Questions q' +
+  'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' + 
+  'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
+  'LEFT JOIN Enrollments e ON atc.cid = e.cid ' + 
+  'LEFT JOIN Classes c ON e.cid = c.cid ' +
+  'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?)  OR (e.sid = ? AND i.tid = ?);'
   db.query(sql, [sid, cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });

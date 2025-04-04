@@ -45,7 +45,7 @@ function QuestionsLibrary() {
     return (
         <Layout style={{ flex: 1, padding: 5 }}>
             <ScrollView>
-                <View style={{ marginBottom: 20 }}>
+                <View style={{ marginBottom: 10 }}>
                     {questions.length > 0 ? (
                         <>
                             {questions.map((question) =>
@@ -61,11 +61,8 @@ function QuestionsLibrary() {
                                     <Text category="s2">{question.pointVal} Points</Text>
                                     {/* <View><Text category="s2">{question.imgfile}</Text></View> */}
                                     <View style={styles.container}>
-                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Assign a question', {assignTo: "course", question: question})}>
-                                            Assign to class
-                                        </Button>
-                                        <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Assign a question', {assignTo: "student", question: question})}>
-                                            Assign to student/students
+                                        <Button style={{ margin: 5, width: 300 }} onPress={() => navigation.navigate('Assign a question', {assignTo: "course", question: question})}>
+                                            Assign to class or student/students
                                         </Button>
                                     </View>
                                 </Card>

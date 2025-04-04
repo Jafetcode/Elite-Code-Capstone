@@ -12,7 +12,7 @@ const TeacherCourseClasslist = () => {
     const route = useRoute();
     const { cid } = route.params || {};
     const [classlist, setClasslist] = useState([])
-    const { user } = useAuth(); 
+    const { user } = useAuth();
 
     const fetchClasslist = async () => {
         try {
@@ -25,16 +25,16 @@ const TeacherCourseClasslist = () => {
     };
 
     const handleRemoveStudent = async (student) => {
-        try{
+        try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/removeStudent?cid=${cid}&sid=${student.userID}`, {
                 method: "DELETE"
             });
             if (res.ok) {
-                fetchClasslist(); 
+                fetchClasslist();
             } else {
                 console.error("Failed to remove student");
             }
-        }catch (error){
+        } catch (error) {
             console.error("Failed to remove student: ", error);
         }
     }
@@ -49,27 +49,27 @@ const TeacherCourseClasslist = () => {
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="s1"> Course classlist </Text>
-                    
+
                     </View>
 
                     {classlist.map((student) => (
                         <Card key={student.userID} style={{ marginBottom: 10, borderRadius: 10 }}>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <Image source={require("../assets/images/profile-picture.png")}
-                                        style={{ width: 40, height: 40, borderRadius: 40, margin: 5, marginRight: 20}} />                                    
-                                        <View style={{ flex: 1 }}>
-                                        <Text >{student.fname} {student.lname}</Text>
-                                        <Text appearance="hint">{student.email}</Text>
-                                 </View>
-                                </View >
-                                 <View style={styles.container}>
-                                <Button onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, cid: cid })}>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <Image source={require("../assets/images/profile-picture.png")}
+                                    style={{ width: 40, height: 40, borderRadius: 40, margin: 5, marginRight: 20 }} />
+                                <View style={{ flex: 1 }}>
+                                    <Text >{student.fname} {student.lname}</Text>
+                                    <Text appearance="hint">{student.email}</Text>
+                                </View>
+                            </View >
+                            <View style={styles.container}>
+                                <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, tid: user.userID })}>
                                     <Text>Assigned Questions</Text>
-                                    </Button>
-                                <Button status="danger" onPress={() => handleRemoveStudent(student)}>
+                                </Button>
+                                <Button size="small" style={{ margin: 5, width: 140 }}status="danger" onPress={() => handleRemoveStudent(student)}>
                                     <Text>REMOVE STUDENT</Text>
-                                    </Button>
-                                    </View>
+                                </Button>
+                            </View>
                         </Card>
                     ))}
                 </View>

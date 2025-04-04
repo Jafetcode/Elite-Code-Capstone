@@ -6,7 +6,6 @@ import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
 import { useRoute } from '@react-navigation/native';
-import { SlideInDown } from "react-native-reanimated";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -60,7 +59,7 @@ function QsByCourse() {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 20 }}>
-                    {questions.length > 0 ? (
+                    {questions?.length > 0 ? (
                         <>
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
@@ -73,8 +72,8 @@ function QsByCourse() {
                                         </View>
                                         <View><Text category="s2">Topic: {question.topic}</Text></View>
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                        {/* <Text category="s2">{question.pointVal} Points</Text> */}
-                                        <View><Text category="s2">{question.imgfile}</Text></View>
+                                        <Text category="s2">{question.pointVal} Points</Text>
+                                        {/* <View><Text category="s2">{question.imgfile}</Text></View> */}
                                     </Card>
                                 )
                             )}

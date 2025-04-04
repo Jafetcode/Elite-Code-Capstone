@@ -16,12 +16,12 @@ function QuestionsAssignedToStudent() {
     const [questions, setQuestions] = React.useState([]);
     const { user } = useAuth();
     const student = route.params?.student;
-    const cid = route.params?.cid;
+    const tid = route.params?.tid;
 
     const fetchQuestions = async () => {
         try {
-            console.log("info passing jsx", cid, student.userID)
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&sid=${student.userID}`);
+            console.log("info passing jsx", tid, student.userID)
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?tid=${tid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
             // console.log(questions)
@@ -47,14 +47,14 @@ function QuestionsAssignedToStudent() {
             if (student?.userID) {
                 fetchQuestions();
             }
-        }, [student, cid])
+        }, [student, tid])
     );
 
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-                    {questions.length > 0 ? (
+                    {questions?.length > 0 ? (
                         <>
                             <View style={{ flexDirection: "row", marginBottom: 15 }}>
                                 <Text category="s1">Questions assigned to: </Text>

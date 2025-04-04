@@ -38,28 +38,9 @@ router.get('/getCourses', (req, res) => {
   });
 });
 
-// router.post('/specificAssignment', (req, res) => {
-//     const sql = 'INSERT into AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
-//     db.query(sql, [qid, sid, viewable], (err, results) => {
-//       if (err) {
-//         return res.status(500).json({ error: err.message });
-//       }
-//       res.json({ message: 'Student assigned specific question'});
-//     });
-// });
 
-router.post('/assignQuestion', (req, res) => {
-  // qid : question.qid, 
-  // courses: selectedCourses,
-  // students: selectedStudents,
-  // viewable: 1  
-  console.log("Assign question route hit"); 
+router.post('/assignQuestion', (req, res) => { 
   const { qid, courses, students, viewable, tid } = req.body;
-  console.log("Received qid:", qid); 
-  console.log(qid)
-  console.log(courses)
-  console.log(students)
-  console.log(viewable)
   if (courses.length > 0) {
     console.log("assigned to at least one course")
       courses.forEach((cid) => {
@@ -69,7 +50,6 @@ router.post('/assignQuestion', (req, res) => {
           });
       });
   }
-
   if (students.length > 0) {
     console.log("assigned to at least one student")
       students.forEach((sid) => {
@@ -82,51 +62,6 @@ router.post('/assignQuestion', (req, res) => {
 
   res.json({ message: "Question assigned successfully" });
 });
-
-
-// const assignToClass = async (cid, qid, viewable) => {
-//   console.log("in assign to class")
-//   return new Promise((resolve, reject) => {
-//       const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, viewable) VALUES (?, ?, ?)';
-//       db.query(sqlClass, [qid, cid, viewable], (err, result) => {
-//           if (err) {
-//               reject(err);  // reject on error
-//           } else {
-//               resolve(result);  // resolve on success
-//           }
-//       });
-//   });
-// };
-
-// const assignToStudent = async (sid, qid, viewable) => {
-//   return new Promise((resolve, reject) => {
-//       const sqlStudent = 'INSERT INTO AssignedToStudent (sid, qid, viewable) VALUES (?, ?, ?)';
-//       db.query(sqlStudent, [qid, sid, viewable], (err, result) => {
-//           if (err) {
-//               reject(err);  // reject on error
-//           } else {
-//               resolve(result);  // resolve on success
-//           }
-//       });
-//   });
-// };
-
-// router.post('/assignQuestion', async (req, res) => {
-//   const { qid, courses, students, viewable } = req.body;
-
-//   try {
-//       const classPromises = courses.map(cid => assignToClass(cid, qid, viewable)); // map to promises
-//       const studentPromises = students.map(sid => assignToStudent(sid, qid, viewable)); // map to promises
-
-//       // Wait for all promises to resolve
-//       await Promise.all([...classPromises, ...studentPromises]);
-
-//       res.json({ message: "Question assigned successfully" });
-//   } catch (error) {
-//       console.error("Error assigning question:", error);
-//       res.status(500).json({ error: "An error occurred while assigning the question" });
-//   }
-// });
 
 router.get('/submission', (req, res) => {
   const sid = req.query.sid;
