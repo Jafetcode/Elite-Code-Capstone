@@ -49,21 +49,29 @@ router.get('/getCourses', (req, res) => {
 // });
 
 router.post('/assignQuestion', (req, res) => {
-  const { qid, courses, students, viewable } = req.body;
+  // qid : question.qid, 
+  // courses: selectedCourses,
+  // students: selectedStudents,
+  // viewable: 1  
+  console.log("Assign question route hit"); 
+  const { qid, courses, students, viewable, tid } = req.body;
+  console.log("Received qid:", qid); 
   console.log(qid)
   console.log(courses)
   console.log(students)
   console.log(viewable)
   if (courses.length > 0) {
+    console.log("assigned to at least one course")
       courses.forEach((cid) => {
-          const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, viewable) VALUES (?, ?, ?)';
-          db.query(sqlClass, [qid, cid, viewable], (err) => {
+          const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, tid viewable) VALUES (?, ?, ?)';
+          db.query(sqlClass, [qid, cid, tid, viewable], (err) => {
               if (err) console.error("Error assigning to class:", err);
           });
       });
   }
 
   if (students.length > 0) {
+    console.log("assigned to at least one student")
       students.forEach((sid) => {
           const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
           db.query(sqlStudent, [qid, sid, viewable], (err) => {
@@ -164,7 +172,9 @@ router.get('/allQuestions', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    console.log("all questions")
     res.json({ results });
+
   });
 });
 

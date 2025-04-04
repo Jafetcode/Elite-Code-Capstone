@@ -7,13 +7,13 @@ import { useAuth } from "../AuthContext";
 const Assigning = () => {
     const route = useRoute();
     const { user } = useAuth();
-    const { question} = route.params?.q;
+    const { question} = route.params;
     const assignTo = route.params?.assignTo
     const [courses, setCourses] = useState([]);
     const [students, setStudents] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [selectedStudents, setSelectedStudents] = useState([]);
-
+    console.log(question)
     useEffect(() => {
         fetchCoursesAndStudents();
     }, []);
@@ -21,6 +21,7 @@ const Assigning = () => {
     const fetchCoursesAndStudents = async () => {
         try {
             console.log(user.userID)
+            console.log("qid in assigning", question.qid)
             // Fetch courses the teacher teaches
             let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
             const data = await res.json();
@@ -56,11 +57,13 @@ const Assigning = () => {
         }
     
         try {
+            console.log("in try", question.qid)
             let res = await fetch("https://elitecodecapstone24.onrender.com/instructor/assignQuestion", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     qid : question.qid, 
+                    tid: user.userId,
                     courses: selectedCourses,
                     students: selectedStudents,
                     viewable: 1  
