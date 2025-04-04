@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const { default: QsAssignedToStudent } = require('../../TeacherView/QsAssignedToStudent');
 
 // Define your routes
 router.get('/', (req, res) => {
