@@ -52,4 +52,47 @@ router.get('/courses', async (req, res) => {
   });
 });
 
+router.get('/getUpcoming', (req, res) => {
+  const sid = req.query.sid;
+
+  const sql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  db.query(sql, [sid], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ results });
+  });
+});
+
+router.get('/getPastDue', (req, res) => {
+  const sid = req.query.sid;
+
+  const sql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ?
+      AND DATE(q.dueDate) < CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  db.query(sql, [sid], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ results });
+  });
+});
+
+
+
+
+
+
 module.exports = router;
