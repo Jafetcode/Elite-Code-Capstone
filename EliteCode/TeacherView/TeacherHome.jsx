@@ -1,7 +1,7 @@
 import * as React from "react";
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
+import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Popover,  } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
@@ -12,7 +12,7 @@ function TeacherHome() {
     const navigation = useNavigation();
     const [courses, setCourses] = React.useState([]);
     const { user } = useAuth();
-
+    
     const fetchCourses = async () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
@@ -22,6 +22,12 @@ function TeacherHome() {
             console.error("Failed to fetch", error);
         }
     };
+    const handleDeleteCourse = async () => {
+        console.log("Delete button")
+    }
+    const handleEditCourse = async () => {
+        console.log("Edit button")
+    }
 
     useFocusEffect(
         React.useCallback(() => {
@@ -48,7 +54,8 @@ function TeacherHome() {
                     </View>
                     {courses.map((course) => (
                         <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
-                            {/* <TouchableOpacity onPress={() => navigation.navigate('TeacherCourse')}> */}
+                            <TouchableOpacity onPress={() => navigation.navigate('Manage Course', { course })}>
+                           
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <View style={{ flex: 1 }}>
                                     <Text>{course.courseName}</Text>
@@ -67,6 +74,7 @@ function TeacherHome() {
                                     Questions
                                 </Button>
                             </View>
+                            </TouchableOpacity>
                         </Card>
                     ))}
                 </View>
