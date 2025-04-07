@@ -187,23 +187,17 @@ router.get('/students', (req, res) => { //working
 
 router.get('/:tid/courses', async (req, res) => {
   const { tid } = req.params.tid;
-
+  console.log(`tid : ${tid}`);
   const sql = `
-    SELECT 
-      e.cid, 
-      c.courseName, 
-      u.userID, 
-      u.fname, 
-      u.lname
+    SELECT e.cid, c.courseName, u.userID, u.fname, u.lname
     FROM Enrolled e
     JOIN Users u ON e.sid = u.userID
     JOIN Classes c ON e.cid = c.cid
     WHERE e.tid = ?
-    ORDER BY c.courseName, u.lname, u.fname
-  `;
+    ORDER BY c.courseName, u.lname, u.fname`;
 
   try {
-    const [rows] = await db.execute(sql, [tid]);
+    const [rows] = db.query(sql, [tid]);
 
     // Group rows by course
     const courses = {};
