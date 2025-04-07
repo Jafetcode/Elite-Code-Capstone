@@ -83,7 +83,7 @@ app.post('/createQuestion', upload.single('imgFile'), (req, res) => {
   console.log(req.body);
   const { question, description, pointVal, topic, type, dueDate, tid } = req.body;
   const imgFile = req.file ? req.file.buffer : null;
-  if (!question || !description || !pointVal || !topic || !type || !dueDate || !tid) {
+  if (!question || !pointVal || !type || !dueDate || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   const sql = 'INSERT INTO Questions(question, description, pointVal, imgFile, topic, type, dueDate, tid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
