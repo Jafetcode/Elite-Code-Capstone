@@ -197,7 +197,7 @@ router.get('/:tid/courses', async (req, res) => {
     ORDER BY c.courseName, u.lname, u.fname`;
 
   try {
-    const [rows] = db.query(sql, [tid]);
+    const [rows] = db.execute(sql, [tid]);
 
     // Group rows by course
     const courses = {};
