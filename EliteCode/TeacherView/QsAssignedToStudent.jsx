@@ -72,7 +72,7 @@ function QuestionsAssignedToStudent() {
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                             <Text category="s2">{question.pointVal} Points</Text>
-                                            <View><Text category="s2">{question.imgFile}</Text></View>
+                                            {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
                                             <Button size="small" style= {{margin: 10}}onPress={() => navigation.navigate("Question", {q : question, s: student})} > Grade question </Button>
                                     </Card> 
                                 )
