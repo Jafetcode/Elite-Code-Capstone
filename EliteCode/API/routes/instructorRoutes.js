@@ -201,7 +201,7 @@ router.get('/:tid/courses', async (req, res) => {
 
     // Group rows by course
     const courses = {};
-    rows.forEach(row => {
+    for (const row of rows) {
       if (!courses[row.cid]) {
         courses[row.cid] = {
           cid: row.cid,
@@ -214,12 +214,12 @@ router.get('/:tid/courses', async (req, res) => {
         fname: row.fname,
         lname: row.lname,
       });
-    });
+    }
 
-    res.json(Object.values(courses));
+    res.json(Object.values(courses)); // ✅ sends grouped data
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Database error');
+    console.error('Database error:', err);
+    res.status(500).send('Something went wrong');
   }
 });
 
