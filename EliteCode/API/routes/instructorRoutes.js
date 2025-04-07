@@ -185,8 +185,8 @@ router.get('/students', (req, res) => { //working
   });
 });
 
-router.get('/instructor/:tid/courses', async (req, res) => {
-  const { tid } = req.params;
+router.get('/:tid/courses', async (req, res) => {
+  const { tid } = req.params.tid;
 
   const sql = `
     SELECT 
