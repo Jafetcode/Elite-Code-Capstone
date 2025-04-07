@@ -1,11 +1,11 @@
 import * as React from "react";
 import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Popover,  } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
