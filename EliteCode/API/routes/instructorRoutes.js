@@ -196,32 +196,32 @@ router.get('/:tid/courses', async (req, res) => {
     WHERE e.tid = ?
     ORDER BY c.courseName, u.lname, u.fname`;
 
-  try {
-    const [rows] = db.execute(sql, [tid]);
-
-    // Group rows by course
-    const courses = {};
-    for (const row of rows) {
-      if (!courses[row.cid]) {
-        courses[row.cid] = {
-          cid: row.cid,
-          courseName: row.courseName,
-          students: [],
-        };
+    db.execute(sql, [tid], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).send('Something went wrong');
       }
-      courses[row.cid].students.push({
-        userID: row.userID,
-        fname: row.fname,
-        lname: row.lname,
-      });
-    }
-
-    res.json(Object.values(courses)); // ✅ sends grouped data
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).send('Something went wrong');
-  }
-});
+  
+      const courses = {};
+      for (const row of results) {
+        if (!courses[row.cid]) {
+          courses[row.cid] = {
+            cid: row.cid,
+            courseName: row.courseName,
+            students: [],
+          };
+        }
+        courses[row.cid].students.push({
+          userID: row.userID,
+          fname: row.fname,
+          lname: row.lname,
+        });
+      }
+  
+      res.json(Object.values(courses));
+    });
+  });
+  
 
 
 router.put('/updateQuestion', (req, res) => {
