@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -66,7 +66,25 @@ const TeacherCourseClasslist = () => {
                                 <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, tid: user.userID })}>
                                     <Text>Assigned Questions</Text>
                                 </Button>
-                                <Button size="small" style={{ margin: 5, width: 140 }}status="danger" onPress={() => handleRemoveStudent(student)}>
+                                <Button size="small" style={{ margin: 5, width: 140 }}status="danger" 
+                                onPress={() => 
+                                    Alert.alert(
+                                        "Remove Student",
+                                        `Are you sure you want to remove ${student.fname} ${student.lname}?`,
+                                        [
+                                            {
+                                                text: "Cancel",
+                                                style: "cancel"
+                                            },
+                                            {
+                                                text: "Remove Student",
+                                                style: "destructive",
+                                                onPress: () => handleRemoveStudent(student)
+                                              }
+                                        ]
+                                    )
+                                }
+                                >
                                     <Text>REMOVE STUDENT</Text>
                                 </Button>
                             </View>
