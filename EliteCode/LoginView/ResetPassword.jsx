@@ -28,7 +28,10 @@ function ResetPassword() {
                 return;
             }
             await changePassword(email);
+            // maybe make it timeout 
+            // check not registered emails issue
             Alert.alert(`Reset link has been sent to ${email}!`);
+            navigation.navigate("LoginScreen");
             setEmail("");
         } catch {
             Alert.alert('Email not registered to an account', error.message);
@@ -46,8 +49,7 @@ return (
         <View style={styles.inputContainer}>
             <Text
                 style={styles.innerText}
-                category='h1'
-            > Reset Password </Text>
+                category='h1'> Reset Password </Text>
             <Input
                 style={styles.inputs}
                 label='Email'

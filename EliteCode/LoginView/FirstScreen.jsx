@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text,  StyleSheet} from 'react-native';
+import {Text,  StyleSheet, Image} from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
 import { Button, Layout, Divider} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
@@ -9,7 +9,10 @@ function FirstScreen() {
     const navigation = useNavigation();
   return (
     <Layout style={styles.containerMain}>
-    <Text style={styles.outer}>EliteCode</Text>
+    <Image
+    source={require("../assets/images/EliteCodeLogoLow.png")}
+            style={{ width: 300, height: 150, marginBottom: 30 }}
+          />
         <Layout style={styles.containerInner}>
         <Button style={styles.button} onPress={() => navigation.navigate('LoginScreen')}>
           Login

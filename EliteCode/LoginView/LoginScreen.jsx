@@ -43,9 +43,6 @@ function LoginScreen() {
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
-        <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-          {"<"}
-        </Button>
         <Text category="H1" style={styles.headerText}>
           Elite Code
         </Text>

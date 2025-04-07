@@ -176,13 +176,57 @@ router.get('/courses', (req, res) => { //working
 });
 router.get('/students', (req, res) => { //working
   const tid = req.query.tid;
-  const sql = 'Select distinct u.userID, u.fname, u.lname From Users u join Enrolled e on u.UserID = e.sid where e.tid = ?';
+  const sql = 'Select e.cid, distinct u.userID, u.fname, u.lname From Users u join Enrolled e on u.UserID = e.sid where e.tid = ? and e.sid = u.UserID';
   db.query(sql, [tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     res.json({results});
   });
+});
+
+router.get('/instructor/:tid/courses', async (req, res) => {
+  const { tid } = req.params;
+
+  const sql = `
+    SELECT 
+      e.cid, 
+      c.courseName, 
+      u.userID, 
+      u.fname, 
+      u.lname
+    FROM Enrolled e
+    JOIN Users u ON e.sid = u.userID
+    JOIN Classes c ON e.cid = c.cid
+    WHERE e.tid = ?
+    ORDER BY c.courseName, u.lname, u.fname
+  `;
+
+  try {
+    const [rows] = await db.execute(sql, [tid]);
+
+    // Group rows by course
+    const courses = {};
+    rows.forEach(row => {
+      if (!courses[row.cid]) {
+        courses[row.cid] = {
+          cid: row.cid,
+          courseName: row.courseName,
+          students: [],
+        };
+      }
+      courses[row.cid].students.push({
+        userID: row.userID,
+        fname: row.fname,
+        lname: row.lname,
+      });
+    });
+
+    res.json(Object.values(courses));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Database error');
+  }
 });
 
 

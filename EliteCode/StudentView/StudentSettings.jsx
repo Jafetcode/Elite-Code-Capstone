@@ -9,6 +9,7 @@ import {useAuth} from '../AuthContext';
   
 const StudentSettings = () =>{
     const navigation = useNavigation();
+    const { user } = useAuth();
     const {logout} = useAuth();
 
     const handleLogout = async () => {
@@ -20,7 +21,8 @@ const StudentSettings = () =>{
     };
 
     useEffect(() => {
-        fetch('https://elitecodecapstone24.onrender.com/user')
+      console.log(`user :  ${user.userID}`)
+        fetch(`https://elitecodecapstone24.onrender.com/userRole?email=${user.email}`)
           .then(response => response.json())
           .then(data => {
             console.log(data);
@@ -42,8 +44,8 @@ const StudentSettings = () =>{
       <ListItem title="About" description="App information" />
 
       <ListItem title="Logout" onPress={handleLogout} />
-
-                    </Layout>
+      <ListItem title="Reset Password" onPress={() => navigation.navigate("ResetPassword")} />
+      </Layout>
     );
 }
 export default ()=> (
