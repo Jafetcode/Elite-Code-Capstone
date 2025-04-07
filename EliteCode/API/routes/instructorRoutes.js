@@ -186,7 +186,7 @@ router.get('/students', (req, res) => { //working
 });
 
 router.get('/:tid/courses', async (req, res) => {
-  const tid  = req.params.tid;
+  const {tid}  = req.params;
   console.log(`tid : ${tid}`);
   const sql = `
     SELECT e.cid, c.courseName, u.userID, u.fname, u.lname
