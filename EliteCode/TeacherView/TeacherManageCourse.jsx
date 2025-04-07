@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
-import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, Popover,  } from "@ui-kitten/components";
+import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Input, Card, Popover,  } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
@@ -31,11 +31,11 @@ function TeacherManageCourse() {
                 Alert.alert("Success", "Course edited!");
                 navigation.goBack();
             } else {
-                Alert.alert("Error", "Failed to edit course.", err);
+                Alert.alert("Error", "Failed to edit course.");
             }
         } catch (err) {
             console.error(err);
-            Alert.alert("Error", err);
+            Alert.alert("Error");
         }
     };
     const handleDelete = async () => {
@@ -55,11 +55,11 @@ function TeacherManageCourse() {
                             Alert.alert("Deleted", "Course deleted successfully!");
                             navigation.goBack();
                         } else {
-                            Alert.alert("Error", "Failed to delete course.", err);
+                            Alert.alert("Error", "Failed to delete course.");
                         }
                     } catch (err) {
                         console.error(err);
-                        Alert.alert("Error", "Something went wrong.", err);
+                        Alert.alert("Error", "Something went wrong.");
                     }
                  },
                 },
@@ -76,25 +76,25 @@ function TeacherManageCourse() {
                             Edit Course
                         </Text>
                         <Text> Course Name</Text>
-                        <TextInput
+                        <Input
                             value={courseName}
                             onChangeText={setCourseName}
                             style={styles.input}
                             placeholder="Enter New Course Name"
                         />
                         <Text style={{ marginTop: 15 }}>Description</Text>
-                        <TextInput
+                        <Input
                             value={description}
                             onChangeText={setDescription}
                             style={styles.input}
                             placeholder="Enter New Description"
                         />    
 
-                        <Button size="small" status="warning" style={{ marginBottom: 20 }} onPress={handleUpdate}>
-                            Edit Course
+                        <Button size="small" status="warning" style={{ marginTop: 10, marginBottom: 20 }} onPress={handleUpdate}>
+                            <Text>Save Changes</Text>
                         </Button>
                         <Button size="small" status="danger" style={{ marginBottom: 20 }} onPress={handleDelete}>
-                            Delete Course
+                            <Text>Delete Course</Text>
                         </Button>
                     </View>
                     </View>
