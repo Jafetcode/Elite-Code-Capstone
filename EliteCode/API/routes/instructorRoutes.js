@@ -174,6 +174,46 @@ router.get('/courses', (req, res) => { //working
     res.json({results});
   });
 });
+
+router.put('/course/:cid', (req, res) => {
+    const {cid} = req.params;
+    const { courseName, description } = req.body;
+
+    if (!courseName){
+      return res.status(400).json({ error: 'Missing Course Name'});
+    }
+    const sql = 'UPDATE Classes SET courseName = ?, description = ? WHERE cid = ?';
+    db.query(sql, [courseName, description, cid], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: 'Course not found' });
+      }
+      res.json({ message: 'Course updated successfully' });
+    });
+
+});
+
+router.delete('/course/:cid', (req, res) => {
+  const {cid} = req.params;
+  
+  const sql = 'DELETE FROM Classes WHERE cid = ?';
+  db.query(sql, [courseName, description, cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    res.json({ message: 'Course updated successfully' });
+  });
+
+});
+
+
+
+
 router.get('/students', (req, res) => { //working
   const tid = req.query.tid;
   const sql = 'Select e.cid, distinct u.userID, u.fname, u.lname From Users u join Enrolled e on u.UserID = e.sid where e.tid = ? and e.sid = u.UserID';
