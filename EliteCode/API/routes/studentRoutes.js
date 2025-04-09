@@ -16,7 +16,18 @@ router.get('/', (req, res) => {
   res.send('Student route');
 });
 
-
+router.get('/questions', (req, res) => {
+  const cid = req.query.cid;
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+    'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';
+  db.query(sql, [cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+  
+});
 router.post('/submitQuestion', (req, res) => {
   const { qid, sid, answer,progress, submitted_on} = req.body;
   const imgFile = req.file ? req.file.buffer : null;
