@@ -25,6 +25,20 @@ function StudentQuestion() {
   const { cid } = route.params || {};
   const { cName } = route.params || {};
 
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true, 
+    });
+};
+
   const fetchQuestions = async () => {
     try {
       const res = await fetch(
@@ -66,6 +80,7 @@ function StudentQuestion() {
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                             <Text category="s2">{question.pointVal} Points</Text>
+                                            <Button onPress={() => navigation.navigate('SubmitQuestion', { cid: cid })} style={{ marginTop: 20 }}> Submit answer for {question.question}</Button>
                                             {/* <View>{question.imgFile}</View> */}
                                         </Card>
                                     )

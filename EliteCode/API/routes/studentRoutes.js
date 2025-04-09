@@ -1,6 +1,16 @@
 const express = require('express');
+const mysql = require('mysql2');
 const router = express.Router();
+const cors = require('cors');
 const db = require('../db');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.use(cors());
+app.use(express.json());
+
+
 // Define your routes
 router.get('/', (req, res) => {
   res.send('Student route');
@@ -17,6 +27,19 @@ router.get('/questions', (req, res) => {
     res.json({ results });
   });
   
+});
+router.post('/submitQuestion', (req, res) => {
+  const { qid, sid, answer,progress, submitted_on} = req.body;
+  const imgFile = req.file ? req.file.buffer : null;
+  const sql = `
+    INSERT INTO Submissions (qid, sid, answer,progress, submitted_on, imgFile)
+    VALUES (?, ?, ?, ?, ?, ?)`;
+  db.query(sql, [qid, sid, answer,progress, submitted_on,imgFile], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
 });
 
 router.post('/joinCourse', async (req, res) => {

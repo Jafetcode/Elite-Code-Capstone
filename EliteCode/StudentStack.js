@@ -8,7 +8,7 @@ import ErikaStudentHome from './StudentView/ErikaStudentHome';
 import AndryStudentHome from './StudentView/AndryStudentHome';
 import JafetStudentHome from './StudentView/JafetStudentHome';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import SubmitQuestion from './StudentView/SubmitQuestion';
 const Stack = createNativeStackNavigator();
 
 const StudentStack = () => (
@@ -21,6 +21,7 @@ const StudentStack = () => (
     <Stack.Screen name="AndryStudentHome" component={AndryStudentHome} />
     <Stack.Screen name="ErikaStudentHome" component={ErikaStudentHome} />
     <Stack.Screen name="JafetStudentHome" component={JafetStudentHome} />
+    <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} />
   </Stack.Navigator>
 );
 
