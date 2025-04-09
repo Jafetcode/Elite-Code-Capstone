@@ -41,7 +41,7 @@ function TeacherManageCourse() {
     const handleDelete = async () => {
         Alert.alert(
             "Course will be deleted",
-            `Are you sure you want to delete course with ID: ${course.cid}?`,
+            `Are you sure you want to delete ${courseName}?`,
             [
                 {text: "Cancel", style: "cancel"},
                 {

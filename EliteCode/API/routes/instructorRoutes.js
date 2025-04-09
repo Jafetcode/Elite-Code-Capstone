@@ -187,9 +187,6 @@ router.put('/course/:cid', (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      if (results.affectedRows === 0) {
-        return res.status(404).json({ error: 'Course not found' });
-      }
       res.json({ message: 'Course updated successfully' });
     });
 
@@ -203,15 +200,10 @@ router.delete('/course/:cid', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ error: 'Course not found' });
-    }
-    res.json({ message: 'Course updated successfully' });
+    res.json({ message: 'Course Deleted successfully' });
   });
 
 });
-
-
 
 
 router.get('/students', (req, res) => { //working
