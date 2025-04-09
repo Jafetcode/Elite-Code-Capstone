@@ -97,7 +97,6 @@ router.get('/questions', (req, res) => {
     }
     res.json({ results });
   });
-  
 });
 
 router.get('/allQuestions', (req, res) => {
