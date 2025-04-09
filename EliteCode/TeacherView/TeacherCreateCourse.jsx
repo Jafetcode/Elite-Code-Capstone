@@ -17,6 +17,7 @@ function TeacherCreateCourse() {
     const {user} = useAuth(); 
     const [value, setValue] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [courses, setCourses] = React.useState([]);
 
     const handleCreateCourse = async () => {
         
@@ -29,8 +30,9 @@ function TeacherCreateCourse() {
                     description: description.trim()
                 }),
             });
-
+            
             const data = await response.json();
+        
             if (response.ok) {
                 alert("Course Created!");
                 navigation.goBack();
