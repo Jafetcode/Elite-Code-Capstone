@@ -1,45 +1,92 @@
 import * as React from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
+import { useNavigation, useFocusEffect  } from "@react-navigation/native";
+import {
+  ApplicationProvider,
+  IconRegistry,
+  Layout,
+  Button,
+  Text,
+  Icon,
+  Card,
+} from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import { useAuth } from "../AuthContext";
+import { useRoute } from "@react-navigation/native";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function StudentQuestion() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [questions, setQuestions] = React.useState([]);
+  const { user } = useAuth();
+  const { cid } = route.params || {};
+  const { cName } = route.params || {};
 
-    return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+  const fetchQuestions = async () => {
+    try {
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}`
+      );
+      const data = await res.json();
+      setQuestions(data.results);
+    } catch (error) {
+      console.error("Failed to fetch", error);
+    }
+  };
 
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Button
-                    appearance="ghost"
-                    status="basic"
-                    accessoryLeft={BackIcon}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
-                    Elite Code
-                </Text>
-            </View>
+  useFocusEffect(
+    React.useCallback(() => {
+      if (cid) {
+        fetchQuestions();
+      }
+    }, [cid])
+  );
 
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Text category="h5" style={{ flex: 1, textAlign: "center" }}>
-                    Question Page
-                </Text>
-            </View>
-
-        </Layout>
-    );
+  return (
+    <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+                <ScrollView>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                        <Text category="s1"> Questions for course </Text>
+                    </View>
+                    <View style={{ marginBottom: 20 }}>
+                        {questions?.length > 0 ? (
+                            <>
+                                {questions.map((question) =>
+                                    (question.classView === 1 || question.studentView === 1) && (
+                                        <Card key={question.qid} style={{}}>
+                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                                <View style={{ flex: 1 }}>
+                                                    <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                                    <Text appearance="hint" >{question.description}</Text>
+                                                </View>
+                                            </View>
+                                            <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                            <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
+                                            <Text category="s2">{question.pointVal} Points</Text>
+                                            {/* <View>{question.imgFile}</View> */}
+                                        </Card>
+                                    )
+                                )}
+                            </>
+                        ) : (
+                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
+                                <Text category="s1">No questions have been assigned this course.</Text>
+                            </View>
+                        )}
+                    </View>
+                </ScrollView>
+            </Layout>
+        );
 }
 
 export default () => (
-    <>
-        <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider {...eva} theme={eva.dark}>
-            <StudentQuestion />
-        </ApplicationProvider>
-    </>
+  <>
+    <IconRegistry icons={EvaIconsPack} />
+    <ApplicationProvider {...eva} theme={eva.dark}>
+      <StudentQuestion />
+    </ApplicationProvider>
+  </>
 );

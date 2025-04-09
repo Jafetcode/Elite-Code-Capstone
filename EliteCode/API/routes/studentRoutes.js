@@ -7,20 +7,16 @@ router.get('/', (req, res) => {
 });
 
 router.get('/questions', (req, res) => {
-  const sid = req.query.sid;
-  const tid = req.query.tid;
-  const sql = 'SELECT DISTINCT q.*, ats.viewable as studentView, atc.viewable as classView FROM Questions q ' +
-  'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' + 
-  'LEFT JOIN AssignedToClass atc ON q.qid = atc.qid ' +
-  'LEFT JOIN Enrolled e ON atc.cid = e.cid ' + 
-  'LEFT JOIN Classes c ON e.cid = c.cid ' +
-  'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?) OR (e.sid = ? AND i.tid = ?);'
-  db.query(sql, [sid, tid, sid, tid], (err, results) => {
+  const cid = req.query.cid;
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
+    'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';
+  db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     res.json({ results });
   });
+  
 });
 
 router.post('/joinCourse', async (req, res) => {

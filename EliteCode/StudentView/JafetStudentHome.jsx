@@ -13,11 +13,11 @@ import {
   Input,
 } from "@ui-kitten/components";
 
-function StudentHome() {
+function JafetStudentHome() {
   const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);
   const [classCode, setClassCode] = React.useState('');
-  const { user } = useAuth();
+  const { user} = useAuth();
   const [courses, setCourses] = React.useState([]);
 
   const fetchCourses = async () => {
@@ -57,7 +57,7 @@ function StudentHome() {
       });
 
       const data = await response.json();
-
+  
       if (response.ok) {
         setClassCode('');
         Alert.alert("Success", data.message || "You joined the course!");
@@ -73,30 +73,21 @@ function StudentHome() {
   };
 
   return (
-
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-      <View>
-        <Button onPress={() => navigation.navigate('AndryStudentHome')}> Andry</Button>
 
-        <Button onPress={() => navigation.navigate('JafetStudentHome')}> Jafet </Button>
-
-        <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
-
-        <Button> Evan </Button>
-      </View>
       <ScrollView>
         <View style={{ marginBottom: 20 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5, }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5,}}>
             <Text category="s1">Course Library</Text>
             <TouchableOpacity onPress={() => setVisible(true)}>
-              <Text appearance="hint">Join Course</Text>
-            </TouchableOpacity>
+                          <Text appearance="hint">Join Course</Text>
+                        </TouchableOpacity>
             <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
 
               <Card disabled={true}>
-                <Text style={{ marginBottom: 20 }}>Enter a class code</Text>
+                <Text  style={{marginBottom: 20}}>Enter a class code</Text>
                 <Input style={styles.inputs} label='Class' placeholder='class code' value={classCode} onChangeText={nextClassCode => setClassCode(nextClassCode)} />
-                <Button onPress={() => { setVisible(false); handleJoinClass(); }}>Join</Button>
+                <Button onPress={() => { setVisible(false); handleJoinClass();}}>Join</Button>
               </Card>
 
             </Modal>
@@ -104,7 +95,7 @@ function StudentHome() {
 
           {courses.map((course) => (
             <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
-              <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
+              <TouchableOpacity onPress={() => navigation.navigate('StudentQuestion', { cid: course.cid })}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <View style={{ flex: 1 }}>
                     <Text>{course.courseName}</Text>
@@ -120,7 +111,7 @@ function StudentHome() {
 
         </View>
 
-
+        
       </ScrollView>
     </Layout>
   );
@@ -129,7 +120,7 @@ function StudentHome() {
 function AppWrapper(props = {}) {
   return (
     <Layout style={{ flex: 1 }}>
-      <StudentHome />
+      <JafetStudentHome />
     </Layout>
   );
 }
