@@ -196,7 +196,7 @@ router.delete('/course/:cid', (req, res) => {
   const {cid} = req.params;
   
   const sql = 'DELETE FROM Classes WHERE cid = ?';
-  db.query(sql, [courseName, description, cid], (err, results) => {
+  db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
