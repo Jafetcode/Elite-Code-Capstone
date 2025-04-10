@@ -20,7 +20,8 @@
     "multer": "^1.4.5-lts.2",
     "mysql2": "^3.12.0",
     "react": "^18.0.0",
-    "react-native": "0.71.0"
+    "react-native": "0.71.0",
+    "react-native-element-dropdown": "^2.12.4"
   },
   "keywords": [],
   "author": "",

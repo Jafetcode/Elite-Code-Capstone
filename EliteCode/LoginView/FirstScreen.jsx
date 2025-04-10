@@ -10,7 +10,7 @@ function FirstScreen() {
   return (
     <Layout style={styles.containerMain}>
     <Image
-    source={require("../assets/images/EliteCodeLogoLow.png")}
+    source={require("../assets/images/FinalLogo2.png")}
             style={{ width: 300, height: 150, marginBottom: 30 }}
           />
         <Layout style={styles.containerInner}>

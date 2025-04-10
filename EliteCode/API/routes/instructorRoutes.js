@@ -11,18 +11,31 @@ router.get('/', (req, res) => {
 router.post('/createCourse', (req, res) => {
   const { tid } = req.query;
   const { courseName, description } = req.body;
+
   if (!courseName || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const sql = 'INSERT INTO Classes (courseName, tid, description) VALUES (?, ?, ?)';
-  db.query(sql, [courseName, tid, description], (err, results) => {
+  const checkDuplicate = 'SELECT * FROM Classes WHERE tid = ? AND courseName = ?';
+  db.query(checkDuplicate, [tid, courseName], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'Course created', courseId: results.insertId });
+
+    if (results.length > 0) {
+      return res.status(409).json({ error: 'You Cannot Have A Duplicate Course Name' });
+    }
+
+    const sql = 'INSERT INTO Classes (courseName, tid, description) VALUES (?, ?, ?)';
+    db.query(sql, [courseName, tid, description], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: 'Course created!', courseId: results.insertId });
+    });
   });
-})
+});
+
 
 
 router.get('/getCourses', (req, res) => {
@@ -97,7 +110,6 @@ router.get('/questions', (req, res) => {
     }
     res.json({ results });
   });
-  
 });
 
 router.get('/allQuestions', (req, res) => {
