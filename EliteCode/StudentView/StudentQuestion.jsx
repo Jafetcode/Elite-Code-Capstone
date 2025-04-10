@@ -59,6 +59,25 @@ function StudentQuestion() {
     }, [cid])
   );
 
+  const fetchSpecificQuestions = async () => {
+    try {
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/specificAssignedQuestions?tid=${tid}&sid=${user.userID}`
+      );
+      const data = await res.json();
+      setQuestions(data.results);
+    } catch (error) {
+      console.error("Failed to fetch", error);
+    }
+  }
+  useFocusEffect(
+    React.useCallback(() => {
+      if (cid) {
+        fetchSpecificQuestions();
+      }
+    }, [cid])
+  );
+
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
                 <ScrollView>

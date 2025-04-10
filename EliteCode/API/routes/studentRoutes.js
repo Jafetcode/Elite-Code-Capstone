@@ -18,19 +18,19 @@ router.get('/', (req, res) => {
 
 
 
-// router.get('/specificAssignedQuestions', (req, res) => {
-//   const sid = req.query.sid;
-//   const tid = req.query.tid;
-//   const sql = 'SELECT DISTINCT q.*, ats.viewable as studentView, atc.viewable as classView FROM Questions q ' +
-//   'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' + 
-//   'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?) OR (e.sid = ? AND i.tid = ?);'
-//   db.query(sql, [sid, tid, sid, tid], (err, results) => {
-//     if (err) {
-//       return res.status(500).json({ error: err.message });
-//     }
-//     res.json({ results });
-//   });
-// });
+router.get('/specificAssignedQuestions', (req, res) => {
+  const sid = req.query.sid;
+  const tid = req.query.tid;
+  const sql = 'SELECT DISTINCT q.*, ats.viewable as studentView, atc.viewable as classView FROM Questions q ' +
+  'LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid ' + 
+  'LEFT JOIN Instructor i ON c.tid = i.tid WHERE (ats.sid = ? AND i.tid = ?) OR (e.sid = ? AND i.tid = ?);'
+  db.query(sql, [sid, tid, sid, tid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+});
 
 router.get('/questions', (req, res) => {
   const cid = req.query.cid;
