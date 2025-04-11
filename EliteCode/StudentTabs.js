@@ -5,8 +5,26 @@ import StudentSettings from './StudentView/StudentSettings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '@ui-kitten/components';
 const Tab = createBottomTabNavigator();
-const TabIcon = (name) => ({ focused, size }) => (
-  <Icon name={name} fill={focused ? '#3366FF' : '#8F9BB3'} style={{ width: size, height: size }} />
+
+const HomeIcon = () => (
+  <Icon
+  fill='#8F9BB3'
+  name='home-outline'
+  />
+);
+
+const ProfileIcon = ()=> (
+  <Icon
+  fill='#8F9BB3'
+  name='person-outline'
+  />
+);
+
+const SettingsIcon = () => (
+  <Icon
+  fill='#8F9BB3'
+  name='settings-outline'
+  />
 );
 
 const StudentTabs = () => (
@@ -14,10 +32,10 @@ const StudentTabs = () => (
     <Tab.Screen 
       name="Home" 
       component={StudentStack} 
-      options={{ tabBarIcon: TabIcon('home-outline'), headerShown: false }}
+      options={{ tabBarIcon:() => <HomeIcon/>, headerShown: false }}
     />
-    <Tab.Screen name="Profile" component={StudentProfile} options = {{tabBarIcon: TabIcon('person-outline')}}/>
-    <Tab.Screen name="Settings" component={StudentSettings} options={{ tabBarIcon: TabIcon('settings-outline') }}/>
+    <Tab.Screen name="Profile" component={StudentProfile} options = {{tabBarIcon:() => <ProfileIcon/>}}/>
+    <Tab.Screen name="Settings" component={StudentSettings} options={{ tabBarIcon:() => <SettingsIcon/> }}/>
   </Tab.Navigator>
 );
 
