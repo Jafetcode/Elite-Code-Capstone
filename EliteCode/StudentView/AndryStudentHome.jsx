@@ -19,8 +19,10 @@ function AndryStudentHome() {
   const [classCode, setClassCode] = React.useState('');
   const { user } = useAuth();
   const [courses, setCourses] = React.useState([]);
-  const [upcoming, setUpcoming] = React.useState([]);
-  const [pastDue, setPastDue] = React.useState([]);
+  const [upcomingClass, setUpcomingClass] = React.useState([]);
+  const [pastDueClass, setPastDueClass] = React.useState([]);
+  const [upcomingStudent, setUpcomingStudent] = React.useState([]);
+  const [pastDueStudent, setPastDueStudent] = React.useState([]);
 
   const fetchCourses = async () => {
     try {
@@ -35,16 +37,23 @@ function AndryStudentHome() {
 
   const fetchAssignments = async () => {
     try {
-      const [upcomingRes, pastDueRes] = await Promise.all([
-        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcoming?sid=${user.userID}`),
-        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDue?sid=${user.userID}`),
+      const [upcomingRes, pastDueRes, upcomingStudentRes, pastDueStudentRes] = await Promise.all([
+        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingClass?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueClass?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingStudent?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueStudent?sid=${user.userID}`),
       ]);
 
-      const upcomingData = await upcomingRes.json();
-      const pastDueData = await pastDueRes.json();
+      const upcomingClassData = await upcomingRes.json();
+      const pastDueClassData = await pastDueRes.json();
+      const upcomingStudentData = await upcomingStudentRes.json();
+      const pastDueStudentData = await pastDueStudentRes.json();
 
-      setUpcoming(upcomingData.results || []);
-      setPastDue(pastDueData.results || []);
+      setUpcomingClass(upcomingData.results || []);
+      setPastDueClass(pastDueData.results || []);
+      setUpcomingStudent(upcomingDataStudent.results || []);
+      setPastDueStudent(pastDueDataStudent.results || []);
+
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
       Alert.alert("Error", "Could not load your assignments.");
@@ -126,21 +135,36 @@ function AndryStudentHome() {
             </Card>
           ))}
 
-          <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Assignments</Text>
-          {upcoming.map(item => (
+          <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
+          {upcomingClass.map(item => (
             <Card key={item.qid} style={{ borderRadius: 10, marginBottom: 10 }}>
               <Text>{item.question}</Text>
               <Text appearance="hint">Due: {new Date(item.dueDate).toLocaleDateString()}</Text>
             </Card>
           ))}
 
-          <Text category="s1" style={{ marginVertical: 10 }}>Past Due Assignments</Text>
-          {pastDue.map(item => (
+          {upcomingStudent.map(item => (
             <Card key={item.qid} style={{ borderRadius: 10, marginBottom: 10 }}>
               <Text>{item.question}</Text>
               <Text appearance="hint">Due: {new Date(item.dueDate).toLocaleDateString()}</Text>
             </Card>
           ))}
+
+          <Text category="s1" style={{ marginVertical: 10 }}>Past Due Questions</Text>
+          {pastDueClass.map(item => (
+            <Card key={item.qid} style={{ borderRadius: 10, marginBottom: 10 }}>
+              <Text>{item.question}</Text>
+              <Text appearance="hint">Due: {new Date(item.dueDate).toLocaleDateString()}</Text>
+            </Card>
+          ))}
+
+          {pastDueStudent.map(item => (
+            <Card key={item.qid} style={{ borderRadius: 10, marginBottom: 10 }}>
+              <Text>{item.question}</Text>
+              <Text appearance="hint">Due: {new Date(item.dueDate).toLocaleDateString()}</Text>
+            </Card>
+          ))}
+
 
         </View>
 

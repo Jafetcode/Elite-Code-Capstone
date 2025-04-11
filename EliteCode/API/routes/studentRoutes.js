@@ -89,7 +89,6 @@ router.get('/courses', async (req, res) => {
 
 router.get('/getUpcoming', (req, res) => {
   const sid = req.query.sid;
-
   const sql = `
     SELECT DISTINCT q.*
     FROM Questions q
@@ -99,16 +98,30 @@ router.get('/getUpcoming', (req, res) => {
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
   `;
-
   db.query(sql, [sid], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ results });
   });
 });
 
+router.get('/getUpcomingStudentQ', (req, res) => {
+  const sid = req.query.sid;
+  const sql =`
+    SSELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToStudent atc on q.qid = atc.qid
+    WHERE atc.sid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+  db.query(sql, [sid], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message});
+    res.json({results});
+  })
+});
+
 router.get('/getPastDue', (req, res) => {
   const sid = req.query.sid;
-
   const sql = `
     SELECT DISTINCT q.*
     FROM Questions q
@@ -118,7 +131,22 @@ router.get('/getPastDue', (req, res) => {
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;
+  db.query(sql, [sid], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ results });
+  });
+});
 
+router.get('/getPastDueStudentQ', (req, res) => {
+  const sid = req.query.sid;
+  const sql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToStudent atc ON q.qid = atc.qid
+    WHERE atc.sid = ?
+      AND DATE(q.dueDate) < CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
   db.query(sql, [sid], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ results });
