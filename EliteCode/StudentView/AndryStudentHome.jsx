@@ -108,32 +108,73 @@ function AndryStudentHome() {
   return (
     <Layout style={{ flex: 2, padding: 20, backgroundColor: "#2C496B" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 20 }}>
+        <View >
+          <Image
+            source={require("../assets/images/FinalLogo2.png")}
+            style={{
+              width: 300,
+              height: 150,
+              marginTop: -10,
+              marginBottom: -25,
+              alignSelf: 'center',
+              resizeMode: 'cover',
+            }}
+          />
+
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5, }}>
             <Text category="s1">Course Library</Text>
             <TouchableOpacity onPress={() => setVisible(true)}>
               <Text appearance="hint">Join Course</Text>
             </TouchableOpacity>
-            <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
 
-              <Card disabled={true}>
-                <Text style={{ marginBottom: 20 }}>Enter a class code</Text>
-                <Input style={styles.inputs} label='Class' placeholder='class code' value={classCode} onChangeText={nextClassCode => setClassCode(nextClassCode)} />
-                <Button onPress={() => { setVisible(false); handleJoinClass(); }}>Join</Button>
+            <Modal
+              visible={visible}
+              backdropStyle={styles.backdrop}
+              onBackdropPress={() => setVisible(false)}
+            >
+              <Card
+                disabled={true}
+                style={{
+                  width: 220,
+                  alignSelf: 'center',
+                  borderRadius: 10,
+                  paddingVertical: 10,
+                  paddingHorizontal: 5,
+                  elevation: 5,
+                  shadowColor: '#000',
+                  shadowOpacity: 0.2,
+                  shadowRadius: 5,
+                  shadowOffset: { width: 0, height: 2 },
+                }}
+              >
+                <Text category="s1" style={{ textAlign: 'center', marginBottom: 15 }}>
+                  Join Course
+                </Text>
+                <Input style={{ marginBottom: 10 }} label='Course Code:' placeholder='' value={classCode} onChangeText={nextClassCode => setClassCode(nextClassCode)} />
+                <Button onPress={() => { setVisible(false); handleJoinClass(); }}>
+                  Join
+                </Button>
               </Card>
-
             </Modal>
+
           </View>
 
           {courses.map(course => (
-            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
+            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
               <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
-                <Text>{course.courseName}</Text>
-                <Text appearance="hint">{course.description}</Text>
-                <Text category="s2">Course Code: {course.cid}</Text>
+                <Text category="h6" style={{ fontSize: 14, marginBottom: 3, marginTop: -6, color: 'white' }}>
+                  {course.courseName}
+                </Text>
+                <Text appearance="hint" numberOfLines={1} ellipsizeMode="tail" style={{ marginBottom: 3, color: '#A9B7C6' }}>
+                  {course.description}
+                </Text>
+                <Text category="c1" style={{ color: '#6C8AA6', marginBottom: -4 }}>
+                  Code: {course.cid}
+                </Text>
               </TouchableOpacity>
             </Card>
           ))}
+
 
           <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
           {upcomingClass.map(item => (
@@ -142,7 +183,6 @@ function AndryStudentHome() {
               <Text appearance="hint">Due: {new Date(item.dueDate).toLocaleDateString()}</Text>
             </Card>
           ))}
-
           {upcomingStudent.map(item => (
             <Card key={item.qid} style={{ borderRadius: 10, marginBottom: 10 }}>
               <Text>{item.question}</Text>
@@ -157,7 +197,6 @@ function AndryStudentHome() {
               <Text appearance="hint">Due: {new Date(item.dueDate).toLocaleDateString()}</Text>
             </Card>
           ))}
-
           {pastDueStudent.map(item => (
             <Card key={item.qid} style={{ borderRadius: 10, marginBottom: 10 }}>
               <Text>{item.question}</Text>

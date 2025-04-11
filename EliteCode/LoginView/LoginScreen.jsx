@@ -29,7 +29,7 @@ function LoginScreen() {
       if (user.role === 'teacher') {
         navigation.reset({
           index: 0,
-          routes: [{name:'TecaherHome'}],
+          routes: [{name:'TeacherHome'}],
         });
       } else if (user.role === 'student') {
         navigation.reset({
