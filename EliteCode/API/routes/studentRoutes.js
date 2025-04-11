@@ -87,7 +87,7 @@ router.get('/courses', async (req, res) => {
   });
 });
 
-router.get('/getUpcoming', (req, res) => {
+router.get('/getUpcomingClass', (req, res) => {
   const sid = req.query.sid;
   const sql = `
     SELECT DISTINCT q.*
@@ -104,10 +104,10 @@ router.get('/getUpcoming', (req, res) => {
   });
 });
 
-router.get('/getUpcomingStudentQ', (req, res) => {
+router.get('/getUpcomingStudent', (req, res) => {
   const sid = req.query.sid;
   const sql =`
-    SSELECT DISTINCT q.*
+    SELECT DISTINCT q.*
     FROM Questions q
     INNER JOIN AssignedToStudent atc on q.qid = atc.qid
     WHERE atc.sid = ?
@@ -120,7 +120,7 @@ router.get('/getUpcomingStudentQ', (req, res) => {
   })
 });
 
-router.get('/getPastDue', (req, res) => {
+router.get('/getPastDueClass', (req, res) => {
   const sid = req.query.sid;
   const sql = `
     SELECT DISTINCT q.*
@@ -137,7 +137,7 @@ router.get('/getPastDue', (req, res) => {
   });
 });
 
-router.get('/getPastDueStudentQ', (req, res) => {
+router.get('/getPastDueStudent', (req, res) => {
   const sid = req.query.sid;
   const sql = `
     SELECT DISTINCT q.*

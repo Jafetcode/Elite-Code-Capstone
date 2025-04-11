@@ -49,10 +49,10 @@ function AndryStudentHome() {
       const upcomingStudentData = await upcomingStudentRes.json();
       const pastDueStudentData = await pastDueStudentRes.json();
 
-      setUpcomingClass(upcomingData.results || []);
-      setPastDueClass(pastDueData.results || []);
-      setUpcomingStudent(upcomingDataStudent.results || []);
-      setPastDueStudent(pastDueDataStudent.results || []);
+      setUpcomingClass(upcomingClassData.results || []);
+      setPastDueClass(pastDueClassData.results || []);
+      setUpcomingStudent(upcomingStudentData.results || []);
+      setPastDueStudent(pastDueStudentData.results || []);
 
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
