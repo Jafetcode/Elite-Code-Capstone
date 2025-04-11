@@ -6,37 +6,62 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '@ui-kitten/components';
 const Tab = createBottomTabNavigator();
 
-const HomeIcon = () => (
+const HomeIcon = ({ color }) => (
   <Icon
-  fill='#8F9BB3'
-  name='home-outline'
+    fill={color}  
+    name='home-outline'
+    style={{ width: 24, height: 24 }}
   />
 );
 
-const ProfileIcon = ()=> (
+const ProfileIcon = ({ color }) => (
   <Icon
-  fill='#8F9BB3'
-  name='person-outline'
+    fill={color}  
+    name='person-outline'
+    style={{ width: 24, height: 24 }}
   />
 );
 
-const SettingsIcon = () => (
+const SettingsIcon = ({ color }) => (
   <Icon
-  fill='#8F9BB3'
-  name='settings-outline'
+    fill={color}  
+    name='settings-outline'
+    style={{ width: 24, height: 24 }}
   />
 );
 
 const StudentTabs = () => (
-  <Tab.Navigator lazy={true}>
+  <Tab.Navigator
+    lazy={true}
+    screenOptions={{
+      tabBarStyle: {
+        backgroundColor: '#1E2A38',
+        borderTopWidth: 0,
+      },
+      tabBarActiveTintColor: '#D02C32',
+      tabBarInactiveTintColor: '#A9B7C6',
+    }}
+  >
     <Tab.Screen 
       name="Home" 
       component={StudentStack} 
-      options={{ tabBarIcon:() => <HomeIcon/>, headerShown: false }}
+      options={{ 
+        tabBarIcon: ({ color }) => <HomeIcon color={color} />,
+        headerShown: false 
+      }}
     />
-    <Tab.Screen name="Profile" component={StudentProfile} options = {{tabBarIcon:() => <ProfileIcon/>}}/>
-    <Tab.Screen name="Settings" component={StudentSettings} options={{ tabBarIcon:() => <SettingsIcon/> }}/>
+    <Tab.Screen 
+      name="Profile" 
+      component={StudentProfile} 
+      options={{ tabBarIcon: ({ color }) => <ProfileIcon color={color} /> }}
+    />
+    <Tab.Screen 
+      name="Settings" 
+      component={StudentSettings} 
+      options={{ tabBarIcon: ({ color }) => <SettingsIcon color={color} /> }}
+    />
   </Tab.Navigator>
 );
+
 
 export default StudentTabs;
