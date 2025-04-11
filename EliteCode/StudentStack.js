@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 const StudentStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="StudentHome">
     <Stack.Screen name="StudentHome" component={StudentHome}/>
-    <Stack.Screen name="StudentCourse" component={StudentCourse} />
+    <Stack.Screen name="StudentCourse" options={{ headerShown: false }} component={StudentCourse} />
     <Stack.Screen name="StudentProfile" component={StudentProfile} />
     <Stack.Screen name="StudentQuestion" component={StudentQuestion} />
     <Stack.Screen name="StudentSettings" component={StudentSettings} />

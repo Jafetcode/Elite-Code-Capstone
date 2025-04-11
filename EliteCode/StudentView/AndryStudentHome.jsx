@@ -16,7 +16,7 @@ function AndryStudentHome() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/courses?sid=${user.userID}`);
+      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`);
       const data = await res.json();
       setCourses(data.results || []);
     } catch (error) {
@@ -104,8 +104,9 @@ function AndryStudentHome() {
     <Layout style={{ flex: 2, padding: 20, backgroundColor: "#2C496B" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 50 }}>
-          <Image
-            source={require("../assets/images/FinalLogo2.png")}
+
+          {/* Header */}
+          <Image source={require("../assets/images/FinalLogo2.png")}
             style={{
               width: 300,
               height: 150,
@@ -116,6 +117,7 @@ function AndryStudentHome() {
             }}
           />
 
+          {/* Sub header / Modal */}
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5, }}>
             <View style={{
               flexDirection: 'row',
@@ -212,6 +214,7 @@ function AndryStudentHome() {
 
           </View>
 
+          {/* Course Cards */}
           {courses.map(course => (
             <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
               <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
@@ -228,7 +231,7 @@ function AndryStudentHome() {
             </Card>
           ))}
 
-
+          {/* Upcoming Cards */}
           <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
           {upcoming.length === 0 ? (
             <Text appearance="hint">No upcoming questions!</Text>
@@ -278,6 +281,7 @@ function AndryStudentHome() {
             ))
           )}
 
+          {/* Past Due Cards */}
           <Text category="s1" style={{ marginVertical: 10 }}>Past Due Questions</Text>
           {pastDue.length === 0 ? (
             <Text appearance="hint">No past due questions!</Text>
@@ -321,9 +325,8 @@ function AndryStudentHome() {
               </Card>
             ))
           )}
+
         </View>
-
-
       </ScrollView>
     </Layout>
   );

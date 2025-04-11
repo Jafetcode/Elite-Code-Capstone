@@ -72,7 +72,7 @@ router.post('/joinCourse', async (req, res) => {
 });
 
 
-router.get('/courses', async (req, res) => {
+router.get('/getCourses', async (req, res) => {
   const sid = req.query.sid;
   const sql = `
     SELECT Classes.courseName, Classes.description, Classes.cid
@@ -149,6 +149,22 @@ router.get('/getPastDueStudent', (req, res) => {
   `;
   db.query(sql, [sid], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
+    res.json({ results });
+  });
+});
+
+router.get('/getCourseData', async (req, res) => {
+  const cid = req.query.cid;
+  const sql = `
+    SELECT q.*
+    FROM Questions q
+    JOIN Classes c ON q.tid = c.tid
+    WHERE c.cid = ?;
+  `;
+  db.query(sql, [cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
     res.json({ results });
   });
 });
