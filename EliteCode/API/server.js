@@ -97,12 +97,12 @@ app.post('/createQuestion', upload.single('imgFile'), (req, res) => {
 });
 
 app.post('/createMCQ', (req, res) => {
-  const { qid, correctAns, opt1, opt2, opt3 } = req.body;
-  if (!qid || !correctAns || !opt1 || !opt2 || !opt3) {
+  const { correctAns, opt1, opt2, opt3 } = req.body;
+  if ( !correctAns || !opt1 || !opt2 || !opt3) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO MCQ(qid, correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?, ?)';
-  db.query(sql, [qid, correctAns, opt1, opt2, opt3], (err, results) => {
+  const sql = 'INSERT INTO MCQ(correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?)';
+  db.query(sql, [correctAns, opt1, opt2, opt3], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
