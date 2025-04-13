@@ -129,14 +129,21 @@ router.get('/allQuestions', (req, res) => {
 
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
-  const sql = 'SELECT * FROM Questions Where qid = ?';
+  const sql = 'SELECT * FROM Questions WHERE qid = ?';
+
   db.query(sql, [qid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+
+    if (results.length > 0 && results[0].imgFile) {
+      results[0].imgFile = `data:image/jpeg;base64,${results[0].imgFile.toString('base64')}`;
+    }
+
     res.json({ results });
   });
 });
+
 
 
 router.get('/questionID', (req, res) => {

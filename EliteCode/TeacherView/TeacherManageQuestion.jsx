@@ -14,6 +14,7 @@ import {
     SelectItem } from "@ui-kitten/components";
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from 'expo-file-system';
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />
 
@@ -149,12 +150,17 @@ function TeacherManageQuestion() {
                 selectionLimit: 1,
                 allowsEditing: true,
                 aspect: [1, 1],
-                quality: 0.5
+                quality: 0.5,
+                base64: true,
             });
 
             if (!result.canceled) {
-                const imageUri = result.assets[0].uri;
-                setImgFile(imageUri);
+              const imageUri = result.assets[0].uri;
+
+              const base64 = await FileSystem.readAsStringAsync(imageUri, {
+                encoding: FileSystem.EncodingType.Base64,
+              });
+              setImgFile(`data:image/jpeg;base64,${base64}`);
             }
         } catch (error) {
             console.error("Error picking image:", error);
