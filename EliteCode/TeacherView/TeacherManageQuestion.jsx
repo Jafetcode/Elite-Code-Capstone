@@ -32,9 +32,49 @@ function TeacherManageQuestion() {
 
     const { qid } = route.params;
     const { cid } = route.params || {};
+
+    const getQuestionData = async () => {
+        try {
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/getQuestion/?qid=${qid}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            
+            const data = await res.json();
+            
+            if (!data?.results?.[0]) {
+                throw new Error("No question data found");
+            }
+
+            const q = data.results[0];
+            setQuestion(q.question || '');
+            setDescription(q.description || '');
+            setType(q.type || 'MCQ');
+            setDate(q.dueDate ? new Date(q.dueDate) : new Date());
+            setPointVal(String(q.pointVal || ''));
+            setTopic(q.topic || '');
+            setImgFile(q.imgFile || null);
+
+        } catch (error) {
+            console.error("Error:", error.message);
+            Alert.alert("Error", "Failed to load question data");
+        }
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (qid) {
+                getQuestionData();
+            }
+        }, [qid])
+    );
+    
+
     const handleUpdate = async () => {
         try {
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/updateQuestion/${cid}/${qid} `, {
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/updateQuestion/?qid=${qid}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -51,14 +91,16 @@ function TeacherManageQuestion() {
             });
 
             if (res.ok) {
-                Alert.alert("Success", "Course edited!");
+                const data = await res.json();
+                Alert.alert("Success", "Question updated successfully!");
                 navigation.goBack();
             } else {
-                Alert.alert("Error", "Failed to edit question.");
+                const errorData = await res.json();
+                Alert.alert("Error", errorData.message || "Failed to update question");
             }
         } catch (err) {
-            console.error(err);
-            Alert.alert("Error");
+            console.error("Update error:", err);
+            Alert.alert("Error", "Failed to connect to the server");
         }
     };
     const handleDelete = async () => {
@@ -91,28 +133,40 @@ function TeacherManageQuestion() {
         );
     }
     const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!permissionResult.granted) {
-        alert("Permission to access camera roll is required!");
-        return;
-      }
-    
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes:['images'],
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.canceled) {
-        setImgFile(result.assets[0].uri);
-      }
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+            alert("Permission to access camera roll is required!");
+            return;
+        }
+
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                // mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                // allowsEditing: true,
+                // aspect: [1, 1],
+                // quality: 0.5
+                presentationStyle: 'fullScreen',
+                selectionLimit: 1,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.5
+            });
+
+            if (!result.canceled) {
+                const imageUri = result.assets[0].uri;
+                setImgFile(imageUri);
+            }
+        } catch (error) {
+            console.error("Error picking image:", error);
+            Alert.alert("Error", "Failed to select image");
+        }
     };
     const handleTypeChange = (selectedIndex) => {
         setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
         console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
       };
     return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }} on>
               <View
                 style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}
               >
@@ -143,7 +197,7 @@ function TeacherManageQuestion() {
                   </View>
         
                   <Input
-                    placeholder="Enter question"
+                    placeholder={question || "Enter question"}
                     value={question}
                     onChangeText={(question) => setQuestion(question)}
                   />
@@ -159,7 +213,7 @@ function TeacherManageQuestion() {
                   </View>
         
                   <Input
-                    placeholder="Type Description Here"
+                    placeholder={description || "Type Description Here"}
                     value={description}
                     onChangeText={(description) => setDescription(description)}
                   />

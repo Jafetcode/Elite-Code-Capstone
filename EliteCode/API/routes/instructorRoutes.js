@@ -203,20 +203,21 @@ router.put('/course/:cid', (req, res) => {
     });
 
 });
-router.put('/updateQuestion:qid', (req, res) => {
+router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
   const { qid } = req.params;
   const { question, description, pointVal, topic, type, dueDate } = req.body;
+  const imgFile = req.file ? req.file.buffer : null;
   if (!question || !description || !pointVal || !topic || !type || !dueDate) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'UPDATE Questions SET question = ?, description = ?, pointVal = ?, topic = ?, type = ?, dueDate = ? WHERE qid = ?';
-  db.query(sql, [], (err, results) => {
-    if(err) {
-      return res.status(500).json({error: err.message});
+  const sql = 'UPDATE Questions SET question = ?, description = ?, pointVal = ?, imgFile = ?, topic = ?, type = ?, dueDate = ? WHERE qid = ?';
+  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate, qid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
     }
-    res.json({results})
-  })
-})
+    res.json({ results });
+  });
+});
 
 router.delete('/course/:cid', (req, res) => {
   const {cid} = req.params;
