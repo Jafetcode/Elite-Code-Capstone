@@ -9,7 +9,7 @@ import { TextInput } from "react-native";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
-function TeacherManageCourse() {
+function EditProfile() {
     const navigation = useNavigation();
     const route = useRoute();
     const { course } = route.params;
@@ -113,7 +113,7 @@ export default () => (
     <>
         <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={eva.dark}>
-            <TeacherManageCourse />
+            <EditProfile />
         </ApplicationProvider>
     </>
 );
