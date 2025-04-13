@@ -1,6 +1,6 @@
 import React from 'react';
 import TeacherStack from './TeacherStack';
-import TeacherProfile from './TeacherView/TeacherProfile';
+import ProfileStack from './ProfileStack';
 import TeacherSettings from './TeacherView/TeacherSettings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '@ui-kitten/components';
@@ -34,8 +34,16 @@ const TeacherTabs = () => (
       component={TeacherStack} 
       options={{ tabBarIcon:() => <HomeIcon/>, headerShown: false }}
     />
-    <Tab.Screen name="Profile" component={TeacherProfile}  options = {{ tabBarIcon:() => <ProfileIcon/>}}/>
-    <Tab.Screen name="Settings" component={TeacherSettings}options={{  tabBarIcon:() => <SettingsIcon/> }}/>
+
+    <Tab.Screen 
+      name="Profile" 
+      component={ProfileStack}  
+      options = {{ tabBarIcon:() => <ProfileIcon/>}}/>
+
+    <Tab.Screen 
+      name="Settings" 
+      component={TeacherSettings} 
+      options={{  tabBarIcon:() => <SettingsIcon/> }}/>
   </Tab.Navigator>
 );
 

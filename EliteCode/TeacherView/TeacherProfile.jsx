@@ -45,6 +45,7 @@ function TeacherProfile() {
           />
           <Text category="h6">{user.name} </Text>
           <Text appearance="hint">{user.role}</Text>
+          <Text appearance="hint">{user.bio}</Text>
           <Button size="small" style={{ marginTop: 10 }} onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>
         </View>
 
@@ -77,12 +78,4 @@ function TeacherProfile() {
   );
 }
 
-export default () => (
-  <>
-    <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.dark}>
-      <TeacherProfile />
-    </ApplicationProvider>
-  </>
-);
-
+export default TeacherProfile;

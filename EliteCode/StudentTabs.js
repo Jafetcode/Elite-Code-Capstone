@@ -1,6 +1,7 @@
 import React from 'react';
 import StudentStack from './StudentStack';
 import StudentProfile from './StudentView/StudentProfile';
+import ProfileStack from './ProfileStack';
 import StudentSettings from './StudentView/StudentSettings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from '@ui-kitten/components';
@@ -52,7 +53,7 @@ const StudentTabs = () => (
     />
     <Tab.Screen 
       name="Profile" 
-      component={StudentProfile} 
+      component={ProfileStack} 
       options={{ tabBarIcon: ({ color }) => <ProfileIcon color={color} /> }}
     />
     <Tab.Screen 
