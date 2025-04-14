@@ -346,6 +346,10 @@ router.get('/assignments', (req, res) =>{
         return res.status(500).json({ error: err.message });
       }
       const classesRes = classResults.results
+      console.log("studnets");
+      console.log(studentRes);
+      console.log("classes");
+      console.log(classesRed);
       res.json({
         message: 'Assignments retrieved successfully',
         students: studentRes,
