@@ -11,6 +11,7 @@ import {
   Card,
   Modal,
   Input,
+  Icon
 } from "@ui-kitten/components";
 
 function StudentHome() {
@@ -234,7 +235,7 @@ function StudentHome() {
           {/* Course Cards */}
           {courses.map(course => (
             <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
-              <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
+              <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid, courseName: course.courseName })}>
                 <Text category="h6" style={{ fontSize: 14, marginBottom: 3, marginTop: -6, color: 'white' }}>
                   {course.courseName}
                 </Text>
