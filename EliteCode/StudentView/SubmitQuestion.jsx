@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, ScrollView, Image, StyleSheet, Platform } from "react-native";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, useRoute} from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 
 import * as ImagePicker from "expo-image-picker";
@@ -26,7 +26,6 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function SubmitQuestion() {
   const navigation = useNavigation();
-  const { user } = useAuth();
   const [imgFile, setImgFile] = React.useState(null);
   const [answer, setAnswer] = React.useState("");
   const [progress, setProgress] = React.useState("");
@@ -35,8 +34,9 @@ function SubmitQuestion() {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [questionData, setQuestionData] = React.useState([]);
   const route = useRoute();
-
-  const { cid } = route.params || {};
+  const { user } = useAuth() || {};
+;
+  const { cid, qid} = route.params || {};
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -78,20 +78,19 @@ function SubmitQuestion() {
   
   const handleSubmit = async () => {
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
-    const qid = user.questionId;
     const sid = user.userID;
     const cid = user.cid;
     setProgress("submitted");
 
     try {
-      const formData = new FormData();
-      formData.append();
 
+
+      const formData = new FormData();
+      formData.append("qid", qid);
+      formData.append("sid", sid);
       formData.append("answer", answer);
       formData.append("progress", progress);
       formData.append("submitted_on", submitted_on);
-      formData.append("qid", qid);
-      formData.append("sid", sid);
       formData.append("cid", cid);
 
       if (imgFile) {
