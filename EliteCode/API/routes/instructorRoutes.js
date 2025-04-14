@@ -55,29 +55,30 @@ router.get('/getCourses', (req, res) => {
 });
 
 
-// router.post('/assignQuestion', (req, res) => { 
-//   const { qid, courses, students, viewable, tid } = req.body;
-//   if (courses.length > 0) {
-//     console.log("assigned to at least one course")
-//       courses.forEach((cid) => {
-//           const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, tid, viewable) VALUES (?, ?, ?, ?)';
-//           db.query(sqlClass, [qid, cid, tid, viewable], (err) => {
-//               if (err) console.error("Error assigning to class:", err);
-//           });
-//       });
-//   }
-//   if (students.length > 0) {
-//     console.log("assigned to at least one student")
-//       students.forEach((sid) => {
-//           const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid, viewable) VALUES (?, ?, ?)';
-//           db.query(sqlStudent, [qid, sid, viewable], (err) => {
-//               if (err) console.error("Error assigning to student:", err);
-//           });
-//       });
-//   }
+router.post('/updateAssignments', (req, res) => { 
+  const { qid, courses, students, tid } = req.body;
+  if (courses.length > 0) {
+    console.log("assigned to at least one course")
+      courses.forEach((cid) => {
+          const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)';
+          db.query(sqlClass, [qid, cid, tid], (err) => {
+              if (err) console.error("Error assigning to class:", err);
+          });
+      });
+  }
+  if (students.length > 0) {
+    console.log("assigned to at least one student")
+      students.forEach((sid) => {
+          const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)';
+          db.query(sqlStudent, [qid, sid], (err) => {
+              if (err) console.error("Error assigning to student:", err);
+          });
+      });
+  }
 
-//   res.json({ message: "Question assigned successfully" });
-// });
+  res.json({ message: "Question assigned successfully" });
+});
+
 router.post('/assignQuestion', async (req, res) => { 
   const { qid, courses, students, viewable, tid } = req.body;
 
@@ -327,7 +328,6 @@ router.get('/:tid/courses', async (req, res) => {
     });
   });
 
-  // assignments?qid=${question.qid}
   
 router.get('/assignments', (req, res) =>{
   const qid = req.query.qid;

@@ -18,15 +18,16 @@ const Assigning = () => {
     const fetchCoursesAndAssignments = async () => {
         try {
             // Fetch courses the teacher teaches
-            let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
+            let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/${user.userID}/courses`);
             const courses = await res.json();
-            console.log("courses.results: ", courses.results)
-            setClasses(courses.results);
-            // // Here, fetch existing assignments for this question
+            console.log("courses.results: ", courses)
+            setClasses(courses);
+            // fetch existing assignments for this question
             let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
             const assignmentData = await assignmentRes.json();
             // Set the existing assignments into selectedClasses and selectedStudents
-            console.log("assignmentData: ",  assignmentData)
+            console.log("assignmentData: ", assignmentData)
+            console.log("assignmentData: ", assignmentData)
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
 
@@ -47,13 +48,11 @@ const Assigning = () => {
         fetchCoursesAndAssignments();
     }, []);
 
-    // Toggle class selection
     const toggleClassSelection = (classId) => {
         setSelectedClasses(prev => {
             const newSelection = { ...prev };
             newSelection[classId] = !prev[classId];
 
-            // If class is selected, check if all students in this class are selected
             if (newSelection[classId]) {
                 const classStudents = classes.find(c => c.cid === classId).students;
                 const allSelected = classStudents.every(student => selectedStudents[student.userID] || false);
@@ -61,7 +60,7 @@ const Assigning = () => {
                     setSelectedStudents(prevStudents => {
                         const newStudentSelection = { ...prevStudents };
                         classStudents.forEach(student => {
-                            newStudentSelection[student.userID] = true; // Select all students in the class
+                            newStudentSelection[student.userID] = true;
                         });
                         return newStudentSelection;
                     });
@@ -77,7 +76,6 @@ const Assigning = () => {
             const newSelection = { ...prev };
             newSelection[studentId] = !prev[studentId];
 
-            // If a student is selected, deselect the class
             if (newSelection[studentId]) {
                 setSelectedClasses(prevClasses => ({
                     ...prevClasses,
@@ -85,13 +83,13 @@ const Assigning = () => {
                 }));
             }
 
-            // Check if all students in the class are selected, if so, select the class
             const classStudents = classes.find(c => c.cid === classId).students;
-            const allSelected = classStudents.every(student => newSelection[student.userID] || false);
+            const allSelected = selectedStudents?.students?.every(student => newSelection[student.userID] || false) ?? false;
+            // const allSelected = classStudents.every(student => newSelection[student.userID] || false);
             if (allSelected) {
                 setSelectedClasses(prevClasses => ({
                     ...prevClasses,
-                    [classId]: true // Select the class if all students are selected
+                    [classId]: true
                 }));
             }
 
@@ -131,8 +129,8 @@ const Assigning = () => {
                 },
                 body: JSON.stringify({
                     qid: question.qid,
-                    courses: selectedItems.classes,
-                    students: selectedItems.students,
+                    courses: selectedClasses,
+                    students: selectedStudents,
                     tid: user.userID
                 })
             });
@@ -199,13 +197,13 @@ const Assigning = () => {
                         {expandedClasses[classItem.cid] && (
                             <View style={styles.studentsContainer}>
                                 <Divider />
-                                <View
-                                    data={classItem.students}
-                                    renderItem={({ item }) => renderStudentItem(item, classItem.cid)}
-                                    ItemSeparatorComponent={Divider}
-                                />
+                                {classItem.students.map((student, index) => (
+                                    <View key={student.userID || index}>
+                                        {renderStudentItem(student, classItem.cid)}
+                                        {index < classItem.students.length - 1 && <Divider />}
+                                    </View>
+                                ))}
                             </View>
-                          
                         )}
                     </Card>
                 ))}
