@@ -346,8 +346,8 @@ router.get('/assignments', (req, res) =>{
 
       res.json({
         message: 'Assignments retrieved successfully',
-        students: studentResults,
-        classes: classResults
+        students: studentResults.results,
+        classes: classResults.results
       });
     });
   });
