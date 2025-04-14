@@ -349,7 +349,7 @@ router.get('/assignments', (req, res) =>{
       res.json({
         message: 'Assignments retrieved successfully',
         students: studentResults,
-        classes: classesResults
+        classes: classResults
       });
     });
   });
