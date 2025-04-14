@@ -21,15 +21,15 @@ function StudentHome() {
   const [courses, setCourses] = React.useState([]);
 
   const fetchCourses = async () => {
-    try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/courses?sid=${user.userID}`);
-      const data = await res.json();
-      setCourses(data.results || []);
-    } catch (error) {
-      console.error("Failed to fetch courses:", error);
-      Alert.alert("Error", "Could not load your courses.");
-    }
-  };
+      try {
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`);
+        const data = await res.json();
+        setCourses(data.results || []);
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+        Alert.alert("Error", "Could not load your courses.");
+      }
+    };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -102,19 +102,19 @@ function StudentHome() {
             </Modal>
           </View>
 
-          {courses.map((course) => (
-            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
+          {courses.map(course => (
+            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
               <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <View style={{ flex: 1 }}>
-                    <Text>{course.courseName}</Text>
-                    <Text appearance="hint">{course.description}</Text>
-                  </View>
-                </View>
+                <Text category="h6" style={{ fontSize: 14, marginBottom: 3, marginTop: -6, color: 'white' }}>
+                  {course.courseName}
+                </Text>
+                <Text appearance="hint" numberOfLines={1} ellipsizeMode="tail" style={{ marginBottom: 3, color: '#A9B7C6' }}>
+                  {course.description}
+                </Text>
+                <Text category="c1" style={{ color: '#6C8AA6', marginBottom: -4 }}>
+                  Code: {course.cid}
+                </Text>
               </TouchableOpacity>
-              <View>
-                <Text category="s2">Course Code: {course.cid}</Text>
-              </View>
             </Card>
           ))}
 
