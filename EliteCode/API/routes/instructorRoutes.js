@@ -330,12 +330,10 @@ router.get('/:tid/courses', async (req, res) => {
   // assignments?qid=${question.qid}
   
 router.get('/assignments', (req, res) =>{
-  const {qid} = req.query.qid
-
-  ;
+  const qid = req.query.qid;
   
-  const sqlStudents = 'SELECT sid AS Students FROM AssignedToStudent WHERE qid = ?';
-  const sqlClasses =  'SELECT cid AS Classes FROM AssignedToClass WHERE qid = ?';
+  const sqlStudents = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
+  const sqlClasses =  'SELECT cid FROM AssignedToClass WHERE qid = ?';
    db.query(sqlStudents, [qid], (err, studentResults) => {
     if (err) {
       return res.status(500).json({ error: err.message });
