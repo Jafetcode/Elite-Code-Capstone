@@ -56,7 +56,8 @@ app.get('/user', (req, res) => {
       res.json({
         role: results[0].role,
         userID: results[0].userID,
-        name: results[0].fname
+        name: results[0].fname,
+        bio: results[0].bio
       });
 
     } else {
