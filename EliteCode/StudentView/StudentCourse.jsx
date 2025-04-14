@@ -36,26 +36,23 @@ function StudentCourse() {
                 fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingForCourse?sid=${user.userID}&cid=${cid}`),
                 fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueForCourse?sid=${user.userID}&cid=${cid}`)
             ]);
-
+    
             const upcomingClassData = await upcomingRes.json();
             const pastDueClassData = await pastDueRes.json();
-            const upcomingStudentData = upcomingClassData.results.upcomingStudent;
-            const pastDueStudentData = pastDueClassData.results.pastDueStudent;
-
+    
             const combinedUpcoming = [
                 ...(upcomingClassData.results.upcomingClass || []),
-                ...(upcomingStudentData || [])
+                ...(upcomingClassData.results.upcomingStudent || [])
             ];
-
+    
             const combinedPastDue = [
                 ...(pastDueClassData.results.pastDueClass || []),
-                ...(pastDueStudentData || [])
+                ...(pastDueClassData.results.pastDueStudent || [])
             ];
-
-
+    
             setUpcoming(combinedUpcoming);
             setPastDue(combinedPastDue);
-
+    
         } catch (error) {
             console.error("Failed to fetch assignments:", error);
             Alert.alert("Error", "Could not load your assignments.");
