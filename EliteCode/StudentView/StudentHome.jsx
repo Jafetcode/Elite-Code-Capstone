@@ -118,7 +118,7 @@ function StudentHome() {
 
         <Button> Evan </Button>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 20 }}>
 
 
