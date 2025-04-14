@@ -338,24 +338,18 @@ router.get('/assignments', (req, res) =>{
     if (err) {
       return res.status(500).json({ error: err.message });
     }     
-    const studentRes = studentResults.results
-
 
     db.query(sqlClasses, [qid], (err, classResults) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      const classesRes = classResults.results
       console.log("studnets");
-      console.log(studentRes);
       console.log(studentResults);
-      console.log("classes");
-      console.log(classesRes);
       console.log(classResults)
       res.json({
         message: 'Assignments retrieved successfully',
-        students: studentRes,
-        classes: classesRes
+        students: studentResults,
+        classes: classesResults
       });
     });
   });

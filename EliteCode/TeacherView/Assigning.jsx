@@ -19,16 +19,14 @@ const Assigning = () => {
         try {
             // Fetch courses the teacher teaches
             let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.userID}`);
-            const data = await res.json();
-            console.log(data.results)
-            setClasses(data.results);
+            const courses = await res.json();
+            console.log("courses.results: ", courses.results)
+            setClasses(courses.results);
             // // Here, fetch existing assignments for this question
-            // let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
-            // const assignmentData = await assignmentRes.json();
-            // Set the existing assignments into selectedClasses and selectedStudents
-                      
-            let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assginments?qid=${qid}`);
+            let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
             const assignmentData = await assignmentRes.json();
+            // Set the existing assignments into selectedClasses and selectedStudents
+            console.log("assignmentData: ",  assignmentData)
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
 
@@ -41,7 +39,7 @@ const Assigning = () => {
             setSelectedStudents(studentSelection);
 
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching courses:", error);
         }
     };
 
