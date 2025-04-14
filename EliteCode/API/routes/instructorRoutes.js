@@ -2,6 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Define your routes
 router.get('/', (req, res) => {
@@ -165,14 +168,21 @@ router.get('/allQuestions', (req, res) => {
 
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
-  const sql = 'SELECT * FROM Questions Where qid = ?';
+  const sql = 'SELECT * FROM Questions WHERE qid = ?';
+
   db.query(sql, [qid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+
+    if (results.length > 0 && results[0].imgFile) {
+      results[0].imgFile = `data:image/jpeg;base64,${results[0].imgFile.toString('base64')}`;
+    }
+
     res.json({ results });
   });
 });
+
 
 
 router.get('/questionID', (req, res) => {
@@ -239,6 +249,21 @@ router.put('/course/:cid', (req, res) => {
     });
 
 });
+router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
+  const { qid } = req.params;
+  const { question, description, pointVal, topic, type, dueDate } = req.body;
+  const imgFile = req.file ? req.file.buffer : null;
+  if (!question || !description || !pointVal || !topic || !type || !dueDate) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  const sql = 'UPDATE Questions SET question = ?, description = ?, pointVal = ?, imgFile = ?, topic = ?, type = ?, dueDate = ? WHERE qid = ?';
+  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate, qid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+});
 
 router.delete('/course/:cid', (req, res) => {
   const {cid} = req.params;
@@ -304,14 +329,6 @@ router.get('/:tid/courses', async (req, res) => {
   
 
 
-router.put('/updateQuestion', (req, res) => {
-  const sql = ' ';
-  db.query(sql, [], (err, results) => {
-    if(err) {
-      return res.status(500).json({error: err.message});
-    }
-    res.json({results})
-  })
-})
+
 // Export the router
 module.exports = router;

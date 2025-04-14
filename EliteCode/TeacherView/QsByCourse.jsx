@@ -13,9 +13,9 @@ function QsByCourse() {
     const navigation = useNavigation();
     const route = useRoute();
     const [questions, setQuestions] = React.useState([]);
-    const { user } = useAuth();
     const { cid } = route.params || {};
-    const { cName } = route.params || {};
+    
+
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -63,18 +63,35 @@ function QsByCourse() {
                         <>
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
-                                    <Card key={question.qid} style={{}}>
-                                        <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
-                                            <View style={{ flex: 1 }}>
-                                                <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
-                                                <Text appearance="hint" >{question.description}</Text>
+                                    <TouchableOpacity 
+                                        key={question.qid}
+                                        onPress={() => navigation.navigate('TeacherManageQuestion', { 
+                                            course: { cid },
+                                            qid: question.qid 
+                                        })}
+                                        style={{ marginBottom: 10 }}
+                                    >
+                                        <Card>
+                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                                <View style={{ flex: 1 }}>
+                                                    <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                                    <Text appearance="hint">{question.description}</Text>
+                                                </View>
                                             </View>
-                                        </View>
-                                        <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                        <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                        <Text category="s2">{question.pointVal} Points</Text>
-                                        {/* <View>{question.imgFile}</View> */}
-                                    </Card>
+                                            <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                            <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
+                                            <Text category="s2">{question.pointVal} Points</Text>
+                                        </Card>
+                                        <Button 
+                                            onPress={() => navigation.navigate('TeacherManageQuestion', { 
+                                                course: { cid },
+                                                qid: question.qid 
+                                            })}
+                                            style={{ marginTop: 20 }}
+                                        >
+                                            Manage {question.question}
+                                        </Button>
+                                    </TouchableOpacity>
                                 )
                             )}
                         </>

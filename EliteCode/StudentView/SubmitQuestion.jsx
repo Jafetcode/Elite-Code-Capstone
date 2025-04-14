@@ -150,34 +150,27 @@ function SubmitQuestion() {
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
-          <RadioGroup
-            selectedIndex={type === "shortAnswer" ? 0 : 1}
-            onChange={handleTypeChange}
-            style={styles.radioGroup}
-          >
-            <Radio>Short Answer</Radio>
-            <Radio>Image Answer</Radio>
-          </RadioGroup>
 
-          {type === "shortAnswer" && (
+
+
+        <View style={styles.imageContainer}>
+          <Text category="h6">Upload a file</Text>
+          
+              <Button onPress={pickImage}>
+                Choose a image to upload
+              </Button>
+              {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
+            </View>
+
             <Input
-              placeholder="Enter your question here"
+              placeholder="Enter your answer here"
               multiline={true}
               value={answer}
               onChangeText={(nextValue) => setAnswer(nextValue)}
               style={styles.textInput}
               textStyle={{ minHeight: 64 }}
             />
-          )}
-          
-          {type === "imageAnswer" && (
-            <View style={styles.imageContainer}>
-              <Button onPress={pickImage}>
-                Choose a image to upload
-              </Button>
-              {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
-            </View>
-          )}
+
 
           <Button 
             onPress={() => handleSubmit()} 

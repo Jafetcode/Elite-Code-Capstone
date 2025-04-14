@@ -9,6 +9,7 @@ const instructorRoutes = require('./routes/instructorRoutes');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const fs = require("fs");
 
 
 require('dotenv').config();
@@ -96,12 +97,12 @@ app.post('/createQuestion', upload.single('imgFile'), (req, res) => {
 });
 
 app.post('/createMCQ', (req, res) => {
-  const { qid, correctAns, opt1, opt2, opt3 } = req.body;
-  if (!qid || !correctAns || !opt1 || !opt2 || !opt3) {
+  const { correctAns, opt1, opt2, opt3 } = req.body;
+  if ( !correctAns || !opt1 || !opt2 || !opt3) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'INSERT INTO MCQ(qid, correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?, ?)';
-  db.query(sql, [qid, correctAns, opt1, opt2, opt3], (err, results) => {
+  const sql = 'INSERT INTO MCQ(correctAns, opt1, opt2, opt3) VALUES (?, ?, ?, ?)';
+  db.query(sql, [correctAns, opt1, opt2, opt3], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -109,6 +110,27 @@ app.post('/createMCQ', (req, res) => {
   });
 });
 
+app.put('/user/:userID', (req, res) => {
+  const { userID } = req.params;
+  const { fname, lname, bio } = req.body;
+
+  if (!fname || !lname) {
+    return res.status(400).json({ error: 'First name and last name are required' });
+  }
+
+  const sql = 'UPDATE Users SET fname = ?, lname = ?, bio = ? WHERE userID = ?';
+  db.query(sql, [fname, lname, bio, userID], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ message: 'Profile updated successfully!' });
+  });
+});
 
 app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);

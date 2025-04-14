@@ -42,7 +42,7 @@ function StudentQuestion() {
   const fetchQuestions = async () => {
     try {
       const res = await fetch(
-        `https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}`
+        `https://elitecodecapstone24.onrender.com/student/questions?tid=${user.tid}&cid=${cid}`
       );
       const data = await res.json();
       setQuestions(data.results);
@@ -55,6 +55,25 @@ function StudentQuestion() {
     React.useCallback(() => {
       if (cid) {
         fetchQuestions();
+      }
+    }, [cid])
+  );
+
+  const fetchSpecificQuestions = async () => {
+    try {
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/specificAssignedQuestions?tid=${tid}&sid=${user.userID}`
+      );
+      const data = await res.json();
+      setQuestions(data.results);
+    } catch (error) {
+      console.error("Failed to fetch", error);
+    }
+  }
+  useFocusEffect(
+    React.useCallback(() => {
+      if (cid) {
+        fetchSpecificQuestions();
       }
     }, [cid])
   );

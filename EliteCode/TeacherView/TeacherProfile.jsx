@@ -45,47 +45,11 @@ function TeacherProfile() {
           />
           <Text category="h6">{user.name} </Text>
           <Text appearance="hint">{user.role}</Text>
-          <Button size="small" style={{ marginTop: 10 }} onPress={() => console.log("Edit profile button pressed")}>Edit Profile</Button>
+          <Text appearance="hint">{user.bio}</Text>
+          <Button size="small" style={{ marginTop: 10 }} onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>
         </View>
 
-        {/* My Courses Section */}
-        <View style={{ marginBottom: 20 }}>
-
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-            <Text category="s1">My Courses</Text>
-            <TouchableOpacity onPress={() => console.log("Edit courses button pressed")}>
-              <Text appearance="hint">edit</Text>
-            </TouchableOpacity>
-          </View>
-
-          <Card style={{ marginBottom: 10 }}>
-            <TouchableOpacity onPress={() => console.log("Course card 1 pressed")}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                <View style={{ flex: 1 }}>
-                  <Text>Course Name</Text>
-                  <Text appearance="hint">Description</Text>
-                </View>
-                <Text category="s2">Grade: A</Text>
-              </View>
-            </TouchableOpacity>
-          </Card>
-
-          <Card>
-            <TouchableOpacity onPress={() => console.log("Course Card 2 pressed")}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ width: 40, height: 40, backgroundColor: "#ccc", marginRight: 10 }} />
-                <View style={{ flex: 1 }}>
-                  <Text>Course Name</Text>
-                  <Text appearance="hint">Description</Text>
-                </View>
-                <Text category="s2">Grade: A</Text>
-              </View>
-            </TouchableOpacity>
-          </Card>
-
-        </View>
-
+       
         {/* Languages Section */}
         {/* <View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
@@ -114,12 +78,4 @@ function TeacherProfile() {
   );
 }
 
-export default () => (
-  <>
-    <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.dark}>
-      <TeacherProfile />
-    </ApplicationProvider>
-  </>
-);
-
+export default TeacherProfile;

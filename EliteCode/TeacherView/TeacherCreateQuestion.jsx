@@ -15,8 +15,7 @@ import {
   Radio,
   RadioGroup,
   Datepicker,
-  SelectItem
-
+  SelectItem,
 } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 
@@ -39,132 +38,132 @@ function TeacherCreateQuestion() {
   const [option3, setOption3] = React.useState("");
   const [correctAns, setCorrectAns] = React.useState("");
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [questionData, setQuestionData] = React.useState([]);
-  const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const formattedDate = dueDate.toISOString().slice(0, 19).replace("T", " ");
 
-  const{user} = useAuth();
+  const { user } = useAuth();
 
-const pickImage = async () => {
-const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (!permissionResult.granted) {
-    alert("Permission to access camera roll is required!");
-    return;
-  }
-
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes:['images'],
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
-  if (!result.canceled) {
-    setImgFile(result.assets[0].uri);
-  }
-};
-
-
-const handleCreateQuestion = async () => {
-  try {
-
-    const formData = new FormData();
-
-
-    formData.append('question', question);
-    formData.append('description', description);
-    formData.append('pointVal', pointVal);
-    formData.append('topic', topic);
-    formData.append('type', type);
-    formData.append('dueDate', formattedDate);
-    formData.append('tid', user.userID);
-
-    if (imgFile) {
-      const filename = imgFile.split('/').pop();
-      const match = /\.(\w+)$/.exec(filename);
-      const mimeType = match ? `image/${match[1]}` : 'image/jpeg';
-  
-      formData.append('imgFile', {
-        uri: Platform.OS === 'ios' ? imgFile.replace('file://', '') : imgFile,
-        name: filename || 'image.jpg',
-        type: mimeType
-      });
+  const pickImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission to access camera roll is required!");
+      return;
     }
 
-    const response = await fetch(
-      'https://elitecodecapstone24.onrender.com/createQuestion',
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImgFile(result.assets[0].uri);
+    }
+  };
+
+  const handleCreateQuestion = async () => {
+    try {
+      const formData = new FormData();
+      if (isSubmitting) return; 
+      setIsSubmitting(true);
+
+      formData.append("question", question);
+      formData.append("description", description);
+      formData.append("pointVal", pointVal);
+      formData.append("topic", topic);
+      formData.append("type", type);
+      formData.append("dueDate", formattedDate);
+      formData.append("tid", user.userID);
+
+      if (imgFile) {
+        const filename = imgFile.split("/").pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const mimeType = match ? `image/${match[1]}` : "image/jpeg";
+
+        formData.append("imgFile", {
+          uri: Platform.OS === "ios" ? imgFile.replace("file://", "") : imgFile,
+          name: filename || "image.jpg",
+          type: mimeType,
+        });
       }
-    );
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to create question');
-    }
-
-    console.log("Question created successfully. Response data:", data);
-
-    if (type === "MCQ") {
-      try {
-        console.log("Creating MCQ with the following details:");
-        console.log("Question ID (qid):", data.qid);
-        console.log("Option 1:", option1);
-        console.log("Option 2:", option2);
-        console.log("Option 3:", option3);
-        console.log("Correct Answer:", correctAns);
-
-        const mcqResponse = await fetch(
-          "https://elitecodecapstone24.onrender.com/createMCQ/",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              qid: data.qid,
-              opt1: option1,
-              opt2: option2,
-              opt3: option3,
-              correctAns,
-            }),
-          }
-        );
-
-        const mcqData = await mcqResponse.json();
-        if (mcqResponse.ok) {
-          console.log("MCQ created successfully. Response data:", mcqData);
-          alert("MCQ Created!");
-          navigation.goBack();
-        } else {
-          console.log("MCQ Response Status:", mcqResponse.status);
-          console.log("MCQ Response Data:", mcqData);
-          alert("Error:" + (mcqData.error || "Failed to create MCQ"));
+      const response = await fetch(
+        "https://elitecodecapstone24.onrender.com/createQuestion",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+          body: formData,
         }
-      } catch (error) {
-        console.error("Error creating MCQ:", error.message);
-        alert("Network error: " + error.message);
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create question");
       }
-    }
 
-    if (response.ok) {
-      alert("Question Created!");
+      console.log("Question created successfully. Response data:", data);
+
+      if (type === "MCQ") {
+        try {
+          const mcqPayload = {
+            qid: data.questionId,
+            correctAns,
+            opt1: option1,
+            opt2: option2,
+            opt3: option3,
+          };
+
+          const mcqResponse = await fetch("https://elitecodecapstone24.onrender.com/createMCQ/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(mcqPayload),
+          }
+          );
+
+          const mcqData = await mcqResponse.json();
+          if (mcqResponse.ok) {
+            console.log("MCQ created successfully. Response data:", mcqData);
+            alert("MCQ Created!");
+          } else {
+            console.log("MCQ Response Status:", mcqResponse.status);
+            console.log("MCQ Response Data:", mcqData);
+            alert("Error:" + (mcqData.error || "Failed to create MCQ"));
+          }
+        } catch (error) {
+          console.error("Error creating MCQ:", error.message);
+          alert("Network error: " + error.message);
+        }
+      }
+
+      if (response.ok) {
+        alert("Question Created!");
+        
+      } else {
+        alert("Error:" + (data.error || "Failed to create question"));
+      }
+    } catch (error) {
+      console.error("Error creating question:", error.message);
+      alert("Network error: " + error.message);
+    }  finally {
+      setIsSubmitting(false); 
       navigation.goBack();
-    } else {
-      alert("Error:" + (data.error || "Failed to create question"));
     }
-  } catch (error) {
-    console.error("Error creating question:", error.message);
-    alert("Network error: " + error.message);
-  }
-};
-  
+  };
 
-    
   const handleTypeChange = (selectedIndex) => {
     setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
     console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
+  };
+  const handleSelectChange = (index) => {
+    const options = [option1, option2, option3];
+    setSelectedIndex(index);
+    setCorrectAns(options[index.row]);
   };
 
   return (
@@ -219,7 +218,7 @@ const handleCreateQuestion = async () => {
             value={description}
             onChangeText={(description) => setDescription(description)}
           />
-     
+
           <View
             style={{
               flexDirection: "row",
@@ -238,13 +237,16 @@ const handleCreateQuestion = async () => {
           </RadioGroup>
 
           {type === "MCQ" && (
-            
-            <View style={{  backgroundColor: '#526F8C',
+            <View
+              style={{
+                backgroundColor: "#526F8C",
                 borderRadius: 10,
                 marginVertical: 10,
-                overflow: 'hidden',
-                width: '90%',
-                alignSelf: 'center' }}>
+                overflow: "hidden",
+                width: "90%",
+                alignSelf: "center",
+              }}
+            >
               <Text category="h5" style={{ marginBottom: 5 }}>
                 Multiple Choice Options
               </Text>
@@ -267,23 +269,19 @@ const handleCreateQuestion = async () => {
                 style={{ marginBottom: 5 }}
               />
               {/* work on tommorow*/}
-              <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
-                <Select
-                 selectedIndex={selectedIndex}
-                 value={correctAns}
-                 onSelect={(index) => {
-                     const options = [option1, option2, option3];
-                     setSelectedIndex(index);
-                     setCorrectAns(options[index.row]);
-                     console.log('Selected index:', index.row);
-                     console.log('Selected correct answer:', options[index.row]);
-                 }}
-                 style={{ marginBottom: 5 }}
-             >
-                 <SelectItem title={option1 || 'Option 1'} />
-                 <SelectItem title={option2 || 'Option 2'} />
-                 <SelectItem title={option3 || 'Option 3'} />
-                </Select>
+              <Text category="h5" style={{ marginBottom: 5 }}>
+                Select Correct Answer
+              </Text>
+              <Select
+                selectedIndex={selectedIndex}
+                value={correctAns}
+                onSelect={handleSelectChange}
+                style={{ marginBottom: 5 }}
+              >
+                <SelectItem title={option1 || "Option 1"} />
+                <SelectItem title={option2 || "Option 2"} />
+                <SelectItem title={option3 || "Option 3"} />
+              </Select>
             </View>
           )}
           <Input
@@ -310,8 +308,10 @@ const handleCreateQuestion = async () => {
             onChangeText={(value) => setImgFile(value)}
             style={{ marginBottom: 5 }}
           /> */}
-           <Button title="Pick an image from camera roll" onPress={pickImage}>Choose a image to upload</Button>
-           {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
+          <Button title="Pick an image from camera roll" onPress={pickImage}>
+            Choose a image to upload
+          </Button>
+          {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
           <View
             style={{
               flexDirection: "row",
@@ -335,56 +335,52 @@ const handleCreateQuestion = async () => {
           <View>
             <Text category="p1">
               {" "}
-              {`Selected date: ${dueDate.toLocaleDateString()}`}
-              {" "}
+              {`Selected date: ${dueDate.toLocaleDateString()}`}{" "}
             </Text>
             <Datepicker date={dueDate} onSelect={(date) => setDate(date)} />
           </View>
         </View>
-        <Button onPress={handleCreateQuestion}> Submit Question</Button>
+        <Button onPress={handleCreateQuestion} disabled={isSubmitting}> Submit Question</Button>
       </ScrollView>
-      
     </Layout>
-    
   );
-  
 }
 const styles = StyleSheet.create({
   container: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
   },
   image: {
-      width: 200,
-      height: 200,
-      resizeMode: 'contain',
-      alignSelf: 'center',
-      marginVertical: 10,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginVertical: 10,
   },
   select: {
-      marginVertical: 8,
-      width: '100%',
+    marginVertical: 8,
+    width: "100%",
   },
   mcqContainer: {
-      backgroundColor: '#526F8C',
-      borderRadius: 10,
-      marginVertical: 10,
-      overflow: 'hidden',
-      width: '90%',
-      alignSelf: 'center',
-      padding: 10,
+    backgroundColor: "#526F8C",
+    borderRadius: 10,
+    marginVertical: 10,
+    overflow: "hidden",
+    width: "90%",
+    alignSelf: "center",
+    padding: 10,
   },
   heading: {
-      marginBottom: 5,
+    marginBottom: 5,
   },
   input: {
-      marginBottom: 5,
+    marginBottom: 5,
   },
   buttonContainer: {
-      marginTop: 10,
-      marginBottom: 20,
-  }
+    marginTop: 10,
+    marginBottom: 20,
+  },
 });
 export default () => (
   <>

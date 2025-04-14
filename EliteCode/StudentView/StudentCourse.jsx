@@ -1,37 +1,54 @@
 import * as React from "react";
-import { View, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
+import { View, ScrollView, TouchableOpacity, Image } from "react-native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
+import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card} from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function StudentCourse() {
+
     const navigation = useNavigation();
+    const route = useRoute();
+    const { cid } = route.params;
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchCourseData = async () => {
+                try {
+                    const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourseData?cid=${cid}`);
+                    const data = await res.json();
+                    setQuestions(data.results || []);
+                } catch (error) {
+                    console.error("Failed to fetch course data:", error);
+                    Alert.alert("Error", "Could not load course data.");
+                }
+            };
+
+            fetchCourseData();
+        }, [cid])
+    );
 
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{ marginTop: 50 }}>
+                    {/* Header */}
+                    <Image source={require("../assets/images/FinalLogo2.png")}
+                        style={{
+                            width: 300,
+                            height: 150,
+                            marginTop: -10,
+                            marginBottom: -25,
+                            alignSelf: 'center',
+                            resizeMode: 'cover',
+                        }}
+                    />
 
-            <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
-                <Button
-                    appearance="ghost"
-                    status="basic"
-                    accessoryLeft={BackIcon}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text category="h5" style={{ flex: 1, textAlign: "center", paddingRight: 50 }}>
-                    Elite Code
-                </Text>
-            </View>
-
-            <ScrollView>
-                <View style={{ marginBottom: 20 }}>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="s1">Lessons</Text>
-                            <Text appearance="hint">Grade: 95%</Text>
-                    </View>
-
+<View style={{ marginBottom: 20 }}>
+            <Text>{cid}</Text>
+                    
                     <Card style={{ marginBottom: 10 }}>
                         <TouchableOpacity onPress={() => navigation.navigate('StudentQuestion')}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -55,6 +72,12 @@ function StudentCourse() {
                             </View>
                         </TouchableOpacity>
                     </Card>
+
+                </View>
+
+
+
+
 
                 </View>
             </ScrollView>
