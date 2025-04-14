@@ -349,7 +349,7 @@ router.get('/assignments', (req, res) =>{
       console.log("studnets");
       console.log(studentRes);
       console.log("classes");
-      console.log(classesRed);
+      console.log(classesRes);
       res.json({
         message: 'Assignments retrieved successfully',
         students: studentRes,
