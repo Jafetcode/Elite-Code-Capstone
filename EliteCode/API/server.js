@@ -110,7 +110,27 @@ app.post('/createMCQ', (req, res) => {
   });
 });
 
+app.put('/user/:userID', (req, res) => {
+  const { userID } = req.params;
+  const { fname, lname, bio } = req.body;
 
+  if (!fname || !lname) {
+    return res.status(400).json({ error: 'First name and last name are required' });
+  }
+
+  const sql = 'UPDATE Users SET fname = ?, lname = ?, bio = ? WHERE userID = ?';
+  db.query(sql, [fname, lname, bio, userID], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ message: 'Profile updated successfully!' });
+  });
+});
 
 app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);
