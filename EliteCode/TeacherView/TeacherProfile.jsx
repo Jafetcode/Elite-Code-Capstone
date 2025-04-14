@@ -11,7 +11,7 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 function TeacherProfile() {
   const navigation = useNavigation();
   const { user, logout } = useAuth();  // Get the user and logout function
-
+  const { fname, lname } = user;
   if (!user) {
     Alert.alert("Unauthorized", "You need to log in first.", [
       { text: "OK", onPress: () => navigation.navigate("Login")},
@@ -43,7 +43,8 @@ function TeacherProfile() {
             source={require("../assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
           />
-          <Text category="h6">{user.name} </Text>
+          <Text category="h6">{user.fname} </Text>
+          <Text>Debug: {JSON.stringify(user)}</Text>
           <Text appearance="hint">{user.role}</Text>
           <Text appearance="hint">{user.bio}</Text>
           <Button size="small" style={{ marginTop: 10 }} onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>

@@ -38,7 +38,10 @@ app.get('/userRole', (req, res) => {
       return res.json({
         role: results[0].role,
         userID: results[0].userID,
-        name: results[0].fname
+        name: results[0].fname,
+        fname: results[0].fname,
+        lname: results[0].lname,
+        bio: results[0].bio
       });
     }
     return res.status(404).json({ error: `User not found: ${email}` });
