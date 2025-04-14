@@ -326,7 +326,32 @@ router.get('/:tid/courses', async (req, res) => {
       res.json(Object.values(courses));
     });
   });
+
+  // assignments?qid=${question.qid}
   
+router.get('/assignments', (req, res) =>{
+  const {qid} = req.params;
+  
+  const sql = 'SELECT sid AS Students FROM AssignedToStudent WHERE qid = ?';
+  const sql1 =  'SELECT cid AS Classes FROM AssignedToClass WHERE qid = ?';
+   db.query(sqlStudents, [qid], (err, studentResults) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    db.query(sqlClasses, [qid], (err, classResults) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+
+      res.json({
+        message: 'Assignments retrieved successfully',
+        students: studentResults,
+        classes: classResults
+      });
+    });
+  });
+});
 
 
 

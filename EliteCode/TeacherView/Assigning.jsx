@@ -3,6 +3,7 @@ import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { useRoute } from '@react-navigation/native';
 import { Layout, Icon, Button, Card, Text, CheckBox, List, ListItem, Divider } from "@ui-kitten/components";
 import { useAuth } from "../AuthContext";
+import { QueryEndAtConstraint } from "firebase/firestore";
 
 const Assigning = () => {
     const route = useRoute();
@@ -21,10 +22,13 @@ const Assigning = () => {
             const data = await res.json();
             console.log(data.results)
             setClasses(data.results);
-            // Here, fetch existing assignments for this question
-            // let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/question/assignments?qid=${question.qid}`);
+            // // Here, fetch existing assignments for this question
+            // let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
             // const assignmentData = await assignmentRes.json();
             // Set the existing assignments into selectedClasses and selectedStudents
+                      
+            let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assginments?qid=${qid}`);
+            const assignmentData = await assignmentRes.json();
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
 
