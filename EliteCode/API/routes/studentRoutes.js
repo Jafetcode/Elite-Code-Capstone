@@ -44,13 +44,13 @@ router.get('/questions', (req, res) => {
   });
 });
 
-router.post('/submitQuestion', (req, res) => {
-  const { qid, sid, answer,progress, submitted_on} = req.body;
+router.post('/submitQuestion', upload.single('imgFile'), (req, res) => {
+  const { qid, sid, answer, progress, submitted_on } = req.body;
   const imgFile = req.file ? req.file.buffer : null;
   const sql = `
-    INSERT INTO Submissions (qid, sid, answer,progress, submitted_on, imgFile)
+    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, imgFile)
     VALUES (?, ?, ?, ?, ?, ?)`;
-  db.query(sql, [qid, sid, answer,progress, submitted_on,imgFile], (err, results) => {
+  db.query(sql, [qid, sid, answer, progress, submitted_on, imgFile], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -75,7 +75,7 @@ router.post('/joinCourse', async (req, res) => {
 router.get('/getCourses', async (req, res) => {
   const sid = req.query.sid;
   const sql = `
-    SELECT Classes.courseName, Classes.description, Classes.cid
+    SELECT Classes.courseName, Classes.description, Classes.cid, Enrolled.tid
     FROM Enrolled
     JOIN Classes ON Enrolled.cid = Classes.cid
     WHERE Enrolled.sid = ?;`;

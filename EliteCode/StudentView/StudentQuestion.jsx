@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation, useFocusEffect  } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, useEffect } from "@react-navigation/native";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -22,8 +22,8 @@ function StudentQuestion() {
   const route = useRoute();
   const [questions, setQuestions] = React.useState([]);
   const { user } = useAuth();
-  const { cid } = route.params || {};
-  const { cName } = route.params || {};
+  const { cid, tid } = route.params || {};
+
 
 
   const formatDate = (dateString) => {
@@ -42,7 +42,7 @@ function StudentQuestion() {
   const fetchQuestions = async () => {
     try {
       const res = await fetch(
-        `https://elitecodecapstone24.onrender.com/student/questions?tid=${user.tid}&cid=${cid}`
+        `https://elitecodecapstone24.onrender.com/student/questions?tid=${tid}&cid=${cid}`
       );
       const data = await res.json();
       setQuestions(data.results);
@@ -50,14 +50,6 @@ function StudentQuestion() {
       console.error("Failed to fetch", error);
     }
   };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (cid) {
-        fetchQuestions();
-      }
-    }, [cid])
-  );
 
   const fetchSpecificQuestions = async () => {
     try {
@@ -70,13 +62,16 @@ function StudentQuestion() {
       console.error("Failed to fetch", error);
     }
   }
+  
   useFocusEffect(
     React.useCallback(() => {
       if (cid) {
-        fetchSpecificQuestions();
+        fetchQuestions();
+
       }
     }, [cid])
   );
+
 
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>

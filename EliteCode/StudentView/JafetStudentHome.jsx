@@ -22,7 +22,7 @@ function JafetStudentHome() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/courses?sid=${user.userID}`);
+      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`);
       const data = await res.json();
       setCourses(data.results || []);
     } catch (error) {
@@ -30,6 +30,7 @@ function JafetStudentHome() {
       Alert.alert("Error", "Could not load your courses.");
     }
   };
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -95,7 +96,7 @@ function JafetStudentHome() {
 
           {courses.map((course) => (
             <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
-              <TouchableOpacity onPress={() => navigation.navigate('StudentQuestion', { cid: course.cid })}>
+              <TouchableOpacity onPress={() => navigation.navigate('StudentQuestion', { cid: course.cid, tid: course.tid })}>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <View style={{ flex: 1 }}>
                     <Text>{course.courseName}</Text>

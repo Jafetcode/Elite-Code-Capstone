@@ -34,7 +34,9 @@ function SubmitQuestion() {
   const [type, setType] = React.useState("shortAnswer");
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [questionData, setQuestionData] = React.useState([]);
+  const route = useRoute();
 
+  const { cid } = route.params || {};
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -66,11 +68,18 @@ function SubmitQuestion() {
     }
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user?.qid) {
+        fetchQuestionData();
+      }
+    }, [user])
+  );
   
   const handleSubmit = async () => {
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
-    const qid = user.qid;
-    const sid = user.sid;
+    const qid = user.questionId;
+    const sid = user.userID;
     const cid = user.cid;
     setProgress("submitted");
 
@@ -124,10 +133,6 @@ function SubmitQuestion() {
       alert("Error submitting question.");
     }
   };
-  const handleTypeChange = (selectedIndex) => {
-    setType(selectedIndex === 0 ? "shortAnswer" : "imageAnswer");
-    console.log("Selected type:", selectedIndex === 0 ? "shortAnswer" : "imageAnswer");
-  }
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
@@ -154,7 +159,7 @@ function SubmitQuestion() {
 
 
         <View style={styles.imageContainer}>
-          <Text category="h6">Upload a file</Text>
+          <Text style={styles.uploadFileText} category="h6">Upload a file</Text>
           
               <Button onPress={pickImage}>
                 Choose a image to upload
@@ -170,7 +175,6 @@ function SubmitQuestion() {
               style={styles.textInput}
               textStyle={{ minHeight: 64 }}
             />
-
 
           <Button 
             onPress={() => handleSubmit()} 
@@ -230,6 +234,9 @@ const styles = StyleSheet.create({
   submitButton: {
     marginTop: 20,
     width: '100%',
+  },
+  uploadFileText: {
+    marginBottom: 20,
   },
 });
 
