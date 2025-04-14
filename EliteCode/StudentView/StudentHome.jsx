@@ -19,25 +19,50 @@ function StudentHome() {
   const [classCode, setClassCode] = React.useState('');
   const { user } = useAuth();
   const [courses, setCourses] = React.useState([]);
+  const [upcoming, setUpcoming] = React.useState([]);
+  const [pastDue, setPastDue] = React.useState([]);
 
   const fetchCourses = async () => {
-      try {
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`);
-        const data = await res.json();
-        setCourses(data.results || []);
-      } catch (error) {
-        console.error("Failed to fetch courses:", error);
-        Alert.alert("Error", "Could not load your courses.");
-      }
-    };
+    try {
+      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`);
+      const data = await res.json();
+      setCourses(data.results || []);
+    } catch (error) {
+      console.error("Failed to fetch courses:", error);
+      Alert.alert("Error", "Could not load your courses.");
+    }
+  };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (user?.userID) {
-        fetchCourses();
-      }
-    }, [user])
-  );
+  const fetchAssignments = async () => {
+    try {
+      const [upcomingRes, pastDueRes, upcomingStudentRes, pastDueStudentRes] = await Promise.all([
+        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingClass?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueClass?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingStudent?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueStudent?sid=${user.userID}`),
+      ]);
+
+      const upcomingClassData = await upcomingRes.json();
+      const pastDueClassData = await pastDueRes.json();
+      const upcomingStudentData = await upcomingStudentRes.json();
+      const pastDueStudentData = await pastDueStudentRes.json();
+
+      const combinedUpcoming = [...upcomingClassData.results, ...upcomingStudentData.results].sort(
+        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+      );
+      const combinedPastDue = [...pastDueClassData.results, ...pastDueStudentData.results].sort(
+        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+      );
+
+      setUpcoming(combinedUpcoming);
+      setPastDue(combinedPastDue);
+
+    } catch (error) {
+      console.error("Failed to fetch assignments:", error);
+      Alert.alert("Error", "Could not load your assignments.");
+    }
+  };
+
 
   const handleJoinClass = async () => {
     if (!classCode.trim()) {
@@ -72,6 +97,15 @@ function StudentHome() {
 
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user?.userID) {
+        fetchCourses();
+        fetchAssignments();
+      }
+    }, [user])
+  );
+
   return (
 
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
@@ -86,22 +120,118 @@ function StudentHome() {
       </View>
       <ScrollView>
         <View style={{ marginBottom: 20 }}>
+
+
+          {/* Header */}
+          <Image source={require("../assets/images/FinalLogo2.png")}
+            style={{
+              width: 300,
+              height: 150,
+              marginTop: -10,
+              marginBottom: -25,
+              alignSelf: 'center',
+              resizeMode: 'cover',
+            }}
+          />
+
+          {/* Sub header / Modal */}
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5, }}>
-            <Text category="s1">Course Library</Text>
-            <TouchableOpacity onPress={() => setVisible(true)}>
-              <Text appearance="hint">Join Course</Text>
-            </TouchableOpacity>
-            <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 10,
+              width: '100%'
+            }}>
+              <Text category="s1">Course Library</Text>
 
-              <Card disabled={true}>
-                <Text style={{ marginBottom: 20 }}>Enter a class code</Text>
-                <Input style={styles.inputs} label='Class' placeholder='class code' value={classCode} onChangeText={nextClassCode => setClassCode(nextClassCode)} />
-                <Button onPress={() => { setVisible(false); handleJoinClass(); }}>Join</Button>
+              <TouchableOpacity onPress={() => setVisible(true)}>
+                <Text appearance="hint">Join Course</Text>
+              </TouchableOpacity>
+            </View>
+
+            <Modal
+              visible={visible}
+              backdropStyle={styles.backdrop}
+              onBackdropPress={() => setVisible(false)}
+            >
+              <Card
+                disabled={true}
+                style={{
+                  width: 240,
+                  alignSelf: 'center',
+                  borderRadius: 10,
+                  backgroundColor: '#1E2A38',
+                  borderColor: '#334154',
+                }}
+              >
+                <Text
+                  category="s1"
+                  style={{
+                    fontSize: 16,
+                    textAlign: 'center',
+                    color: 'white',
+                    fontWeight: '600',
+                  }}
+                >
+                  Join Course
+                </Text>
+
+                <Image
+                  source={require("../assets/images/joinIcon.png")}
+                  style={{
+                    width: '100%',
+                    height: undefined,
+                    aspectRatio: 2,
+                    alignSelf: 'center',
+                    resizeMode: 'contain',
+                  }}
+                />
+
+                <Input
+                  size="small"
+                  style={{
+                    marginBottom: 8,
+                    backgroundColor: '#253243',
+                    borderRadius: 8,
+                  }}
+                  textStyle={{ fontSize: 14, color: 'white' }}
+                  placeholder='Course Code'
+                  value={classCode}
+                  onChangeText={nextClassCode => setClassCode(nextClassCode)}
+                />
+
+                <Button
+                  size="small"
+                  style={{
+                    borderRadius: 10,
+                    backgroundColor: '#3A4B5C',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingVertical: 0
+                  }}
+                  onPress={() => {
+                    setVisible(false);
+                    handleJoinClass();
+                  }}
+                >
+                  {({ style }) => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Text style={{ color: 'white', fontWeight: '600', marginRight: 6 }}>
+                        Join
+                      </Text>
+                      <Icon name="flag" fill="white" style={{ width: 14, height: 14 }} />
+                    </View>
+                  )}
+                </Button>
               </Card>
-
             </Modal>
+
+
           </View>
 
+          {/* Course Cards */}
           {courses.map(course => (
             <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
               <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
@@ -117,6 +247,102 @@ function StudentHome() {
               </TouchableOpacity>
             </Card>
           ))}
+
+          {/* Upcoming Cards */}
+          <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
+          {upcoming.length === 0 ? (
+            <Text appearance="hint">No upcoming questions!</Text>
+          ) : (
+            upcoming.map(item => (
+              <Card
+                key={item.qid}
+                style={{
+                  borderRadius: 10,
+                  marginBottom: 5,
+                  backgroundColor: '#1E2A38'
+                }}
+              >
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
+                >
+                  {item.question}
+                </Text>
+
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 3
+                }}>
+                  <Text
+                    appearance="hint"
+                    style={{ fontSize: 14 }}
+                  >
+                    Due: {new Date(item.dueDate).toLocaleDateString()}
+                  </Text>
+
+                  <View style={{
+                    backgroundColor: '#D87D4A',
+                    borderRadius: 6,
+                    paddingHorizontal: 8,
+                    paddingVertical: 2,
+                  }}>
+                    <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
+                  </View>
+                </View>
+              </Card>
+
+
+            ))
+          )}
+
+          {/* Past Due Cards */}
+          <Text category="s1" style={{ marginVertical: 10 }}>Past Due Questions</Text>
+          {pastDue.length === 0 ? (
+            <Text appearance="hint">No past due questions!</Text>
+          ) : (
+            pastDue.map(item => (
+              <Card
+                key={item.qid}
+                style={{
+                  borderRadius: 10,
+                  marginBottom: 5,
+                  backgroundColor: '#1E2A38'
+                }}
+              >
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
+                >
+                  {item.question}
+                </Text>
+
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 3
+                }}>
+                  <Text appearance="hint">
+                    Due: {new Date(item.dueDate).toLocaleDateString()}
+                  </Text>
+
+                  <View style={{
+                    backgroundColor: '#A94B4B',
+                    borderRadius: 6,
+                    paddingHorizontal: 8,
+                    paddingVertical: 2,
+                  }}>
+                    <Text style={{ color: 'white', fontSize: 12 }}>Past Due</Text>
+                  </View>
+                </View>
+              </Card>
+            ))
+          )}
+
 
         </View>
 
