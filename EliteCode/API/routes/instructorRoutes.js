@@ -330,7 +330,9 @@ router.get('/:tid/courses', async (req, res) => {
   // assignments?qid=${question.qid}
   
 router.get('/assignments', (req, res) =>{
-  const {qid} = req.params;
+  const {qid} = req.query.qid
+
+  ;
   
   const sqlStudents = 'SELECT sid AS Students FROM AssignedToStudent WHERE qid = ?';
   const sqlClasses =  'SELECT cid AS Classes FROM AssignedToClass WHERE qid = ?';
