@@ -337,17 +337,19 @@ router.get('/assignments', (req, res) =>{
    db.query(sqlStudents, [qid], (err, studentResults) => {
     if (err) {
       return res.status(500).json({ error: err.message });
-    }
+    }     
+    const studentRes = studentResults.results
+
 
     db.query(sqlClasses, [qid], (err, classResults) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-
+      const classesRes = classResults.results
       res.json({
         message: 'Assignments retrieved successfully',
-        students: studentResults.results,
-        classes: classResults.results
+        students: studentRes,
+        classes: classesRes
       });
     });
   });
