@@ -89,72 +89,6 @@ router.get("/getCourses", async (req, res) => {
   });
 });
 
-router.get("/getUpcomingClass", (req, res) => {
-  const sid = req.query.sid;
-  const sql = `
-    SELECT DISTINCT q.*
-    FROM Questions q
-    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
-    INNER JOIN Enrolled e ON atc.cid = e.cid
-    WHERE e.sid = ?
-      AND DATE(q.dueDate) >= CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
-  db.query(sql, [sid], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ results });
-  });
-});
-
-router.get("/getUpcomingStudent", (req, res) => {
-  const sid = req.query.sid;
-  const sql = `
-    SELECT DISTINCT q.*
-    FROM Questions q
-    INNER JOIN AssignedToStudent atc on q.qid = atc.qid
-    WHERE atc.sid = ?
-      AND DATE(q.dueDate) >= CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
-  db.query(sql, [sid], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ results });
-  });
-});
-
-router.get("/getPastDueClass", (req, res) => {
-  const sid = req.query.sid;
-  const sql = `
-    SELECT DISTINCT q.*
-    FROM Questions q
-    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
-    INNER JOIN Enrolled e ON atc.cid = e.cid
-    WHERE e.sid = ?
-      AND DATE(q.dueDate) < CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
-  db.query(sql, [sid], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ results });
-  });
-});
-
-router.get("/getPastDueStudent", (req, res) => {
-  const sid = req.query.sid;
-  const sql = `
-    SELECT DISTINCT q.*
-    FROM Questions q
-    INNER JOIN AssignedToStudent atc ON q.qid = atc.qid
-    WHERE atc.sid = ?
-      AND DATE(q.dueDate) < CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
-  db.query(sql, [sid], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ results });
-  });
-});
-
 router.get("/getCourseData", async (req, res) => {
   const cid = req.query.cid;
   const sql = `
@@ -171,7 +105,81 @@ router.get("/getCourseData", async (req, res) => {
   });
 });
 
-router.get("/getUpcomingForCourse", async (req, res) => {
+router.get("/getAllPastDueQuestions", async (req, res) => {
+  const { sid } = req.query;
+
+  const classSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ?
+      AND DATE(q.dueDate) < CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  const studentSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+    WHERE ats.sid = ?
+      AND DATE(q.dueDate) < CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  try {
+    const [classResults] = await db.promise().query(classSql, [sid]);
+    const [studentResults] = await db.promise().query(studentSql, [sid]);
+
+    res.json({
+      results: {
+        pastDueClass: classResults || [],
+        pastDueStudent: studentResults || []
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/getAllUpcomingQuestions", async (req, res) => {
+  const { sid } = req.query;
+
+  const classSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  const studentSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+    WHERE ats.sid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  try {
+    const [classResults] = await db.promise().query(classSql, [sid]);
+    const [studentResults] = await db.promise().query(studentSql, [sid]);
+
+    res.json({
+      results: {
+        upcomingClass: classResults || [],
+        upcomingStudent: studentResults || []
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
@@ -187,8 +195,9 @@ router.get("/getUpcomingForCourse", async (req, res) => {
   const studentSql = `
     SELECT DISTINCT q.*
     FROM Questions q
-    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-    WHERE ats.sid = ? AND ats.cid = ?
+    INNER JOIN AssignedToStudent atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e on q.tid AND e.tid
+    WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
   `;
@@ -208,7 +217,7 @@ router.get("/getUpcomingForCourse", async (req, res) => {
   }
 });
 
-router.get("/getPastDueForCourse", async (req, res) => {
+router.get("/getPastDueCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
@@ -225,7 +234,8 @@ router.get("/getPastDueForCourse", async (req, res) => {
     SELECT DISTINCT q.*
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-    WHERE ats.sid = ? AND ats.cid = ?
+    INNER JOIN Enrolled e on q.tid AND e.tid
+    WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;

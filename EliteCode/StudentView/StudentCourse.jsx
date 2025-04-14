@@ -6,8 +6,6 @@ import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } f
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
-
 function StudentCourse() {
 
     const navigation = useNavigation();
@@ -38,7 +36,9 @@ function StudentCourse() {
             ]);
     
             const upcomingClassData = await upcomingRes.json();
+            console.log("Upcoming response:", upcomingClassData);
             const pastDueClassData = await pastDueRes.json();
+            console.log("Past Due response:", pastDueClassData);
     
             const combinedUpcoming = [
                 ...(upcomingClassData.results.upcomingClass || []),
@@ -62,8 +62,8 @@ function StudentCourse() {
 
     useFocusEffect(
         React.useCallback(() => {
-            fetchCourseData(); // cid
-            fetchAssignments(); // userid, cid 
+            fetchCourseData();
+            fetchAssignments();
         }, [user, cid])
     );
 

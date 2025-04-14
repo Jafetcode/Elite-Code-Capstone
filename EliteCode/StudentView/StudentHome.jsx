@@ -36,33 +36,33 @@ function StudentHome() {
 
   const fetchAssignments = async () => {
     try {
-      const [upcomingRes, pastDueRes, upcomingStudentRes, pastDueStudentRes] = await Promise.all([
-        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingClass?sid=${user.userID}`),
-        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueClass?sid=${user.userID}`),
-        fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingStudent?sid=${user.userID}`),
-        fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueStudent?sid=${user.userID}`),
+      const [upcomingRes, pastDueRes] = await Promise.all([
+        fetch(`https://elitecodecapstone24.onrender.com/student/getAllUpcomingQuestions?sid=${user.userID}`),
+        fetch(`https://elitecodecapstone24.onrender.com/student/getAllPastDueQuestions?sid=${user.userID}`)
       ]);
-
-      const upcomingClassData = await upcomingRes.json();
-      const pastDueClassData = await pastDueRes.json();
-      const upcomingStudentData = await upcomingStudentRes.json();
-      const pastDueStudentData = await pastDueStudentRes.json();
-
-      const combinedUpcoming = [...upcomingClassData.results, ...upcomingStudentData.results].sort(
-        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-      );
-      const combinedPastDue = [...pastDueClassData.results, ...pastDueStudentData.results].sort(
-        (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-      );
-
+  
+      const upcomingData = await upcomingRes.json();
+      const pastDueData = await pastDueRes.json();
+  
+      const combinedUpcoming = [
+        ...(upcomingData.results.upcomingClass || []),
+        ...(upcomingData.results.upcomingStudent || [])
+      ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  
+      const combinedPastDue = [
+        ...(pastDueData.results.pastDueClass || []),
+        ...(pastDueData.results.pastDueStudent || [])
+      ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  
       setUpcoming(combinedUpcoming);
       setPastDue(combinedPastDue);
-
+  
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
       Alert.alert("Error", "Could not load your assignments.");
     }
   };
+  
 
 
   const handleJoinClass = async () => {
