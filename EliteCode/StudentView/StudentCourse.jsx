@@ -76,7 +76,7 @@ function StudentCourse() {
                         style={{
                             width: 300,
                             height: 150,
-                            marginTop: -10,
+                            marginTop: 40,
                             marginBottom: -25,
                             alignSelf: 'center',
                             resizeMode: 'cover',

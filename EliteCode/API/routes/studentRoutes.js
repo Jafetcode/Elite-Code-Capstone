@@ -197,8 +197,8 @@ router.get('/getUpcomingForCourse', async (req, res) => {
     ]);
 
     res.json({
-      upcomingClass: classResults[0],
-      upcomingStudent: studentResults[0]
+      upcomingClass: classResults,
+      upcomingStudent: studentResults
     });
 
   } catch (err) {
@@ -235,8 +235,8 @@ router.get('/getPastDueForCourse', async (req, res) => {
     ]);
 
     res.json({
-      pastDueClass: classResults[0],
-      pastDueStudent: studentResults[0]
+      pastDueClass: classResults,
+      pastDueStudent: studentResults
     });
 
   } catch (err) {

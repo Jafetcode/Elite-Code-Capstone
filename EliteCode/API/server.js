@@ -57,6 +57,8 @@ app.get('/user', (req, res) => {
         role: results[0].role,
         userID: results[0].userID,
         name: results[0].fname,
+        fname: results[0].fname,
+        lname : results[0].lname,
         bio: results[0].bio
       });
 
