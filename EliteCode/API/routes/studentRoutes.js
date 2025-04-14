@@ -191,14 +191,14 @@ router.get('/getUpcomingForCourse', async (req, res) => {
   `;
 
   try {
-    const [classResults, studentResults] = await Promise.all([
-      db.promise().query(classSql, [sid, cid]),
-      db.promise().query(studentSql, [sid, cid])
-    ]);
+    const [classResults] = await db.promise().query(classSql, [sid, cid]);
+    const [studentResults] = await db.promise().query(studentSql, [sid, cid]);
 
     res.json({
-      upcomingClass: classResults,
-      upcomingStudent: studentResults
+      results: {
+        upcomingClass: classResults || [],
+        upcomingStudent: studentResults || []
+      }
     });
 
   } catch (err) {
@@ -229,21 +229,19 @@ router.get('/getPastDueForCourse', async (req, res) => {
   `;
 
   try {
-    const [classResults, studentResults] = await Promise.all([
-      db.promise().query(classSql, [sid, cid]),
-      db.promise().query(studentSql, [sid, cid])
-    ]);
+    const [classResults] = await db.promise().query(classSql, [sid, cid]);
+    const [studentResults] = await db.promise().query(studentSql, [sid, cid]);
 
     res.json({
-      pastDueClass: classResults,
-      pastDueStudent: studentResults
+      results: {
+        pastDueClass: classResults || [],
+        pastDueStudent: studentResults || []
+      }
     });
 
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 });
-
-
 
 module.exports = router;

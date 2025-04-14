@@ -37,16 +37,21 @@ function StudentCourse() {
                 fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueForCourse?sid=${user.userID}&cid=${cid}`)
             ]);
 
-            const upcomingData = await upcomingRes.json();
-            const pastDueData = await pastDueRes.json();
+            const upcomingClassData = await upcomingRes.json();
+            const pastDueClassData = await pastDueRes.json();
+            const upcomingStudentData = upcomingClassData.results.upcomingStudent;
+            const pastDueStudentData = pastDueClassData.results.pastDueStudent;
 
-            const combinedUpcoming = [...upcomingData.upcomingClass, ...upcomingData.upcomingStudent].sort(
-                (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-            );
+            const combinedUpcoming = [
+                ...(upcomingClassData.results.upcomingClass || []),
+                ...(upcomingStudentData || [])
+            ];
 
-            const combinedPastDue = [...pastDueData.pastDueClass, ...pastDueData.pastDueStudent].sort(
-                (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
-            );
+            const combinedPastDue = [
+                ...(pastDueClassData.results.pastDueClass || []),
+                ...(pastDueStudentData || [])
+            ];
+
 
             setUpcoming(combinedUpcoming);
             setPastDue(combinedPastDue);
@@ -70,7 +75,7 @@ function StudentCourse() {
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ marginBottom: 20 }}>
-                    
+
                     {/* Header */}
                     <Image source={require("../assets/images/FinalLogo2.png")}
                         style={{
