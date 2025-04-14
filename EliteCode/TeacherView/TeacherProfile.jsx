@@ -11,7 +11,6 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 function TeacherProfile() {
   const navigation = useNavigation();
   const { user, logout } = useAuth();  // Get the user and logout function
-  const { fname, lname } = user;
   if (!user) {
     Alert.alert("Unauthorized", "You need to log in first.", [
       { text: "OK", onPress: () => navigation.navigate("Login")},

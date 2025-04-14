@@ -43,7 +43,7 @@ function StudentProfile() {
             source={require("../assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
           />
-          <Text category="h6">{fname} {lname}</Text>
+          <Text category="h6">{user.fname}</Text>
           <Text>Debug: {JSON.stringify(user)}</Text>
           <Text appearance="hint">{user.role}</Text>
           <Button size="small" style={{ marginTop: 10 }} onPress={() => console.log("Edit profile button pressed")}>Edit Profile</Button>
