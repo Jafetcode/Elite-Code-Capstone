@@ -71,7 +71,6 @@ router.post('/joinCourse', async (req, res) => {
   });
 });
 
-
 router.get('/getCourses', async (req, res) => {
   const sid = req.query.sid;
   const sql = `
@@ -169,8 +168,81 @@ router.get('/getCourseData', async (req, res) => {
   });
 });
 
+router.get('/getUpcomingForCourse', async (req, res) => {
+  const { sid, cid } = req.query;
 
+  const classSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ? AND e.cid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
 
+  const studentSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+    WHERE ats.sid = ? AND ats.cid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  try {
+    const [classResults, studentResults] = await Promise.all([
+      db.promise().query(classSql, [sid, cid]),
+      db.promise().query(studentSql, [sid, cid])
+    ]);
+
+    res.json({
+      upcomingClass: classResults[0],
+      upcomingStudent: studentResults[0]
+    });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/getPastDueForCourse', async (req, res) => {
+  const { sid, cid } = req.query;
+
+  const classSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ? AND e.cid = ?
+      AND DATE(q.dueDate) < CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  const studentSql = `
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+    WHERE ats.sid = ? AND ats.cid = ?
+      AND DATE(q.dueDate) < CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
+
+  try {
+    const [classResults, studentResults] = await Promise.all([
+      db.promise().query(classSql, [sid, cid]),
+      db.promise().query(studentSql, [sid, cid])
+    ]);
+
+    res.json({
+      pastDueClass: classResults[0],
+      pastDueStudent: studentResults[0]
+    });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 
 
 
