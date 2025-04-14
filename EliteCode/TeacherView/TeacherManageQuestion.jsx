@@ -55,7 +55,7 @@ function TeacherManageQuestion() {
             setType(q.type || 'MCQ');
             setDate(q.dueDate ? new Date(q.dueDate) : new Date());
             setPointVal(String(q.pointVal || ''));
-            setTopic(q.topic || '');
+            setTopic(q.topic || '');  
             setImgFile(q.imgFile || null);
 
         } catch (error) {
