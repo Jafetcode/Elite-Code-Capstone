@@ -1,6 +1,10 @@
 import * as React from "react";
 import { View, ScrollView, Image, StyleSheet, Platform } from "react-native";
-import { useNavigation, useFocusEffect, useRoute} from "@react-navigation/native";
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+} from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 
 import * as ImagePicker from "expo-image-picker";
@@ -11,12 +15,9 @@ import {
   Button,
   Text,
   Icon,
-  Select,
   Input,
   Radio,
   RadioGroup,
-  Datepicker,
-  SelectItem,
 } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 
@@ -28,13 +29,12 @@ function SubmitQuestion() {
   const navigation = useNavigation();
   const [imgFile, setImgFile] = React.useState(null);
   const [answer, setAnswer] = React.useState("");
-  const [progress, setProgress] = React.useState("");
+  const [progress, setProgress] = React.useState("inprogress");
   const [submitted_on, setSubmitted_on] = React.useState(new Date());
-  const [correctAns, setCorrectAns] = React.useState("");
   const [questionData, setQuestionData] = React.useState([]);
   const route = useRoute();
   const { user } = useAuth() || {};
-  const { cid, qid, type , opt1, opt2, opt3 } = route.params || {};
+  const { cid, qid, type, opt1, opt2, opt3 } = route.params || {};
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -77,35 +77,30 @@ function SubmitQuestion() {
       }
     }, [user])
   );
-  
+
   const handleSubmit = async () => {
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
-    const sid = user.userID;
-    setProgress("submitted");
-
     try {
-
-
       const formData = new FormData();
       formData.append("qid", qid);
-      formData.append("sid", sid);
-      formData.append("answer", answer);
-      formData.append("progress", progress);
+      formData.append("sid", user.userID);
+      formData.append("answer", answer.toString);
+      formData.append("progress", "submitted");
       formData.append("submitted_on", submitted_on);
-      formData.append("cid", cid);
-      formData.append("answer", answer);
+
 
       if (imgFile) {
         const filename = imgFile.split("/").pop();
         const match = /\.(\w+)$/.exec(filename);
         const mimeType = match ? `image/${match[1]}` : "image/jpeg";
-
+  
         formData.append("imgFile", {
           uri: Platform.OS === "ios" ? imgFile.replace("file://", "") : imgFile,
           name: filename || "image.jpg",
           type: mimeType,
         });
       }
+  
       const response = await fetch(
         "https://elitecodecapstone24.onrender.com/student/submitQuestion",
         {
@@ -120,38 +115,7 @@ function SubmitQuestion() {
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to create question");
-      }
-
-      // if (type === "MCQ") {
-      //   try {
-      //     const mcqPayload = {
-      //       qid: data.questionId,
-      //       correctAns
-      //     };
-
-      //     const mcqResponse = await fetch("https://elitecodecapstone24.onrender.com/createMCQ/", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //       body: JSON.stringify(mcqPayload),
-      //     }
-      //     );
-
-      //     const mcqData = await mcqResponse.json();
-      //     if (mcqResponse.ok) {
-      //       console.log("MCQ created successfully. Response data:", mcqData);
-      //       alert("MCQ Created!");
-      //     } else {
-      //       console.log("MCQ Response Status:", mcqResponse.status);
-      //       console.log("MCQ Response Data:", mcqData);
-      //       alert("Error:" + (mcqData.error || "Failed to create MCQ"));
-      //     }
-      //   } catch (error) {
-      //     console.error("Error creating MCQ:", error.message);
-      //     alert("Network error: " + error.message);
-      //   }
-      // }
+      } 
 
       console.log("Response:", data);
       if (response.ok) {
@@ -169,10 +133,8 @@ function SubmitQuestion() {
     <Layout style={styles.container}>
       <View style={styles.header}>
         {/* TODO >>>>>>>>>> */}
-      
-        <Text >
-          {questionData.question}
-        </Text>
+
+        <Text>{questionData.question}</Text>
         <Button
           appearance="ghost"
           status="basic"
@@ -184,21 +146,25 @@ function SubmitQuestion() {
           Submit Question
         </Text>
       </View>
-      
+
+
+    <Text category="h6" style={styles.title}>
+      Question Type:
+      {type}
+    </Text>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.content}>
-
-
-
-        <View style={styles.imageContainer}>
-          <Text style={styles.uploadFileText} category="h6">Upload a file</Text>
-          
-              <Button onPress={pickImage}>
-                Choose a image to upload
-              </Button>
-              {imgFile && <Image source={{ uri: imgFile }} style={styles.image} />}
-            </View>
-
+      <View style={styles.content}>
+        <Text>{questionData.question}</Text>
+        
+        {type === "ShortAns" && (
+          <View style={styles.imageContainer}>
+            <Text style={styles.uploadFileText} category="h6">
+              Upload a file
+            </Text>
+            <Button onPress={pickImage}>Choose an image to upload</Button>
+            {imgFile && (
+              <Image source={{ uri: imgFile }} style={styles.image} />
+            )}
             <Input
               placeholder="Enter your answer here"
               multiline={true}
@@ -207,32 +173,31 @@ function SubmitQuestion() {
               style={styles.textInput}
               textStyle={{ minHeight: 64 }}
             />
-            {type === "MCQ" && (
-              <View style={styles.radioGroup}>
-                <Text category="h6">Select the correct answer</Text>
-                <RadioGroup
-                  selectedIndex={correctAns}
-                  onChange={(index) => setCorrectAns(index)}
-                >
-                  <Radio>{opt1}</Radio>
-                  <Radio>{opt2}</Radio>
-                  <Radio>{opt3}</Radio>
-                </RadioGroup>
-              </View>
-            )}
+          </View>
+        )}
 
-          <Button 
-            onPress={() => handleSubmit()} 
-            style={styles.submitButton}
-          >
-            Submit Question
-          </Button>
-        </View>
-      </ScrollView>
+        {type === "MCQ" && (
+          <View style={styles.radioGroup}>
+            <Text category="h6">Select the correct answer</Text>
+            <RadioGroup
+              selectedIndex={answer}
+              onChange={(index) => setAnswer(index)}
+            >
+              <Radio>{opt1}</Radio>
+              <Radio>{opt2}</Radio>
+              <Radio>{opt3}</Radio>
+            </RadioGroup>
+          </View>
+        )}
+
+        <Button onPress={() => handleSubmit()} style={styles.submitButton}>
+          Submit Question
+        </Button>
+      </View>
+    </ScrollView>
     </Layout>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -240,8 +205,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
   },
   backButton: {
@@ -254,31 +219,31 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingBottom: 20,
   },
   radioGroup: {
     marginBottom: 20,
-    width: '100%',
+    width: "100%",
   },
   textInput: {
-    width: '100%',
+    width: "100%",
     marginBottom: 20,
   },
   imageContainer: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     marginBottom: 20,
   },
   image: {
     width: 300,
     height: 225,
     marginTop: 10,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   submitButton: {
     marginTop: 20,
-    width: '100%',
+    width: "100%",
   },
   uploadFileText: {
     marginBottom: 20,
