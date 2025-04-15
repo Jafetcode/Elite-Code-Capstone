@@ -65,72 +65,72 @@ const Assigning = () => {
     }, []);
 
 
-    const toggleClassSelection = (classId) => {
-        setSelectedClasses(prev => {
-            const newClassSelection = { ...prev, [classId]: !prev[classId] };
-            const classStudents = classes.find(c => c.cid === classId)?.students || [];
+    // const toggleClassSelection = (classId) => {
+    //     setSelectedClasses(prev => {
+    //         const newClassSelection = { ...prev, [classId]: !prev[classId] };
+    //         const classStudents = classes.find(c => c.cid === classId)?.students || [];
 
-            setSelectedStudents(prevStudents => {
-                const newStudentSelection = { ...prevStudents };
-                classStudents.forEach(student => {
-                    newStudentSelection[student.userID] = newClassSelection[classId]; 
-                });
-                return newStudentSelection;
-            });
+    //         setSelectedStudents(prevStudents => {
+    //             const newStudentSelection = { ...prevStudents };
+    //             classStudents.forEach(student => {
+    //                 newStudentSelection[student.userID] = newClassSelection[classId];
+    //             });
+    //             return newStudentSelection;
+    //         });
 
-            return newClassSelection;
-        });
-    };
-
-
-    const toggleStudentSelection = (studentId, classId) => {
-        setSelectedStudents(prev => {
-            const newSelection = { ...prev };
-            newSelection[studentId] = !prev[studentId];
-
-            // Uncheck the class if it was selected
-            setSelectedClasses(prevClasses => ({
-                ...prevClasses,
-                [classId]: false
-            }));
-
-            return newSelection;
-        });
-    };
+    //         return newClassSelection;
+    //     });
+    // };
 
 
-    // Toggle class expansion (show/hide students)
-    const toggleClassExpansion = (classId) => {
-        setExpandedClasses(prev => ({
-            ...prev,
-            [classId]: !prev[classId]
-        }));
-    };
+    // const toggleStudentSelection = (studentId, classId) => {
+    //     setSelectedStudents(prev => {
+    //         const newSelection = { ...prev };
+    //         newSelection[studentId] = !prev[studentId];
 
-    const getSelectedItems = () => {
-        const selectedStudentsCopy = { ...selectedStudents }; // clone to safely modify
-        const finalSelectedClasses = new Set();
+    //         // Uncheck the class if it was selected
+    //         setSelectedClasses(prevClasses => ({
+    //             ...prevClasses,
+    //             [classId]: false
+    //         }));
 
-        classes.forEach(classItem => {
-            const students = classItem.students;
-            const allSelected = students.length > 0 && students.every(
-                s => selectedStudentsCopy[s.userID]
-            );
+    //         return newSelection;
+    //     });
+    // };
 
-            // if (allSelected) {
-            //     finalSelectedClasses.add(classItem.cid);
-            //     // Remove these students so we don't double assign
-            //     students.forEach(s => delete selectedStudentsCopy[s.userID]);
-            // }
-        });
 
-        const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
+    // // Toggle class expansion (show/hide students)
+    // const toggleClassExpansion = (classId) => {
+    //     setExpandedClasses(prev => ({
+    //         ...prev,
+    //         [classId]: !prev[classId]
+    //     }));
+    // };
 
-        return {
-            classes: Array.from(finalSelectedClasses),
-            students: finalSelectedStudents,
-        };
-    };
+    // const getSelectedItems = () => {
+    //     const selectedStudentsCopy = { ...selectedStudents }; // clone to safely modify
+    //     const finalSelectedClasses = new Set();
+
+    //     classes.forEach(classItem => {
+    //         const students = classItem.students;
+    //         const allSelected = students.length > 0 && students.every(
+    //             s => selectedStudentsCopy[s.userID]
+    //         );
+
+    //         // if (allSelected) {
+    //         //     finalSelectedClasses.add(classItem.cid);
+    //         //     // Remove these students so we don't double assign
+    //         //     students.forEach(s => delete selectedStudentsCopy[s.userID]);
+    //         // }
+    //     });
+
+    //     const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
+
+    //     return {
+    //         classes: Array.from(finalSelectedClasses),
+    //         students: finalSelectedStudents,
+    //     };
+    // };
 
 
     const renderToggleIcon = (props, isExpanded) => (
@@ -138,17 +138,89 @@ const Assigning = () => {
     );
 
 
+    // const handleSave = async () => {
+    //     const selectedItems = getSelectedItems();
+    //     setLoading(true);
+
+    //     if (selectedItems.classes.length === 0 && selectedItems.students.length === 0) {
+    //         setMessage("No selections made — not updating.");
+    //         setTimeout(() => {
+    //             setMessage('');
+    //             navigation.goBack();
+    //         }, 2000);
+    //     }
+
+    //     try {
+    //         const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({
+    //                 qid: question.qid,
+    //                 courses: selectedItems.classes,
+    //                 students: selectedItems.students,
+    //                 tid: user.userID
+    //             })
+    //         });
+
+    //         const text = await response.text(); //  First, read as text
+    //         let result;
+    //         try {
+    //             result = JSON.parse(text); //  Then, try parsing JSON manually
+    //         } catch (parseErr) {
+    //             console.error("Failed to parse JSON:", parseErr);
+    //             console.log("Raw response text:", text); // This will show you what the server actually sent back
+    //             setMessage("Server error: invalid response");
+    //             return;
+    //         }
+
+    //         if (result.message === "Question assignments updated successfully.") {
+    //             setMessage(" Assignments updated!");
+    //             setTimeout(() => {
+    //                 setMessage('');
+    //                 navigation.goBack();
+    //             }, 2000);
+    //         } else if (result.message === "No changes made"){
+    //             setMessage("No changes made")
+    //             setTimeout(() => {
+    //                 setMessage('');
+    //                 navigation.goBack();
+    //             }, 2000);
+    //         }
+    //         else {
+    //             console.log(result.message);
+    //             setMessage("Error: Failed to update assignments.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Unexpected error:", error);
+    //         setMessage("Error: saving assignments.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSave = async () => {
         const selectedItems = getSelectedItems();
         setLoading(true);
 
+        // Handle case where no items are selected
         if (selectedItems.classes.length === 0 && selectedItems.students.length === 0) {
             setMessage("No selections made — not updating.");
             setTimeout(() => {
                 setMessage('');
                 navigation.goBack();
             }, 2000);
+            return;
         }
+
+        // Prepare body data for request
+        const requestData = {
+            qid: question.qid,
+            courses: selectedItems.classes,
+            students: selectedItems.students,
+            tid: user.userID,
+        };
 
         try {
             const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
@@ -156,40 +228,32 @@ const Assigning = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    qid: question.qid,
-                    courses: selectedItems.classes,
-                    students: selectedItems.students,
-                    tid: user.userID
-                })
+                body: JSON.stringify(requestData)
             });
 
-            const text = await response.text(); //  First, read as text
+            const text = await response.text(); // Read the response text
             let result;
+
+            // Parse the response as JSON
             try {
-                result = JSON.parse(text); //  Then, try parsing JSON manually
+                result = JSON.parse(text);
             } catch (parseErr) {
                 console.error("Failed to parse JSON:", parseErr);
-                console.log("Raw response text:", text); // This will show you what the server actually sent back
+                console.log("Raw response text:", text);
                 setMessage("Server error: invalid response");
                 return;
             }
 
-            if (result.message === "Question assignments updated successfully.") {
-                setMessage(" Assignments updated!");
+            // Handle responses based on the backend logic
+            if (result.message === "Question assigned successfully.") {
+                setMessage("Assignments updated!");
                 setTimeout(() => {
                     setMessage('');
                     navigation.goBack();
                 }, 2000);
-            } else if (result.message === "No changes made"){
-                setMessage("No changes made")
-                setTimeout(() => {
-                    setMessage('');
-                    navigation.goBack();
-                }, 2000);
-            }
-            else {
-                console.log(result.message);
+            } else if (result.message === "No changes made") {
+                setMessage("No changes made.");
+            } else {
                 setMessage("Error: Failed to update assignments.");
             }
         } catch (error) {
@@ -200,6 +264,43 @@ const Assigning = () => {
         }
     };
 
+    // const renderStudentItem = (student, classId) => (
+    //     <ListItem
+    //         key={student.userID}
+    //         title={`${student.fname} ${student.lname}`}
+    //         accessoryLeft={(props) => (
+    //             <CheckBox
+    //                 {...props}
+    //                 checked={selectedStudents[student.userID] || false}
+    //                 onChange={() => toggleStudentSelection(student.userID, classId)}
+    //             />
+    //         )}
+    //     />
+    // );
+
+    const getSelectedItems = () => {
+        const selectedClasses = Object.keys(selectedClassesState).filter(classId => selectedClassesState[classId]);
+        const selectedStudents = Object.keys(selectedStudentsState).filter(studentId => selectedStudentsState[studentId]);
+        return {
+            classes: selectedClasses,
+            students: selectedStudents,
+        };
+    };
+
+    const renderClassItem = (classId) => (
+        <ListItem
+            key={classId}
+            title={`Class ${classId}`}
+            accessoryLeft={(props) => (
+                <CheckBox
+                    {...props}
+                    checked={selectedClassesState[classId] || false}
+                    onChange={() => toggleClassSelection(classId)}
+                />
+            )}
+        />
+    );
+
     const renderStudentItem = (student, classId) => (
         <ListItem
             key={student.userID}
@@ -207,12 +308,42 @@ const Assigning = () => {
             accessoryLeft={(props) => (
                 <CheckBox
                     {...props}
-                    checked={selectedStudents[student.userID] || false}
+                    checked={selectedStudentsState[student.userID] || false}
                     onChange={() => toggleStudentSelection(student.userID, classId)}
                 />
             )}
         />
     );
+
+    const toggleClassSelection = (classId) => {
+        setSelectedClassesState(prevState => ({
+            ...prevState,
+            [classId]: !prevState[classId],
+        }));
+    };
+
+    const toggleStudentSelection = (studentId, classId) => {
+        // Ensure students selected from a class are handled correctly
+        setSelectedStudentsState(prevState => ({
+            ...prevState,
+            [studentId]: !prevState[studentId],
+        }));
+
+        // If a class is selected, prevent individual student assignment for that class
+        if (selectedClassesState[classId]) {
+            // Remove any students that were manually selected in that class
+            setSelectedStudentsState(prevState => {
+                const newState = { ...prevState };
+                const classStudents = studentsInClass[classId]; // Assume this maps to the students in the class
+                classStudents.forEach(student => {
+                    if (newState[student.userID]) {
+                        delete newState[student.userID];
+                    }
+                });
+                return newState;
+            });
+        }
+    };
 
     return (
         <Layout style={styles.container}>
@@ -283,16 +414,16 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
     },
-    heading: { marginBottom: 8,},
-    subHeading: { marginBottom: 16,},
+    heading: { marginBottom: 8, },
+    subHeading: { marginBottom: 16, },
     classesContainer: { flex: 1, },
-    classCard: { marginBottom: 16,},
+    classCard: { marginBottom: 16, },
     classHeader: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    checkbox: {  marginRight: 8, },
+    checkbox: { marginRight: 8, },
     className: {
         flex: 1,
         fontSize: 12

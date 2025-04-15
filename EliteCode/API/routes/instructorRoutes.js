@@ -177,84 +177,171 @@ router.get('/getCourses', (req, res) => {
 //   });
 // });
 
+// router.post('/updateAssignments', (req, res) => {
+//   const { qid, courses = [], students = [], tid } = req.body;
+
+//   // Fetch existing class assignments
+//   const fetchClassAssignments = 'SELECT cid FROM AssignedToClass WHERE qid = ?';
+//   db.query(fetchClassAssignments, [qid], (err, classResults) => {
+//     if (err) {
+//       console.error("Error fetching class assignments:", err);
+//       return res.status(500).json({ message: "Error fetching class assignments" });
+//     }
+
+//     const existingCids = classResults.map(r => r.cid);
+//     const cidsToDelete = existingCids.filter(cid => !courses.includes(cid));
+//     const cidsToInsert = courses.filter(cid => !existingCids.includes(cid));
+
+//     const classDeletePromises = cidsToDelete.map(cid => {
+//       return new Promise((resolve, reject) => {
+//         db.query('DELETE FROM AssignedToClass WHERE qid = ? AND cid = ? AND tid = ?', [qid, cid, tid], (err) => {
+//           if (err) reject(err);
+//           else resolve();
+//         });
+//       });
+//     });
+
+//     const classInsertPromises = cidsToInsert.map(cid => {
+//       return new Promise((resolve, reject) => {
+//         db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) => {
+//           if (err) reject(err);
+//           else resolve();
+//         });
+//       });
+//     });
+
+//     // Fetch students enrolled in selected classes
+//     const placeholders = courses.length > 0 ? courses.map(() => '?').join(',') : '-1';
+//     const fetchStudentsInClasses = `SELECT DISTINCT sid FROM Enrolled WHERE cid IN (${placeholders})`;
+
+//     db.query(fetchStudentsInClasses, courses, (err, classStudentResults) => {
+//       if (err) {
+//         console.error("Error fetching students in classes:", err);
+//         return res.status(500).json({ message: "Error fetching students in selected classes" });
+//       }
+
+//       const studentsInClassesSet = new Set(classStudentResults.map(row => row.sid));
+
+//       // Filter out students already in selected classes
+//       const filteredStudents = students.filter(sid => !studentsInClassesSet.has(sid));
+
+//       // Fetch existing individual student assignments
+//       const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
+//       db.query(fetchStudentAssignments, [qid], (err, studentResults) => {
+//         if (err) {
+//           console.error("Error fetching student assignments:", err);
+//           return res.status(500).json({ message: "Error fetching student assignments" });
+//         }
+
+//         const existingSids = studentResults.map(r => r.sid);
+//         const sidsToDelete = existingSids.filter(sid => !filteredStudents.includes(sid));
+//         const sidsToInsert = filteredStudents.filter(sid => !existingSids.includes(sid));
+
+//         const studentDeletePromises = sidsToDelete.map(sid => {
+//           return new Promise((resolve, reject) => {
+//             db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND sid = ?', [qid, sid], (err) => {
+//               if (err) reject(err);
+//               else resolve();
+//             });
+//           });
+//         });
+
+//         const studentInsertPromises = sidsToInsert.map(sid => {
+//           return new Promise((resolve, reject) => {
+//             db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) => {
+//               if (err) reject(err);
+//               else resolve();
+//             });
+//           });
+//         });
+
+//         if (
+//           cidsToDelete.length === 0 &&
+//           cidsToInsert.length === 0 &&
+//           sidsToDelete.length === 0 &&
+//           sidsToInsert.length === 0
+//         ) {
+//           return res.json({ message: "No changes made" });
+//         }
+//         // Finalize all insertions and deletions
+//         Promise.all([
+//           ...classDeletePromises,
+//           ...classInsertPromises,
+//           ...studentDeletePromises,
+//           ...studentInsertPromises
+//         ])
+//           .then(() => {
+//             res.json({ message: "Question assignments updated successfully." });
+//           })
+//           .catch(error => {
+//             console.error("Error updating assignments:", error);
+//             res.status(500).json({ message: "Error updating assignments" });
+//           });
+//       });
+//     });
+//   });
+// });
+
 router.post('/updateAssignments', (req, res) => {
   const { qid, courses = [], students = [], tid } = req.body;
 
-  // Fetch existing class assignments
+  // Fetch class assignments
   const fetchClassAssignments = 'SELECT cid FROM AssignedToClass WHERE qid = ?';
   db.query(fetchClassAssignments, [qid], (err, classResults) => {
-    if (err) {
-      console.error("Error fetching class assignments:", err);
-      return res.status(500).json({ message: "Error fetching class assignments" });
-    }
+    if (err) return res.status(500).json({ message: "Error fetching class assignments" });
 
     const existingCids = classResults.map(r => r.cid);
     const cidsToDelete = existingCids.filter(cid => !courses.includes(cid));
     const cidsToInsert = courses.filter(cid => !existingCids.includes(cid));
 
-    const classDeletePromises = cidsToDelete.map(cid => {
-      return new Promise((resolve, reject) => {
-        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND cid = ? AND tid = ?', [qid, cid, tid], (err) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
-    });
+    const classDeletePromises = cidsToDelete.map(cid =>
+      new Promise((resolve, reject) =>
+        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND cid = ? AND tid = ?', [qid, cid, tid], (err) =>
+          err ? reject(err) : resolve()
+        )
+      )
+    );
 
-    const classInsertPromises = cidsToInsert.map(cid => {
-      return new Promise((resolve, reject) => {
-        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) => {
-          if (err) reject(err);
-          else resolve();
-        });
-      });
-    });
+    const classInsertPromises = cidsToInsert.map(cid =>
+      new Promise((resolve, reject) =>
+        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) =>
+          err ? reject(err) : resolve()
+        )
+      )
+    );
 
-    // Fetch students enrolled in selected classes
-    const placeholders = courses.length > 0 ? courses.map(() => '?').join(',') : '-1';
-    const fetchStudentsInClasses = `SELECT DISTINCT sid FROM Enrolled WHERE cid IN (${placeholders})`;
+    // Fetch students in selected classes
+    const fetchStudentsInClasses = 'SELECT sid FROM Enrolled WHERE cid IN (?)';
+    const courseIdsToCheck = courses.length > 0 ? courses : [-1];
+    db.query(fetchStudentsInClasses, [courseIdsToCheck], (err, classStudentResults) => {
+      if (err) return res.status(500).json({ message: "Error fetching students in selected classes" });
 
-    db.query(fetchStudentsInClasses, courses, (err, classStudentResults) => {
-      if (err) {
-        console.error("Error fetching students in classes:", err);
-        return res.status(500).json({ message: "Error fetching students in selected classes" });
-      }
+      const studentsInClasses = classStudentResults.map(r => r.sid);
+      const filteredStudents = students.filter(sid => !studentsInClasses.includes(sid));
 
-      const studentsInClassesSet = new Set(classStudentResults.map(row => row.sid));
-
-      // Filter out students already in selected classes
-      const filteredStudents = students.filter(sid => !studentsInClassesSet.has(sid));
-
-      // Fetch existing individual student assignments
-      const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
-      db.query(fetchStudentAssignments, [qid], (err, studentResults) => {
-        if (err) {
-          console.error("Error fetching student assignments:", err);
-          return res.status(500).json({ message: "Error fetching student assignments" });
-        }
+      // Fetch existing student assignments
+      db.query('SELECT sid FROM AssignedToStudent WHERE qid = ?', [qid], (err, studentResults) => {
+        if (err) return res.status(500).json({ message: "Error fetching student assignments" });
 
         const existingSids = studentResults.map(r => r.sid);
         const sidsToDelete = existingSids.filter(sid => !filteredStudents.includes(sid));
         const sidsToInsert = filteredStudents.filter(sid => !existingSids.includes(sid));
 
-        const studentDeletePromises = sidsToDelete.map(sid => {
-          return new Promise((resolve, reject) => {
-            db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND sid = ?', [qid, sid], (err) => {
-              if (err) reject(err);
-              else resolve();
-            });
-          });
-        });
+        const studentDeletePromises = sidsToDelete.map(sid =>
+          new Promise((resolve, reject) =>
+            db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND sid = ?', [qid, sid], (err) =>
+              err ? reject(err) : resolve()
+            )
+          )
+        );
 
-        const studentInsertPromises = sidsToInsert.map(sid => {
-          return new Promise((resolve, reject) => {
-            db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) => {
-              if (err) reject(err);
-              else resolve();
-            });
-          });
-        });
-
+        const studentInsertPromises = sidsToInsert.map(sid =>
+          new Promise((resolve, reject) =>
+            db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) =>
+              err ? reject(err) : resolve()
+            )
+          )
+        );
         if (
           cidsToDelete.length === 0 &&
           cidsToInsert.length === 0 &&
@@ -263,7 +350,8 @@ router.post('/updateAssignments', (req, res) => {
         ) {
           return res.json({ message: "No changes made" });
         }
-        // Finalize all insertions and deletions
+
+        // Execute all queries
         Promise.all([
           ...classDeletePromises,
           ...classInsertPromises,
@@ -271,7 +359,9 @@ router.post('/updateAssignments', (req, res) => {
           ...studentInsertPromises
         ])
           .then(() => {
-            res.json({ message: "Question assignments updated successfully." });
+            const noChanges = cidsToDelete.length === 0 && cidsToInsert.length === 0 &&
+              sidsToDelete.length === 0 && sidsToInsert.length === 0;
+            return res.json({ message: noChanges ? "No changes made" : "Question assigned successfully." });
           })
           .catch(error => {
             console.error("Error updating assignments:", error);
@@ -281,7 +371,6 @@ router.post('/updateAssignments', (req, res) => {
     });
   });
 });
-
 
 
 router.get('/submission', (req, res) => {
