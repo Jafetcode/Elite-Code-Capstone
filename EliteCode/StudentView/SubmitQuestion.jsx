@@ -34,7 +34,7 @@ function SubmitQuestion() {
   const [questionData, setQuestionData] = React.useState([]);
   const route = useRoute();
   const { user } = useAuth() || {};
-  const { cid, qid, type } = route.params || {};
+  const { cid, qid, type , opt1, opt2, opt3 } = route.params || {};
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -93,6 +93,7 @@ function SubmitQuestion() {
       formData.append("progress", progress);
       formData.append("submitted_on", submitted_on);
       formData.append("cid", cid);
+      formData.append("answer", answer);
 
       if (imgFile) {
         const filename = imgFile.split("/").pop();
@@ -206,6 +207,19 @@ function SubmitQuestion() {
               style={styles.textInput}
               textStyle={{ minHeight: 64 }}
             />
+            {type === "MCQ" && (
+              <View style={styles.radioGroup}>
+                <Text category="h6">Select the correct answer</Text>
+                <RadioGroup
+                  selectedIndex={correctAns}
+                  onChange={(index) => setCorrectAns(index)}
+                >
+                  <Radio>{opt1}</Radio>
+                  <Radio>{opt2}</Radio>
+                  <Radio>{opt3}</Radio>
+                </RadioGroup>
+              </View>
+            )}
 
           <Button 
             onPress={() => handleSubmit()} 

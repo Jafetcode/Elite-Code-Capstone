@@ -183,7 +183,7 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-  SELECT DISTINCT q.*
+  SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
   FROM Questions q
   INNER JOIN AssignedToClass atc ON q.qid = atc.qid
   INNER JOIN Enrolled e ON atc.cid = e.cid
@@ -194,7 +194,7 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
 `;
 
 const studentSql = `
-  SELECT DISTINCT q.*
+  SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
   FROM Questions q
   INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
   INNER JOIN Enrolled e ON ats.sid = e.sid
@@ -223,7 +223,7 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
@@ -234,7 +234,7 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
     INNER JOIN Enrolled e ON ats.sid = e.sid
