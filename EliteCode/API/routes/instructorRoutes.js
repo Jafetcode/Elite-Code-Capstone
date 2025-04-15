@@ -105,7 +105,7 @@ router.post('/updateAssignments', (req, res) => {
 
     const classInsertPromises = cidsToInsert.map(cid => {
       return new Promise((resolve, reject) => {
-        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?)', [qid, cid], (err) => {
+        db.query('INSERT INTO AssignedToClass (qid, cid) VALUES (?, ?)', [qid, cid], (err) => {
           if (err) reject(err);
           else resolve();
         });
