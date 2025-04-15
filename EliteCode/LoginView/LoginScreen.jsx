@@ -1,17 +1,15 @@
 import * as React from 'react';
-import {Text,  StyleSheet,View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import { Button, Layout, Input, Divider, Icon} from '@ui-kitten/components';
+import { Text, StyleSheet, View, Alert, Image, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Button, Layout, Input, Icon } from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 import { ApplicationProvider, theme } from '@ui-kitten/components';
-import {useAuth} from '../AuthContext';
-
+import { useAuth } from '../AuthContext';
 
 function LoginScreen() {
   const navigation = useNavigation();
-  const {login, user} = useAuth();
+  const { login, user } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -24,144 +22,149 @@ function LoginScreen() {
     }
   };
 
-
   useEffect(() => {
     if (user) {
       if (user.role === 'teacher') {
-        navigation.reset({
-          index: 0,
-          routes: [{name:'TeacherHome'}],
-        });
+        navigation.reset({ index: 0, routes: [{ name: 'TeacherHome' }] });
       } else if (user.role === 'student') {
-        navigation.reset({
-          index: 0,
-          routes: [{name:'StudentHome'}],
-        });
+        navigation.reset({ index: 0, routes: [{ name: 'StudentHome' }] });
       }
     }
   }, [user, navigation]);
 
   const renderEyeIcon = (props) => (
-    <Icon
-      {...props}
-      name={showPassword ? 'eye-off' : 'eye'}
-      onPress={() => setShowPassword(!showPassword)}
-    />
+    <Icon {...props} name={showPassword ? 'eye-off' : 'eye'} onPress={() => setShowPassword(!showPassword)} />
   );
-
 
   return (
-    <Layout style={styles.container}>
-      
-      <Divider />
-      <View style={styles.inputContainer}>
-        <Text
-          style={styles.innerText}
-          category='H1'
-        >Login</Text>
-        <Input
-          style={styles.inputs}
-          label='Email'
-          placeholder='Enter Email'
-          value={email}
-          autoCapitalize='none'
-          onChangeText={nextEmail => setEmail(nextEmail)} />
-     <Input
-          style={styles.inputs}
-          label='Password'
-          placeholder='Enter Password'
-          value={password}
-          secureTextEntry={!showPassword}
-          accessoryRight={renderEyeIcon} 
-          onChangeText={nextPassword => setPassword(nextPassword)}
-        />
+    <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+      <Layout style={styles.container}>
+        <ScrollView contentContainerStyle={styles.contentWrapper} showsVerticalScrollIndicator={false}>
+          
+          <Image
+            source={require("../assets/images/welcomeBack.png")}
+            style={{ width: 200, height: 200, marginTop: -30, marginBottom: 10, alignSelf: 'center' }}
+          />
 
-        <Text style={styles.resetLink} onPress= {() => navigation.navigate('ResetPassword')}> Forgot Password? </Text>
-        
-        <Button style={styles.submit} onPress={handleLogin}>
-          Submit
-        </Button>
-      </View>
-      <View style={styles.tempButtons}>
-        {/* <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-          Skip to Home
-        </Button> */}
-        <Button onPress={() => navigation.navigate('FirstScreen')}> Back to First Screen </Button>
-      </View>
-    </Layout>
+          <View style={styles.card}>
+            <Text style={styles.subtitle}>Please log in to continue</Text>
+
+            <Input
+              style={styles.input}
+              textStyle={{ color: 'white' }}
+              label='Email'
+              placeholder='Enter Email'
+              placeholderTextColor="#7A8CA0"
+              value={email}
+              autoCapitalize='none'
+              onChangeText={setEmail}
+            />
+
+            <Input
+              style={styles.input}
+              textStyle={{ color: 'white' }}
+              label='Password'
+              placeholder='Enter Password'
+              placeholderTextColor="#7A8CA0"
+              value={password}
+              secureTextEntry={!showPassword}
+              accessoryRight={renderEyeIcon}
+              onChangeText={setPassword}
+            />
+
+            <Text style={styles.resetLink} onPress={() => navigation.navigate('ResetPassword')}>
+              Forgot Password?
+            </Text>
+
+            <Button style={styles.loginButton} onPress={handleLogin}>
+              Submit
+            </Button>
+          </View>
+
+          <Button appearance="ghost" style={styles.backButton} onPress={() => navigation.navigate('FirstScreen')}>
+            Back to First Screen
+          </Button>
+
+          <View style={styles.footerContainer}>
+                  <Text style={styles.footerLine1}>Stay curious. Stay coding.</Text>
+                  <Text style={styles.footerLine2}>EliteCode © 2025 — Red Panda Studios</Text>
+                </View>
+
+        </ScrollView>
+      </Layout>
+    </ApplicationProvider>
   );
 }
-
-
-export default () => (
-  <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <LoginScreen />
-    </Layout>
-  </ApplicationProvider>
-);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#2C496B',
+    paddingHorizontal: 20,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 40,
-    paddingHorizontal: 10,
-    height: 80,
-  },
-  headerText: {
-    flex: 1,
-    textAlign: "center",
-    paddingRight: 50,
-    color: 'white',
-  },
-  backButton: {
-    width: 40,
-  },
-  inputContainer: {
-    flexDirection: 'column',
-    backgroundColor: '#526F8C',
-    borderRadius: 10,
-    width: 300,
-    height: 300,
+  contentWrapper: {
+    flexGrow: 1,
     justifyContent: 'center',
-    alignItems:'center', 
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  card: {
+    marginTop: -25,
+    width: '90%',
+    maxWidth: 350,
+    backgroundColor: '#1E2A38',
+    borderRadius: 15,
+    padding: 20,
+    borderColor: '#334154',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
     alignSelf: 'center',
-    marginTop: 'auto',
-    marginBottom: 'auto'
   },
-  outerText: {
-    fontSize: 20,
-    color: 'white',
+  subtitle: {
+    fontSize: 14,
+    color: '#A9B7C6',
+    marginBottom: 20,
+    textAlign: 'center',
   },
-  innerText: {
-    flexDirection: 'column',
-    margin: 2,
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
-    marginBottom: 10,
+  input: {
+    backgroundColor: '#253243',
+    borderRadius: 10,
+    marginBottom: 12,
   },
-  inputs: {
-    width: 250,
-  },
-  tempButtons: {
-    marginTop: 50,
-  },
-    submit: {
-    position: 'relative',
-    marginTop: 20,
+  loginButton: {
+    backgroundColor: '#3A4B5C',
+    borderRadius: 10,
+    marginTop: 10,
   },
   resetLink: {
-    fontSize : 14,
-    color: "white",
-    paddingTop: 10,
-    alignSelf: "flex-end",
-    paddingRight: 25,
-    fontWeight: 600
-  }
-    
-  });
+    fontSize: 14,
+    color: '#A9B7C6',
+    textAlign: 'right',
+    paddingRight: 4,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 20,
+    alignItems: 'center',
+  },
+  backButton: {
+    marginTop: -5,
+  },
+  footerLine1: {
+    color: '#A9B7C6',
+    fontSize: 12,
+    marginBottom: 2,
+  },
+  footerLine2: {
+    color: '#A9B7C6',
+    fontSize: 12,
+    opacity: 0.7,
+  },
+});
+
+export default LoginScreen;
