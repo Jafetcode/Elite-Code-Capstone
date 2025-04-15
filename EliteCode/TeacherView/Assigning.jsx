@@ -68,7 +68,6 @@ const Assigning = () => {
     const toggleClassSelection = (classId) => {
         setSelectedClasses(prev => {
             const newClassSelection = { ...prev, [classId]: !prev[classId] };
-
             const classStudents = classes.find(c => c.cid === classId)?.students || [];
 
             setSelectedStudents(prevStudents => {
@@ -118,11 +117,11 @@ const Assigning = () => {
                 s => selectedStudentsCopy[s.userID]
             );
 
-            if (allSelected) {
-                finalSelectedClasses.add(classItem.cid);
-                // Remove these students so we don't double assign
-                students.forEach(s => delete selectedStudentsCopy[s.userID]);
-            }
+            // if (allSelected) {
+            //     finalSelectedClasses.add(classItem.cid);
+            //     // Remove these students so we don't double assign
+            //     students.forEach(s => delete selectedStudentsCopy[s.userID]);
+            // }
         });
 
         const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
@@ -182,13 +181,16 @@ const Assigning = () => {
                     setMessage('');
                     navigation.goBack();
                 }, 2000);
-            } else {
+            } else if (result.message === "No changes made"){
+                setMessage("No changes made")
+            }
+            else {
                 console.log(result.message);
-                setMessage("Failed to update assignments.");
+                setMessage("Error: Failed to update assignments.");
             }
         } catch (error) {
             console.error("Unexpected error:", error);
-            setMessage("Error saving assignments.");
+            setMessage("Error: saving assignments.");
         } finally {
             setLoading(false);
         }
@@ -215,7 +217,7 @@ const Assigning = () => {
                 Select classes or specific students
             </Text>
             {message !== '' && (
-                <Text style={{ textAlign: 'center', color: message.includes("") ? 'green' : 'red', marginVertical: 10 }}>
+                <Text style={{ textAlign: 'center', color: message.includes("Error") ? 'red' : 'green', marginVertical: 10 }}>
                     {message}
                 </Text>
             )}
