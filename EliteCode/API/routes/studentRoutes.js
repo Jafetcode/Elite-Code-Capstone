@@ -232,14 +232,15 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
 });
 
 router.get('/submission', (req, res) => {
-  const sid = req.params.sid;
-  const qid = req.params.qid;
+  const sid = req.query.sid;
+  const qid = req.query.qid;
   const sql = 'SELECT * FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;';
 
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    console.log(results);
     res.json(results);
   });
 
