@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { Layout, Icon, Button, Card, Text, CheckBox, List, ListItem, Divider } from "@ui-kitten/components";
 import { useAuth } from "../AuthContext";
 import { QueryEndAtConstraint } from "firebase/firestore";
+import { router } from "expo-router";
 
 const Assigning = () => {
     const route = useRoute();
@@ -13,6 +14,9 @@ const Assigning = () => {
     const [selectedClasses, setSelectedClasses] = useState({});
     const [expandedClasses, setExpandedClasses] = useState({});
     const [selectedStudents, setSelectedStudents] = useState({});
+
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     // Fetch courses and current assignments
     const fetchCoursesAndAssignments = async () => {
@@ -106,12 +110,30 @@ const Assigning = () => {
     };
 
     // Get all selected items for submission
+    // const getSelectedItems = () => {
+    //     const selectedItems = {
+    //         classes: Object.keys(selectedClasses).filter(classId => selectedClasses[classId]),
+    //         students: Object.keys(selectedStudents).filter(studentId => selectedStudents[studentId])
+    //     };
+    //     return selectedItems;
+    // };
     const getSelectedItems = () => {
-        const selectedItems = {
-            classes: Object.keys(selectedClasses).filter(classId => selectedClasses[classId]),
-            students: Object.keys(selectedStudents).filter(studentId => selectedStudents[studentId])
+        const selectedClassesSet = new Set(Object.keys(selectedClasses).filter(cid => selectedClasses[cid]));
+        const selectedStudentsArray = Object.keys(selectedStudents).filter(sid => {
+            // Check if this student is in a selected class
+            for (const classItem of classes) {
+                if (selectedClassesSet.has(classItem.cid)) {
+                    const studentInClass = classItem.students.find(s => s.userID === sid);
+                    if (studentInClass) return false; // skip this student
+                }
+            }
+            return selectedStudents[sid];
+        });
+
+        return {
+            classes: Array.from(selectedClassesSet),
+            students: selectedStudentsArray,
         };
-        return selectedItems;
     };
 
     const renderToggleIcon = (props, isExpanded) => (
@@ -119,8 +141,53 @@ const Assigning = () => {
     );
 
     // Handle assignment save
+    // const handleSave = async () => {
+    //     const selectedItems = getSelectedItems();
+    //     try {
+    //         const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({
+    //                 qid: question.qid,
+    //                 courses: selectedItems.classes,
+    //                 students: selectedItems.students,
+    //                 tid: user.userID
+    //             })
+    //         });
+
+    //         //     const result = await response.json();
+    //         //     if (result.message === "Question assigned successfully") {
+    //         //         alert("Assignments updated!");
+    //         //     } else {
+    //         //         console.log(result.message)
+    //         //         alert("Failed to update assignments.");
+    //         //     }
+    //         // } catch (error) {
+    //         //     console.error("Error saving assignments:", error);
+    //         // }
+
+    //         const result = await response.json();
+    //         if (result.message === "Question assigned successfully") {
+    //             setMessage("Assignments updated!");
+
+    //             setTimeout(() => {
+    //                 router.back();
+    //             }, 3000);
+    //         } else {
+    //             console.log(result.message);
+    //             setMessage("Failed to update assignments.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error saving assignments:", error);
+    //         setMessage("Error saving assignments.");
+    //     }
+    // };
+
     const handleSave = async () => {
         const selectedItems = getSelectedItems();
+        setLoading(true);
         try {
             const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
                 method: 'POST',
@@ -129,20 +196,28 @@ const Assigning = () => {
                 },
                 body: JSON.stringify({
                     qid: question.qid,
-                    courses: selectedClasses,
-                    students: selectedStudents,
+                    courses: selectedItems.classes,
+                    students: selectedItems.students,
                     tid: user.userID
                 })
             });
 
             const result = await response.json();
-            if (result.message === "Assignments updated successfully") {
-                alert("Assignments updated!");
+            if (result.message === "Question assigned successfully") {
+                setMessage("Assignments updated!");
+                setTimeout(() => {
+                    setMessage('');
+                    router.back(); // Go back after showing message
+                }, 3000); // 2 seconds feels good
             } else {
-                alert("Failed to update assignments.");
+                console.log(result.message);
+                setMessage("Failed to update assignments.");
             }
         } catch (error) {
             console.error("Error saving assignments:", error);
+            setMessage("Error saving assignments.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -167,7 +242,11 @@ const Assigning = () => {
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 Select classes or specific students
             </Text>
-
+            {message !== '' && (
+                <Text style={{ textAlign: 'center', color: message.includes("✅") ? 'green' : 'red', marginVertical: 10 }}>
+                    {message}
+                </Text>
+            )}
             <ScrollView style={styles.classesContainer}>
                 {classes.map(classItem => (
                     <Card
@@ -213,8 +292,9 @@ const Assigning = () => {
                 style={styles.assignButton}
                 onPress={handleSave}
                 size='large'
+                disabled={loading}
             >
-                Save Changes
+                {loading ? "Saving..." : "Save Changes"}
             </Button>
         </Layout>
     );
