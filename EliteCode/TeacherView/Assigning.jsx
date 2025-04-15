@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import { Layout, Icon, Button, Card, Text, CheckBox, List, ListItem, Divider } from "@ui-kitten/components";
+import { Layout, Icon, Button, Text, CheckBox, ListItem, Divider } from "@ui-kitten/components";
 import { useAuth } from "../AuthContext";
-import { QueryEndAtConstraint } from "firebase/firestore";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
 const Assigning = () => {
@@ -10,201 +9,93 @@ const Assigning = () => {
     const navigation = useNavigation();
     const { user } = useAuth();
     const { question } = route.params;
+
     const [classes, setClasses] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState({});
-    const [expandedClasses, setExpandedClasses] = useState({});
     const [selectedStudents, setSelectedStudents] = useState({});
-
+    const [expandedClasses, setExpandedClasses] = useState({});
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-
-    const fetchCoursesAndAssignments = async () => {
-        try {
-            let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/${user.userID}/courses`);
-            const courses = await res.json();
-            console.log("courses.results: ", courses)
-            setClasses(courses);
-            // fetch existing assignments for this question
-            let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
-            const assignmentData = await assignmentRes.json();
-            // Set the existing assignments into selectedClasses and selectedStudents
-            console.log("assignmentData2: ", assignmentData)
-            const classAssignments = assignmentData.classes || [];
-            const studentAssignments = assignmentData.students || [];
-
-            const classSelection = {};
-            classAssignments.forEach(c => classSelection[c.cid] = true);
-
-            const studentSelection = {};
-            studentAssignments.forEach(s => studentSelection[s.sid] = true);
-
-            // for (const classItem of courses) {
-            //     const allStudentsAssigned =
-            //         classItem.students.length > 0 &&
-            //         classItem.students.every(student => studentSelection[student.userID]);
-
-            //     if (allStudentsAssigned) {
-            //         classSelection[classItem.cid] = true;
-            //         // Remove individual students to avoid duplicates
-            //         classItem.students.forEach(student => {
-            //             delete studentSelection[student.userID];
-            //         });
-            //     }
-            // }
-
-            setSelectedClasses(classSelection);
-            setSelectedStudents(studentSelection);
-
-        } catch (error) {
-            console.error("Error fetching courses:", error);
-        }
-    };
 
     useEffect(() => {
         fetchCoursesAndAssignments();
     }, []);
 
+    const fetchCoursesAndAssignments = async () => {
+        try {
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/${user.userID}/courses`);
+            const courses = await res.json();
+            setClasses(courses);
 
-    // const toggleClassSelection = (classId) => {
-    //     setSelectedClasses(prev => {
-    //         const newClassSelection = { ...prev, [classId]: !prev[classId] };
-    //         const classStudents = classes.find(c => c.cid === classId)?.students || [];
+            const assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
+            const assignmentData = await assignmentRes.json();
 
-    //         setSelectedStudents(prevStudents => {
-    //             const newStudentSelection = { ...prevStudents };
-    //             classStudents.forEach(student => {
-    //                 newStudentSelection[student.userID] = newClassSelection[classId];
-    //             });
-    //             return newStudentSelection;
-    //         });
+            const classSelection = {};
+            assignmentData.classes?.forEach(c => classSelection[c.cid] = true);
 
-    //         return newClassSelection;
-    //     });
-    // };
+            const studentSelection = {};
+            assignmentData.students?.forEach(s => studentSelection[s.sid] = true);
 
+            setSelectedClasses(classSelection);
+            setSelectedStudents(studentSelection);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
-    // const toggleStudentSelection = (studentId, classId) => {
-    //     setSelectedStudents(prev => {
-    //         const newSelection = { ...prev };
-    //         newSelection[studentId] = !prev[studentId];
+    const toggleClassSelection = (classId) => {
+        setSelectedClasses(prev => {
+            const newClassSelection = { ...prev, [classId]: !prev[classId] };
+            const classStudents = classes.find(c => c.cid === classId)?.students || [];
 
-    //         // Uncheck the class if it was selected
-    //         setSelectedClasses(prevClasses => ({
-    //             ...prevClasses,
-    //             [classId]: false
-    //         }));
+            setSelectedStudents(prevStudents => {
+                const newStudentSelection = { ...prevStudents };
+                classStudents.forEach(student => {
+                    newStudentSelection[student.userID] = newClassSelection[classId];
+                });
+                return newStudentSelection;
+            });
 
-    //         return newSelection;
-    //     });
-    // };
+            return newClassSelection;
+        });
+    };
 
+    const toggleStudentSelection = (studentId, classId) => {
+        setSelectedStudents(prev => {
+            const newSelection = { ...prev, [studentId]: !prev[studentId] };
 
-    // // Toggle class expansion (show/hide students)
-    // const toggleClassExpansion = (classId) => {
-    //     setExpandedClasses(prev => ({
-    //         ...prev,
-    //         [classId]: !prev[classId]
-    //     }));
-    // };
+            // If a student is unchecked, also uncheck the class
+            if (!newSelection[studentId]) {
+                setSelectedClasses(prevClasses => ({
+                    ...prevClasses,
+                    [classId]: false
+                }));
+            }
 
-    // const getSelectedItems = () => {
-    //     const selectedStudentsCopy = { ...selectedStudents }; // clone to safely modify
-    //     const finalSelectedClasses = new Set();
+            return newSelection;
+        });
+    };
 
-    //     classes.forEach(classItem => {
-    //         const students = classItem.students;
-    //         const allSelected = students.length > 0 && students.every(
-    //             s => selectedStudentsCopy[s.userID]
-    //         );
+    const toggleClassExpansion = (classId) => {
+        setExpandedClasses(prev => ({
+            ...prev,
+            [classId]: !prev[classId]
+        }));
+    };
 
-    //         // if (allSelected) {
-    //         //     finalSelectedClasses.add(classItem.cid);
-    //         //     // Remove these students so we don't double assign
-    //         //     students.forEach(s => delete selectedStudentsCopy[s.userID]);
-    //         // }
-    //     });
-
-    //     const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
-
-    //     return {
-    //         classes: Array.from(finalSelectedClasses),
-    //         students: finalSelectedStudents,
-    //     };
-    // };
-
-
-    const renderToggleIcon = (props, isExpanded) => (
-        <Icon {...props} name={isExpanded ? 'arrow-up-outline' : 'arrow-down-outline'} />
-    );
-
-
-    // const handleSave = async () => {
-    //     const selectedItems = getSelectedItems();
-    //     setLoading(true);
-
-    //     if (selectedItems.classes.length === 0 && selectedItems.students.length === 0) {
-    //         setMessage("No selections made — not updating.");
-    //         setTimeout(() => {
-    //             setMessage('');
-    //             navigation.goBack();
-    //         }, 2000);
-    //     }
-
-    //     try {
-    //         const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 qid: question.qid,
-    //                 courses: selectedItems.classes,
-    //                 students: selectedItems.students,
-    //                 tid: user.userID
-    //             })
-    //         });
-
-    //         const text = await response.text(); //  First, read as text
-    //         let result;
-    //         try {
-    //             result = JSON.parse(text); //  Then, try parsing JSON manually
-    //         } catch (parseErr) {
-    //             console.error("Failed to parse JSON:", parseErr);
-    //             console.log("Raw response text:", text); // This will show you what the server actually sent back
-    //             setMessage("Server error: invalid response");
-    //             return;
-    //         }
-
-    //         if (result.message === "Question assignments updated successfully.") {
-    //             setMessage(" Assignments updated!");
-    //             setTimeout(() => {
-    //                 setMessage('');
-    //                 navigation.goBack();
-    //             }, 2000);
-    //         } else if (result.message === "No changes made"){
-    //             setMessage("No changes made")
-    //             setTimeout(() => {
-    //                 setMessage('');
-    //                 navigation.goBack();
-    //             }, 2000);
-    //         }
-    //         else {
-    //             console.log(result.message);
-    //             setMessage("Error: Failed to update assignments.");
-    //         }
-    //     } catch (error) {
-    //         console.error("Unexpected error:", error);
-    //         setMessage("Error: saving assignments.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
+    const getSelectedItems = () => {
+        const selectedClassIds = Object.keys(selectedClasses).filter(id => selectedClasses[id]);
+        const selectedStudentIds = Object.keys(selectedStudents).filter(id => selectedStudents[id]);
+        return {
+            classes: selectedClassIds,
+            students: selectedStudentIds,
+        };
+    };
 
     const handleSave = async () => {
         const selectedItems = getSelectedItems();
         setLoading(true);
 
-        // Handle case where no items are selected
         if (selectedItems.classes.length === 0 && selectedItems.students.length === 0) {
             setMessage("No selections made — not updating.");
             setTimeout(() => {
@@ -214,37 +105,28 @@ const Assigning = () => {
             return;
         }
 
-        // Prepare body data for request
-        const requestData = {
-            qid: question.qid,
-            courses: selectedItems.classes,
-            students: selectedItems.students,
-            tid: user.userID,
-        };
-
         try {
             const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    qid: question.qid,
+                    courses: selectedItems.classes,
+                    students: selectedItems.students,
+                    tid: user.userID
+                })
             });
 
-            const text = await response.text(); // Read the response text
+            const text = await response.text();
             let result;
-
-            // Parse the response as JSON
             try {
                 result = JSON.parse(text);
             } catch (parseErr) {
-                console.error("Failed to parse JSON:", parseErr);
-                console.log("Raw response text:", text);
+                console.error("Failed to parse response:", parseErr, "\nRaw text:", text);
                 setMessage("Server error: invalid response");
                 return;
             }
 
-            // Handle responses based on the backend logic
             if (result.message === "Question assigned successfully.") {
                 setMessage("Assignments updated!");
                 setTimeout(() => {
@@ -264,43 +146,6 @@ const Assigning = () => {
         }
     };
 
-    // const renderStudentItem = (student, classId) => (
-    //     <ListItem
-    //         key={student.userID}
-    //         title={`${student.fname} ${student.lname}`}
-    //         accessoryLeft={(props) => (
-    //             <CheckBox
-    //                 {...props}
-    //                 checked={selectedStudents[student.userID] || false}
-    //                 onChange={() => toggleStudentSelection(student.userID, classId)}
-    //             />
-    //         )}
-    //     />
-    // );
-
-    const getSelectedItems = () => {
-        const selectedClasses = Object.keys(selectedClassesState).filter(classId => selectedClassesState[classId]);
-        const selectedStudents = Object.keys(selectedStudentsState).filter(studentId => selectedStudentsState[studentId]);
-        return {
-            classes: selectedClasses,
-            students: selectedStudents,
-        };
-    };
-
-    const renderClassItem = (classId) => (
-        <ListItem
-            key={classId}
-            title={`Class ${classId}`}
-            accessoryLeft={(props) => (
-                <CheckBox
-                    {...props}
-                    checked={selectedClassesState[classId] || false}
-                    onChange={() => toggleClassSelection(classId)}
-                />
-            )}
-        />
-    );
-
     const renderStudentItem = (student, classId) => (
         <ListItem
             key={student.userID}
@@ -308,129 +153,63 @@ const Assigning = () => {
             accessoryLeft={(props) => (
                 <CheckBox
                     {...props}
-                    checked={selectedStudentsState[student.userID] || false}
+                    checked={selectedStudents[student.userID] || false}
                     onChange={() => toggleStudentSelection(student.userID, classId)}
                 />
             )}
         />
     );
 
-    const toggleClassSelection = (classId) => {
-        setSelectedClassesState(prevState => ({
-            ...prevState,
-            [classId]: !prevState[classId],
-        }));
-    };
+    const renderClassItem = (classItem) => {
+        const isExpanded = expandedClasses[classItem.cid] || false;
 
-    const toggleStudentSelection = (studentId, classId) => {
-        // Ensure students selected from a class are handled correctly
-        setSelectedStudentsState(prevState => ({
-            ...prevState,
-            [studentId]: !prevState[studentId],
-        }));
-
-        // If a class is selected, prevent individual student assignment for that class
-        if (selectedClassesState[classId]) {
-            // Remove any students that were manually selected in that class
-            setSelectedStudentsState(prevState => {
-                const newState = { ...prevState };
-                const classStudents = studentsInClass[classId]; // Assume this maps to the students in the class
-                classStudents.forEach(student => {
-                    if (newState[student.userID]) {
-                        delete newState[student.userID];
-                    }
-                });
-                return newState;
-            });
-        }
+        return (
+            <View key={classItem.cid}>
+                <ListItem
+                    title={`${classItem.courseName}`}
+                    accessoryLeft={(props) => (
+                        <CheckBox
+                            {...props}
+                            checked={selectedClasses[classItem.cid] || false}
+                            onChange={() => toggleClassSelection(classItem.cid)}
+                        />
+                    )}
+                    accessoryRight={(props) => (
+                        <TouchableOpacity onPress={() => toggleClassExpansion(classItem.cid)}>
+                            <Icon {...props} name={isExpanded ? 'arrow-up-outline' : 'arrow-down-outline'} />
+                        </TouchableOpacity>
+                    )}
+                />
+                {isExpanded && (
+                    <View style={{ paddingLeft: 32 }}>
+                        {classItem.students?.map(student =>
+                            renderStudentItem(student, classItem.cid)
+                        )}
+                    </View>
+                )}
+                <Divider />
+            </View>
+        );
     };
 
     return (
-        <Layout style={styles.container}>
+        <Layout style={{ flex: 1, padding: 16}}>
             <Text category='h4' style={styles.heading}>Assign Question</Text>
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 Select classes or specific students
             </Text>
-            {message !== '' && (
-                <Text style={{ textAlign: 'center', color: message.includes("Error") ? 'red' : 'green', marginVertical: 10 }}>
-                    {message}
-                </Text>
-            )}
-            <ScrollView style={styles.classesContainer}>
-                {classes.map(classItem => (
-                    <Card
-                        key={classItem.cid}
-                        style={styles.classCard}
-                        disabled={false}
-                    >
-                        <View style={styles.classHeader}>
-                            <CheckBox
-                                checked={selectedClasses[classItem.cid] || false}
-                                onChange={() => toggleClassSelection(classItem.cid)}
-                                style={styles.checkbox}
-                            />
-                            <Text category='h6' style={styles.className}>
-                                {classItem.courseName}
-                            </Text>
-                            <Button
-                                appearance='ghost'
-                                accessoryLeft={(props) => renderToggleIcon(props, expandedClasses[classItem.cid])}
-                                onPress={() => toggleClassExpansion(classItem.cid)}
-                                style={styles.expandButton}
-                            >
-                                {expandedClasses[classItem.cid] ? 'Hide Students' : 'Select Students'}
-                            </Button>
-                        </View>
-
-                        {expandedClasses[classItem.cid] && (
-                            <View style={styles.studentsContainer}>
-                                <Divider />
-                                {classItem.students.map((student, index) => (
-                                    <View key={student.userID || index}>
-                                        {renderStudentItem(student, classItem.cid)}
-                                        {index < classItem.students.length - 1 && <Divider />}
-                                    </View>
-                                ))}
-                            </View>
-                        )}
-                    </Card>
-                ))}
+            <ScrollView>
+                {classes.map(classItem => renderClassItem(classItem))}
             </ScrollView>
-
-            <Button
-                style={styles.assignButton}
-                onPress={handleSave}
-                size='large'
-                disabled={loading}
-            >
-                {loading ? "Saving..." : "Save Changes"}
+            {message ? <Text style={{ textAlign: 'center', marginVertical: 8 }}>{message}</Text> : null}
+            <Button onPress={handleSave} disabled={loading} style={{ marginTop: 10 }}>
+                {loading ? "Saving..." : "Assign question"}
             </Button>
         </Layout>
     );
 };
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-    },
-    heading: { marginBottom: 8, },
-    subHeading: { marginBottom: 16, },
-    classesContainer: { flex: 1, },
-    classCard: { marginBottom: 16, },
-    classHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    checkbox: { marginRight: 8, },
-    className: {
-        flex: 1,
-        fontSize: 12
-    },
-    expandButton: { marginLeft: 8, },
-    studentsContainer: { marginTop: 8, },
-    assignButton: { marginTop: 16, },
+    heading: { marginBottom: 8,  paddingTop: 30},
+    subHeading: { marginBottom: 16, }
 });
-
 export default Assigning;

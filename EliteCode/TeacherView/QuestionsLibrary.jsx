@@ -43,13 +43,17 @@ function QuestionsLibrary() {
 
 
     return (
-        <Layout style={{ flex: 1, padding: 5 }}>
+        <Layout style={{ flex: 1, padding: 16 }}>
+            <Text category='h4' style={styles.heading}>Questions Library</Text>
+            <Text category='s1' appearance='hint' style={styles.subHeading}>
+                All questions created by YOU.
+            </Text>
             <ScrollView>
                 <View style={{ marginBottom: 10 }}>
                     {questions.length > 0 ? (
                         <>
                             {questions.map((question) =>
-                                <Card key={question.qid} style={{borderRadius: 10,  borderWidth: 0}}>
+                                <Card key={question.qid} style={{ borderRadius: 10, borderWidth: 0 }}>
                                     <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                         <View style={{ flex: 1 }}>
                                             <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
@@ -61,7 +65,7 @@ function QuestionsLibrary() {
                                     <Text category="s2">{question.pointVal} Points</Text>
                                     {/* <View>{question.imgFile}</View> */}
                                     <View style={styles.container}>
-                                        <Button style={{ margin: 5, width: 300 }} onPress={() => navigation.navigate('Assign a question', {assignTo: "course", question: question})}>
+                                        <Button style={{ margin: 5, width: 300 }} onPress={() => navigation.navigate('Assign a question', { assignTo: "course", question: question })}>
                                             Assign to class or student/students
                                         </Button>
                                     </View>
@@ -86,6 +90,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
     },
+    heading: { marginBottom: 8,  paddingTop: 30},
+    subHeading: { marginBottom: 16, }
 });
 
 export default QuestionsLibrary;

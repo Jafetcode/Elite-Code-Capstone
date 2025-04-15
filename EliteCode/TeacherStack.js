@@ -22,7 +22,7 @@ const Stack = createNativeStackNavigator();
 
 const TeacherStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Course Library">
-    <Stack.Screen name="Course Library" component={TeacherHome} />
+    <Stack.Screen name="Course Library" component={TeacherHome} options={{ headerShown: false }}/>
     <Stack.Screen name="TeacherCourse" component={TeacherCourse} />
     <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
     <Stack.Screen name="Question" component={GradingScreen} />
@@ -32,8 +32,8 @@ const TeacherStack = () => (
     <Stack.Screen name="Classlist" component={TeacherCourseClasslist} />
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>
     <Stack.Screen name="QsByCourse" component={QsByCourse}/>
-    <Stack.Screen name="Questions Library" component={QuestionsLibrary}/>
-    <Stack.Screen name="Assign a question" component={Assigning}/>
+    <Stack.Screen name="Questions Library" component={QuestionsLibrary} options={{ headerShown: false }}/>
+    <Stack.Screen name="Assign a question" component={Assigning} options={{ headerShown: false }}/>
     <Stack.Screen name="Manage Course" component={TeacherManageCourse}/>
     <Stack.Screen name="TeacherManageQuestion" component={TeacherManageQuestion}/>
     <Stack.Screen name="EditProfile" component={EditProfile}/>
