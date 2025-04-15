@@ -66,54 +66,87 @@ const Assigning = () => {
         fetchCoursesAndAssignments();
     }, []);
 
+    // const toggleClassSelection = (classId) => {
+    //     setSelectedClasses(prev => {
+    //         const newSelection = { ...prev };
+    //         newSelection[classId] = !prev[classId];
+
+    //         if (newSelection[classId]) {
+    //             const classStudents = classes.find(c => c.cid === classId).students;
+    //             const allSelected = classStudents.every(student => selectedStudents[student.userID] || false);
+    //             if (allSelected) {
+    //                 setSelectedStudents(prevStudents => {
+    //                     const newStudentSelection = { ...prevStudents };
+    //                     classStudents.forEach(student => {
+    //                         newStudentSelection[student.userID] = true;
+    //                     });
+    //                     return newStudentSelection;
+    //                 });
+    //             }
+    //         }
+    //         return newSelection;
+    //     });
+    // };
     const toggleClassSelection = (classId) => {
         setSelectedClasses(prev => {
-            const newSelection = { ...prev };
-            newSelection[classId] = !prev[classId];
-
-            if (newSelection[classId]) {
-                const classStudents = classes.find(c => c.cid === classId).students;
-                const allSelected = classStudents.every(student => selectedStudents[student.userID] || false);
-                if (allSelected) {
-                    setSelectedStudents(prevStudents => {
-                        const newStudentSelection = { ...prevStudents };
-                        classStudents.forEach(student => {
-                            newStudentSelection[student.userID] = true;
-                        });
-                        return newStudentSelection;
-                    });
-                }
-            }
-            return newSelection;
+            const newClassSelection = { ...prev, [classId]: !prev[classId] };
+    
+            const classStudents = classes.find(c => c.cid === classId)?.students || [];
+    
+            setSelectedStudents(prevStudents => {
+                const newStudentSelection = { ...prevStudents };
+                classStudents.forEach(student => {
+                    newStudentSelection[student.userID] = newClassSelection[classId]; // true or false
+                });
+                return newStudentSelection;
+            });
+    
+            return newClassSelection;
         });
     };
+    
 
 
+    // const toggleStudentSelection = (studentId, classId) => {
+    //     setSelectedStudents(prev => {
+    //         const newSelection = { ...prev };
+    //         newSelection[studentId] = !prev[studentId];
+
+    //         if (newSelection[studentId]) {
+    //             setSelectedClasses(prevClasses => ({
+    //                 ...prevClasses,
+    //                 [classId]: false
+    //             }));
+    //         }
+
+    //         const classStudents = classes.find(c => c.cid === classId).students;
+    //         const allSelected = selectedStudents?.students?.every(student => newSelection[student.userID] || false) ?? false;
+    //         // const allSelected = classStudents.every(student => newSelection[student.userID] || false);
+    //         if (allSelected) {
+    //             setSelectedClasses(prevClasses => ({
+    //                 ...prevClasses,
+    //                 [classId]: true
+    //             }));
+    //         }
+
+    //         return newSelection;
+    //     });
+    // };
     const toggleStudentSelection = (studentId, classId) => {
         setSelectedStudents(prev => {
             const newSelection = { ...prev };
             newSelection[studentId] = !prev[studentId];
-
-            if (newSelection[studentId]) {
-                setSelectedClasses(prevClasses => ({
-                    ...prevClasses,
-                    [classId]: false
-                }));
-            }
-
-            const classStudents = classes.find(c => c.cid === classId).students;
-            const allSelected = selectedStudents?.students?.every(student => newSelection[student.userID] || false) ?? false;
-            // const allSelected = classStudents.every(student => newSelection[student.userID] || false);
-            if (allSelected) {
-                setSelectedClasses(prevClasses => ({
-                    ...prevClasses,
-                    [classId]: true
-                }));
-            }
-
+    
+            // Uncheck the class if it was selected
+            setSelectedClasses(prevClasses => ({
+                ...prevClasses,
+                [classId]: false
+            }));
+    
             return newSelection;
         });
     };
+    
 
     // Toggle class expansion (show/hide students)
     const toggleClassExpansion = (classId) => {
@@ -131,24 +164,49 @@ const Assigning = () => {
     //     };
     //     return selectedItems;
     // };
-    const getSelectedItems = () => {
-        const selectedClassesSet = new Set(Object.keys(selectedClasses).filter(cid => selectedClasses[cid]));
-        const selectedStudentsArray = Object.keys(selectedStudents).filter(sid => {
-            // Check if this student is in a selected class
-            for (const classItem of classes) {
-                if (selectedClassesSet.has(classItem.cid)) {
-                    const studentInClass = classItem.students.find(s => s.userID === sid);
-                    if (studentInClass) return false; // skip this student
-                }
-            }
-            return selectedStudents[sid];
-        });
+    // const getSelectedItems = () => {
+    //     const selectedClassesSet = new Set(Object.keys(selectedClasses).filter(cid => selectedClasses[cid]));
+    //     const selectedStudentsArray = Object.keys(selectedStudents).filter(sid => {
+    //         // Check if this student is in a selected class
+    //         for (const classItem of classes) {
+    //             if (selectedClassesSet.has(classItem.cid)) {
+    //                 const studentInClass = classItem.students.find(s => s.userID === sid);
+    //                 if (studentInClass) return false; // skip this student
+    //             }
+    //         }
+    //         return selectedStudents[sid];
+    //     });
 
+    //     return {
+    //         classes: Array.from(selectedClassesSet),
+    //         students: selectedStudentsArray,
+    //     };
+    // };
+    const getSelectedItems = () => {
+        const selectedStudentsCopy = { ...selectedStudents }; // clone to safely modify
+        const finalSelectedClasses = new Set();
+        
+        classes.forEach(classItem => {
+          const students = classItem.students;
+          const allSelected = students.length > 0 && students.every(
+            s => selectedStudentsCopy[s.userID]
+          );
+      
+          if (allSelected) {
+            finalSelectedClasses.add(classItem.cid);
+            // Remove these students so we don't double assign
+            students.forEach(s => delete selectedStudentsCopy[s.userID]);
+          }
+        });
+      
+        const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
+      
         return {
-            classes: Array.from(selectedClassesSet),
-            students: selectedStudentsArray,
+          classes: Array.from(finalSelectedClasses),
+          students: finalSelectedStudents,
         };
-    };
+      };
+      
 
     const renderToggleIcon = (props, isExpanded) => (
         <Icon {...props} name={isExpanded ? 'arrow-up-outline' : 'arrow-down-outline'} />
