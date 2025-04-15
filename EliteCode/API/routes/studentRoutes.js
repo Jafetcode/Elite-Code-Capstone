@@ -195,8 +195,8 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const studentSql = `
     SELECT DISTINCT q.*
     FROM Questions q
-    INNER JOIN AssignedToStudent atc ON q.qid = atc.qid
-    INNER JOIN Enrolled e on q.tid AND e.tid
+    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+    INNER JOIN Enrolled e on ats.sid = e.sid
     WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
