@@ -22,6 +22,8 @@ function StudentHome() {
   const [courses, setCourses] = React.useState([]);
   const [upcoming, setUpcoming] = React.useState([]);
   const [pastDue, setPastDue] = React.useState([]);
+  const [upcomingStudent, setUpcomingStudent] = React.useState([]);
+  const [pastDueStudent, setPastDueStudent] = React.useState([]);
 
   const fetchCourses = async () => {
     try {
@@ -40,30 +42,37 @@ function StudentHome() {
         fetch(`https://elitecodecapstone24.onrender.com/student/getAllUpcomingQuestions?sid=${user.userID}`),
         fetch(`https://elitecodecapstone24.onrender.com/student/getAllPastDueQuestions?sid=${user.userID}`)
       ]);
-  
+
       const upcomingData = await upcomingRes.json();
       const pastDueData = await pastDueRes.json();
-  
-      const combinedUpcoming = [
-        ...(upcomingData.results.upcomingClass || []),
-        ...(upcomingData.results.upcomingStudent || [])
-      ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  
-      const combinedPastDue = [
-        ...(pastDueData.results.pastDueClass || []),
-        ...(pastDueData.results.pastDueStudent || [])
-      ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-  
-      setUpcoming(combinedUpcoming);
-      setPastDue(combinedPastDue);
-  
+
+      const upcomingClass = upcomingData.results.upcomingClass;
+      const pastDueClass = pastDueData.results.pastDueClass;
+
+      const upcomingStudent = upcomingData.results.upcomingStudent;
+      const pastDueStudent = pastDueData.results.pastDueStudent;
+
+
+      // const combinedUpcoming = [
+      //   ...(upcomingData.results.upcomingClass || []),
+      //   ...(upcomingData.results.upcomingStudent || [])
+      // ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+      // const combinedPastDue = [
+      //   ...(pastDueData.results.pastDueClass || []),
+      //   ...(pastDueData.results.pastDueStudent || [])
+      // ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+      setUpcoming(upcomingClass);
+      setPastDue(pastDueClass);
+      setUpcomingStudent(upcomingStudent);
+      setPastDueStudent(pastDueStudent);
+
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
       Alert.alert("Error", "Could not load your assignments.");
     }
   };
-  
-
 
   const handleJoinClass = async () => {
     if (!classCode.trim()) {
@@ -110,6 +119,7 @@ function StudentHome() {
   return (
 
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+
       {/* <View>
         <Button onPress={() => navigation.navigate('AndryStudentHome')}> Andry</Button>
 
@@ -119,8 +129,9 @@ function StudentHome() {
 
         <Button> Evan </Button>
       </View> */}
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginTop: 50 }}>
 
 
           {/* Header */}
@@ -249,6 +260,10 @@ function StudentHome() {
             </Card>
           ))}
 
+
+
+          <Text category="s1" style={{ marginVertical: 10}}>Class Assignments</Text>
+
           {/* Upcoming Cards */}
           <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
           {upcoming.length === 0 ? (
@@ -263,39 +278,39 @@ function StudentHome() {
                   backgroundColor: '#1E2A38'
                 }}
               >
-              <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
+                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
 
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
-                >
-                  {item.question}
-                </Text>
-
-                <View style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 3
-                }}>
                   <Text
-                    appearance="hint"
-                    style={{ fontSize: 14 }}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
                   >
-                    Due: {new Date(item.dueDate).toLocaleDateString()}
+                    {item.question}
                   </Text>
 
                   <View style={{
-                    backgroundColor: '#D87D4A',
-                    borderRadius: 6,
-                    paddingHorizontal: 8,
-                    paddingVertical: 2,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: 3
                   }}>
-                    <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
+                    <Text
+                      appearance="hint"
+                      style={{ fontSize: 14 }}
+                    >
+                      Due: {new Date(item.dueDate).toLocaleDateString()}
+                    </Text>
+
+                    <View style={{
+                      backgroundColor: '#D87D4A',
+                      borderRadius: 6,
+                      paddingHorizontal: 8,
+                      paddingVertical: 2,
+                    }}>
+                      <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
               </Card>
             ))
           )}
@@ -344,6 +359,108 @@ function StudentHome() {
               </Card>
             ))
           )}
+
+
+
+
+          <Text category="s1" style={{ marginVertical: 10, alignContent: 'center'}}>Personal Assignments</Text>
+
+          {/* Upcoming Cards */}
+          <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
+          {upcomingStudent.length === 0 ? (
+            <Text appearance="hint">No upcoming questions!</Text>
+          ) : (
+            upcomingStudent.map(item => (
+              <Card
+                key={item.qid}
+                style={{
+                  borderRadius: 10,
+                  marginBottom: 5,
+                  backgroundColor: '#1E2A38'
+                }}
+              >
+                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
+
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
+                  >
+                    {item.question}
+                  </Text>
+
+                  <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginTop: 3
+                  }}>
+                    <Text
+                      appearance="hint"
+                      style={{ fontSize: 14 }}
+                    >
+                      Due: {new Date(item.dueDate).toLocaleDateString()}
+                    </Text>
+
+                    <View style={{
+                      backgroundColor: '#D87D4A',
+                      borderRadius: 6,
+                      paddingHorizontal: 8,
+                      paddingVertical: 2,
+                    }}>
+                      <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </Card>
+            ))
+          )}
+
+          {/* Past Due Cards */}
+          <Text category="s1" style={{ marginVertical: 10 }}>Past Due Questions</Text>
+          {pastDueStudent.length === 0 ? (
+            <Text appearance="hint">No past due questions!</Text>
+          ) : (
+            pastDueStudent.map(item => (
+              <Card
+                key={item.qid}
+                style={{
+                  borderRadius: 10,
+                  marginBottom: 5,
+                  backgroundColor: '#1E2A38'
+                }}
+              >
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
+                >
+                  {item.question}
+                </Text>
+
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 3
+                }}>
+                  <Text appearance="hint">
+                    Due: {new Date(item.dueDate).toLocaleDateString()}
+                  </Text>
+
+                  <View style={{
+                    backgroundColor: '#A94B4B',
+                    borderRadius: 6,
+                    paddingHorizontal: 8,
+                    paddingVertical: 2,
+                  }}>
+                    <Text style={{ color: 'white', fontSize: 12 }}>Past Due</Text>
+                  </View>
+                </View>
+              </Card>
+            ))
+          )}
+
 
 
         </View>

@@ -183,35 +183,21 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-  SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-  FROM Questions q
-  INNER JOIN AssignedToClass atc ON q.qid = atc.qid
-  INNER JOIN Enrolled e ON atc.cid = e.cid
-  LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-  WHERE e.sid = ? AND e.cid = ?
-    AND DATE(q.dueDate) >= CURDATE()
-  ORDER BY q.dueDate ASC;
-`;
-
-const studentSql = `
-  SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-  FROM Questions q
-  INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-  INNER JOIN Enrolled e ON ats.sid = e.sid
-  LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-  WHERE ats.sid = ? AND e.cid = ?
-    AND DATE(q.dueDate) >= CURDATE()
-  ORDER BY q.dueDate ASC;
-`;
+    SELECT DISTINCT q.*
+    FROM Questions q
+    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+    INNER JOIN Enrolled e ON atc.cid = e.cid
+    WHERE e.sid = ? AND e.cid = ?
+      AND DATE(q.dueDate) >= CURDATE()
+    ORDER BY q.dueDate ASC;
+  `;
 
   try {
     const [classResults] = await db.promise().query(classSql, [sid, cid]);
-    const [studentResults] = await db.promise().query(studentSql, [sid, cid]);
 
     res.json({
       results: {
         upcomingClass: classResults || [],
-        upcomingStudent: studentResults || [],
       },
     });
   } catch (err) {
@@ -223,35 +209,21 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+    SELECT DISTINCT q.*
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
-    LEFT JOIN MCQ mcq ON q.qid = mcq.qid
     WHERE e.sid = ? AND e.cid = ?
-      AND DATE(q.dueDate) < CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
-
-  const studentSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-    FROM Questions q
-    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-    INNER JOIN Enrolled e ON ats.sid = e.sid
-    LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-    WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   try {
     const [classResults] = await db.promise().query(classSql, [sid, cid]);
-    const [studentResults] = await db.promise().query(studentSql, [sid, cid]);
 
     res.json({
       results: {
         pastDueClass: classResults || [],
-        pastDueStudent: studentResults || [],
       },
     });
   } catch (err) {

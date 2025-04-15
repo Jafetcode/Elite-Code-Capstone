@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Text, Alert } from 'react-native';
 import {useNavigation,} from '@react-navigation/native';
-import {Button,Layout, ListItem } from '@ui-kitten/components';
+import {Button,Layout, ListItem, ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import {useEffect} from 'react';
 import * as eva from '@eva-design/eva';
 import {useAuth} from '../AuthContext';
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
   
 const StudentSettings = () =>{
@@ -33,7 +34,7 @@ const StudentSettings = () =>{
       }, []);
 
     return (
-      <Layout>
+      <Layout style={{flex: 1}} >
       <ListItem title="Profile" description="Manage your account" />    
       <ListItem title="Notifications" description="Turn on or off" />
       <ListItem title="Font-size" description="Change font size" />
@@ -48,13 +49,12 @@ const StudentSettings = () =>{
       </Layout>
     );
 }
-export default ()=> (
 
-        <Layout style={
-            { flex: 1, 
-            }
-            }>
-        <StudentSettings/>
-        </Layout>
-
+export default () => (
+    <>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider {...eva} theme={eva.dark}>
+            <StudentSettings />
+        </ApplicationProvider>
+    </>
 );
