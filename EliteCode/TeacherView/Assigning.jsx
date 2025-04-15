@@ -222,7 +222,7 @@ const Assigning = () => {
                 result = JSON.parse(text); // ← Then, try parsing JSON manually
             } catch (parseErr) {
                 console.error("Failed to parse JSON:", parseErr);
-                console.log("Raw response text:", text); // ← This will show you what the server actually sent back
+                console.log("Raw response text:", text); // This will show you what the server actually sent back
                 setMessage("Server error: invalid response");
                 return;
             }

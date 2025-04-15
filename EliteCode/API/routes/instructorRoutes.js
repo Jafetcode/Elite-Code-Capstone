@@ -96,7 +96,7 @@ router.post('/updateAssignments', (req, res) => {
 
     const classDeletePromises = cidsToDelete.map(cid => {
       return new Promise((resolve, reject) => {
-        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND cid = ?', [qid, cid], (err) => {
+        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND cid = ? and tid = ?', [qid, cid, tid], (err) => {
           if (err) reject(err);
           else resolve();
         });
@@ -105,7 +105,7 @@ router.post('/updateAssignments', (req, res) => {
 
     const classInsertPromises = cidsToInsert.map(cid => {
       return new Promise((resolve, reject) => {
-        db.query('INSERT INTO AssignedToClass (qid, cid) VALUES (?, ?)', [qid, cid], (err) => {
+        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) => {
           if (err) reject(err);
           else resolve();
         });
