@@ -1,4 +1,5 @@
 import * as React from "react";
+import {useState} from 'react';
 import { View, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import * as eva from "@eva-design/eva";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -16,26 +17,26 @@ import {
 function ErikaStudentHome() {
   const navigation = useNavigation();
   // const { user } = useAuth();
-  const qid = "3";
+  const questionID = "3";
   const userID = "53471f"
   const [question, setQuestion] = useState({});
   const fetchSubmission = async () => {
     try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${qid}&sid=${userID}`);
-      console.log(res);
-      setQuestion(res);
+      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
+      console.log("response: ", res);
+      setQuestion(res);s
     } catch (error) {
       Alert.alert("Error", "Could not load your submission.");
     }
   };
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     if (user?.userID) {
-  //       fetchSubmission();
-  //     }
-  //   }, [qid])  `
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      if (userID) {
+        fetchSubmission();
+      }
+    }, []) 
+  );
 
   return (
     <Layout style={{ flex: 1, padding: 22}}>
@@ -45,25 +46,25 @@ function ErikaStudentHome() {
       </Text>
       <View>
         <Text>
-          ${question.question}
+          {question.question}
         </Text>
         <Text>
-          ${question.description}
+          {question.description}
         </Text>
         <Text>
-          ${question.comment}
+          {question.comment}
         </Text>
         <Text>
           Your answer
         </Text>
         <Text>
-          ${question.answer}
+          {question.answer}
         </Text>
         <Text>
           Your grade
         </Text>
         <Text>
-          ${question.grade} / ${quesiton.pointVal} - ${question.grade/question.pointVal}
+          {question.grade} / {question.pointVal} - {question.grade/question.pointVal}
         </Text>
         {/* <Text>
           ${question.imgFile}
