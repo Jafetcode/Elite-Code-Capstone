@@ -31,7 +31,7 @@ function StudentCourse() {
     const fetchAssignments = async () => {
         try {
             const [upcomingRes, pastDueRes] = await Promise.all([
-                fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingCoursesQuestions?sid=${user.userID}&cid=${cid}`),
+                fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingCourseQuestions?sid=${user.userID}&cid=${cid}`),
                 fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueCourseQuestions?sid=${user.userID}&cid=${cid}`)
             ]);
     
@@ -98,7 +98,7 @@ function StudentCourse() {
                                 key={question.qid}
                                 style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "#1E2A38" }}
                             >
-                                <TouchableOpacity onPress={() => navigation.navigate("StudentQuestion", { qid: question.qid })}>
+                                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: question.qid })}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, color: 'white' }}>
                                             {question.topic}
@@ -136,7 +136,7 @@ function StudentCourse() {
                                 key={question.qid}
                                 style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "#1E2A38" }}
                             >
-                                <TouchableOpacity onPress={() => navigation.navigate("StudentQuestion", { qid: question.qid })}>
+                                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: question.qid })}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, color: 'white' }}>
                                             {question.topic}
