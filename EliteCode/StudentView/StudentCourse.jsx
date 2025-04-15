@@ -31,7 +31,7 @@ function StudentCourse() {
     const fetchAssignments = async () => {
         try {
             const [upcomingRes, pastDueRes] = await Promise.all([
-                fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingCoursesQuestions?sid=${user.userID}&cid=${cid}`),
+                fetch(`https://elitecodecapstone24.onrender.com/student/getUpcomingCourseQuestions?sid=${user.userID}&cid=${cid}`),
                 fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueCourseQuestions?sid=${user.userID}&cid=${cid}`)
             ]);
     
