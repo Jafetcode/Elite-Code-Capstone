@@ -42,10 +42,9 @@ function TeacherProfile() {
             source={require("../assets/images/profile-picture.png")}
             style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10 }}
           />
-          <Text category="h6">{user.fname} </Text>
-          <Text>Debug: {JSON.stringify(user)}</Text>
+          <Text category="h4">{user.fname} </Text>
           <Text appearance="hint">{user.role}</Text>
-          <Text appearance="hint">{user.bio}</Text>
+          <Text category ="h6">{user.bio}</Text>
           <Button size="small" style={{ marginTop: 10 }} onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>
         </View>
 
