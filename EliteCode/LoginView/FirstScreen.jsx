@@ -33,7 +33,6 @@ function FirstScreen() {
       </Card>
       <Text style={styles.subtagline}>Learn. Build. Level Up.</Text>
 
-      {/* Footer stays the same */}
       <View style={styles.footerContainer}>
         <Text style={styles.footerLine1}>Stay curious. Stay coding.</Text>
         <Text style={styles.footerLine2}>EliteCode © 2025 — Red Panda Studios</Text>
