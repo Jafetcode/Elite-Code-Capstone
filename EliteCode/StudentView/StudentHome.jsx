@@ -63,8 +63,6 @@ function StudentHome() {
     }
   };
   
-
-
   const handleJoinClass = async () => {
     if (!classCode.trim()) {
       Alert.alert("Error", "Please enter a class code.");
@@ -110,6 +108,7 @@ function StudentHome() {
   return (
 
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+
       {/* <View>
         <Button onPress={() => navigation.navigate('AndryStudentHome')}> Andry</Button>
 
@@ -119,8 +118,9 @@ function StudentHome() {
 
         <Button> Evan </Button>
       </View> */}
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginTop: 50 }}>
 
 
           {/* Header */}
