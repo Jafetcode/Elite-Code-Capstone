@@ -35,23 +35,24 @@ function StudentCourse() {
                 fetch(`https://elitecodecapstone24.onrender.com/student/getPastDueCourseQuestions?sid=${user.userID}&cid=${cid}`)
             ]);
     
-            const upcomingClassData = await upcomingRes.json();
-            console.log("Upcoming response:", upcomingClassData);
-            const pastDueClassData = await pastDueRes.json();
-            console.log("Past Due response:", pastDueClassData);
+            const upcomingData = await upcomingRes.json();
+            const pastDueData = await pastDueRes.json();
+
+            const upcomingClass = upcomingData.results.upcomingClass;
+            const pastDueClass = pastDueData.results.pastDueClass;
     
-            const combinedUpcoming = [
-                ...(upcomingClassData.results.upcomingClass || []),
-                ...(upcomingClassData.results.upcomingStudent || [])
-            ];
+            // const combinedUpcoming = [
+            //     ...(upcomingClassData.results.upcomingClass || []),
+            //     ...(upcomingClassData.results.upcomingStudent || [])
+            // ];
     
-            const combinedPastDue = [
-                ...(pastDueClassData.results.pastDueClass || []),
-                ...(pastDueClassData.results.pastDueStudent || [])
-            ];
+            // const combinedPastDue = [
+            //     ...(pastDueClassData.results.pastDueClass || []),
+            //     ...(pastDueClassData.results.pastDueStudent || [])
+            // ];
     
-            setUpcoming(combinedUpcoming);
-            setPastDue(combinedPastDue);
+            setUpcoming(upcomingClass);
+            setPastDue(pastDueClass);
     
         } catch (error) {
             console.error("Failed to fetch assignments:", error);
