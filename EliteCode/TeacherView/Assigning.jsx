@@ -175,7 +175,7 @@ const Assigning = () => {
                 return;
             }
 
-            if (result.message === "Question assigned successfully.") {
+            if (result.message === "Question assignments updated successfully.") {
                 setMessage(" Assignments updated!");
                 setTimeout(() => {
                     setMessage('');
@@ -183,6 +183,10 @@ const Assigning = () => {
                 }, 2000);
             } else if (result.message === "No changes made"){
                 setMessage("No changes made")
+                setTimeout(() => {
+                    setMessage('');
+                    navigation.goBack();
+                }, 2000);
             }
             else {
                 console.log(result.message);
