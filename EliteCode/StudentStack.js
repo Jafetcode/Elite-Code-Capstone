@@ -19,7 +19,7 @@ const StudentStack = () => (
     <Stack.Screen name="StudentQuestion" component={StudentQuestion} />
     <Stack.Screen name="StudentSettings" component={StudentSettings} />
     <Stack.Screen name="AndryStudentHome" options={{ headerShown: false }}  component={AndryStudentHome} />
-    <Stack.Screen name="ErikaStudentHome" component={ErikaStudentHome} />
+    <Stack.Screen name="ErikaStudentHome" component={ErikaStudentHome} options={{ headerShown: false }}  />
     <Stack.Screen name="JafetStudentHome" component={JafetStudentHome} />
     <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} />
   </Stack.Navigator>

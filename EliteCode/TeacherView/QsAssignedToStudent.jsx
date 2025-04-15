@@ -21,6 +21,7 @@ function QuestionsAssignedToStudent() {
     const fetchQuestions = async () => {
         try {
             console.log("info passing jsx", tid, student.userID)
+            // TO DO: update the route to show only questions 
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?tid=${tid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.results);
@@ -84,6 +85,7 @@ function QuestionsAssignedToStudent() {
                         </View>
                     )}
                 </View>
+            
             </ScrollView>
         </Layout>
     );
