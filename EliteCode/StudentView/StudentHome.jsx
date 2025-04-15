@@ -110,7 +110,7 @@ function StudentHome() {
   return (
 
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-      <View>
+      {/* <View>
         <Button onPress={() => navigation.navigate('AndryStudentHome')}> Andry</Button>
 
         <Button onPress={() => navigation.navigate('JafetStudentHome')}> Jafet </Button>
@@ -118,7 +118,7 @@ function StudentHome() {
         <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
 
         <Button> Evan </Button>
-      </View>
+      </View> */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 20 }}>
 
@@ -263,6 +263,8 @@ function StudentHome() {
                   backgroundColor: '#1E2A38'
                 }}
               >
+              <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
+
                 <Text
                   numberOfLines={1}
                   ellipsizeMode="tail"
@@ -293,9 +295,8 @@ function StudentHome() {
                     <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
                   </View>
                 </View>
+              </TouchableOpacity>
               </Card>
-
-
             ))
           )}
 
