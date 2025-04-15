@@ -79,7 +79,7 @@ router.get('/getCourses', (req, res) => {
 //   res.json({ message: "Question assigned successfully" });
 // });
 
-router.post('/instructor/updateAssignments', (req, res) => {
+router.post('/updateAssignments', (req, res) => {
   const { qid, courses = [], students = [], tid } = req.body;
 
   // ---- CLASS ASSIGNMENTS ----

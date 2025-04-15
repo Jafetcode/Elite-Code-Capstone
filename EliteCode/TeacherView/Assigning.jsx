@@ -30,8 +30,7 @@ const Assigning = () => {
             let assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
             const assignmentData = await assignmentRes.json();
             // Set the existing assignments into selectedClasses and selectedStudents
-            console.log("assignmentData: ", assignmentData)
-            console.log("assignmentData: ", assignmentData)
+            console.log("assignmentData2: ", assignmentData)
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
 
@@ -201,25 +200,36 @@ const Assigning = () => {
                     tid: user.userID
                 })
             });
-
-            const result = await response.json();
+    
+            const text = await response.text(); // ← First, read as text
+            let result;
+            try {
+                result = JSON.parse(text); // ← Then, try parsing JSON manually
+            } catch (parseErr) {
+                console.error("Failed to parse JSON:", parseErr);
+                console.log("Raw response text:", text); // ← This will show you what the server actually sent back
+                setMessage("Server error: invalid response");
+                return;
+            }
+    
             if (result.message === "Question assigned successfully") {
-                setMessage("Assignments updated!");
+                setMessage(" Assignments updated!");
                 setTimeout(() => {
                     setMessage('');
-                    router.back(); // Go back after showing message
-                }, 3000); // 2 seconds feels good
+                    router.back();
+                }, 3000);
             } else {
                 console.log(result.message);
                 setMessage("Failed to update assignments.");
             }
         } catch (error) {
-            console.error("Error saving assignments:", error);
+            console.error("Unexpected error:", error);
             setMessage("Error saving assignments.");
         } finally {
             setLoading(false);
         }
     };
+    
 
     // Render student item
     const renderStudentItem = (student, classId) => (
