@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     alignSelf: 'center',
     marginBottom: 10,
-    marginTop: 120,
+    marginTop: 100,
   },
   title: {
     fontSize: 22,
