@@ -34,6 +34,8 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
+        console.log("going to login")
+        console.log('Logging in with:', email, password); // DEBUG
         return signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
     };
 

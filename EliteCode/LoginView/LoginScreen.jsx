@@ -20,10 +20,10 @@ function LoginScreen() {
     try {
       await login(email, password);
     } catch (error) {
-      // Changed: Using error.message instead of error object for the Alert
       Alert.alert('Invalid Login', error.message);
     }
   };
+
 
   useEffect(() => {
     if (user) {
@@ -73,7 +73,7 @@ function LoginScreen() {
           value={password}
           secureTextEntry={!showPassword}
           accessoryRight={renderEyeIcon} 
-          onChangeText={setPassword}
+          onChangeText={nextPassword => setPassword(nextPassword)}
         />
 
         <Text style={styles.resetLink} onPress= {() => navigation.navigate('ResetPassword')}> Forgot Password? </Text>
@@ -91,6 +91,15 @@ function LoginScreen() {
     </Layout>
   );
 }
+
+
+export default () => (
+  <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <LoginScreen />
+    </Layout>
+  </ApplicationProvider>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -133,6 +142,8 @@ const styles = StyleSheet.create({
     margin: 2,
     fontSize: 20,
     color: 'white',
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   inputs: {
     width: 250,
@@ -154,12 +165,3 @@ const styles = StyleSheet.create({
   }
     
   });
-  
-
-export default () => (
-  <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <LoginScreen />
-    </Layout>
-  </ApplicationProvider>
-)
