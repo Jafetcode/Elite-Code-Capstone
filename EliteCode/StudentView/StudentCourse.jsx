@@ -98,7 +98,7 @@ function StudentCourse() {
                                 key={question.qid}
                                 style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "#1E2A38" }}
                             >
-                                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: question.qid })}>
+                                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: question.qid, cid: cid })}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, color: 'white' }}>
                                             {question.topic}

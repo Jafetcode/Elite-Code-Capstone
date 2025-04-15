@@ -183,20 +183,22 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*
+    SELECT DISTINCT q.*, mcq.*
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
+    INNER JOIN MCQ mcq on q.qid = mcq.qid
     WHERE e.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*
+    SELECT DISTINCT q.*, mcq.*
     FROM Questions q
-    INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
     INNER JOIN Enrolled e on ats.sid = e.sid
+    INNER JOIN MCQ mcq on q.qid = mcq.qid
     WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
@@ -221,20 +223,22 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*
+    SELECT DISTINCT q.*, mcq.*
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
+    INNER JOIN MCQ mcq ON q.qid = mcq.qid
     WHERE e.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*
+    SELECT DISTINCT q.*, mcq.*
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-    INNER JOIN Enrolled e on q.tid AND e.tid
+    INNER JOIN Enrolled e on ats.sid = e.sid
+    INNER JOIN MCQ mcq ON q.qid = mcq.qid
     WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;

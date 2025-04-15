@@ -30,13 +30,11 @@ function SubmitQuestion() {
   const [answer, setAnswer] = React.useState("");
   const [progress, setProgress] = React.useState("");
   const [submitted_on, setSubmitted_on] = React.useState(new Date());
-  const [type, setType] = React.useState("shortAnswer");
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [correctAns, setCorrectAns] = React.useState("");
   const [questionData, setQuestionData] = React.useState([]);
   const route = useRoute();
   const { user } = useAuth() || {};
-;
-  const { cid, qid} = route.params || {};
+  const { cid, qid, type } = route.params || {};
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -59,8 +57,12 @@ function SubmitQuestion() {
   const fetchQuestionData = async () => {
     try {
       const res = await fetch(
-        `https://elitecodecapstone24.onrender.com/student/questions?qid=${qid}`
+        `https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}&qid=${qid}`
       );
+      if (!res.ok) {
+        throw new Error("Network response was not ok" + res.statusText);
+      }
+
       const data = await res.json();
       setQuestionData(data.results);
     } catch (error) {
@@ -79,7 +81,6 @@ function SubmitQuestion() {
   const handleSubmit = async () => {
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
     const sid = user.userID;
-    const cid = user.cid;
     setProgress("submitted");
 
     try {
@@ -119,6 +120,37 @@ function SubmitQuestion() {
       if (!response.ok) {
         throw new Error(data.error || "Failed to create question");
       }
+
+      // if (type === "MCQ") {
+      //   try {
+      //     const mcqPayload = {
+      //       qid: data.questionId,
+      //       correctAns
+      //     };
+
+      //     const mcqResponse = await fetch("https://elitecodecapstone24.onrender.com/createMCQ/", {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //       body: JSON.stringify(mcqPayload),
+      //     }
+      //     );
+
+      //     const mcqData = await mcqResponse.json();
+      //     if (mcqResponse.ok) {
+      //       console.log("MCQ created successfully. Response data:", mcqData);
+      //       alert("MCQ Created!");
+      //     } else {
+      //       console.log("MCQ Response Status:", mcqResponse.status);
+      //       console.log("MCQ Response Data:", mcqData);
+      //       alert("Error:" + (mcqData.error || "Failed to create MCQ"));
+      //     }
+      //   } catch (error) {
+      //     console.error("Error creating MCQ:", error.message);
+      //     alert("Network error: " + error.message);
+      //   }
+      // }
 
       console.log("Response:", data);
       if (response.ok) {
