@@ -46,7 +46,7 @@ router.get('/getCourses', (req, res) => {
   const { tid } = req.query;
   const sql = 'SELECT * FROM Classes WHERE tid = ?';
 
-  db.query(sql, [tid], (err, results) =>{
+  db.query(sql, [tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -122,33 +122,33 @@ router.get('/getCourses', (req, res) => {
 //         });
 //       });
 
-    // const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
-    // db.query(fetchStudentAssignments, [qid], (err, studentResults) => {
-    //   if (err) {
-    //     console.error("Error fetching student assignments:", err);
-    //     return res.status(500).json({ message: "Error fetching student assignments" });
-    //   }
+// const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
+// db.query(fetchStudentAssignments, [qid], (err, studentResults) => {
+//   if (err) {
+//     console.error("Error fetching student assignments:", err);
+//     return res.status(500).json({ message: "Error fetching student assignments" });
+//   }
 
-    //   const existingSids = studentResults.map(r => r.sid);
-    //   const sidsToDelete = existingSids.filter(sid => !students.includes(sid));
-    //   const sidsToInsert = students.filter(sid => !existingSids.includes(sid));
+//   const existingSids = studentResults.map(r => r.sid);
+//   const sidsToDelete = existingSids.filter(sid => !students.includes(sid));
+//   const sidsToInsert = students.filter(sid => !existingSids.includes(sid));
 
-      // const studentDeletePromises = sidsToDelete.map(sid => {
-      //   return new Promise((resolve, reject) => {
-      //     db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND sid = ?', [qid, sid], (err) => {
-      //       if (err) reject(err);
-      //       else resolve();
-      //     });
-      //   });
-      // });
+// const studentDeletePromises = sidsToDelete.map(sid => {
+//   return new Promise((resolve, reject) => {
+//     db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND sid = ?', [qid, sid], (err) => {
+//       if (err) reject(err);
+//       else resolve();
+//     });
+//   });
+// });
 
-      // const studentInsertPromises = sidsToInsert.map(sid => {
-      //   return new Promise((resolve, reject) => {
-      //     db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) => {
-      //       if (err) reject(err);
-      //       else resolve();
-      //     });
-      //   });
+// const studentInsertPromises = sidsToInsert.map(sid => {
+//   return new Promise((resolve, reject) => {
+//     db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) => {
+//       if (err) reject(err);
+//       else resolve();
+//     });
+//   });
 //       });
 
 
@@ -255,6 +255,14 @@ router.post('/updateAssignments', (req, res) => {
           });
         });
 
+        if (
+          cidsToDelete.length === 0 &&
+          cidsToInsert.length === 0 &&
+          sidsToDelete.length === 0 &&
+          sidsToInsert.length === 0
+        ) {
+          return res.json({ message: "No changes made" });
+        }
         // Finalize all insertions and deletions
         Promise.all([
           ...classDeletePromises,
@@ -284,17 +292,17 @@ router.get('/submission', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({results});
+    res.json({ results });
   });
 });
 
-router.put('/gradeSubmission',( req, res) => {
+router.put('/gradeSubmission', (req, res) => {
   const sql = 'UPDATE Submissions set grade= ?, comment = ? where qid = ? and sid = ?';
   db.query(sql, [grade, comment, qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({message: "Submission graded successfully", results});
+    res.json({ message: "Submission graded successfully", results });
   });
 
 });
@@ -360,54 +368,54 @@ router.get('/questionID', (req, res) => {
 router.get('/classlist', (req, res) => { //working
   const cid = req.query.cid;
   const sql = 'Select Users.userID, Users.fname, Users.lname, Users.email '
-  + 'From Users join Enrolled where Enrolled.cid = ? and Enrolled.sid = Users.userID';
+    + 'From Users join Enrolled where Enrolled.cid = ? and Enrolled.sid = Users.userID';
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({results});
+    res.json({ results });
   });
 });
 
-router.delete('/removeStudent', (req, res) =>{
+router.delete('/removeStudent', (req, res) => {
   const { cid, sid } = req.query;
   const sql = 'DELETE FROM Enrolled WHERE cid = ? AND sid = ?';
   db.query(sql, [cid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'Student removed from course'});
+    res.json({ message: 'Student removed from course' });
   });
 });
 
 router.get('/courses', (req, res) => { //working
   const tid = req.query.tid;
   const sql = 'Select Classes.cid, Classes.courseName, Classes.description, coalesce(count(distinct Enrolled.sid), 0) as NumEnrolled ' +
-  'FROM Classes left join Enrolled on Classes.cid = Enrolled.cid ' +
-  'where  Classes.tid = ? ' +
-  'GROUP BY Classes.cid, Classes.courseName';
+    'FROM Classes left join Enrolled on Classes.cid = Enrolled.cid ' +
+    'where  Classes.tid = ? ' +
+    'GROUP BY Classes.cid, Classes.courseName';
   db.query(sql, [tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({results});
+    res.json({ results });
   });
 });
 
 router.put('/course/:cid', (req, res) => {
-    const {cid} = req.params;
-    const { courseName, description } = req.body;
+  const { cid } = req.params;
+  const { courseName, description } = req.body;
 
-    if (!courseName){
-      return res.status(400).json({ error: 'Missing Course Name'});
+  if (!courseName) {
+    return res.status(400).json({ error: 'Missing Course Name' });
+  }
+  const sql = 'UPDATE Classes SET courseName = ?, description = ? WHERE cid = ?';
+  db.query(sql, [courseName, description, cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
     }
-    const sql = 'UPDATE Classes SET courseName = ?, description = ? WHERE cid = ?';
-    db.query(sql, [courseName, description, cid], (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ message: 'Course updated successfully' });
-    });
+    res.json({ message: 'Course updated successfully' });
+  });
 
 });
 router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
@@ -427,8 +435,8 @@ router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
 });
 
 router.delete('/course/:cid', (req, res) => {
-  const {cid} = req.params;
-  
+  const { cid } = req.params;
+
   const sql = 'DELETE FROM Classes WHERE cid = ?';
   db.query(sql, [cid], (err, results) => {
     if (err) {
@@ -447,12 +455,12 @@ router.get('/students', (req, res) => { //working
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({results});
+    res.json({ results });
   });
 });
 
 router.get('/:tid/courses', async (req, res) => {
-  const {tid}  = req.params;
+  const { tid } = req.params;
   console.log(`tid : ${tid}`);
   const sql = `
     SELECT e.cid, c.courseName, u.userID, u.fname, u.lname
@@ -462,42 +470,42 @@ router.get('/:tid/courses', async (req, res) => {
     WHERE e.tid = ?
     ORDER BY c.courseName, u.lname, u.fname`;
 
-    db.execute(sql, [tid], (err, results) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).send('Something went wrong');
-      }
-  
-      const courses = {};
-      for (const row of results) {
-        if (!courses[row.cid]) {
-          courses[row.cid] = {
-            cid: row.cid,
-            courseName: row.courseName,
-            students: [],
-          };
-        }
-        courses[row.cid].students.push({
-          userID: row.userID,
-          fname: row.fname,
-          lname: row.lname,
-        });
-      }
-  
-      res.json(Object.values(courses));
-    });
-  });
+  db.execute(sql, [tid], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).send('Something went wrong');
+    }
 
-  
-router.get('/assignments', (req, res) =>{
+    const courses = {};
+    for (const row of results) {
+      if (!courses[row.cid]) {
+        courses[row.cid] = {
+          cid: row.cid,
+          courseName: row.courseName,
+          students: [],
+        };
+      }
+      courses[row.cid].students.push({
+        userID: row.userID,
+        fname: row.fname,
+        lname: row.lname,
+      });
+    }
+
+    res.json(Object.values(courses));
+  });
+});
+
+
+router.get('/assignments', (req, res) => {
   const qid = req.query.qid;
-  
+
   const sqlStudents = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
-  const sqlClasses =  'SELECT cid FROM AssignedToClass WHERE qid = ?';
-   db.query(sqlStudents, [qid], (err, studentResults) => {
+  const sqlClasses = 'SELECT cid FROM AssignedToClass WHERE qid = ?';
+  db.query(sqlStudents, [qid], (err, studentResults) => {
     if (err) {
       return res.status(500).json({ error: err.message });
-    }     
+    }
 
     db.query(sqlClasses, [qid], (err, classResults) => {
       if (err) {

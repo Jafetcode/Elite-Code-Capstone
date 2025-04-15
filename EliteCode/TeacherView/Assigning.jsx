@@ -175,7 +175,7 @@ const Assigning = () => {
                 return;
             }
 
-            if (result.message === "Question assigned successfully") {
+            if (result.message === "Question assigned successfully.") {
                 setMessage(" Assignments updated!");
                 setTimeout(() => {
                     setMessage('');
