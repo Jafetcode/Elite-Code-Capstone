@@ -79,52 +79,87 @@ router.get('/getCourses', (req, res) => {
 //   res.json({ message: "Question assigned successfully" });
 // });
 
-router.post('/updateAssignments', (req, res) => { 
-  const { qid, courses, students, tid } = req.body;
+app.post('/instructor/updateAssignments', (req, res) => {
+  const { qid, courses = [], students = [], tid } = req.body;
 
-  // First, delete all existing assignments for this question by the teacher
-  const deleteClassSQL = 'DELETE FROM AssignedToClass WHERE qid = ? AND tid = ?';
-  const deleteStudentSQL = 'DELETE FROM AssignedToStudent WHERE qid = ? and sid = ?';
-
-  db.query(deleteClassSQL, [qid, tid], (err) => {
+  // ---- CLASS ASSIGNMENTS ----
+  const fetchClassAssignments = 'SELECT cid FROM AssignedToClass WHERE qid = ? AND tid = ?';
+  db.query(fetchClassAssignments, [qid, tid], (err, classResults) => {
     if (err) {
-      console.error("Error deleting class assignments:", err);
-      return res.status(500).json({ message: "Error clearing class assignments" });
+      console.error("Error fetching class assignments:", err);
+      return res.status(500).json({ message: "Error fetching class assignments" });
     }
 
-    db.query(deleteStudentSQL, [qid], (err) => {
+    const existingCids = classResults.map(r => r.cid);
+    const cidsToDelete = existingCids.filter(cid => !courses.includes(cid));
+    const cidsToInsert = courses.filter(cid => !existingCids.includes(cid));
+
+    const classDeletePromises = cidsToDelete.map(cid => {
+      return new Promise((resolve, reject) => {
+        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND tid = ? AND cid = ?', [qid, tid, cid], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+    });
+
+    const classInsertPromises = cidsToInsert.map(cid => {
+      return new Promise((resolve, reject) => {
+        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+    });
+
+    // ---- STUDENT ASSIGNMENTS ----
+    const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ? AND tid = ?';
+    db.query(fetchStudentAssignments, [qid, tid], (err, studentResults) => {
       if (err) {
-        console.error("Error deleting student assignments:", err);
-        return res.status(500).json({ message: "Error clearing student assignments" });
+        console.error("Error fetching student assignments:", err);
+        return res.status(500).json({ message: "Error fetching student assignments" });
       }
 
-      // Now insert the selected class assignments
-      courses.forEach((cid) => {
-        const sqlClass = 'INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)';
-        db.query(sqlClass, [qid, cid, tid], (err) => {
-          if (err) console.error("Error assigning to class:", err);
+      const existingSids = studentResults.map(r => r.sid);
+      const sidsToDelete = existingSids.filter(sid => !students.includes(sid));
+      const sidsToInsert = students.filter(sid => !existingSids.includes(sid));
+
+      const studentDeletePromises = sidsToDelete.map(sid => {
+        return new Promise((resolve, reject) => {
+          db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND tid = ? AND sid = ?', [qid, tid, sid], (err) => {
+            if (err) reject(err);
+            else resolve();
+          });
         });
       });
 
-      // Only assign individual students who aren't in selected classes
-      const filteredStudents = students.filter(sid => {
-        return !courses.some(cid => {
-          const course = coursesMap[cid];
-          return course?.students?.some(s => s.userID === sid);
+      const studentInsertPromises = sidsToInsert.map(sid => {
+        return new Promise((resolve, reject) => {
+          db.query('INSERT INTO AssignedToStudent (qid, sid, tid) VALUES (?, ?, ?)', [qid, sid, tid], (err) => {
+            if (err) reject(err);
+            else resolve();
+          });
         });
       });
 
-      filteredStudents.forEach((sid) => {
-        const sqlStudent = 'INSERT INTO AssignedToStudent (qid, sid, viewable) VALUES (?, ?)';
-        db.query(sqlStudent, [qid, sid], (err) => {
-          if (err) console.error("Error assigning to student:", err);
+      // ---- Execute all Promises ----
+      Promise.all([
+        ...classDeletePromises,
+        ...classInsertPromises,
+        ...studentDeletePromises,
+        ...studentInsertPromises
+      ])
+        .then(() => {
+          res.json({ message: "Question assigned successfully" });
+        })
+        .catch(error => {
+          console.error("Error updating assignments:", error);
+          res.status(500).json({ message: "Error updating assignments" });
         });
-      });
-
-      res.json({ message: "Question assigned successfully" });
     });
   });
 });
+
 
 // pretty sure doesnt work
 // router.post('/assignQuestion', async (req, res) => { 
