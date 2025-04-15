@@ -11,7 +11,7 @@ function FirstScreen() {
     <Layout style={styles.containerMain}>
     <Image
     source={require("../assets/images/FinalLogo2.png")}
-            style={{ width: 300, height: 150, marginBottom: 30 }}
+            style={{ width: 300, height: 150, marginBottom: 20}}
           />
         <Layout style={styles.containerInner}>
         <Button style={styles.button} onPress={() => navigation.navigate('LoginScreen')}>
@@ -52,11 +52,11 @@ text:{
 button:{
     width:200,
     marginTop:15,
-
 },
 outer:{
     fontSize: 40,
     marginBottom: 40,
     color:'white'
+
 }
 })

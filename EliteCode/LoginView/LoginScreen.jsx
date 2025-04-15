@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Text,  StyleSheet,View} from 'react-native';
-import {useNavigation,} from '@react-navigation/native';
-import { Button, Layout, Input, Divider,} from '@ui-kitten/components';
+import {useNavigation} from '@react-navigation/native';
+import { Button, Layout, Input, Divider, Icon} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -14,6 +14,7 @@ function LoginScreen() {
   const {login, user} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -40,13 +41,18 @@ function LoginScreen() {
     }
   }, [user, navigation]);
 
+  const renderEyeIcon = (props) => (
+    <Icon
+      {...props}
+      name={showPassword ? 'eye-off' : 'eye'}
+      onPress={() => setShowPassword(!showPassword)}
+    />
+  );
+
+
   return (
     <Layout style={styles.container}>
-      <View style={styles.header}>
-        <Text category="H1" style={styles.headerText}>
-          Elite Code
-        </Text>
-      </View>
+      
       <Divider />
       <View style={styles.inputContainer}>
         <Text
@@ -60,13 +66,14 @@ function LoginScreen() {
           value={email}
           autoCapitalize='none'
           onChangeText={nextEmail => setEmail(nextEmail)} />
-
-        <Input style={styles.inputs}
+     <Input
+          style={styles.inputs}
           label='Password'
           placeholder='Enter Password'
           value={password}
-          secureTextEntry={true}
-          onChangeText={nextPassword => setPassword(nextPassword)}
+          secureTextEntry={!showPassword}
+          accessoryRight={renderEyeIcon} 
+          onChangeText={setPassword}
         />
 
         <Text style={styles.resetLink} onPress= {() => navigation.navigate('ResetPassword')}> Forgot Password? </Text>

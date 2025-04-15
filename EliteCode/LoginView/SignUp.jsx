@@ -96,14 +96,6 @@ const SignUp = () => {
 
   return (
     <Layout style={styles.container}>
-      <View style={styles.header}>
-        <Button appearance="ghost" status="basic" onPress={() => navigation.goBack()}>
-          {'<'}
-        </Button>
-        <Text category="h1" style={styles.headerText}>
-          Elite Code
-        </Text>
-      </View>
       <View style={styles.inputContainer}>
         <Text style={styles.innerText} category="h1">
           Register
@@ -145,18 +137,16 @@ const SignUp = () => {
         />
         <Text style={styles.roleLabel}>Select Role</Text>
         <View style={styles.roleButtons}>
-          <Button
+          <Button  
             appearance={role === 'student' ? 'filled' : 'outline'}
             onPress={() => setRole('student')}
-            style={styles.roleButton}
-          >
+            style={styles.roleButton}>
             Student
           </Button>
           <Button
             appearance={role === 'instructor' ? 'filled' : 'outline'}
             onPress={() => setRole('instructor')}
-            style={styles.roleButton}
-          >
+            style={styles.roleButton}>
             Instructor
           </Button>
         </View>
@@ -240,10 +230,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: 250,
     marginVertical: 10,
+
   },
   roleButton: {
     flex: 1,
     marginHorizontal: 5,
+
   },
   tempButtons: {
     marginTop: 200,
