@@ -18,10 +18,8 @@ const Assigning = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Fetch courses and current assignments
     const fetchCoursesAndAssignments = async () => {
         try {
-            // Fetch courses the teacher teaches
             let res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/${user.userID}/courses`);
             const courses = await res.json();
             console.log("courses.results: ", courses)
@@ -33,27 +31,27 @@ const Assigning = () => {
             console.log("assignmentData2: ", assignmentData)
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
-        
+
             const classSelection = {};
             classAssignments.forEach(c => classSelection[c.cid] = true);
-        
+
             const studentSelection = {};
             studentAssignments.forEach(s => studentSelection[s.sid] = true);
-        
-            for (const classItem of courses) {
-                const allStudentsAssigned =
-                    classItem.students.length > 0 &&
-                    classItem.students.every(student => studentSelection[student.userID]);
-        
-                if (allStudentsAssigned) {
-                    classSelection[classItem.cid] = true;
-                    // Remove individual students to avoid duplicates
-                    classItem.students.forEach(student => {
-                        delete studentSelection[student.userID];
-                    });
-                }
-            }
-        
+
+            // for (const classItem of courses) {
+            //     const allStudentsAssigned =
+            //         classItem.students.length > 0 &&
+            //         classItem.students.every(student => studentSelection[student.userID]);
+
+            //     if (allStudentsAssigned) {
+            //         classSelection[classItem.cid] = true;
+            //         // Remove individual students to avoid duplicates
+            //         classItem.students.forEach(student => {
+            //             delete studentSelection[student.userID];
+            //         });
+            //     }
+            // }
+
             setSelectedClasses(classSelection);
             setSelectedStudents(studentSelection);
 
@@ -66,25 +64,21 @@ const Assigning = () => {
         fetchCoursesAndAssignments();
     }, []);
 
+
     const toggleClassSelection = (classId) => {
         setSelectedClasses(prev => {
-            const newSelection = { ...prev };
-            newSelection[classId] = !prev[classId];
+            const newClassSelection = { ...prev, [classId]: !prev[classId] };
+            const classStudents = classes.find(c => c.cid === classId)?.students || [];
 
-            if (newSelection[classId]) {
-                const classStudents = classes.find(c => c.cid === classId).students;
-                const allSelected = classStudents.every(student => selectedStudents[student.userID] || false);
-                if (allSelected) {
-                    setSelectedStudents(prevStudents => {
-                        const newStudentSelection = { ...prevStudents };
-                        classStudents.forEach(student => {
-                            newStudentSelection[student.userID] = true;
-                        });
-                        return newStudentSelection;
-                    });
-                }
-            }
-            return newSelection;
+            setSelectedStudents(prevStudents => {
+                const newStudentSelection = { ...prevStudents };
+                classStudents.forEach(student => {
+                    newStudentSelection[student.userID] = newClassSelection[classId]; 
+                });
+                return newStudentSelection;
+            });
+
+            return newClassSelection;
         });
     };
 
@@ -94,26 +88,16 @@ const Assigning = () => {
             const newSelection = { ...prev };
             newSelection[studentId] = !prev[studentId];
 
-            if (newSelection[studentId]) {
-                setSelectedClasses(prevClasses => ({
-                    ...prevClasses,
-                    [classId]: false
-                }));
-            }
-
-            const classStudents = classes.find(c => c.cid === classId).students;
-            const allSelected = selectedStudents?.students?.every(student => newSelection[student.userID] || false) ?? false;
-            // const allSelected = classStudents.every(student => newSelection[student.userID] || false);
-            if (allSelected) {
-                setSelectedClasses(prevClasses => ({
-                    ...prevClasses,
-                    [classId]: true
-                }));
-            }
+            // Uncheck the class if it was selected
+            setSelectedClasses(prevClasses => ({
+                ...prevClasses,
+                [classId]: false
+            }));
 
             return newSelection;
         });
     };
+
 
     // Toggle class expansion (show/hide students)
     const toggleClassExpansion = (classId) => {
@@ -123,85 +107,49 @@ const Assigning = () => {
         }));
     };
 
-    // Get all selected items for submission
-    // const getSelectedItems = () => {
-    //     const selectedItems = {
-    //         classes: Object.keys(selectedClasses).filter(classId => selectedClasses[classId]),
-    //         students: Object.keys(selectedStudents).filter(studentId => selectedStudents[studentId])
-    //     };
-    //     return selectedItems;
-    // };
     const getSelectedItems = () => {
-        const selectedClassesSet = new Set(Object.keys(selectedClasses).filter(cid => selectedClasses[cid]));
-        const selectedStudentsArray = Object.keys(selectedStudents).filter(sid => {
-            // Check if this student is in a selected class
-            for (const classItem of classes) {
-                if (selectedClassesSet.has(classItem.cid)) {
-                    const studentInClass = classItem.students.find(s => s.userID === sid);
-                    if (studentInClass) return false; // skip this student
-                }
-            }
-            return selectedStudents[sid];
+        const selectedStudentsCopy = { ...selectedStudents }; // clone to safely modify
+        const finalSelectedClasses = new Set();
+
+        classes.forEach(classItem => {
+            const students = classItem.students;
+            const allSelected = students.length > 0 && students.every(
+                s => selectedStudentsCopy[s.userID]
+            );
+
+            // if (allSelected) {
+            //     finalSelectedClasses.add(classItem.cid);
+            //     // Remove these students so we don't double assign
+            //     students.forEach(s => delete selectedStudentsCopy[s.userID]);
+            // }
         });
 
+        const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
+
         return {
-            classes: Array.from(selectedClassesSet),
-            students: selectedStudentsArray,
+            classes: Array.from(finalSelectedClasses),
+            students: finalSelectedStudents,
         };
     };
+
 
     const renderToggleIcon = (props, isExpanded) => (
         <Icon {...props} name={isExpanded ? 'arrow-up-outline' : 'arrow-down-outline'} />
     );
 
-    // Handle assignment save
-    // const handleSave = async () => {
-    //     const selectedItems = getSelectedItems();
-    //     try {
-    //         const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 qid: question.qid,
-    //                 courses: selectedItems.classes,
-    //                 students: selectedItems.students,
-    //                 tid: user.userID
-    //             })
-    //         });
-
-    //         //     const result = await response.json();
-    //         //     if (result.message === "Question assigned successfully") {
-    //         //         alert("Assignments updated!");
-    //         //     } else {
-    //         //         console.log(result.message)
-    //         //         alert("Failed to update assignments.");
-    //         //     }
-    //         // } catch (error) {
-    //         //     console.error("Error saving assignments:", error);
-    //         // }
-
-    //         const result = await response.json();
-    //         if (result.message === "Question assigned successfully") {
-    //             setMessage("Assignments updated!");
-
-    //             setTimeout(() => {
-    //                 router.back();
-    //             }, 3000);
-    //         } else {
-    //             console.log(result.message);
-    //             setMessage("Failed to update assignments.");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error saving assignments:", error);
-    //         setMessage("Error saving assignments.");
-    //     }
-    // };
 
     const handleSave = async () => {
         const selectedItems = getSelectedItems();
         setLoading(true);
+
+        if (selectedItems.classes.length === 0 && selectedItems.students.length === 0) {
+            setMessage("No selections made — not updating.");
+            setTimeout(() => {
+                setMessage('');
+                navigation.goBack();
+            }, 2000);
+        }
+
         try {
             const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
                 method: 'POST',
@@ -215,38 +163,39 @@ const Assigning = () => {
                     tid: user.userID
                 })
             });
-    
-            const text = await response.text(); // ← First, read as text
+
+            const text = await response.text(); //  First, read as text
             let result;
             try {
-                result = JSON.parse(text); // ← Then, try parsing JSON manually
+                result = JSON.parse(text); //  Then, try parsing JSON manually
             } catch (parseErr) {
                 console.error("Failed to parse JSON:", parseErr);
                 console.log("Raw response text:", text); // This will show you what the server actually sent back
                 setMessage("Server error: invalid response");
                 return;
             }
-    
-            if (result.message === "Question assigned successfully") {
+
+            if (result.message === "Question assigned successfully.") {
                 setMessage(" Assignments updated!");
                 setTimeout(() => {
                     setMessage('');
                     navigation.goBack();
-                }, 3000);
-            } else {
+                }, 2000);
+            } else if (result.message === "No changes made"){
+                setMessage("No changes made")
+            }
+            else {
                 console.log(result.message);
-                setMessage("Failed to update assignments.");
+                setMessage("Error: Failed to update assignments.");
             }
         } catch (error) {
             console.error("Unexpected error:", error);
-            setMessage("Error saving assignments.");
+            setMessage("Error: saving assignments.");
         } finally {
             setLoading(false);
         }
     };
-    
 
-    // Render student item
     const renderStudentItem = (student, classId) => (
         <ListItem
             key={student.userID}
@@ -268,7 +217,7 @@ const Assigning = () => {
                 Select classes or specific students
             </Text>
             {message !== '' && (
-                <Text style={{ textAlign: 'center', color: message.includes("✅") ? 'green' : 'red', marginVertical: 10 }}>
+                <Text style={{ textAlign: 'center', color: message.includes("Error") ? 'red' : 'green', marginVertical: 10 }}>
                     {message}
                 </Text>
             )}
@@ -330,39 +279,23 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
     },
-    heading: {
-        marginBottom: 8,
-    },
-    subHeading: {
-        marginBottom: 16,
-    },
-    classesContainer: {
-        flex: 1,
-    },
-    classCard: {
-        marginBottom: 16,
-    },
+    heading: { marginBottom: 8,},
+    subHeading: { marginBottom: 16,},
+    classesContainer: { flex: 1, },
+    classCard: { marginBottom: 16,},
     classHeader: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    checkbox: {
-        marginRight: 8,
-    },
+    checkbox: {  marginRight: 8, },
     className: {
         flex: 1,
         fontSize: 12
     },
-    expandButton: {
-        marginLeft: 8,
-    },
-    studentsContainer: {
-        marginTop: 8,
-    },
-    assignButton: {
-        marginTop: 16,
-    },
+    expandButton: { marginLeft: 8, },
+    studentsContainer: { marginTop: 8, },
+    assignButton: { marginTop: 16, },
 });
 
 export default Assigning;
