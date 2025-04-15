@@ -83,8 +83,8 @@ router.post('/updateAssignments', (req, res) => {
   const { qid, courses = [], students = [], tid } = req.body;
 
   // ---- CLASS ASSIGNMENTS ----
-  const fetchClassAssignments = 'SELECT cid FROM AssignedToClass WHERE qid = ? AND tid = ?';
-  db.query(fetchClassAssignments, [qid, tid], (err, classResults) => {
+  const fetchClassAssignments = 'SELECT cid FROM AssignedToClass WHERE qid = ?';
+  db.query(fetchClassAssignments, [qid], (err, classResults) => {
     if (err) {
       console.error("Error fetching class assignments:", err);
       return res.status(500).json({ message: "Error fetching class assignments" });
@@ -96,7 +96,7 @@ router.post('/updateAssignments', (req, res) => {
 
     const classDeletePromises = cidsToDelete.map(cid => {
       return new Promise((resolve, reject) => {
-        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND tid = ? AND cid = ?', [qid, tid, cid], (err) => {
+        db.query('DELETE FROM AssignedToClass WHERE qid = ? AND cid = ?', [qid, cid], (err) => {
           if (err) reject(err);
           else resolve();
         });
@@ -105,7 +105,7 @@ router.post('/updateAssignments', (req, res) => {
 
     const classInsertPromises = cidsToInsert.map(cid => {
       return new Promise((resolve, reject) => {
-        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) => {
+        db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?)', [qid, cid], (err) => {
           if (err) reject(err);
           else resolve();
         });
@@ -113,8 +113,8 @@ router.post('/updateAssignments', (req, res) => {
     });
 
     // ---- STUDENT ASSIGNMENTS ----
-    const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ? AND sid = ?';
-    db.query(fetchStudentAssignments, [qid, tid], (err, studentResults) => {
+    const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ?';
+    db.query(fetchStudentAssignments, [qid], (err, studentResults) => {
       if (err) {
         console.error("Error fetching student assignments:", err);
         return res.status(500).json({ message: "Error fetching student assignments" });
@@ -126,7 +126,7 @@ router.post('/updateAssignments', (req, res) => {
 
       const studentDeletePromises = sidsToDelete.map(sid => {
         return new Promise((resolve, reject) => {
-          db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND tid = ? AND sid = ?', [qid, tid, sid], (err) => {
+          db.query('DELETE FROM AssignedToStudent WHERE qid = ? AND sid = ?', [qid, sid], (err) => {
             if (err) reject(err);
             else resolve();
           });
@@ -135,7 +135,7 @@ router.post('/updateAssignments', (req, res) => {
 
       const studentInsertPromises = sidsToInsert.map(sid => {
         return new Promise((resolve, reject) => {
-          db.query('INSERT INTO AssignedToStudent (qid, sid, tid) VALUES (?, ?, ?)', [qid, sid, tid], (err) => {
+          db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) => {
             if (err) reject(err);
             else resolve();
           });

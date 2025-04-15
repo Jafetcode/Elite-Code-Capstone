@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import { useRoute } from '@react-navigation/native';
 import { Layout, Icon, Button, Card, Text, CheckBox, List, ListItem, Divider } from "@ui-kitten/components";
 import { useAuth } from "../AuthContext";
 import { QueryEndAtConstraint } from "firebase/firestore";
-import { router } from "expo-router";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 const Assigning = () => {
     const route = useRoute();
+    const navigation = useNavigation();
     const { user } = useAuth();
     const { question } = route.params;
     const [classes, setClasses] = useState([]);
@@ -33,13 +33,28 @@ const Assigning = () => {
             console.log("assignmentData2: ", assignmentData)
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
-
+        
             const classSelection = {};
             classAssignments.forEach(c => classSelection[c.cid] = true);
-            setSelectedClasses(classSelection);
-
+        
             const studentSelection = {};
             studentAssignments.forEach(s => studentSelection[s.sid] = true);
+        
+            for (const classItem of courses) {
+                const allStudentsAssigned =
+                    classItem.students.length > 0 &&
+                    classItem.students.every(student => studentSelection[student.userID]);
+        
+                if (allStudentsAssigned) {
+                    classSelection[classItem.cid] = true;
+                    // Remove individual students to avoid duplicates
+                    classItem.students.forEach(student => {
+                        delete studentSelection[student.userID];
+                    });
+                }
+            }
+        
+            setSelectedClasses(classSelection);
             setSelectedStudents(studentSelection);
 
         } catch (error) {
@@ -216,7 +231,7 @@ const Assigning = () => {
                 setMessage(" Assignments updated!");
                 setTimeout(() => {
                     setMessage('');
-                    router.back();
+                    navigation.goBack();
                 }, 3000);
             } else {
                 console.log(result.message);
