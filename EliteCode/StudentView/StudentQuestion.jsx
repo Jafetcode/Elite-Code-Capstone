@@ -94,7 +94,7 @@ function StudentQuestion() {
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                             <Text category="s2">{question.pointVal} Points</Text>
-                                            <Button onPress={() => navigation.navigate('SubmitQuestion', { cid: cid, qid: question.qid })} style={{ marginTop: 20 }}> Submit answer for {question.question}</Button>
+                                            <Button onPress={() => navigation.navigate('SubmitQuestion', { cid: cid, qid: question.qid, type: question.type })} style={{ marginTop: 20 }}> Submit answer for {question.question}</Button>
                                             {/* <View>{question.imgFile}</View> */}
                                         </Card>
                                     )

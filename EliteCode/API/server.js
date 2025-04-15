@@ -30,7 +30,7 @@ app.get('/userRole', (req, res) => {
     return res.status(400).json({ error: 'Email is required' });
   }
 
-  db.query('SELECT role, userID, fname FROM Users WHERE email = ?', [email], (err, results) => {
+  db.query('SELECT role, userID, fname, lname, bio FROM Users WHERE email = ?', [email], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
