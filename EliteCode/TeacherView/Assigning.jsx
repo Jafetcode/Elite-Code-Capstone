@@ -33,18 +33,18 @@ const Assigning = () => {
             console.log("assignmentData2: ", assignmentData)
             const classAssignments = assignmentData.classes || [];
             const studentAssignments = assignmentData.students || [];
-        
+
             const classSelection = {};
             classAssignments.forEach(c => classSelection[c.cid] = true);
-        
+
             const studentSelection = {};
             studentAssignments.forEach(s => studentSelection[s.sid] = true);
-        
+
             for (const classItem of courses) {
                 const allStudentsAssigned =
                     classItem.students.length > 0 &&
                     classItem.students.every(student => studentSelection[student.userID]);
-        
+
                 if (allStudentsAssigned) {
                     classSelection[classItem.cid] = true;
                     // Remove individual students to avoid duplicates
@@ -53,7 +53,7 @@ const Assigning = () => {
                     });
                 }
             }
-        
+
             setSelectedClasses(classSelection);
             setSelectedStudents(studentSelection);
 
@@ -90,9 +90,9 @@ const Assigning = () => {
     const toggleClassSelection = (classId) => {
         setSelectedClasses(prev => {
             const newClassSelection = { ...prev, [classId]: !prev[classId] };
-    
+
             const classStudents = classes.find(c => c.cid === classId)?.students || [];
-    
+
             setSelectedStudents(prevStudents => {
                 const newStudentSelection = { ...prevStudents };
                 classStudents.forEach(student => {
@@ -100,11 +100,11 @@ const Assigning = () => {
                 });
                 return newStudentSelection;
             });
-    
+
             return newClassSelection;
         });
     };
-    
+
 
 
     // const toggleStudentSelection = (studentId, classId) => {
@@ -136,17 +136,17 @@ const Assigning = () => {
         setSelectedStudents(prev => {
             const newSelection = { ...prev };
             newSelection[studentId] = !prev[studentId];
-    
+
             // Uncheck the class if it was selected
             setSelectedClasses(prevClasses => ({
                 ...prevClasses,
                 [classId]: false
             }));
-    
+
             return newSelection;
         });
     };
-    
+
 
     // Toggle class expansion (show/hide students)
     const toggleClassExpansion = (classId) => {
@@ -185,28 +185,28 @@ const Assigning = () => {
     const getSelectedItems = () => {
         const selectedStudentsCopy = { ...selectedStudents }; // clone to safely modify
         const finalSelectedClasses = new Set();
-        
+
         classes.forEach(classItem => {
-          const students = classItem.students;
-          const allSelected = students.length > 0 && students.every(
-            s => selectedStudentsCopy[s.userID]
-          );
-      
-          if (allSelected) {
-            finalSelectedClasses.add(classItem.cid);
-            // Remove these students so we don't double assign
-            students.forEach(s => delete selectedStudentsCopy[s.userID]);
-          }
+            const students = classItem.students;
+            const allSelected = students.length > 0 && students.every(
+                s => selectedStudentsCopy[s.userID]
+            );
+
+            if (allSelected) {
+                finalSelectedClasses.add(classItem.cid);
+                // Remove these students so we don't double assign
+                students.forEach(s => delete selectedStudentsCopy[s.userID]);
+            }
         });
-      
+
         const finalSelectedStudents = Object.keys(selectedStudentsCopy).filter(sid => selectedStudentsCopy[sid]);
-      
+
         return {
-          classes: Array.from(finalSelectedClasses),
-          students: finalSelectedStudents,
+            classes: Array.from(finalSelectedClasses),
+            students: finalSelectedStudents,
         };
-      };
-      
+    };
+
 
     const renderToggleIcon = (props, isExpanded) => (
         <Icon {...props} name={isExpanded ? 'arrow-up-outline' : 'arrow-down-outline'} />
@@ -260,6 +260,15 @@ const Assigning = () => {
     const handleSave = async () => {
         const selectedItems = getSelectedItems();
         setLoading(true);
+
+        if (selectedItems.classes.length === 0 && selectedItems.students.length === 0) {
+            setMessage("No selections made — not updating.");
+            setTimeout(() => {
+                setMessage('');
+                navigation.goBack();
+            }, 3000);
+        }
+
         try {
             const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
                 method: 'POST',
@@ -273,7 +282,7 @@ const Assigning = () => {
                     tid: user.userID
                 })
             });
-    
+
             const text = await response.text(); // ← First, read as text
             let result;
             try {
@@ -284,7 +293,7 @@ const Assigning = () => {
                 setMessage("Server error: invalid response");
                 return;
             }
-    
+
             if (result.message === "Question assigned successfully") {
                 setMessage(" Assignments updated!");
                 setTimeout(() => {
@@ -302,7 +311,7 @@ const Assigning = () => {
             setLoading(false);
         }
     };
-    
+
 
     // Render student item
     const renderStudentItem = (student, classId) => (
