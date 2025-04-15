@@ -98,7 +98,7 @@ function StudentCourse() {
                                 key={question.qid}
                                 style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "#1E2A38" }}
                             >
-                                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: question.qid, opt1: question.opt1, opt2: question.opt2, opt3: question.opt3 , cid: question.cid, type: question.type })}>
+                                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: question.qid, mcq: { opt1: question.opt1, opt2: question.opt2, opt3: question.opt3 }, cid: question.cid, type : question.type })}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, color: 'white' }}>
                                             {question.topic}
