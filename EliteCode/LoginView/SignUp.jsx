@@ -2,9 +2,8 @@ import * as eva from '@eva-design/eva';
 import React, { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import { useNavigation } from '@react-navigation/native';
-import { ApplicationProvider } from '@ui-kitten/components';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { Layout, Button, Text, Input, Divider } from '@ui-kitten/components';
+import { ApplicationProvider, Layout, Button, Text, Input } from '@ui-kitten/components';
+import { ActivityIndicator, StyleSheet, View, ScrollView, Alert } from 'react-native';
 
 const SignUp = () => {
   const navigation = useNavigation();
@@ -15,7 +14,7 @@ const SignUp = () => {
   const [lname, setLname] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errorsObj, setErrorsObj] = useState("");
+  const [errorsObj, setErrorsObj] = useState({});
 
   const validateForm = () => {
     let errorsObj = {};
@@ -35,7 +34,7 @@ const SignUp = () => {
       errorsObj.password = 'Password must contain at least one digit';
     }
     if (!role) {
-      errors.role = 'Please select a role';
+      errorsObj.role = 'Please select a role';
     }
 
     setErrorsObj(errorsObj);
@@ -44,7 +43,6 @@ const SignUp = () => {
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      console.log('Valid email and password');
       handleSignUp();
     }
   };
@@ -69,196 +67,203 @@ const SignUp = () => {
         body: JSON.stringify({ email, fname, lname, role }),
       });
 
-      // Log raw response before parsing
       const textResponse = await response.text();
-      console.log('Raw API Response:', textResponse);
-
-      // Parse JSON only if response is valid
       const data = JSON.parse(textResponse);
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create user in MySQL.');
       }
 
-      // Once user is created, sign them out and reset navigation
       await handleLogout();
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'FirstScreen' }],
-      });
+      navigation.reset({ index: 0, routes: [{ name: 'FirstScreen' }] });
 
     } catch (error) {
       console.error('Sign-up error:', error);
-      alert(error.message || 'Invalid Email or Password. Must have a valid Email & Password > 6 characters long.');
+      alert(error.message || 'Invalid Email or Password. Must be at least 6 characters.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Layout style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Text style={styles.innerText} category="h1">
-          Register
-        </Text>
+    <ApplicationProvider {...eva} theme={eva.dark}>
+      <Layout style={styles.container}>
+        <ScrollView contentContainerStyle={styles.contentWrapper} showsVerticalScrollIndicator={false}>
 
-        <Input
-          style={styles.inputs}
-          label="FirstName"
-          placeholder="First Name"
-          value={fname}
-          onChangeText={(text) => setFname(text)}
-          autoCapitalize="none"
-        />
-        <Input
-          style={styles.inputs}
-          label="LastName"
-          placeholder="Last Name"
-          value={lname}
-          onChangeText={(text) => setLname(text)}
-          autoCapitalize="none"
-        />
-        <Input
-          style={styles.inputs}
-          label="Email"
-          placeholder="Enter Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          autoCapitalize="none"
-        />
-        {errorsObj.email ? <Text style={{ color: 'red' }}>{errorsObj.email}</Text> : null}
-        <Input
-          style={styles.inputs}
-          label="Password"
-          placeholder="Enter Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          autoCapitalize="none"
-          secureTextEntry={true}
-        />
-        <Text style={styles.roleLabel}>Select Role</Text>
-        <View style={styles.roleButtons}>
-          <Button  
-            appearance={role === 'student' ? 'filled' : 'outline'}
-            onPress={() => setRole('student')}
-            style={styles.roleButton}>
-            Student
-          </Button>
-          <Button
-            appearance={role === 'instructor' ? 'filled' : 'outline'}
-            onPress={() => setRole('instructor')}
-            style={styles.roleButton}>
-            Instructor
-          </Button>
-        </View>
+          <View style={styles.card}>
+            <Text style={styles.title}>Welcome!</Text>
+            <Text style={styles.subtitle}>Create your account</Text>
 
-        {errorsObj.password ? <Text style={{ color: 'red' }}>{errorsObj.password}</Text> : null}
-        {loading ? (
-          <ActivityIndicator size="small" />
-        ) : (
-          <Button style={styles.submit} onPress={handleSubmit}>
-            Submit
+            <Input
+              style={styles.input}
+              label="First Name"
+              placeholder="First Name"
+              value={fname}
+              onChangeText={setFname}
+              autoCapitalize="none"
+            />
+            <Input
+              style={styles.input}
+              label="Last Name"
+              placeholder="Last Name"
+              value={lname}
+              onChangeText={setLname}
+              autoCapitalize="none"
+            />
+            <Input
+              style={styles.input}
+              label="Email"
+              placeholder="Enter Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+            />
+            {errorsObj.email && <Text style={styles.error}>{errorsObj.email}</Text>}
+
+            <Input
+              style={styles.input}
+              label="Password"
+              placeholder="Enter Password"
+              value={password}
+              onChangeText={setPassword}
+              autoCapitalize="none"
+              secureTextEntry={true}
+            />
+            {errorsObj.password && <Text style={styles.error}>{errorsObj.password}</Text>}
+
+            <Text style={styles.roleLabel}>Select Role</Text>
+            <View style={styles.roleButtons}>
+              <Button
+                appearance={role === 'student' ? 'filled' : 'outline'}
+                onPress={() => setRole('student')}
+                style={styles.roleButton}
+              >
+                Student
+              </Button>
+              <Button
+                appearance={role === 'instructor' ? 'filled' : 'outline'}
+                onPress={() => setRole('instructor')}
+                style={styles.roleButton}
+              >
+                Instructor
+              </Button>
+            </View>
+            {errorsObj.role && <Text style={styles.error}>{errorsObj.role}</Text>}
+
+            {loading ? (
+              <ActivityIndicator size="small" />
+            ) : (
+              <Button style={styles.submit} onPress={handleSubmit}>
+                Submit
+              </Button>
+            )}
+          </View>
+
+          <Button appearance="ghost" style={styles.backButton} onPress={() => navigation.navigate('FirstScreen')}>
+            Back to First Screen
           </Button>
-        )}
-      </View>
-      <View style={styles.tempButtons}>
-        {/* <Button onPress={() => navigation.navigate('HomeGroup', { screen: 'Home' })}>
-          Skip to Home
-        </Button> */}
-        <Button onPress={() => navigation.navigate('LoginScreen')}>
-          Back to Login
-        </Button>
-      </View>
-    </Layout>
+
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerLine1}>Stay curious. Stay coding.</Text>
+            <Text style={styles.footerLine2}>EliteCode © 2025 — Red Panda Studios</Text>
+          </View>
+        </ScrollView>
+      </Layout>
+    </ApplicationProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#2C496B',
+    paddingHorizontal: 20,
+    position: 'relative',
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 60,
-    paddingHorizontal: 10,
-    height: 100,
-  },
-  headerText: {
-    flex: 1,
-    textAlign: "center",
-    paddingRight: 50,
-    color: 'white',
-  },
-  backButton: {
-    width: 40,
-  },
-  inputContainer: {
-    flexDirection: 'column',
-    backgroundColor: '#526F8C',
-    borderRadius: 10,
-    width: 300,
-    height: 'auto',
+  contentWrapper: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 40,
+    paddingBottom: 120,
+  },
+  card: {
+    width: '90%',
+    maxWidth: 350,
+    backgroundColor: '#1E2A38',
+    borderRadius: 15,
+    padding: 20,
+    borderColor: '#334154',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
     alignSelf: 'center',
-    marginTop: 90,
-    marginBottom: 'auto'
+    marginBottom: 10,
+    marginTop: 120,
   },
-  outerText: {
-    alignItems: 'center',
-    alignSelf: 'center',
-    fontSize: 20,
-    color: 'white',
+  title: {
+    fontSize: 22,
+    marginBottom: 5,
+    textAlign: 'center',
   },
-  innerText: {
-    flexDirection: 'column',
-    margin: 2,
-    fontSize: 20,
-    color: 'white',
+  subtitle: {
+    fontSize: 14,
+    color: '#A9B7C6',
+    marginBottom: 10,
+    textAlign: 'center',
   },
-  inputs: {
-    width: 250,
-    marginTop: 'auto',
+  input: {
+    backgroundColor: '#253243',
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
+    marginBottom: 8,
   },
   roleLabel: {
-    marginTop: 15,
+    marginTop: 0,
     fontSize: 16,
     color: 'white',
+    textAlign: 'center',
   },
   roleButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: 250,
+    width: '100%',
     marginVertical: 10,
-
   },
   roleButton: {
     flex: 1,
     marginHorizontal: 5,
-
-  },
-  tempButtons: {
-    marginTop: 200,
   },
   submit: {
-    position: 'relative',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  pickerStyle: {
-    height: 200,
-    color: 'white',
-    backgroundColor: '#526F8C',
+    backgroundColor: '#3A4B5C',
     borderRadius: 10,
-    fontSize: 10,
-  }
+    marginTop: 10,
+  },
+  backButton: {
+    marginTop: -5,
+  },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 20,
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  footerLine1: {
+    color: '#A9B7C6',
+    fontSize: 12,
+    marginBottom: 2,
+  },
+  footerLine2: {
+    color: '#A9B7C6',
+    fontSize: 12,
+    opacity: 0.7,
+  },
 });
 
-export default () => (
-  <>
-    {/* <IconRegistry icons={EvaIconsPack} /> */}
-    <ApplicationProvider {...eva} theme={eva.dark}>
-      <SignUp />
-    </ApplicationProvider>
-  </>
-);
+export default SignUp;

@@ -40,7 +40,7 @@ function LoginScreen() {
     <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
       <Layout style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentWrapper} showsVerticalScrollIndicator={false}>
-          
+
           <Image
             source={require("../assets/images/welcomeBack.png")}
             style={{ width: 200, height: 200, marginTop: -30, marginBottom: 10, alignSelf: 'center' }}
@@ -86,9 +86,9 @@ function LoginScreen() {
           </Button>
 
           <View style={styles.footerContainer}>
-                  <Text style={styles.footerLine1}>Stay curious. Stay coding.</Text>
-                  <Text style={styles.footerLine2}>EliteCode © 2025 — Red Panda Studios</Text>
-                </View>
+            <Text style={styles.footerLine1}>Stay curious. Stay coding.</Text>
+            <Text style={styles.footerLine2}>EliteCode © 2025 — Red Panda Studios</Text>
+          </View>
 
         </ScrollView>
       </Layout>
@@ -147,13 +147,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 16,
   },
+  backButton: {
+    marginTop: -5,
+  },
   footerContainer: {
     position: 'absolute',
     bottom: 20,
     alignItems: 'center',
-  },
-  backButton: {
-    marginTop: -5,
   },
   footerLine1: {
     color: '#A9B7C6',
