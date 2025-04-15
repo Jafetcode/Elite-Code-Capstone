@@ -15,111 +15,67 @@ import {
 
 function ErikaStudentHome() {
   const navigation = useNavigation();
-  const [visible, setVisible] = React.useState(false);
-  const [classCode, setClassCode] = React.useState('');
-  const { user} = useAuth();
-  const [courses, setCourses] = React.useState([]);
-
-  const fetchCourses = async () => {
+  // const { user } = useAuth();
+  const qid = "3";
+  const userID = "53471f"
+  const [question, setQuestion] = useState({});
+  const fetchSubmission = async () => {
     try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/courses?sid=${user.userID}`);
-      const data = await res.json();
-      setCourses(data.results || []);
+      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${qid}&sid=${userID}`);
+      console.log(res);
+      setQuestion(res);
     } catch (error) {
-      console.error("Failed to fetch courses:", error);
-      Alert.alert("Error", "Could not load your courses.");
+      Alert.alert("Error", "Could not load your submission.");
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (user?.userID) {
-        fetchCourses();
-      }
-    }, [user])
-  );
-
-  const handleJoinClass = async () => {
-    if (!classCode.trim()) {
-      Alert.alert("Error", "Please enter a class code.");
-      return;
-    }
-    try {
-      const response = await fetch('https://elitecodecapstone24.onrender.com/student/joinCourse', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cid: classCode.trim(),
-          sid: user.userID,
-        }),
-      });
-
-      const data = await response.json();
-  
-      if (response.ok) {
-        setClassCode('');
-        Alert.alert("Success", data.message || "You joined the course!");
-      } else {
-        console.log("JOIN RESPONSE", data);
-        Alert.alert("Error", JSON.stringify(data));
-      }
-    } catch (error) {
-      console.error("Error joining course:", error);
-      Alert.alert("Error", "Something went wrong.");
-    }
-
-  };
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     if (user?.userID) {
+  //       fetchSubmission();
+  //     }
+  //   }, [qid])  `
+  // );
 
   return (
-    <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
-      <ScrollView>
-        <View style={{ marginBottom: 20 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5,}}>
-            <Text category="s1">Course Library</Text>
-            <TouchableOpacity onPress={() => setVisible(true)}>
-                          <Text appearance="hint">Join Course</Text>
-                        </TouchableOpacity>
-            <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
-
-              <Card disabled={true}>
-                <Text  style={{marginBottom: 20}}>Enter a class code</Text>
-                <Input style={styles.inputs} label='Class' placeholder='class code' value={classCode} onChangeText={nextClassCode => setClassCode(nextClassCode)} />
-                <Button onPress={() => { setVisible(false); handleJoinClass();}}>Join</Button>
-              </Card>
-
-            </Modal>
-          </View>
-
-          {courses.map((course) => (
-            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10 }}>
-              <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid })}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <View style={{ flex: 1 }}>
-                    <Text>{course.courseName}</Text>
-                    <Text appearance="hint">{course.description}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View>
-                <Text category="s2">Course Code: {course.cid}</Text>
-              </View>
-            </Card>
-          ))}
-
-        </View>
-
-        
-      </ScrollView>
+    <Layout style={{ flex: 1, padding: 22}}>
+      <Text category='h4' style={styles.heading}>Review Submission </Text>
+      <Text category='s1' appearance='hint' style={styles.subHeading}>
+      comment maybe
+      </Text>
+      <View>
+        <Text>
+          ${question.question}
+        </Text>
+        <Text>
+          ${question.description}
+        </Text>
+        <Text>
+          ${question.comment}
+        </Text>
+        <Text>
+          Your answer
+        </Text>
+        <Text>
+          ${question.answer}
+        </Text>
+        <Text>
+          Your grade
+        </Text>
+        <Text>
+          ${question.grade} / ${quesiton.pointVal} - ${question.grade/question.pointVal}
+        </Text>
+        {/* <Text>
+          ${question.imgFile}
+        </Text> */}
+      </View>
     </Layout>
   );
 }
 
 function AppWrapper(props = {}) {
   return (
-    <Layout style={{ flex: 1 }}>
+    <Layout style={{ flex: 1, padding: 16 }}>
       <ErikaStudentHome />
     </Layout>
   );
@@ -132,6 +88,7 @@ const styles = StyleSheet.create({
     minHeight: 192,
   },
   backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    heading: { marginBottom: 8,  paddingTop: 30},
+    subHeading: { marginBottom: 16, }
   },
 });

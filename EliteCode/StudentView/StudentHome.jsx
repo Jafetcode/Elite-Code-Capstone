@@ -262,7 +262,7 @@ function StudentHome() {
 
 
 
-          <Text category="s1" style={{ marginVertical: 10}}>Class Assignments</Text>
+          <Text category="s1" style={{ marginVertical: 10 }}>Class Assignments</Text>
 
           {/* Upcoming Cards */}
           <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
@@ -363,7 +363,7 @@ function StudentHome() {
 
 
 
-          <Text category="s1" style={{ marginVertical: 10, alignContent: 'center'}}>Personal Assignments</Text>
+          <Text category="s1" style={{ marginVertical: 10, alignContent: 'center' }}>Personal Assignments</Text>
 
           {/* Upcoming Cards */}
           <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
@@ -465,7 +465,7 @@ function StudentHome() {
 
         </View>
 
-
+        <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
       </ScrollView>
     </Layout>
   );
