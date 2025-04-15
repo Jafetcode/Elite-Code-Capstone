@@ -183,26 +183,26 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*, mcq.*
-    FROM Questions q
-    INNER JOIN AssignedToClass atc ON q.qid = atc.qid
-    INNER JOIN Enrolled e ON atc.cid = e.cid
-    INNER JOIN MCQ mcq on q.qid = mcq.qid
-    WHERE e.sid = ? AND e.cid = ?
-      AND DATE(q.dueDate) >= CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
+  SELECT DISTINCT q.*
+  FROM Questions q
+  INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+  INNER JOIN Enrolled e ON atc.cid = e.cid
+  LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+  WHERE e.sid = ? AND e.cid = ?
+    AND DATE(q.dueDate) >= CURDATE()
+  ORDER BY q.dueDate ASC;
+`;
 
-  const studentSql = `
-    SELECT DISTINCT q.*, mcq.*
-    FROM Questions q
-     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-    INNER JOIN Enrolled e on ats.sid = e.sid
-    INNER JOIN MCQ mcq on q.qid = mcq.qid
-    WHERE ats.sid = ? AND e.cid = ?
-      AND DATE(q.dueDate) >= CURDATE()
-    ORDER BY q.dueDate ASC;
-  `;
+const studentSql = `
+  SELECT DISTINCT q.*
+  FROM Questions q
+  INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+  INNER JOIN Enrolled e ON ats.sid = e.sid
+  LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+  WHERE ats.sid = ? AND e.cid = ?
+    AND DATE(q.dueDate) >= CURDATE()
+  ORDER BY q.dueDate ASC;
+`;
 
   try {
     const [classResults] = await db.promise().query(classSql, [sid, cid]);
@@ -223,22 +223,22 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*, mcq.*
+    SELECT DISTINCT q.*
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
-    INNER JOIN MCQ mcq ON q.qid = mcq.qid
+    LEFT JOIN MCQ mcq ON q.qid = mcq.qid
     WHERE e.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*, mcq.*
+    SELECT DISTINCT q.*
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-    INNER JOIN Enrolled e on ats.sid = e.sid
-    INNER JOIN MCQ mcq ON q.qid = mcq.qid
+    INNER JOIN Enrolled e ON ats.sid = e.sid
+    LEFT JOIN MCQ mcq ON q.qid = mcq.qid
     WHERE ats.sid = ? AND e.cid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
