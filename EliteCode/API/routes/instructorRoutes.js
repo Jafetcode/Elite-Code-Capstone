@@ -113,7 +113,7 @@ router.post('/updateAssignments', (req, res) => {
     });
 
     // ---- STUDENT ASSIGNMENTS ----
-    const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ? AND tid = ?';
+    const fetchStudentAssignments = 'SELECT sid FROM AssignedToStudent WHERE qid = ? AND sid = ?';
     db.query(fetchStudentAssignments, [qid, tid], (err, studentResults) => {
       if (err) {
         console.error("Error fetching student assignments:", err);
