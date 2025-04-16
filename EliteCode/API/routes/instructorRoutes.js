@@ -176,19 +176,51 @@ router.get('/questions', (req, res) => {
   });
 });
 
+// router.get('/allQuestions', (req, res) => {
+//   const tid = req.query.tid;
+//   const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate ' +
+//     'From Questions q Where tid = ?';
+//   db.query(sql, [tid], (err, results) => {
+//     if (err) {
+//       return res.status(500).json({ error: err.message });
+//     }
+//     res.json({ results });
+
+//   });
+// });
+
 router.get('/allQuestions', (req, res) => {
   const tid = req.query.tid;
-  const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate ' +
-    'From Questions q Where tid = ?';
+
+  const sql = `
+    SELECT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate
+    FROM Questions q
+    WHERE tid = ?
+  `;
+
   db.query(sql, [tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ results });
 
+    // Convert imgFile BLOBs to base64 URIs
+    const updatedResults = results.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg'; // or determine this dynamically
+        const buffer = Buffer.from(row.imgFile); // Ensure it's a Buffer
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    res.json({ results: updatedResults });
   });
 });
-
 
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
