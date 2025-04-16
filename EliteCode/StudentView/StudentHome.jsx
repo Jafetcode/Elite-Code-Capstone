@@ -103,7 +103,7 @@ function StudentHome() {
       key={item.qid}
       style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
+      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid, opt1: item.opt1, opt2: item.opt2, opt3: item.opt3, cid: item.cid, type: item.type })}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
           {item.question}
         </Text>

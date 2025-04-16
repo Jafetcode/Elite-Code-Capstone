@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
     },
-    heading: { marginBottom: 8, paddingTop: 30 },
+    heading: { marginBottom: 8, paddingTop: 30, marginTop: 20 },
 
 });
 
