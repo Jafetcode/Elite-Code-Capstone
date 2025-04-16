@@ -252,7 +252,7 @@ function StudentHome() {
               )}
             </View>
           </View>
-          <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
+          {/* <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button> */}
 
           <View/>
         </View>

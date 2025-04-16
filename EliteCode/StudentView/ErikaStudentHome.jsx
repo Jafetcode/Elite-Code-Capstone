@@ -17,7 +17,7 @@ import {
 function ErikaStudentHome() {
   const navigation = useNavigation();
   // const { user } = useAuth();
-  const questionID = "3";
+  const questionID = "74";
   const userID = "53471f"
   const [question, setQuestion] = useState({});
   const fetchSubmission = async () => {
@@ -65,9 +65,9 @@ function ErikaStudentHome() {
         <Text>
           {question.grade} / {question.pointVal} - {parseFloat(question.grade/question.pointVal*100).toFixed(2)}%
         </Text>
-        {/* <Text>
-          ${question.imgFile}
-        </Text> */}
+        <Text>
+          {/* question ? ${question.imgFile} */}
+        </Text>
       </View>
     </Layout>
   );
