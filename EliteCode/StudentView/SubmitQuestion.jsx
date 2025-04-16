@@ -6,8 +6,10 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
+import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import * as eva from "@eva-design/eva";
 
-import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -19,9 +21,7 @@ import {
   Radio,
   RadioGroup,
 } from "@ui-kitten/components";
-import * as eva from "@eva-design/eva";
-
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import mime from 'mime';
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -36,7 +36,28 @@ function SubmitQuestion() {
   const { user } = useAuth() || {};
   const { cid, qid, type, opt1, opt2, opt3 } = route.params || {};
 
-
+  const pickFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/*", "application/pdf"],
+        copyToCacheDirectory: true,
+        multiple: false,
+      });
+      if (result.type === "success") {
+        const selectedFile = result.files[0] || result;
+        const fileData = {
+          uri: selectedFile.uri,
+          name: selectedFile.name,
+          type: mime.getType(selectedFile.uri) || "application/octet-stream",
+        };
+        setFile(fileData);
+      } else {
+        console.log("Document selection cancelled or failed.");
+      }
+    } catch (error) {
+      console.error("Error selecting document:", error);
+    }
+  };
   const fetchQuestionData = async () => {
     try {
       const res = await fetch(
@@ -69,9 +90,22 @@ function SubmitQuestion() {
       const formData = new FormData();
       formData.append("qid", qid);
       formData.append("sid", user.userID);
-      formData.append("answer", answer.toString);
+      formData.append("answer", answer.toString());
       formData.append("progress", "submitted");
       formData.append("submitted_on", submitted_on);
+      if (file) {
+        formData.append("file", 
+          Platform.OS === "android" || Platform.OS === "ios"
+          
+            ? file
+            : {
+                uri: file.uri,
+                name: file.name,
+                type: file.type,
+              }
+        );
+      }
+
       
   
       const response = await fetch(
@@ -79,6 +113,7 @@ function SubmitQuestion() {
         {
           method: "POST",
           headers: {
+            'Accept': 'application/json',
             "Content-Type": "multipart/form-data",
           },
           body: formData,
@@ -133,9 +168,17 @@ function SubmitQuestion() {
             <Text style={styles.uploadFileText} category="h6">
               Upload a file
             </Text>
-            <Button onPress={pickFile}>Choose an image to upload</Button>
+            <Button onPress={pickFile}>Choose an file to upload</Button>
             {file && (
-             
+               <View style={styles.filePreview}>
+               <Text>Selected file: {file.name}</Text>
+               {file.type.startsWith('image/') && (
+                 <Image 
+                   source={{ uri: file.uri }} 
+                   style={styles.previewImage}
+                 />
+               )}
+             </View>
             )}
             <Input
               placeholder="Enter your answer here"

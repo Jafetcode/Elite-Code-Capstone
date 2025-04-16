@@ -7,26 +7,25 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-const uploadDir = path.join(__dirname, '../uploads');
+const uploadDir = path.join(__dirname, "../uploads");
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
-
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); 
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, `${uniqueSuffix}-${file.originalname}`);
   },
 });
 
-const upload = multer({ storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 } });
-
-
-
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 // app.use(cors());
 // app.use(express.json());
@@ -78,9 +77,12 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ message: "Successfully submitted question", results });
-    });
+      res.json({ message: "Successfully submitted question", results, file: { name: fileName, path: filePath } });
+    }
+  );
 });
+
+router.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 router.post("/joinCourse", async (req, res) => {
   const { sid, cid } = req.body;
@@ -155,8 +157,8 @@ router.get("/getAllPastDueQuestions", async (req, res) => {
     res.json({
       results: {
         pastDueClass: classResults || [],
-        pastDueStudent: studentResults || []
-      }
+        pastDueStudent: studentResults || [],
+      },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -192,8 +194,8 @@ router.get("/getAllUpcomingQuestions", async (req, res) => {
     res.json({
       results: {
         upcomingClass: classResults || [],
-        upcomingStudent: studentResults || []
-      }
+        upcomingStudent: studentResults || [],
+      },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -252,10 +254,11 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   }
 });
 
-router.get('/submission', (req, res) => {
+router.get("/submission", (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
-  const sql = 'SELECT * FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;';
+  const sql =
+    "SELECT * FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;";
 
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
@@ -264,6 +267,5 @@ router.get('/submission', (req, res) => {
     console.log(results);
     res.json(results);
   });
-
-})
+});
 module.exports = router;

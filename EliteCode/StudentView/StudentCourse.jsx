@@ -70,7 +70,7 @@ function StudentCourse() {
               opt2: question.opt2,
               opt3: question.opt3
             },
-            cid: question.cid,
+            cid: cid,
             type: question.type
           })
         }
