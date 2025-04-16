@@ -46,27 +46,10 @@ function StudentHome() {
       const upcomingData = await upcomingRes.json();
       const pastDueData = await pastDueRes.json();
 
-      const upcomingClass = upcomingData.results.upcomingClass;
-      const pastDueClass = pastDueData.results.pastDueClass;
-
-      const upcomingStudent = upcomingData.results.upcomingStudent;
-      const pastDueStudent = pastDueData.results.pastDueStudent;
-
-
-      // const combinedUpcoming = [
-      //   ...(upcomingData.results.upcomingClass || []),
-      //   ...(upcomingData.results.upcomingStudent || [])
-      // ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-      // const combinedPastDue = [
-      //   ...(pastDueData.results.pastDueClass || []),
-      //   ...(pastDueData.results.pastDueStudent || [])
-      // ].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
-      setUpcoming(upcomingClass);
-      setPastDue(pastDueClass);
-      setUpcomingStudent(upcomingStudent);
-      setPastDueStudent(pastDueStudent);
+      setUpcoming(upcomingData.results.upcomingClass || []);
+      setPastDue(pastDueData.results.pastDueClass || []);
+      setUpcomingStudent(upcomingData.results.upcomingStudent || []);
+      setPastDueStudent(pastDueData.results.pastDueStudent || []);
 
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
@@ -97,7 +80,6 @@ function StudentHome() {
         setClassCode('');
         Alert.alert("Success", data.message || "You joined the course!");
       } else {
-        console.log("JOIN RESPONSE", data);
         Alert.alert("Error", JSON.stringify(data));
       }
     } catch (error) {
@@ -116,26 +98,38 @@ function StudentHome() {
     }, [user])
   );
 
+  const renderAssignmentCard = (item, status) => (
+    <Card
+      key={item.qid}
+      style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}
+    >
+      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
+          {item.question}
+        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 3 }}>
+          <Text appearance="hint" style={{ fontSize: 14 }}>
+            Due: {new Date(item.dueDate).toLocaleDateString()}
+          </Text>
+          <View style={{
+            backgroundColor: status === "Upcoming" ? '#D87D4A' : '#A94B4B',
+            borderRadius: 6,
+            paddingHorizontal: 8,
+            paddingVertical: 2,
+          }}>
+            <Text style={{ color: 'white', fontSize: 12 }}>{status}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Card>
+  );
+
   return (
-
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-
-      {/* <View>
-        <Button onPress={() => navigation.navigate('AndryStudentHome')}> Andry</Button>
-
-        <Button onPress={() => navigation.navigate('JafetStudentHome')}> Jafet </Button>
-
-        <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
-
-        <Button> Evan </Button>
-      </View> */}
-
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 50 }}>
-
-
-          {/* Header */}
-          <Image source={require("../assets/images/FinalLogo2.png")}
+          <Image
+            source={require("../assets/images/FinalLogo2.png")}
             style={{
               width: 300,
               height: 150,
@@ -146,83 +140,46 @@ function StudentHome() {
             }}
           />
 
-          {/* Sub header / Modal */}
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5, }}>
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 10,
-              width: '100%'
-            }}>
-              <Text category="s1">Course Library</Text>
-
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, width: '100%' }}>
+              <Text category="s1" style={{
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>Course Library</Text>
               <TouchableOpacity onPress={() => setVisible(true)}>
                 <Text appearance="hint">Join Course</Text>
               </TouchableOpacity>
             </View>
 
-            <Modal
-              visible={visible}
-              backdropStyle={styles.backdrop}
-              onBackdropPress={() => setVisible(false)}
-            >
-              <Card
-                disabled={true}
-                style={{
-                  width: 240,
-                  alignSelf: 'center',
-                  borderRadius: 10,
-                  backgroundColor: '#1E2A38',
-                  borderColor: '#334154',
-                }}
-              >
-                <Text
-                  category="s1"
-                  style={{
-                    fontSize: 16,
-                    textAlign: 'center',
-                    color: 'white',
-                    fontWeight: '600',
-                  }}
-                >
+            <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
+              <Card disabled={true} style={{
+                width: 240,
+                alignSelf: 'center',
+                borderRadius: 10,
+                backgroundColor: '#1E2A38',
+                borderColor: '#334154',
+              }}>
+                <Text category="s1" style={{ fontSize: 16, textAlign: 'center', color: 'white', fontWeight: '600' }}>
                   Join Course
                 </Text>
-
-                <Image
-                  source={require("../assets/images/joinIcon.png")}
-                  style={{
-                    width: '100%',
-                    height: undefined,
-                    aspectRatio: 2,
-                    alignSelf: 'center',
-                    resizeMode: 'contain',
-                  }}
-                />
-
+                <Image source={require("../assets/images/joinIcon.png")} style={{
+                  width: '100%',
+                  height: undefined,
+                  aspectRatio: 2,
+                  alignSelf: 'center',
+                  resizeMode: 'contain',
+                }} />
                 <Input
                   size="small"
-                  style={{
-                    marginBottom: 8,
-                    backgroundColor: '#253243',
-                    borderRadius: 8,
-                  }}
+                  style={{ marginBottom: 8, backgroundColor: '#253243', borderRadius: 8 }}
                   textStyle={{ fontSize: 14, color: 'white' }}
                   placeholder='Course Code'
                   value={classCode}
                   onChangeText={nextClassCode => setClassCode(nextClassCode)}
                 />
-
                 <Button
                   size="small"
-                  style={{
-                    borderRadius: 10,
-                    backgroundColor: '#3A4B5C',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    paddingVertical: 0
-                  }}
+                  style={{ borderRadius: 10, backgroundColor: '#3A4B5C', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 0 }}
                   onPress={() => {
                     setVisible(false);
                     handleJoinClass();
@@ -230,20 +187,15 @@ function StudentHome() {
                 >
                   {({ style }) => (
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Text style={{ color: 'white', fontWeight: '600', marginRight: 6 }}>
-                        Join
-                      </Text>
+                      <Text style={{ color: 'white', fontWeight: '600', marginRight: 6 }}>Join</Text>
                       <Icon name="flag" fill="white" style={{ width: 14, height: 14 }} />
                     </View>
                   )}
                 </Button>
               </Card>
             </Modal>
-
-
           </View>
 
-          {/* Course Cards */}
           {courses.map(course => (
             <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
               <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid, courseName: course.courseName })}>
@@ -260,212 +212,50 @@ function StudentHome() {
             </Card>
           ))}
 
+          {/* Class Assignments */}
+          <View style={{ marginTop: 20 }}>
+            <Text category="s1" style={styles.sectionTitle}>Class Assignments</Text>
+            <View style={styles.assignmentBlock}>
+              {upcoming.length === 0 ? (
+                <Text appearance="hint">No upcoming questions!</Text>
+              ) : (
+                upcoming.map(item => renderAssignmentCard(item, "Upcoming"))
+              )}
+            </View>
 
+            <View style={styles.assignmentBlock}>
+              {pastDue.length === 0 ? (
+                <Text appearance="hint">No past due questions!</Text>
+              ) : (
+                pastDue.map(item => renderAssignmentCard(item, "Past Due"))
+              )}
+            </View>
+          </View>
 
-          <Text category="s1" style={{ marginVertical: 10 }}>Class Assignments</Text>
+          {/* Personal Assignments */}
+          <View>
+            <Text category="s1" style={styles.sectionTitle}>Personal Assignments</Text>
 
-          {/* Upcoming Cards */}
-          <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
-          {upcoming.length === 0 ? (
-            <Text appearance="hint">No upcoming questions!</Text>
-          ) : (
-            upcoming.map(item => (
-              <Card
-                key={item.qid}
-                style={{
-                  borderRadius: 10,
-                  marginBottom: 5,
-                  backgroundColor: '#1E2A38'
-                }}
-              >
-                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
+            <View style={styles.assignmentBlock}>
+              {upcomingStudent.length === 0 ? (
+                <Text appearance="hint">No upcoming questions!</Text>
+              ) : (
+                upcomingStudent.map(item => renderAssignmentCard(item, "Upcoming"))
+              )}
+            </View>
 
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
-                  >
-                    {item.question}
-                  </Text>
+            <View style={styles.assignmentBlock}>
+              {pastDueStudent.length === 0 ? (
+                <Text appearance="hint">No past due questions!</Text>
+              ) : (
+                pastDueStudent.map(item => renderAssignmentCard(item, "Past Due"))
+              )}
+            </View>
+          </View>
+          <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
 
-                  <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginTop: 3
-                  }}>
-                    <Text
-                      appearance="hint"
-                      style={{ fontSize: 14 }}
-                    >
-                      Due: {new Date(item.dueDate).toLocaleDateString()}
-                    </Text>
-
-                    <View style={{
-                      backgroundColor: '#D87D4A',
-                      borderRadius: 6,
-                      paddingHorizontal: 8,
-                      paddingVertical: 2,
-                    }}>
-                      <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </Card>
-            ))
-          )}
-
-          {/* Past Due Cards */}
-          <Text category="s1" style={{ marginVertical: 10 }}>Past Due Questions</Text>
-          {pastDue.length === 0 ? (
-            <Text appearance="hint">No past due questions!</Text>
-          ) : (
-            pastDue.map(item => (
-              <Card
-                key={item.qid}
-                style={{
-                  borderRadius: 10,
-                  marginBottom: 5,
-                  backgroundColor: '#1E2A38'
-                }}
-              >
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
-                >
-                  {item.question}
-                </Text>
-
-                <View style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 3
-                }}>
-                  <Text appearance="hint">
-                    Due: {new Date(item.dueDate).toLocaleDateString()}
-                  </Text>
-
-                  <View style={{
-                    backgroundColor: '#A94B4B',
-                    borderRadius: 6,
-                    paddingHorizontal: 8,
-                    paddingVertical: 2,
-                  }}>
-                    <Text style={{ color: 'white', fontSize: 12 }}>Past Due</Text>
-                  </View>
-                </View>
-              </Card>
-            ))
-          )}
-
-
-
-
-          <Text category="s1" style={{ marginVertical: 10, alignContent: 'center' }}>Personal Assignments</Text>
-
-          {/* Upcoming Cards */}
-          <Text category="s1" style={{ marginVertical: 10 }}>Upcoming Questions</Text>
-          {upcomingStudent.length === 0 ? (
-            <Text appearance="hint">No upcoming questions!</Text>
-          ) : (
-            upcomingStudent.map(item => (
-              <Card
-                key={item.qid}
-                style={{
-                  borderRadius: 10,
-                  marginBottom: 5,
-                  backgroundColor: '#1E2A38'
-                }}
-              >
-                <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid })}>
-
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
-                  >
-                    {item.question}
-                  </Text>
-
-                  <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginTop: 3
-                  }}>
-                    <Text
-                      appearance="hint"
-                      style={{ fontSize: 14 }}
-                    >
-                      Due: {new Date(item.dueDate).toLocaleDateString()}
-                    </Text>
-
-                    <View style={{
-                      backgroundColor: '#D87D4A',
-                      borderRadius: 6,
-                      paddingHorizontal: 8,
-                      paddingVertical: 2,
-                    }}>
-                      <Text style={{ color: 'white', fontSize: 12 }}>Upcoming</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </Card>
-            ))
-          )}
-
-          {/* Past Due Cards */}
-          <Text category="s1" style={{ marginVertical: 10 }}>Past Due Questions</Text>
-          {pastDueStudent.length === 0 ? (
-            <Text appearance="hint">No past due questions!</Text>
-          ) : (
-            pastDueStudent.map(item => (
-              <Card
-                key={item.qid}
-                style={{
-                  borderRadius: 10,
-                  marginBottom: 5,
-                  backgroundColor: '#1E2A38'
-                }}
-              >
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={{ fontSize: 14, marginBottom: 3, color: 'white' }}
-                >
-                  {item.question}
-                </Text>
-
-                <View style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginTop: 3
-                }}>
-                  <Text appearance="hint">
-                    Due: {new Date(item.dueDate).toLocaleDateString()}
-                  </Text>
-
-                  <View style={{
-                    backgroundColor: '#A94B4B',
-                    borderRadius: 6,
-                    paddingHorizontal: 8,
-                    paddingVertical: 2,
-                  }}>
-                    <Text style={{ color: 'white', fontSize: 12 }}>Past Due</Text>
-                  </View>
-                </View>
-              </Card>
-            ))
-          )}
-
-
-
+          <View/>
         </View>
-
-        <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
       </ScrollView>
     </Layout>
   );
@@ -482,10 +272,16 @@ function AppWrapper(props = {}) {
 export default AppWrapper;
 
 const styles = StyleSheet.create({
-  container: {
-    minHeight: 192,
-  },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  sectionTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  assignmentBlock: {
+    marginBottom: 15,
   },
 });
