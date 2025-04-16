@@ -13,9 +13,7 @@ function QsByCourse() {
     const navigation = useNavigation();
     const route = useRoute();
     const [questions, setQuestions] = React.useState([]);
-    const { cid } = route.params || {};
-    
-
+    const cid = route.params?.cid;
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -84,7 +82,7 @@ function QsByCourse() {
                                         </Card>
                                         <Button 
                                             onPress={() => navigation.navigate('TeacherManageQuestion', { 
-                                                course: { cid },
+                                                course: cid ,
                                                 qid: question.qid 
                                             })}
                                             style={{ marginTop: 20 }}

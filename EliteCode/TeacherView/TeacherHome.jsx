@@ -22,12 +22,12 @@ function TeacherHome() {
             console.error("Failed to fetch", error);
         }
     };
-    const handleDeleteCourse = async () => {
-        console.log("Delete button")
-    }
-    const handleEditCourse = async () => {
-        console.log("Edit button")
-    }
+    // const handleDeleteCourse = async () => {
+    //     console.log("Delete button")
+    // }
+    // const handleEditCourse = async () => {
+    //     console.log("Edit button")
+    // }
 
     useFocusEffect(
         React.useCallback(() => {
