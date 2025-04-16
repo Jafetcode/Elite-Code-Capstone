@@ -1,4 +1,4 @@
-// [StudentCourse.js]
+
 
 import * as React from "react";
 import {
@@ -65,11 +65,9 @@ function StudentCourse() {
         onPress={() =>
           navigation.navigate("SubmitQuestion", {
             qid: question.qid,
-            mcq: {
               opt1: question.opt1,
               opt2: question.opt2,
-              opt3: question.opt3
-            },
+              opt3: question.opt3,
             cid: cid,
             type: question.type
           })

@@ -63,12 +63,12 @@ function QuestionsLibrary() {
                                     <View><Text category="s2">Topic: {question.topic}</Text></View>
                                     <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                     <Text category="s2">{question.pointVal} Points</Text>
-                                    {imageUri && (
+                                    {/* {imageUri && (
                                         <Image
                                             source={{ uri: imageUri }}
                                             style={{ width: 200, height: 200 }}
                                         />
-                                    )}
+                                    )} */}
                                     <View style={styles.container}>
                                         <Button style={{ margin: 5, width: 300 }} onPress={() => navigation.navigate('Assign a question', { assignTo: "course", question: question })}>
                                             Assign to class or student/students
