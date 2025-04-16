@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { View, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import * as eva from "@eva-design/eva";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -23,20 +23,19 @@ function ErikaStudentHome() {
   const fetchSubmission = async () => {
     try {
       const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
-      console.log("response: ", res);
-      setQuestion(res);s
+      const data = await res.json();
+      console.log("response: ", data);
+      setQuestion(data[0]);
     } catch (error) {
-      Alert.alert("Error", "Could not load your submission.");
+      Alert.alert("Error", "Could not load your submission.", error.message);
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (userID) {
-        fetchSubmission();
-      }
-    }, []) 
-  );
+  useEffect(() => {
+    if (userID && questionID) {
+      fetchSubmission();
+    }
+  }, [userID, questionID]);
 
   return (
     <Layout style={{ flex: 1, padding: 22}}>
@@ -45,7 +44,7 @@ function ErikaStudentHome() {
       comment maybe
       </Text>
       <View>
-        <Text>
+        <Text style={{fontWeight: 'bold', paddingBottom: 10}}>
           {question.question}
         </Text>
         <Text>
@@ -64,7 +63,7 @@ function ErikaStudentHome() {
           Your grade
         </Text>
         <Text>
-          {question.grade} / {question.pointVal} - {question.grade/question.pointVal}
+          {question.grade} / {question.pointVal} - {parseFloat(question.grade/question.pointVal*100).toFixed(2)}%
         </Text>
         {/* <Text>
           ${question.imgFile}
@@ -88,8 +87,7 @@ const styles = StyleSheet.create({
   container: {
     minHeight: 192,
   },
-  backdrop: {
-    heading: { marginBottom: 8,  paddingTop: 30},
-    subHeading: { marginBottom: 16, }
-  },
+  heading: { marginBottom: 15,  paddingTop: 16},
+  subHeading: { marginBottom: 15 }
+
 });
