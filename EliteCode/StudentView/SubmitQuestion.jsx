@@ -27,32 +27,15 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function SubmitQuestion() {
   const navigation = useNavigation();
-  const [imgFile, setImgFile] = React.useState(null);
+  const [file, setFile] = React.useState(null);
   const [answer, setAnswer] = React.useState("");
   const [progress, setProgress] = React.useState("inprogress");
   const [submitted_on, setSubmitted_on] = React.useState(new Date());
-  const [questionData, setQuestionData] = React.useState([]);
+  const [questionData, setQuestionData] = React.useState(null);
   const route = useRoute();
   const { user } = useAuth() || {};
   const { cid, qid, type, opt1, opt2, opt3 } = route.params || {};
-  const pickImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      alert("Permission to access camera roll is required!");
-      return;
-    }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!result.canceled) {
-      setImgFile(result.assets[0].uri);
-    }
-  };
 
   const fetchQuestionData = async () => {
     try {
@@ -64,7 +47,7 @@ function SubmitQuestion() {
       }
 
       const data = await res.json();
-      setQuestionData(data.results);
+      setQuestionData(data.results[0]);
     } catch (error) {
       console.error("Failed to fetch", error);
     }
@@ -72,11 +55,13 @@ function SubmitQuestion() {
 
   useFocusEffect(
     React.useCallback(() => {
-      if (user?.qid) {
         fetchQuestionData();
-      }
-    }, [user])
+    }, [])
   );
+  React.useEffect(() => {
+    console.log('Current type:', type);
+    console.log('Current questionData:', questionData);
+}, [type, questionData]);
 
   const handleSubmit = async () => {
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
@@ -87,19 +72,7 @@ function SubmitQuestion() {
       formData.append("answer", answer.toString);
       formData.append("progress", "submitted");
       formData.append("submitted_on", submitted_on);
-
-
-      if (imgFile) {
-        const filename = imgFile.split("/").pop();
-        const match = /\.(\w+)$/.exec(filename);
-        const mimeType = match ? `image/${match[1]}` : "image/jpeg";
-  
-        formData.append("imgFile", {
-          uri: Platform.OS === "ios" ? imgFile.replace("file://", "") : imgFile,
-          name: filename || "image.jpg",
-          type: mimeType,
-        });
-      }
+      
   
       const response = await fetch(
         "https://elitecodecapstone24.onrender.com/student/submitQuestion",
@@ -132,9 +105,7 @@ function SubmitQuestion() {
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
-        {/* TODO >>>>>>>>>> */}
-
-        <Text>{questionData.question}</Text>
+        {/* TODO::  */}
         <Button
           appearance="ghost"
           status="basic"
@@ -148,22 +119,23 @@ function SubmitQuestion() {
       </View>
 
 
-    <Text category="h6" style={styles.title}>
-      Question Type:
-      {type}
-    </Text>
       <ScrollView style={styles.scrollView}>
       <View style={styles.content}>
-        <Text>{questionData.question}</Text>
-        
+
+        {questionData && (
+          <>
+          
         {type === "ShortAns" && (
           <View style={styles.imageContainer}>
+            <Text category="h6"> {questionData.question}</Text>
+            <Text category="h3">{questionData.description}</Text>
+
             <Text style={styles.uploadFileText} category="h6">
               Upload a file
             </Text>
-            <Button onPress={pickImage}>Choose an image to upload</Button>
-            {imgFile && (
-              <Image source={{ uri: imgFile }} style={styles.image} />
+            <Button onPress={pickFile}>Choose an image to upload</Button>
+            {file && (
+             
             )}
             <Input
               placeholder="Enter your answer here"
@@ -189,6 +161,8 @@ function SubmitQuestion() {
             </RadioGroup>
           </View>
         )}
+        </>
+        )}
 
         <Button onPress={() => handleSubmit()} style={styles.submitButton}>
           Submit Question
@@ -198,6 +172,7 @@ function SubmitQuestion() {
     </Layout>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

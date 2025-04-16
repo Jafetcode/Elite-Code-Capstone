@@ -4,8 +4,29 @@ const router = express.Router();
 // const cors = require('cors');
 const db = require("../db");
 const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const path = require("path");
+const fs = require("fs");
+
+const uploadDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); 
+  },
+});
+
+const upload = multer({ storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 } });
+
+
+
 
 // app.use(cors());
 // app.use(express.json());
@@ -43,22 +64,22 @@ router.get("/questions", (req, res) => {
   });
 });
 
-router.post("/submitQuestion", upload.single("imgFile"), (req, res) => {
+router.post("/submitQuestion", upload.single("file"), (req, res) => {
   const { qid, sid, answer, progress, submitted_on } = req.body;
-  const imgFile = req.file ? req.file.buffer : null;
+  const fileName = req.file ? req.file.filename : null;
+  const filePath = req.file ? req.file.path : null;
   const sql = `
-    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, imgFile)
-    VALUES (?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
   db.query(
     sql,
-    [qid, sid, answer, progress, submitted_on, imgFile],
+    [qid, sid, answer, progress, submitted_on, fileName, filePath],
     (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ results });
-    }
-  );
+      res.json({ message: "Successfully submitted question", results });
+    });
 });
 
 router.post("/joinCourse", async (req, res) => {
