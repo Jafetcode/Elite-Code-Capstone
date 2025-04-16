@@ -68,7 +68,7 @@ function SubmitQuestion() {
       }
 
       const data = await res.json();
-      setQuestionData(data.results[0]);
+      setQuestionData(data.results[0] );
     } catch (error) {
       console.error("Failed to fetch", error);
     }
@@ -81,6 +81,7 @@ function SubmitQuestion() {
   );
   React.useEffect(() => {
     console.log('Current type:', type);
+    console.log('MCQ options:', opt1, opt2, opt3);
     console.log('Current questionData:', questionData);
 }, [type, questionData]);
 
@@ -192,6 +193,11 @@ function SubmitQuestion() {
         )}
 
         {type === "MCQ" && (
+
+          <View style={styles.imageContainer}>
+                <Text category="h6"> {questionData.question}</Text>
+            <Text category="h3">{questionData.description}</Text>
+
           <View style={styles.radioGroup}>
             <Text category="h6">Select the correct answer</Text>
             <RadioGroup
@@ -203,6 +209,7 @@ function SubmitQuestion() {
               <Radio>{opt3}</Radio>
             </RadioGroup>
           </View>
+         </View> 
         )}
         </>
         )}

@@ -45,11 +45,25 @@ function StudentHome() {
 
       const upcomingData = await upcomingRes.json();
       const pastDueData = await pastDueRes.json();
+      
+      const processAssignments = (assignments = []) => {
+        return assignments.map(item => ({
+          qid: item.qid,
+          cid: item.cid,
+          question: item.question,
+          type: item.type,
+          dueDate: item.dueDate,
+          opt1: item.opt1,
+          opt2: item.opt2,
+          opt3: item.opt3,
 
-      setUpcoming(upcomingData.results.upcomingClass || []);
-      setPastDue(pastDueData.results.pastDueClass || []);
-      setUpcomingStudent(upcomingData.results.upcomingStudent || []);
-      setPastDueStudent(pastDueData.results.pastDueStudent || []);
+        })).slice(0, 50);
+      };
+
+      setUpcoming(processAssignments(upcomingData.results?.upcomingClass || []));
+      setPastDue(processAssignments(pastDueData.results?.pastDueClass || []));
+      setUpcomingStudent(processAssignments(upcomingData.results?.upcomingStudent || []));
+      setPastDueStudent(processAssignments(pastDueData.results?.pastDueStudent || []));
 
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
@@ -103,7 +117,13 @@ function StudentHome() {
       key={item.qid}
       style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", { qid: item.qid, opt1: item.opt1, opt2: item.opt2, opt3: item.opt3, cid: item.cid, type: item.type })}>
+      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {  cid: item.cid,
+  qid: item.qid,
+  type: item.type,
+  opt1: item.opt1,
+  opt2: item.opt2,
+  opt3: item.opt3, })}>
+        
         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
           {item.question}
         </Text>
