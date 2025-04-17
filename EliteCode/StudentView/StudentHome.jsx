@@ -122,7 +122,7 @@ function StudentHome() {
   type: item.type,
   opt1: item.opt1,
   opt2: item.opt2,
-  opt3: item.opt3, })}>
+  opt3: item.opt3 })}>
         
         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
           {item.question}
