@@ -397,12 +397,27 @@ router.get('/assignments', (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-   
+
       res.json({
         message: 'Assignments retrieved successfully',
         students: studentResults,
         classes: classResults
       });
+    });
+  });
+});
+
+router.get('/QsByStudent', (req, res) => {
+  const tid = req.query.tid;
+  const sid = req.query.sid;
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, ats.viewable as classView From Questions q RIGHT JOIN AssignedToStudent ats on q.qid = ats.qid Where ats.sid = ? and q.tid = ?;'
+  db.query(sql, [sid, tid], (err, response) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({
+      message: 'Assignments retrieved successfully',
+      QsByStudnet: response,
     });
   });
 });

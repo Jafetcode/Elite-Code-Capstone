@@ -6,7 +6,7 @@ import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
 import { useRoute } from '@react-navigation/native';
-import { SlideInDown } from "react-native-reanimated";
+// import { SlideInDown } from "react-native-reanimated";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -22,9 +22,9 @@ function QuestionsAssignedToStudent() {
         try {
             console.log("info passing jsx", tid, student.userID)
             // TO DO: update the route to show only questions 
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/questions?tid=${tid}&sid=${student.userID}`);
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/QsByStudent?tid=${tid}&sid=${student.userID}`);
             const data = await res.json();
-            setQuestions(data.results);
+            setQuestions(data.QsByStudnet);
             console.log("questions", questions)
         } catch (error) {
             console.error("Failed to fetch", error);
