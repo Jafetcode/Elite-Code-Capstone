@@ -192,7 +192,7 @@ function SubmitQuestion() {
               onChangeText={(nextValue) => setAnswer(nextValue)}
               style={styles.textInput}
               textStyle={{ minHeight: 64 }}
-              maxLength={1000}
+              maxLength={250}
             />
           </View>
         )}
