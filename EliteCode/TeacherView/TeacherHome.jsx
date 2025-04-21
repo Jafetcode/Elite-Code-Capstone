@@ -55,7 +55,7 @@ function TeacherHome() {
                         </TouchableOpacity>
                     </View>
                     {courses.map((course) => (
-                        <Card key={course.cid} style={{ borderRadius: 40, marginBottom: 10 }}>
+                        <Card key={course.cid} style={{ borderRadius: 30, marginBottom: 10 }}>
                             <TouchableOpacity onPress={() => navigation.navigate('Manage Course', { course })}>
 
                                 <View style={{ flexDirection: "row", alignItems: "center" }}>

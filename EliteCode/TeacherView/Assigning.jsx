@@ -183,8 +183,12 @@ const Assigning = () => {
                 />
                 {isExpanded && (
                     <View style={{ paddingLeft: 32 }}>
-                        {classItem.students?.map(student =>
-                            renderStudentItem(student, classItem.cid)
+                        {classItem.students?.filter(s => s && s.userID).length > 0 ? (
+                            classItem.students
+                                .filter(s => s && s.userID)
+                                .map(student => renderStudentItem(student, classItem.cid))
+                        ) : (
+                            <Text style={{ marginLeft: 25, color: 'gray', paddingBottom: 10  }}>No students enrolled</Text>
                         )}
                     </View>
                 )}
@@ -194,7 +198,7 @@ const Assigning = () => {
     };
 
     return (
-        <Layout style={{ flex: 1, padding: 16}}>
+        <Layout style={{ flex: 1, padding: 16 }}>
             <Text category='h4' style={styles.heading}>Assign Question</Text>
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 Select classes or specific students
@@ -210,7 +214,7 @@ const Assigning = () => {
     );
 };
 const styles = StyleSheet.create({
-    heading: { marginBottom: 8,  paddingTop: 30},
+    heading: { marginBottom: 8, paddingTop: 30 },
     subHeading: { marginBottom: 16, }
 });
 export default Assigning;

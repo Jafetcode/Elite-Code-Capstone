@@ -52,7 +52,7 @@ function QuestionsAssignedToStudent() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B", paddingTop: 50}}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
                     {questions?.length > 0 ? (
@@ -62,7 +62,7 @@ function QuestionsAssignedToStudent() {
                                 <Text category="s1">{student.fname} {student.lname}</Text>
                             </View>
                             {questions.map((question) => 
-                                (question.classView === 1 || question.studentView === 1) && (
+                                (question.classView === 1 || question.view === 1) && (
                                     <Card style={{marginBottom: 10}} key={question.qid} >
                                             <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10}}>
                                                 <View style={{ flex: 1}}>

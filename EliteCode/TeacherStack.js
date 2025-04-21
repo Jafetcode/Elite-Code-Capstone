@@ -32,8 +32,8 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
     <Stack.Screen name="Classlist" component={TeacherCourseClasslist} />
-    <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}/>
-    <Stack.Screen name="QsByCourse" component={QsByCourse}/>
+    <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}  options={{ headerShown: false }}/>
+    <Stack.Screen name="QsByCourse" component={QsByCourse}  options={{ headerShown: false }}/>
     <Stack.Screen name="Questions Library" component={QuestionsLibrary} options={{ headerShown: false }}/>
     <Stack.Screen name="Assign a question" component={Assigning} options={{ headerShown: false }}/>
     <Stack.Screen name="Manage Course" component={TeacherManageCourse}/>
