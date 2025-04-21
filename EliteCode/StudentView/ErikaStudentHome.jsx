@@ -206,11 +206,4 @@ function AppWrapper(props = {}) {
 
 export default AppWrapper;
 
-// const styles = StyleSheet.create({
-//   container: {
-//     minHeight: 192,
-//   },
-//   heading: { marginBottom: 15,  paddingTop: 16},
-//   subHeading: { marginBottom: 15 }
 
-// });

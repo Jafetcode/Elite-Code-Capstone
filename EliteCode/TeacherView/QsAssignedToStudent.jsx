@@ -25,7 +25,6 @@ function QuestionsAssignedToStudent() {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/QsByStudent?tid=${tid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.QsByStudnet);
-            console.log("questions", questions)
         } catch (error) {
             console.error("Failed to fetch", error);
         }
@@ -62,7 +61,7 @@ function QuestionsAssignedToStudent() {
                                 <Text category="s1">{student.fname} {student.lname}</Text>
                             </View>
                             {questions.map((question) => 
-                                (question.classView === 1 || question.view === 1) && (
+                                (question.classView === 1 || question.studentView === 1) && (
                                     <Card style={{marginBottom: 10, borderRadius: 20}} key={question.qid} >
                                             <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10}}>
                                                 <View style={{ flex: 1}}>
