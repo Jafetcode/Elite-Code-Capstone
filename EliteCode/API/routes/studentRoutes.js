@@ -53,9 +53,9 @@ router.get("/specificAssignedQuestions", (req, res) => {
 router.get("/questions", (req, res) => {
   const cid = req.query.cid;
   const sql =
-    "SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, mcq.opt1, mcq.opt2, mcq.opt3, atc.viewable as classView " +
+    "SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3, atc.viewable as classView " +
     "From Questions q " +
-    "RIGHT JOIN AssignedToClass atc on q.qid = atc.qid " +
+    "LEFT JOIN AssignedToClass atc on q.qid = atc.qid " +
     "LEFT JOIN MCQ mcq ON q.qid = mcq.qid Where cid = ?";
   db.query(sql, [cid], (err, results) => {
     if (err) {
