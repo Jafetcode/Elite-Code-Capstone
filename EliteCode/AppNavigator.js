@@ -4,16 +4,10 @@ import { useAuth } from './AuthContext';
 import TeacherTabs from './TeacherTabs';
 import StudentTabs from './StudentTabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ResetPassword from './LoginView/ResetPassword';
 
 const AppNavigator = () => {
   const { user } = useAuth();
 
-  const ResetPasswordStack = createNativeStackNavigator();
-
-
-  // Checks if there is a user, if no user then back to login
   if (!user) {
     return (
       <NavigationContainer>
@@ -22,7 +16,6 @@ const AppNavigator = () => {
     );
   }
 
-  // Once logged in, check the role
   if (user.role === 'instructor') {
     return (
       <NavigationContainer>
