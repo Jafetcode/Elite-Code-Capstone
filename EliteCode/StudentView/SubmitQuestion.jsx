@@ -81,6 +81,7 @@ function SubmitQuestion() {
   );
   React.useEffect(() => {
     console.log('Current type:', type);
+    console.log('Current questionData:', questionData.opt1, questionData.opt2, questionData.opt3);
     console.log('MCQ options:',item?.opt1, item?.opt2, item?.opt3);
     console.log('Current questionData:', questionData, item);
 }, [type, questionData]);
@@ -135,7 +136,13 @@ function SubmitQuestion() {
       }
     } catch (error) {
       console.error("Error submitting question:", error);
-      alert("Error submitting question.");
+      if (formData.answer == null) {
+        alert("Please enter an answer.");
+      }
+      // else if (formData.progress === 'submitted') {
+      //   alert("Question already submitted.");
+      // }
+  
     }
   };
   return (
@@ -157,17 +164,15 @@ function SubmitQuestion() {
 
       <ScrollView style={styles.scrollView}>
       <View style={styles.content}>
-
-        {questionData || item && (
-          <>
           
         {type === "ShortAns" && (
           <View style={styles.imageContainer}>
             <Text category="h6"> {questionData?.question } {item?.question}</Text>
             <Text category="h3">{questionData?.description}{item?.description}</Text>
+            {item?.imgFile && <Image source={{ uri: item?.imgFile }} style={styles.image} />}
 
             <Text style={styles.uploadFileText} category="h6">
-              Upload a file
+              Upload a file?
             </Text>
             <Button onPress={pickFile}>Choose an file to upload</Button>
             {file && (
@@ -198,21 +203,19 @@ function SubmitQuestion() {
           <View style={styles.imageContainer}>
                 <Text category="h6"> {questionData?.question}{item?.question}</Text>
             <Text category="h3">{questionData?.description}{item?.description}</Text>
-
+            {item?.imgFile && <Image source={{ uri: item?.imgFile }} style={styles.image} />}
           <View style={styles.radioGroup}>
             <Text category="h6">Select the correct answer</Text>
             <RadioGroup
               selectedIndex={answer}
               onChange={(index) => setAnswer(index)}
             >
-              <Radio>{questionData?.op1}{item?.opt1}</Radio>
-              <Radio>{questionData?.opt2}{item.opt2}</Radio>
-              <Radio>{questionData?.opt3}{item.opt3}</Radio>
+              <Radio>{questionData?.opt1}{item?.opt1}</Radio>
+              <Radio>{questionData?.opt2}{item?.opt2}</Radio>
+              <Radio>{questionData?.opt3}{item?.opt3}</Radio>
             </RadioGroup>
           </View>
          </View> 
-        )}
-        </>
         )}
 
         <Button onPress={() => handleSubmit()} style={styles.submitButton}>
