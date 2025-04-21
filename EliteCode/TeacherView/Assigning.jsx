@@ -19,12 +19,13 @@ const Assigning = () => {
 
     useEffect(() => {
         fetchCoursesAndAssignments();
-    }, []);
+    }, [question]);
 
     const fetchCoursesAndAssignments = async () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/${user.userID}/courses`);
             const courses = await res.json();
+            console.log("course, ", courses)
             setClasses(courses);
 
             const assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);

@@ -75,6 +75,7 @@ function QuestionsAssignedToStudent() {
                                             <Text category="s2">{question.pointVal} Points</Text>
                                             {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
                                             <Button size="small" style= {{margin: 10}}onPress={() => navigation.navigate("Question", {q : question, s: student})} > Grade question </Button>
+                                            <Button size="small" style= {{margin: 10}}onPress={() => navigation.navigate("Submission", {q : question, s: student})} > View submission </Button>
                                     </Card> 
                                 )
                             )}

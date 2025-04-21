@@ -349,12 +349,12 @@ router.get('/students', (req, res) => { //working
 router.get('/:tid/courses', async (req, res) => {
   const { tid } = req.params;
   const sql = `
-    SELECT e.cid, c.courseName, u.userID, u.fname, u.lname
-    FROM Enrolled e
-    JOIN Users u ON e.sid = u.userID
-    JOIN Classes c ON e.cid = c.cid
-    WHERE e.tid = ?
-    ORDER BY c.courseName, u.lname, u.fname`;
+    SELECT c.cid, c.courseName, u.userID, u.fname, u.lname
+  FROM Classes c
+  LEFT JOIN Enrolled e ON c.cid = e.cid AND e.tid = ?
+  LEFT JOIN Users u ON e.sid = u.userID
+  WHERE c.tid = ?
+  ORDER BY c.courseName, u.lname, u.fname;`;
 
   db.execute(sql, [tid], (err, results) => {
     if (err) {
@@ -410,7 +410,7 @@ router.get('/assignments', (req, res) => {
 router.get('/QsByStudent', (req, res) => {
   const tid = req.query.tid;
   const sid = req.query.sid;
-  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, ats.viewable as classView From Questions q RIGHT JOIN AssignedToStudent ats on q.qid = ats.qid Where ats.sid = ? and q.tid = ?;'
+  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, ats.viewable as view From Questions q RIGHT JOIN AssignedToStudent ats on q.qid = ats.qid Where ats.sid = ? and q.tid = ?;'
   db.query(sql, [sid, tid], (err, response) => {
     if (err) {
       return res.status(500).json({ error: err.message });
