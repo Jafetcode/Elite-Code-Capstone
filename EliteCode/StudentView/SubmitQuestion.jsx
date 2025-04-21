@@ -81,9 +81,8 @@ function SubmitQuestion() {
   );
   React.useEffect(() => {
     console.log('Current type:', type);
-    console.log('Current questionData:', questionData.opt1, questionData.opt2, questionData.opt3);
+    console.log('Current questionData:', questionData?.opt1, questionData?.opt2, questionData?.opt3);
     console.log('MCQ options:',item?.opt1, item?.opt2, item?.opt3);
-    console.log('Current questionData:', questionData, item);
 }, [type, questionData]);
 
   const handleSubmit = async () => {
