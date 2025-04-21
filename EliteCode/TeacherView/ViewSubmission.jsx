@@ -10,103 +10,188 @@ function ViewSubmission() {
   const { user } = useAuth();
   const student = route.params?.s;
   const question = route.params?.q;
-  const [submission, setSubmission] = useState(null);
-  const [feedback, setFeedback] = useState("");
-  const [grade, setGrade] = useState("");
-
+    const [submission, setSubmission] = useState({});
   useEffect(() => {
     const fetchSubmission = async () => {
-      try {
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/submission?qid=${question.qid}&sid=${student.sid}`);
-        const data = await res.json();
-        setSubmission(data.submission);
-      } catch (error) {
-        console.error("Error fetching submission", error);
-      }
+        try {
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
+            const data = await res.json();
+            setSubmission(data[0]);
+          } catch (error) {
+            Alert.alert("Error", "Could not load your submission.", error);
+          }
     };
 
     fetchSubmission();
   }, [question, student]);
 
-  const handleSubmitGrade = async () => {
-    try {
-        await fetch("https://elitecodecapstone24.onrender.com/instructorgradeSubmission", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                qid: question.qid,
-                sid: student.sid,
-                grade,
-                comment: feedback
-            }),
-        });
-        alert("Grade submitted successfully!");
-        navigation.goBack();
-    } catch (error) {
-        console.error("Error submitting grade", error);
-    }
-    console.error("Grade submitted successfully!");
-};
+//   useEffect(() => {
+//     if (student && question) {
+//       responseData();
+//     }
+//   }, [userID, questionID]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   return (
-    <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-            <ScrollView>
-                <Card style={{ marginBottom: 20 }}>
-                    <Text category="h5">Grading for {student.fname} {student.lname}</Text>
-                </Card>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.contentContainer}>
+          {/* Header with score information */}
+          <View style={styles.headerContainer}>
+            <View style={styles.scoreSection}>
+              <Text style={styles.scoreText}>
+                Score: <Text style={styles.scoreValue}>{submission.grade}/{submission.pointVal}</Text>
+              </Text>
+              <Text style={styles.percentageText}>
+                {/* {calcPercent(submission.grade, submission.pointVal)}% */}
+                {parseFloat(submission.grade/submission.pointVal*100).toFixed(2)}%
+              </Text>
+            </View>
+            <Text style={styles.dateText}>
+              Submitted: {formatDate(submission.submitted_on)}
+            </Text>
+          </View>
 
-                {question && (
-                    <Card style={{ marginBottom: 20 }}>
-                        <Text category="h6">Question:</Text>
-                        <Text>{question.question}</Text>
-                        <Image>{question.imgFile}</Image>
-                    </Card>
-                )}
+          {/* Question section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Question</Text>
+            <Text style={styles.questionText}>{submission.question}</Text>
 
-                {submission ? (
-                    <Card style={{ marginBottom: 20 }}>
-                        <Text category="h6">Student's Response:</Text>
-                        <Text>{submission.answer}</Text>
-                    </Card>
-                ) : (
-                    <Text>No submission found.</Text>
-                )}
+            {submission.imgFile && (
+              <View style={styles.imageContainer}>
+                {/* <Image
+                  source={{ uri: submission.imgFile }}
+                  style={styles.image}
+                  resizeMode="cover"
+                /> */}
+              </View>
+            )}
+          </View>
 
-                <Card style={{ marginBottom: 20 }}>
-                    <Text category="h6">Enter Grade:</Text>
-                    <Input
-                        placeholder="e.g. 20/30"
-                        value={grade}
-                        onChangeText={setGrade}
-                        keyboardType="numeric"
-                        style={{ marginTop: 10 }}
-                    />
-                </Card>
+          {/* Student's Response section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Your Response</Text>
+            <Text style={styles.responseText}>{submission.answer}</Text>
+          </View>
 
-                <Card style={{ marginBottom: 20 }}>
-                    <Text category="h6">Provide Feedback:</Text>
-                    <TextInput
-                        placeholder="Write feedback here..."
-                        value={feedback}
-                        onChangeText={setFeedback}
-                        style={{
-                            borderWidth: 1,
-                            borderColor: "#ccc",
-                            padding: 10,
-                            height: 100,
-                            borderRadius: 5,
-                            marginTop: 10,
-                            backgroundColor: "#fff",
-                        }}
-                        multiline
-                    />
-                </Card>
+          {/* Teacher's Comments section */}
+          {submission.comment && (
+            <View style={[styles.section, styles.commentsSection]}>
+              <Text style={styles.sectionTitle}>Teacher's Comments</Text>
+              <Text style={styles.commentsText}>{submission.comment}</Text>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
-                <Button onPress={handleSubmitGrade}>Submit Grade</Button>
-            </ScrollView>
-        </Layout>
-    );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  contentContainer: {
+    padding: 16,
+  },
+  headerContainer: {
+    marginBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  scoreSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  scoreText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  scoreValue: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  percentageText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#D02C32',
+  },
+  dateText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  section: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  commentsSection: {
+    borderLeftWidth: 4,
+    borderLeftColor: '#D02C32',
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+  },
+  questionText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+    marginBottom: 16,
+  },
+  responseText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+  },
+  commentsText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+    fontStyle: 'italic',
+  },
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});
+
 
 export default ViewSubmission;

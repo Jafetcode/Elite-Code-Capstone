@@ -16,6 +16,7 @@ import Assigning from './TeacherView/Assigning';
 import TeacherManageCourse from './TeacherView/TeacherManageCourse';
 import TeacherManageQuestion from './TeacherView/TeacherManageQuestion';
 import EditProfile from './TeacherView/EditProfile';
+import ViewSubmission from './TeacherView/ViewSubmission';
 
 // import SubmitQuestion from './TeacherView/SubmitQuestion';
 
@@ -39,6 +40,7 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherManageQuestion" component={TeacherManageQuestion}/>
     <Stack.Screen name="EditProfile" component={EditProfile}/>
     {/* <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} /> */}
+    <Stack.Screen name="Submission" component={ViewSubmission}/>
     {/* <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
 
   </Stack.Navigator>
