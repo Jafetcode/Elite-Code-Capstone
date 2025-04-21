@@ -325,7 +325,7 @@ function TeacherManageQuestion() {
                   >
                     <Text category="h5">Image</Text>
                   </View>
-                  <Text category="p1"> {`Selected image: ${imgFile}`} </Text>
+                  {/* <Text category="p1"> {`Selected image: ${imgFile}`} </Text> */}
         
                   <View
                     style={{
