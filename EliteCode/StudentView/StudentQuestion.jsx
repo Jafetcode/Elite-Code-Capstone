@@ -1,6 +1,10 @@
 import * as React from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
-import { useNavigation, useFocusEffect, useEffect } from "@react-navigation/native";
+import {
+  useNavigation,
+  useFocusEffect,
+  useEffect,
+} from "@react-navigation/native";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -24,20 +28,18 @@ function StudentQuestion() {
   const { user } = useAuth();
   const { cid, tid } = route.params || {};
 
-
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-US", {
-        weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true, 
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
-};
+  };
 
   const fetchQuestions = async () => {
     try {
@@ -51,53 +53,97 @@ function StudentQuestion() {
     }
   };
 
-  
   useFocusEffect(
     React.useCallback(() => {
       if (cid) {
         fetchQuestions();
-
       }
     }, [cid])
   );
 
-
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
-                <ScrollView>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="s1"> Questions for course </Text>
-                    </View>
-                    <View style={{ marginBottom: 20 }}>
-                        {questions?.length > 0 ? (
-                            <>
-                                {questions.map((question) =>
-                                    (question.classView === 1 || question.studentView === 1) && (
-                                        <Card key={question.qid} style={{}}>
-                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
-                                                <View style={{ flex: 1 }}>
-                                                    <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
-                                                    <Text appearance="hint" >{question.description}</Text>
-                                                </View>
-                                            </View>
-                                            <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                            <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                            <Text category="s2">{question.pointVal} Points</Text>
-                                            <Button onPress={() => navigation.navigate('SubmitQuestion', { cid: cid, qid: question.qid, type: question.type })} style={{ marginTop: 20 }}> Submit answer for {question.question}</Button>
-                                            {/* <View>{question.imgFile}</View> */}
-                                        </Card>
-                                    )
-                                )}
-                            </>
-                        ) : (
-                            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
-                                <Text category="s1">No questions have been assigned this course.</Text>
-                            </View>
-                        )}
-                    </View>
-                </ScrollView>
-            </Layout>
-        );
+      <ScrollView>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 5,
+          }}
+        >
+          <Text category="s1"> Questions for course </Text>
+        </View>
+        <View style={{ marginBottom: 20 }}>
+          {questions?.length > 0 ? (
+            <>
+              {questions.map(
+                (question) =>
+                  (question.classView === 1 || question.studentView === 1) && (
+                    <Card key={question.qid} style={{}}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          paddingBottom: 10,
+                        }}
+                      >
+                        <View style={{ flex: 1 }}>
+                          <Text style={{ paddingBottom: 10 }}>
+                            {question.question}?
+                          </Text>
+                          <Text appearance="hint">{question.description}</Text>
+                        </View>
+                      </View>
+                      <View>
+                        <Text category="s2">Topic: {question.topic}</Text>
+                      </View>
+                      <View>
+                        <Text category="s2">
+                          Due: {formatDate(question.dueDate)}
+                        </Text>
+                      </View>
+                      <Text category="s2">{question.pointVal} Points</Text>
+                      <Button
+                        onPress={() =>
+                          navigation.navigate("SubmitQuestion", {
+                            cid: cid,
+                            qid: question.qid,
+                            type: question.type,
+                            item: {
+                              opt1: question.opt1,
+                              opt2: question.opt2,
+                              opt2: question.opt3,
+                            },
+                          })
+                        }
+                        style={{ marginTop: 20 }}
+                      >
+                        {" "}
+                        Submit answer for {question.question}
+                      </Button>
+                      {/* <View>{question.imgFile}</View> */}
+                    </Card>
+                  )
+              )}
+            </>
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                margin: 20,
+              }}
+            >
+              <Text category="s1">
+                No questions have been assigned this course.
+              </Text>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </Layout>
+  );
 }
 
 export default () => (

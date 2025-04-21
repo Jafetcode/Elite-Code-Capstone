@@ -54,9 +54,10 @@ router.get("/questions", (req, res) => {
   const cid = req.query.cid;
   const sql =
     "SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3, atc.viewable as classView " +
-    "From Questions q " +
-    "LEFT JOIN AssignedToClass atc on q.qid = atc.qid " +
-    "LEFT JOIN MCQ mcq ON q.qid = mcq.qid Where cid = ?";
+    "FROM Questions q " +
+    "LEFT JOIN AssignedToClass atc ON q.qid = atc.qid " + 
+    "LEFT JOIN MCQ mcq ON q.qid = mcq.qid " +
+    "WHERE atc.cid = ?";
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
