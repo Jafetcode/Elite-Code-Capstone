@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, ScrollView, Image, StyleSheet} from "react-native";
-import { Layout, Button, Text, Card, Input } from "@ui-kitten/components";
+import { View, Image, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView, Text, Alert } from "react-native";
+
+import { Layout, Button, Card, Input } from "@ui-kitten/components";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 
