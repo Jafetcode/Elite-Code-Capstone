@@ -64,7 +64,7 @@ function EditProfile() {
             value={bio}
             onChangeText={setBio}
             placeholder={user.bio}
-            maxLength={1000}
+            maxLength={250}
             multiline
             textStyle={{ minHeight: 100 }}
           />
