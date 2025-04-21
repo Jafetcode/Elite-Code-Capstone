@@ -32,19 +32,6 @@ const ErikaStudentHome = () => {
     }
   }, [userID, questionID]);
 
-  // const responseData = {
-  //   question: "Explain the process of photosynthesis and its importance to plant life.",
-  //   imageUrl: "", 
-  //   teacherComments: "Good explanation of the basic process, but missing some details about light reactions and the Calvin cycle. More specific examples would strengthen your answer.",
-  //   studentResponse: "Photosynthesis is the process where plants convert sunlight, water, and carbon dioxide into glucose and oxygen.",
-  //   submittedAt: "2025-04-18T14:32:00",
-  //   score: {
-  //     points: 10,
-  //     total: 14,
-  //     percentage: 71.43
-  //   }
-  // };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -55,9 +42,7 @@ const ErikaStudentHome = () => {
       minute: '2-digit'
     });
   };
-  // const calcPercent = (grade, total) => {
-  //   return (grade / total)
-  // }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
