@@ -46,6 +46,7 @@ function EditProfile() {
           <Text >First Name</Text>
           <Input
             value={fname}
+            maxLength={50}
             onChangeText={setfName}
             placeholder={user.fname}
             
@@ -53,6 +54,7 @@ function EditProfile() {
          <Text >Last Name</Text>
           <Input
             value={lname}
+            maxLength={50}
             onChangeText={setlName}
             placeholder={user.lname}
            
@@ -62,6 +64,7 @@ function EditProfile() {
             value={bio}
             onChangeText={setBio}
             placeholder={user.bio}
+            maxLength={1000}
             multiline
             textStyle={{ minHeight: 100 }}
           />

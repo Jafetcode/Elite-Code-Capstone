@@ -72,6 +72,7 @@ function StudentHome() {
   };
 
   const handleJoinClass = async () => {
+
     if (!classCode.trim()) {
       Alert.alert("Error", "Please enter a class code.");
       return;
@@ -168,6 +169,7 @@ function StudentHome() {
 
             <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
               <Card disabled={true} style={{
+                
                 width: 240,
                 alignSelf: 'center',
                 borderRadius: 10,
@@ -190,6 +192,7 @@ function StudentHome() {
                   textStyle={{ fontSize: 14, color: 'white' }}
                   placeholder='Course Code'
                   value={classCode}
+                  maxLength={6}
                   onChangeText={nextClassCode => setClassCode(nextClassCode)}
                 />
                 <Button

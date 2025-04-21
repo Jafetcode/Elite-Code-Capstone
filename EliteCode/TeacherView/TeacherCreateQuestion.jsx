@@ -201,6 +201,7 @@ function TeacherCreateQuestion() {
             placeholder="Enter question"
             value={question}
             onChangeText={(question) => setQuestion(question)}
+            maxLength={200}
           />
 
           <View
@@ -217,6 +218,7 @@ function TeacherCreateQuestion() {
             placeholder="Type Description Here"
             value={description}
             onChangeText={(description) => setDescription(description)}
+            maxLength={200}
           />
 
           <View
@@ -255,18 +257,21 @@ function TeacherCreateQuestion() {
                 value={option1}
                 onChangeText={(value) => setOption1(value)}
                 style={{ marginBottom: 5 }}
+                maxLength={200}
               />
               <Input
                 placeholder="Option 2"
                 value={option2}
                 onChangeText={(value) => setOption2(value)}
                 style={{ marginBottom: 5 }}
+                maxLength={200}
               />
               <Input
                 placeholder="Option 3"
                 value={option3}
                 onChangeText={(value) => setOption3(value)}
                 style={{ marginBottom: 5 }}
+                maxLength={200}
               />
               {/* work on tommorow*/}
               <Text category="h5" style={{ marginBottom: 5 }}>
@@ -296,6 +301,7 @@ function TeacherCreateQuestion() {
             value={topic}
             onChangeText={(value) => setTopic(value)}
             style={{ marginBottom: 5 }}
+            maxLength={200}
           />
           {/* <Button onPress={() => {
                         console.log('Add Image');

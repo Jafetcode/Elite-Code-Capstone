@@ -39,7 +39,7 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherManageQuestion" component={TeacherManageQuestion}/>
     <Stack.Screen name="EditProfile" component={EditProfile}/>
     {/* <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} /> */}
-    <Stack.Screen name="ResetPassword" component={ResetPassword} />
+    {/* <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
 
   </Stack.Navigator>
 );
