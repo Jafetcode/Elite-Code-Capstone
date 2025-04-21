@@ -67,12 +67,12 @@ function TeacherCreateCourse() {
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Course Name *</Text>
                     </View>
-                    <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} />
+                    <Input placeholder="Enter course name" value={courseName} onChangeText={setCourseName} maxLength={30}/>
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                         <Text category="h5">Description</Text>
                     </View>
-                    <Input placeholder='Type Description Here' value={description} onChangeText={setDescription} />
+                    <Input placeholder='Type Description Here' value={description} onChangeText={setDescription} maxLength={200}/>
 
                     {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                                     <Text category="h5">Course Code *</Text>

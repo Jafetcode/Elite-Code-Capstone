@@ -72,6 +72,7 @@ function StudentHome() {
   };
 
   const handleJoinClass = async () => {
+
     if (!classCode.trim()) {
       Alert.alert("Error", "Please enter a class code.");
       return;
@@ -116,13 +117,7 @@ function StudentHome() {
     <Card
       key={item.qid}
       style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }} >
-      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {
-        cid: item.cid,
-        qid: item.qid,
-        type: item.type,
-        opt1: item.opt1,
-        opt2: item.opt2,
-        opt3: item.opt3
+      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {item : item, type: item.type
       })}>
 
         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
@@ -174,6 +169,7 @@ function StudentHome() {
 
             <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
               <Card disabled={true} style={{
+                
                 width: 240,
                 alignSelf: 'center',
                 borderRadius: 10,
@@ -196,6 +192,7 @@ function StudentHome() {
                   textStyle={{ fontSize: 14, color: 'white' }}
                   placeholder='Course Code'
                   value={classCode}
+                  maxLength={6}
                   onChangeText={nextClassCode => setClassCode(nextClassCode)}
                 />
                 <Button
