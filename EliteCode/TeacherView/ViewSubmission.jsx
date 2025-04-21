@@ -10,16 +10,13 @@ function ViewSubmission() {
   const { user } = useAuth();
   const student = route.params?.s;
   const question = route.params?.q;
-  const [submission, setSubmission] = useState(null);
-  const [feedback, setFeedback] = useState("");
-  const [grade, setGrade] = useState("");
-
+    const [submission, setSubmission] = useState({});
   useEffect(() => {
     const fetchSubmission = async () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
             const data = await res.json();
-            setQuestion(data[0]);
+            setSubmission(data[0]);
           } catch (error) {
             Alert.alert("Error", "Could not load your submission.", error);
           }
@@ -53,27 +50,27 @@ function ViewSubmission() {
           <View style={styles.headerContainer}>
             <View style={styles.scoreSection}>
               <Text style={styles.scoreText}>
-                Score: <Text style={styles.scoreValue}>{question.grade}/{question.pointVal}</Text>
+                Score: <Text style={styles.scoreValue}>{submission.grade}/{submission.pointVal}</Text>
               </Text>
               <Text style={styles.percentageText}>
-                {/* {calcPercent(question.grade, question.pointVal)}% */}
-                {parseFloat(question.grade/question.pointVal*100).toFixed(2)}%
+                {/* {calcPercent(submission.grade, submission.pointVal)}% */}
+                {parseFloat(submission.grade/submission.pointVal*100).toFixed(2)}%
               </Text>
             </View>
             <Text style={styles.dateText}>
-              Submitted: {formatDate(question.submitted_on)}
+              Submitted: {formatDate(submission.submitted_on)}
             </Text>
           </View>
 
           {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
-            <Text style={styles.questionText}>{question.question}</Text>
+            <Text style={styles.questionText}>{submission.question}</Text>
 
-            {question.imgFile && (
+            {submission.imgFile && (
               <View style={styles.imageContainer}>
                 {/* <Image
-                  source={{ uri: question.imgFile }}
+                  source={{ uri: submission.imgFile }}
                   style={styles.image}
                   resizeMode="cover"
                 /> */}
@@ -84,14 +81,14 @@ function ViewSubmission() {
           {/* Student's Response section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Your Response</Text>
-            <Text style={styles.responseText}>{question.answer}</Text>
+            <Text style={styles.responseText}>{submission.answer}</Text>
           </View>
 
           {/* Teacher's Comments section */}
-          {question.comment && (
+          {submission.comment && (
             <View style={[styles.section, styles.commentsSection]}>
               <Text style={styles.sectionTitle}>Teacher's Comments</Text>
-              <Text style={styles.commentsText}>{question.comment}</Text>
+              <Text style={styles.commentsText}>{submission.comment}</Text>
             </View>
           )}
         </View>
