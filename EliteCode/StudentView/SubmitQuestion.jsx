@@ -101,7 +101,7 @@ function SubmitQuestion() {
     const calculatedGrade = type === "MCQ" && correctAns == answer ? questionData.pointVal : 0;
     try {
       const formData = new FormData();
-      setProgress("submitted")
+
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
@@ -142,6 +142,7 @@ function SubmitQuestion() {
 
       console.log("Response:", data);
       if (response.ok) {
+        setProgress("submitted")
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
       } else {
@@ -149,6 +150,7 @@ function SubmitQuestion() {
         alert("Failed to submit question.");
       }
     } catch (error) {
+      alert(error)
       console.error("Error submitting question:", error);
     }
   };

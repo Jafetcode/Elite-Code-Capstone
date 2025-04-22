@@ -51,46 +51,39 @@ function QsByCourse() {
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 40 }}>
                     <Text category="s1"> Questions for course </Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
                         <Text appearance="hint">Create Question</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginBottom: 20 }}>
+                <View>
                     {questions?.length > 0 ? (
                         <>
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
+                                    <Card style={{marginBottom: "8"}}>
                                     <TouchableOpacity 
                                         key={question.qid}
                                         onPress={() => navigation.navigate('TeacherManageQuestion', { 
                                             course: { cid },
                                             qid: question.qid 
                                         })}
-                                        style={{ marginBottom: 10 }}
-                                    >
-                                        <Card>
+                
+                                    >  
                                             <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                                 <View style={{ flex: 1 }}>
                                                     <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                                  
                                                     <Text appearance="hint">{question.description}</Text>
                                                 </View>
                                             </View>
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                            <Text category="s2">{question.pointVal} Points</Text>
-                                        </Card>
-                                        <Button 
-                                            onPress={() => navigation.navigate('TeacherManageQuestion', { 
-                                                course: cid ,
-                                                qid: question.qid 
-                                            })}
-                                            style={{ marginTop: 20 }}
-                                        >
-                                            Manage {question.question}
-                                        </Button>
+                                            <Text category="s2" >{question.pointVal} Points</Text>
+                                    
                                     </TouchableOpacity>
+                                    </Card>
                                 )
                             )}
                         </>
