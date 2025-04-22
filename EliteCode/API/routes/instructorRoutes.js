@@ -124,9 +124,11 @@ router.post('/updateAssignments', (req, res) => {
           ...studentDeletePromises,
           ...studentInsertPromises
         ])
-          .then(() => {
-            return res.json({ message: "Question assigned successfully." });
-          })
+        .then(() => {
+          const noChanges = cidsToDelete.length === 0 && cidsToInsert.length === 0 &&
+            sidsToDelete.length === 0 && sidsToInsert.length === 0;
+          return res.json({ message: noChanges ? "No changes made" : "Question assigned successfully." });
+        })
           .catch(error => {
             console.error("Error updating assignments:", error);
             res.status(500).json({ message: "Error updating assignments" });
