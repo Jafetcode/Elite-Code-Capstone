@@ -51,11 +51,11 @@ function QuestionsAssignedToStudent() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20, paddingTop: 50 }}>
+        <Layout style={{ flex: 1, padding: 20, paddingTop: 50, backgroundColor: '#2C496B'}}>
             <ScrollView>
                 <Text category='h5' style={styles.heading}>Questions Assgined To:</Text>
                 <Text category='s1' appearance='hint' style={styles.subHeading}>
-                   {student.fname} {student.lname}
+                    {student.fname} {student.lname}
                 </Text>
                 <View style={{ marginBottom: 20 }}>
                     {questions?.length > 0 ? (
@@ -65,27 +65,40 @@ function QuestionsAssignedToStudent() {
                                     <Card style={{ marginBottom: 10, borderRadius: 20 }} key={question.qid} >
                                         <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                             <View style={{ flex: 1 }}>
-                                                <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
-                                                <Text appearance="hint" >{question.description}</Text>
+                                                <View style={{ flexDirection: 'row' }}>
+                                                    <Text style={{ paddingBottom: 10, paddingRight: 20, width: 200 }}>{question.question}?</Text>
+                                                    <View style={styles.badgeType}>
+                                                        <Text style={styles.badgeText}>{question.type}</Text>
+                                                    </View>
+                                                </View>
+                                                <Text appearance="hint">{question.description}</Text>
                                             </View>
                                         </View>
                                         <View><Text category="s2">Topic: {question.topic}</Text></View>
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                         <Text category="s2">{question.pointVal} Points</Text>
                                         {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
-                                
-                                            {question.hasSubmitted ? (
-                                             <View>
-                                            <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
-                                            <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Submission", { q: question, s: student })} > View submission </Button>
+
+                                        {question.hasSubmitted ? (
+                                            <View style={styles.container}>
+                                                <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
+                                                <Button size="small" style={{ margin: 10 }} onPress={() => {
+                                                    const destination =
+                                                        question.type === "shortAns" ? "ViewSubmission" : "MCQSubmission";
+                                                    navigation.navigate(destination, { q: question, s: student });
+                                                }} > View submission </Button>
                                             </View>)
-                                             : ( <View>
+                                            : (<View>
                                                 <Text style={styles.waitingText}>Waiting for submission </Text>
-                                                </View>)}
-                                       
+                                            </View>)}
+
                                     </Card>
+
+
                                 )
                             )}
+                            <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("MCQSubmission",)} > Grade question </Button>
+
                         </>
                     ) : (
                         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
@@ -105,7 +118,25 @@ const styles = StyleSheet.create({
     },
     heading: { marginBottom: 8, paddingTop: 30 },
     subHeading: { marginBottom: 16, color: "white" },
-    waitingText: {color: "#D02C32", paddingTop: 5, fontWeight: "bold"}
+    waitingText: { color: "#D02C32", paddingTop: 5, fontWeight: "bold" },
+    badgeType: {
+        backgroundColor: "#3A4B5C",
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        width: 80,
+        marginTop: 10,
+        justifyContent: "center"
+      },
+      badgeStatus: {
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+      },
+      badgeText: {
+        color: "white",
+        fontSize: 12,
+        padding: 4
+      }
 });
 
 export default () => (

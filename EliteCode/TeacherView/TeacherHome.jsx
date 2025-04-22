@@ -38,9 +38,20 @@ function TeacherHome() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 15 }}>
+        <Layout style={{ flex: 1, padding: 15, backgroundColor: "#2C496B"}}>
+            <Image
+                source={require("../assets/images/FinalLogo2.png")}
+                style={{
+                    width: 300,
+                    height: 150,
+                    marginTop: 40,
+                    marginBottom: -70,
+                    alignSelf: 'center',
+                    resizeMode: 'cover',
+                }}
+            />
             <Text category='h4' style={styles.heading}>Course Library</Text>
-        
+
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
                     <View >
@@ -69,7 +80,7 @@ function TeacherHome() {
                                 </View>
                                 {/* </TouchableOpacity> */}
                                 <View style={styles.container}>
-                                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Classlist', { cid: course.cid })}>
+                                    <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Classlist', { cid: course.cid,  cName: course.courseName})}>
                                         Classlist
                                     </Button>
                                     <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QsByCourse', { cid: course.cid, cName: course.courseName })}>

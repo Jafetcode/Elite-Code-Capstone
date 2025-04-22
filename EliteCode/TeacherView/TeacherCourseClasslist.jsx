@@ -11,6 +11,7 @@ const TeacherCourseClasslist = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const { cid } = route.params || {};
+    const courseName = route.params?.cName;
     const [classlist, setClasslist] = useState([])
     const { user } = useAuth();
 
@@ -43,12 +44,12 @@ const TeacherCourseClasslist = () => {
         fetchClasslist()
     }, [cid]);
     return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B", paddingTop: 50}}>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
 
                     <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="s1"> Course classlist </Text>
+                        <Text category='h6' style={styles.heading}> Classlist: {courseName}</Text>
 
                     </View>
 
@@ -99,6 +100,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
     },
+    heading: { marginBottom: 8, paddingTop: 10 },
+
 });
 
 export default TeacherCourseClasslist;

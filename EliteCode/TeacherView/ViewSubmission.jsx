@@ -82,7 +82,7 @@ function ViewSubmission() {
 
           {/* Student's Response section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Your Response</Text>
+            <Text style={styles.sectionTitle}>Students Response</Text>
             <Text style={styles.responseText}>{submission.answer}</Text>
           </View>
 

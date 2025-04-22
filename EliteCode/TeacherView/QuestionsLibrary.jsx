@@ -43,7 +43,7 @@ function QuestionsLibrary() {
 
 
     return (
-        <Layout style={{ flex: 1, padding: 16, paddingTop: 50}}>
+        <Layout style={{ flex: 1, padding: 16, paddingTop: 50, backgroundColor: "#2C496B"}}>
             <Text category='h4' style={styles.heading}>Questions Library</Text>
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 All questions created by YOU.
@@ -53,11 +53,16 @@ function QuestionsLibrary() {
                     {questions.length > 0 ? (
                         <>
                             {questions.map((question) =>
-                                <Card key={question.qid} style={{ borderRadius: 10, borderWidth: 0 }}>
+                                <Card key={question.qid} style={{ borderRadius: 10, borderWidth: 0, marginBottom: 10}}>
                                     <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                         <View style={{ flex: 1 }}>
-                                            <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
-                                            <Text appearance="hint" >{question.description}</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Text style={{ paddingBottom: 10, width: 230 }}>{question.question}?</Text>
+                                                <View style={styles.badgeType}>
+                                                    <Text style={styles.badgeText}>{question.type}</Text>
+                                                </View>
+                                            </View>
+                                            <Text appearance="hint">{question.description}</Text>
                                         </View>
                                     </View>
                                     <View><Text category="s2">Topic: {question.topic}</Text></View>
@@ -95,7 +100,26 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     heading: { marginBottom: 8, paddingTop: 30 },
-    subHeading: { marginBottom: 16, }
+    subHeading: { marginBottom: 16, },
+    badgeType: {
+        backgroundColor: "#3A4B5C",
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        width: 80,
+        marginLeft: 10,
+        justifyContent: "center",
+        
+    },
+    badgeStatus: {
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+    },
+    badgeText: {
+        color: "white",
+        fontSize: 12,
+        padding: 4,
+    }
 });
 
 export default QuestionsLibrary;
