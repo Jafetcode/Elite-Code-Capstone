@@ -238,7 +238,7 @@ router.get('/allQuestions', (req, res) => {
 
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
-  const sql = 'SELECT *, mcq.opt1, mcq.opt2, mcq.opt3 FROM Questions LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE qid = ?';
+  const sql = 'SELECT q.*, mcq.opt1, mcq.opt2, mcq.opt3 FROM Questions q LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE qid = ?';
 
   db.query(sql, [qid], (err, results) => {
     if (err) {
