@@ -44,7 +44,6 @@ const StudentSettings = () =>{
       <ListItem title="FAQ" description="Frequently asked questions" />
       <ListItem title="About" description="App information" />
       <ListItem title="Logout" onPress={handleLogout} />
-      <ListItem title="Reset Password" onPress={() => navigation.navigate('LoginStack', { screen: 'ResetPassword' })} />
       </Layout>
     );
 }
