@@ -203,12 +203,12 @@ router.get('/allQuestions', (req, res) => {
       return res.status(500).json({ error: err.message });
     }
 
-    // Convert imgFile BLOBs to base64 URIs
+ 
     const updatedResults = results.map(row => {
       let base64Image = null;
       if (row.imgFile) {
-        const mimeType = 'image/jpeg'; // or determine this dynamically
-        const buffer = Buffer.from(row.imgFile); // Ensure it's a Buffer
+        const mimeType = 'image/jpeg'; 
+        const buffer = Buffer.from(row.imgFile);
         base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
       }
 
@@ -318,6 +318,18 @@ router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
       return res.status(500).json({ error: err.message });
     }
     res.json({ results });
+  });
+});
+
+router.delete('/question/:qid', (req, res) => {
+  const { qid } = req.params;
+  const sql = 'DELETE FROM Questions WHERE qid = ?';
+  
+  db.query(sql, [qid], (err, results) => {
+      if (err) {
+          return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: 'Question deleted successfully' });
   });
 });
 

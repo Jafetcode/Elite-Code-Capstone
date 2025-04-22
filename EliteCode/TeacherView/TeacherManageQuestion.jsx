@@ -114,14 +114,14 @@ function TeacherManageQuestion() {
                  text: "Delete", style: "destructive",
                  onPress: async () => {
                     try {
-                        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/question/${qid}}`, {
+                        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/question/${qid}`, {
                             method: "DELETE",
                         });
                         if (res.ok) {
-                            Alert.alert("Deleted", "Course deleted successfully!");
+                            Alert.alert("Deleted", "Question deleted successfully!");
                             navigation.goBack();
                         } else {
-                            Alert.alert("Error", "Failed to delete course.");
+                            Alert.alert("Error", "Failed to delete question.");
                         }
                     } catch (err) {
                         console.error(err);
@@ -142,10 +142,6 @@ function TeacherManageQuestion() {
 
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
-                // mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                // allowsEditing: true,
-                // aspect: [1, 1],
-                // quality: 0.5
                 presentationStyle: 'fullScreen',
                 selectionLimit: 1,
                 allowsEditing: true,

@@ -72,7 +72,6 @@ function SubmitQuestion() {
       const data = await res.json();
       const question = data.results.find(q => q.qid === qid);
       setQuestionData(question);
-      console.log(question)
       setQuestionAnswer(question.correctAns)
     } catch (error) {
       console.error("Failed to fetch", error);
@@ -88,11 +87,8 @@ function SubmitQuestion() {
   );
   React.useEffect(() => {
     console.log('Current type:', type);
-    // console.log('Current questionData:', questionData?.opt1, questionData?.opt2, questionData?.opt3);
-    console.log('MCQ options:',item?.opt1, item?.opt2, item?.opt3);
     console.log('Question Data:', {
       question: questionData,
-      routeParams: route.params
     });
 }, [type, questionData]);
 
@@ -145,9 +141,6 @@ function SubmitQuestion() {
       }
     } catch (error) {
       console.error("Error submitting question:", error);
-      if (formData.answer == null) {
-        alert("Please enter an answer.");
-      }
     }
   };
   return (
