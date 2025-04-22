@@ -49,7 +49,7 @@ function QsByCourse() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B", paddingTop: 50 }}>
             <ScrollView>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
                     <Text category="s1"> Questions for course </Text>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
@@ -38,7 +38,7 @@ function QuestionsAssignedToStudent() {
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-            hour12: true, 
+            hour12: true,
         });
     };
 
@@ -51,31 +51,31 @@ function QuestionsAssignedToStudent() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20, paddingTop: 50}}>
+        <Layout style={{ flex: 1, padding: 20, paddingTop: 50 }}>
             <ScrollView>
+                <Text category='h5' style={styles.heading}>Questions Assgined To:</Text>
+                <Text category='s1' appearance='hint' style={styles.subHeading}>
+                   {student.fname} {student.lname}
+                </Text>
                 <View style={{ marginBottom: 20 }}>
                     {questions?.length > 0 ? (
                         <>
-                            <View style={{ flexDirection: "row", marginBottom: 15 }}>
-                                <Text category="s1">Questions assigned to: </Text>
-                                <Text category="s1">{student.fname} {student.lname}</Text>
-                            </View>
-                            {questions.map((question) => 
+                            {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
-                                    <Card style={{marginBottom: 10, borderRadius: 20}} key={question.qid} >
-                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10}}>
-                                                <View style={{ flex: 1}}>
-                                                    <Text style={{paddingBottom: 10}}>{question.question}?</Text>
-                                                    <Text appearance="hint" >{question.description}</Text>
-                                                </View>
+                                    <Card style={{ marginBottom: 10, borderRadius: 20 }} key={question.qid} >
+                                        <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                            <View style={{ flex: 1 }}>
+                                                <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                                <Text appearance="hint" >{question.description}</Text>
                                             </View>
-                                            <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                            <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                            <Text category="s2">{question.pointVal} Points</Text>
-                                            {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
-                                            <Button size="small" style= {{margin: 10}}onPress={() => navigation.navigate("Question", {q : question, s: student})} > Grade question </Button>
-                                            <Button size="small" style= {{margin: 10}}onPress={() => navigation.navigate("Submission", {q : question, s: student})} > View submission </Button>
-                                    </Card> 
+                                        </View>
+                                        <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                        <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
+                                        <Text category="s2">{question.pointVal} Points</Text>
+                                        {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
+                                        <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
+                                        <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Submission", { q: question, s: student })} > View submission </Button>
+                                    </Card>
                                 )
                             )}
                         </>
@@ -85,11 +85,19 @@ function QuestionsAssignedToStudent() {
                         </View>
                     )}
                 </View>
-            
+
             </ScrollView>
         </Layout>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+    },
+    heading: { marginBottom: 8, paddingTop: 30 },
+    subHeading: { marginBottom: 16, color: "white" }
+});
 
 export default () => (
     <>

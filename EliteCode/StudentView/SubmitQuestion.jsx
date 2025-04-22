@@ -32,8 +32,10 @@ function SubmitQuestion() {
   const [progress, setProgress] = React.useState("inprogress");
   const [submitted_on, setSubmitted_on] = React.useState(new Date());
   const [questionData, setQuestionData] = React.useState(null);
+  const [correctAns, setQuestionAnswer] = React.useState('');
   const route = useRoute();
   const { user } = useAuth() || {};
+  const [studentGrade, setGrade] = React.useState(0);
   const { cid, qid, type, item } = route.params || {};
 
   const pickFile = async () => {
@@ -69,6 +71,8 @@ function SubmitQuestion() {
 
       const data = await res.json();
       setQuestionData(data.results[0] );
+      console.log(data.results[0])
+      setQuestionAnswer(data.results[0].correctAns)
     } catch (error) {
       console.error("Failed to fetch", error);
     }
@@ -107,7 +111,12 @@ function SubmitQuestion() {
               }
         );
       }
-
+      if(correctAns == answer){
+        setGrade(questionData.pointVal);
+      }
+      else{
+        setGrade(0);
+      }
       
   
       const response = await fetch(
@@ -118,7 +127,8 @@ function SubmitQuestion() {
             'Accept': 'application/json',
             "Content-Type": "multipart/form-data",
           },
-          body: formData,
+          body: formData, 
+          studentGrade: grade
         }
       );
       const data = await response.json();

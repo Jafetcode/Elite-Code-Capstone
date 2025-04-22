@@ -40,7 +40,7 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherManageQuestion" component={TeacherManageQuestion}/>
     <Stack.Screen name="EditProfile" component={EditProfile}/>
     {/* <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} /> */}
-    <Stack.Screen name="Submission" component={ViewSubmission}/>
+    <Stack.Screen name="Submission" component={ViewSubmission} options={{ headerShown: false }}/>
     {/* <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
 
   </Stack.Navigator>

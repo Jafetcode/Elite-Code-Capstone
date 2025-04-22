@@ -43,7 +43,7 @@ function QuestionsLibrary() {
 
 
     return (
-        <Layout style={{ flex: 1, padding: 16 }}>
+        <Layout style={{ flex: 1, padding: 16, paddingTop: 50}}>
             <Text category='h4' style={styles.heading}>Questions Library</Text>
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 All questions created by YOU.

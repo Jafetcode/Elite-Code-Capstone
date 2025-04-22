@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView, Text, Alert } from "react-native";
-
 import { Layout, Button, Card, Input } from "@ui-kitten/components";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
@@ -15,11 +14,11 @@ function ViewSubmission() {
   useEffect(() => {
     const fetchSubmission = async () => {
         try {
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
+            console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
+            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
             const data = await res.json();
-            console.log("getting submission")
+            console.log("getting submission", data[0].question)
             setSubmission(data[0]);
-            console.log(data[0].question)
           } catch (error) {
             Alert.alert("Error", "Could not load your submission.", error);
           }
@@ -103,6 +102,7 @@ function ViewSubmission() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#222B45"
   },
   scrollView: {
     flex: 1,
