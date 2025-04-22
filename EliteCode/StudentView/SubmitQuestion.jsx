@@ -223,26 +223,18 @@ function SubmitQuestion() {
   <View style={styles.imageContainer}>
     <Text category="h6">{questionData?.question || item?.question}</Text>
     <Text category="h3">{questionData?.description || item?.description}</Text>
-    {(questionData?.imgFile || item?.imgFile) && (
-      <Image 
-        source={{ 
-          uri: questionData?.imgFile || item?.imgFile,
-          cache: 'reload'
-        }} 
-        style={styles.image}
-        resizeMode="contain"
-      />
-    )}
-    <View style={styles.radioGroup }>
-      <Text category="h6">Select the correct answer</Text>
+    
+    <View style={styles.radioGroup}>
+      <Text category="h6">Select your answer:</Text>
       <RadioGroup
-    selectedIndex={["opt1", "opt2", "opt3"].indexOf(answer)}
-    onChange={(index) => {
-      const optionValue = `opt${index + 1}`;
-      setAnswer(optionValue);
-      console.log('Selected answer:', optionValue); 
-    }}
-  >
+        selectedIndex={answer ? parseInt(answer) - 1 : -1}
+        onChange={(index) => {
+          // Simply store the index + 1 as the answer (1, 2, or 3)
+          const selectedAnswer = (index + 1).toString();
+          setAnswer(selectedAnswer);
+          console.log('Selected answer:', selectedAnswer);
+        }}
+      >
         <Radio>{questionData?.opt1 || item?.opt1}</Radio>
         <Radio>{questionData?.opt2 || item?.opt2}</Radio>
         <Radio>{questionData?.opt3 || item?.opt3}</Radio>
