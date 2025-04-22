@@ -51,12 +51,12 @@ function QuestionsAssignedToStudent() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20, paddingTop: 50, backgroundColor: '#2C496B'}}>
-            <ScrollView>
-                <Text category='h5' style={styles.heading}>Questions Assgined To:</Text>
+        <Layout style={{ flex: 1, padding: 20, paddingTop: 45, backgroundColor: '#2C496B'}}>
+            <Text category='h5' style={styles.heading}>Questions Assgined To:</Text>
                 <Text category='s1' appearance='hint' style={styles.subHeading}>
                     {student.fname} {student.lname}
                 </Text>
+            <ScrollView>
                 <View style={{ marginBottom: 20 }}>
                     {questions?.length > 0 ? (
                         <>
@@ -66,7 +66,7 @@ function QuestionsAssignedToStudent() {
                                         <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                             <View style={{ flex: 1 }}>
                                                 <View style={{ flexDirection: 'row' }}>
-                                                    <Text style={{ paddingBottom: 10, paddingRight: 20, width: 200 }}>{question.question}?</Text>
+                                                    <Text style={{ paddingBottom: 10, paddingRight: 15, width: 230 }}>{question.question}?</Text>
                                                     <View style={styles.badgeType}>
                                                         <Text style={styles.badgeText}>{question.type}</Text>
                                                     </View>

@@ -43,17 +43,23 @@ function QuestionsLibrary() {
 
 
     return (
-        <Layout style={{ flex: 1, padding: 16, paddingTop: 50, backgroundColor: "#2C496B"}}>
+        <Layout style={{ flex: 1, padding: 16, paddingTop: 50, backgroundColor: "#2C496B" }}>
             <Text category='h4' style={styles.heading}>Questions Library</Text>
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 All questions created by YOU.
             </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
+                <Text></Text>
+                <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
+                    <Text style={{ marginBottom: 10,}} category='s1' appearance="hint">Create Question</Text>
+                </TouchableOpacity>
+            </View>
             <ScrollView>
                 <View style={{ marginBottom: 10 }}>
                     {questions.length > 0 ? (
                         <>
                             {questions.map((question) =>
-                                <Card key={question.qid} style={{ borderRadius: 10, borderWidth: 0, marginBottom: 10}}>
+                                <Card key={question.qid} style={{ borderRadius: 10, borderWidth: 0, marginBottom: 10 }}>
                                     <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                         <View style={{ flex: 1 }}>
                                             <View style={{ flexDirection: 'row' }}>
@@ -62,7 +68,10 @@ function QuestionsLibrary() {
                                                     <Text style={styles.badgeText}>{question.type}</Text>
                                                 </View>
                                             </View>
-                                            <Text appearance="hint">{question.description}</Text>
+                                            {question.description &&
+                                                (<View>
+                                                    <Text appearance="hint"> {question.description} </Text>
+                                                </View>)}
                                         </View>
                                     </View>
                                     <View><Text category="s2">Topic: {question.topic}</Text></View>
@@ -75,7 +84,7 @@ function QuestionsLibrary() {
                                         />
                                     )} */}
                                     <View style={styles.container}>
-                                        <Button style={{ margin: 5, width: 300 }} onPress={() => navigation.navigate('Assign a question', { assignTo: "course", question: question })}>
+                                        <Button size="small" style={{ marginTop: 10, marginBotton: 10, width: 300, }} onPress={() => navigation.navigate('Assign a question', { assignTo: "course", question: question })}>
                                             Assign to class or student/students
                                         </Button>
                                     </View>
@@ -100,7 +109,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     heading: { marginBottom: 8, paddingTop: 30 },
-    subHeading: { marginBottom: 16, },
+    subHeading: { marginBottom: 8, },
     badgeType: {
         backgroundColor: "#3A4B5C",
         borderRadius: 6,
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
         width: 80,
         marginLeft: 10,
         justifyContent: "center",
-        
+
     },
     badgeStatus: {
         borderRadius: 6,

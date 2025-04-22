@@ -51,18 +51,17 @@ function QsByCourse() {
 
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B", paddingTop: 50 }}>
+            <Text category='h5' > Questions For:  </Text>
+            <Text category='h6' style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 5, width: 200}}>
+                {courseName}
+            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
+                <Text></Text>
+                <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
+                    <Text style={{ marginBottom: 10, }} category='s1' appearance="hint">Create Question</Text>
+                </TouchableOpacity>
+            </View>
             <ScrollView>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                    <Text category='h5' > Questions For:  </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
-                        <Text style={{ paddingTop: 5 }} category='s1' appearance="hint">Create Question</Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <Text category='h6' style={{ paddingTop: 0, paddingBottom: 15, paddingLeft: 5 }}>
-                        {courseName}
-                    </Text>
-                </View>
                 <View style={{ marginBottom: 20 }}>
                     {questions?.length > 0 ? (
                         <>
@@ -79,12 +78,12 @@ function QsByCourse() {
                                         <Card style={{ borderRadius: 20 }}>
                                             <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10, }}>
                                                 <View style={{ flex: 1 }}>
-                                                    <View style={{flexDirection: 'row'}}>
-                                                    <Text style={{ paddingBottom: 10, paddingRight: 20, width: 200 }}>{question.question}?</Text>
-                                                    <View style={styles.badgeType}>
-                                                        <Text style={styles.badgeText}>{question.type}</Text>
+                                                    <View style={{ flexDirection: 'row' }}>
+                                                        <Text style={{ paddingBottom: 10, paddingRight: 15, width: 220 }}>{question.question}?</Text>
+                                                        <View style={styles.badgeType}>
+                                                            <Text style={styles.badgeText}>{question.type}</Text>
+                                                        </View>
                                                     </View>
-                                                    </View> 
                                                     <Text appearance="hint">{question.description}</Text>
                                                 </View>
                                             </View>
@@ -116,25 +115,25 @@ function QsByCourse() {
     );
 }
 const styles = StyleSheet.create({
-badgeType: {
-    backgroundColor: "#3A4B5C",
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    width: 80,
-    marginTop: 10,
-    justifyContent: "center"
+    badgeType: {
+        backgroundColor: "#3A4B5C",
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        width: 80,
+        marginTop: 10,
+        justifyContent: "center"
 
-  },
-  badgeStatus: {
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-  },
-  badgeText: {
-    color: "white",
-    fontSize: 12,
-    padding: 4
-  }
+    },
+    badgeStatus: {
+        borderRadius: 6,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+    },
+    badgeText: {
+        color: "white",
+        fontSize: 12,
+        padding: 4
+    }
 });
 export default () => (
     <>
