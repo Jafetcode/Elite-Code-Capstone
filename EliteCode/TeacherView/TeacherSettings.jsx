@@ -53,7 +53,7 @@ function TeacherSettings() {
 
       <ListItem title="Logout" onPress={handleLogout} />
 
-                    </Layout>
+      </Layout>
     );
 }
 export default ()=> (

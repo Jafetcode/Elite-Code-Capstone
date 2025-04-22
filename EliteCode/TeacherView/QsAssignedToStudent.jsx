@@ -73,8 +73,16 @@ function QuestionsAssignedToStudent() {
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                         <Text category="s2">{question.pointVal} Points</Text>
                                         {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
-                                        <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
-                                        <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Submission", { q: question, s: student })} > View submission </Button>
+                                
+                                            {question.hasSubmitted ? (
+                                             <View>
+                                            <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
+                                            <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Submission", { q: question, s: student })} > View submission </Button>
+                                            </View>)
+                                             : ( <View>
+                                                <Text style={styles.waitingText}>Waiting for submission </Text>
+                                                </View>)}
+                                       
                                     </Card>
                                 )
                             )}
@@ -96,7 +104,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     heading: { marginBottom: 8, paddingTop: 30 },
-    subHeading: { marginBottom: 16, color: "white" }
+    subHeading: { marginBottom: 16, color: "white" },
+    waitingText: {color: "#D02C32", paddingTop: 5, fontWeight: "bold"}
 });
 
 export default () => (
