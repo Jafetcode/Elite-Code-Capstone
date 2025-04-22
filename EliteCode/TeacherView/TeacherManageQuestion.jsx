@@ -54,17 +54,17 @@ const [correctAns, setCorrectAns] = React.useState("");
             }
 
             const q = data.results[0];
-            setQuestion(q.question || '');
-            setDescription(q.description || '');
-            setType(q.type || 'MCQ');
-            setDate(q.dueDate ? new Date(q.dueDate) : new Date());
-            setPointVal(String(q.pointVal || ''));
-            setTopic(q.topic || '');  
-            setImgFile(q.imgFile || null);
-            setOption1(q.opt1)
-            setOption2(q.opt2)
-            setOption3(q.opt3)
-            setCorrectAns(q.correctAns)
+            q.question && setQuestion(q.question);
+            q.description && setDescription(q.description);
+            q.type && setType(q.type);
+            q.dueDate && setDate(new Date(q.dueDate));
+            q.pointVal && setPointVal(String(q.pointVal));
+            q.topic && setTopic(q.topic);
+            q.imgFile && setImgFile(q.imgFile);
+            q.opt1 && setOption1(q.opt1);
+            q.opt2 && setOption2(q.opt2);
+            q.opt3 && setOption3(q.opt3);
+            q.correctAns && setCorrectAns(q.correctAns);
 
         } catch (error) {
             console.error("Error:", error.message);

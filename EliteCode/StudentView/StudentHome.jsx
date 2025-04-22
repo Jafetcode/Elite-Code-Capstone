@@ -56,6 +56,7 @@ function StudentHome() {
           opt1: item.opt1,
           opt2: item.opt2,
           opt3: item.opt3,
+          imgFile: item.imgFile
 
         })).slice(0, 50);
       };

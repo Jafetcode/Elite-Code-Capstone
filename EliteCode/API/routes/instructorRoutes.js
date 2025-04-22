@@ -238,22 +238,24 @@ router.get('/allQuestions', (req, res) => {
 
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
-  const sql = 'SELECT q.*, mcq.opt1, mcq.opt2, mcq.opt3 FROM Questions q LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE qid = ?';
+  const sql = 'SELECT q.*, mcq.opt1, mcq.opt2, mcq.opt3 FROM Questions q LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE q.qid = ?';
 
   db.query(sql, [qid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
 
-    if (results.length > 0 && results[0].imgFile) {
+    if (!results || results.length === 0) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+
+    if (results[0].imgFile) {
       results[0].imgFile = `data:image/jpeg;base64,${results[0].imgFile.toString('base64')}`;
     }
 
     res.json({ results });
   });
 });
-
-
 
 router.get('/questionID', (req, res) => {
   const cid = req.query.cid;

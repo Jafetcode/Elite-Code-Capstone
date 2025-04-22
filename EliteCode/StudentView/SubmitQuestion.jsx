@@ -93,14 +93,22 @@ function SubmitQuestion() {
 }, [type, questionData]);
 
   const handleSubmit = async () => {
+    if (progress === "submitted") {
+      alert("This question has already been submitted!");
+      return;
+    }
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
     const calculatedGrade = type === "MCQ" && correctAns == answer ? questionData.pointVal : 0;
     try {
       const formData = new FormData();
+      setProgress("submitted")
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
-      formData.append("progress", "submitted");
+      if(progress === "inprogress"){
+        
+        formData.append("progress", progress);
+      }
       formData.append("submitted_on", submitted_on);
       formData.append("grade", calculatedGrade);
       if (file) {
@@ -137,6 +145,7 @@ function SubmitQuestion() {
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
       } else {
+        setProgress("inprogress")
         alert("Failed to submit question.");
       }
     } catch (error) {
