@@ -81,7 +81,7 @@ function SubmitQuestion() {
   );
   React.useEffect(() => {
     console.log('Current type:', type);
-    console.log('Current questionData:', questionData?.opt1, questionData?.opt2, questionData?.opt3);
+    // console.log('Current questionData:', questionData?.opt1, questionData?.opt2, questionData?.opt3);
     console.log('MCQ options:',item?.opt1, item?.opt2, item?.opt3);
 }, [type, questionData]);
 
@@ -197,25 +197,26 @@ function SubmitQuestion() {
           </View>
         )}
 
-        {type === "MCQ" && (
-
-          <View style={styles.imageContainer}>
-                <Text category="h6"> {questionData?.question}{item?.question}</Text>
-            <Text category="h3">{questionData?.description}{item?.description}</Text>
-            {item?.imgFile && <Image source={{ uri: item?.imgFile }} style={styles.image} />}
-          <View style={styles.radioGroup}>
-            <Text category="h6">Select the correct answer</Text>
-            <RadioGroup
-              selectedIndex={answer}
-              onChange={(index) => setAnswer(index)}
-            >
-              <Radio>{questionData?.opt1}{item?.opt1}</Radio>
-              <Radio>{questionData?.opt2}{item?.opt2}</Radio>
-              <Radio>{questionData?.opt3}{item?.opt3}</Radio>
-            </RadioGroup>
-          </View>
-         </View> 
-        )}
+{type === "MCQ" && (
+  <View style={styles.imageContainer}>
+    <Text category="h6">{questionData?.question || item?.question}</Text>
+    <Text category="h3">{questionData?.description || item?.description}</Text>
+    {(questionData?.imgFile || item?.imgFile) && 
+      <Image source={{ uri: questionData?.imgFile || item?.imgFile }} style={styles.image} />
+    }
+    <View style={styles.radioGroup}>
+      <Text category="h6">Select the correct answer</Text>
+      <RadioGroup
+        selectedIndex={answer}
+        onChange={(index) => setAnswer(index)}
+      >
+        <Radio>{questionData?.opt1 || item?.opt1}</Radio>
+        <Radio>{questionData?.opt2 || item?.opt2}</Radio>
+        <Radio>{questionData?.opt3 || item?.opt3}</Radio>
+      </RadioGroup>
+    </View>
+  </View>
+)}
 
         <Button onPress={() => handleSubmit()} style={styles.submitButton}>
           Submit Question

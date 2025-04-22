@@ -112,7 +112,7 @@ function StudentQuestion() {
                             item: {
                               opt1: question.opt1,
                               opt2: question.opt2,
-                              opt2: question.opt3,
+                              opt3: question.opt3,
                             },
                           })
                         }
