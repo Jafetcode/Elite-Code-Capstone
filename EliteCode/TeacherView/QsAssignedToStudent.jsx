@@ -93,7 +93,6 @@ function QuestionsAssignedToStudent() {
                                 )
                             )}
                             <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("MCQSubmission",)} > Grade question </Button>
-
                         </>
                     ) : (
                         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", margin: 20 }}>
