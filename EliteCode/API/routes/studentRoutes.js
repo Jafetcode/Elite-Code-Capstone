@@ -239,7 +239,7 @@ router.get("/getAllPastDueQuestions", async (req, res) => {
   const { sid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3,
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3, mcq.correctAns,
       s.submitted_on IS NOT NULL AS hasSubmitted
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
@@ -252,7 +252,7 @@ router.get("/getAllPastDueQuestions", async (req, res) => {
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3,
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3, mcq.correctAns,
       s.submitted_on IS NOT NULL AS hasSubmitted
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid

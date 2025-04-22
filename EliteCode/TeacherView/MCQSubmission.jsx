@@ -4,6 +4,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const MCQSubmission = () => {
   // Sample data - in a real app, this would come from props or a data store
+  const {question} = route.params?.q;
+  const {student} = route.params?.s;
+  // Query from submission and MCQ TABLE query from 
   const questionData = {
     question: "Which of the following is NOT a primary color in the RGB color model?",
     imageUrl: "/api/placeholder/400/200", // Optional image

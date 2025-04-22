@@ -71,7 +71,7 @@ function QuestionsLibrary() {
                                                 </View>)}
                                         </View>
                                     </View>
-                                    <View><Text category="s2">{question.type}</Text> </View>
+                                    <View><Text category="s2">Type: {question.type}</Text> </View>
                                     <View><Text category="s2">Topic: {question.topic}</Text></View>
                                     <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                     <Text category="s2">{question.pointVal} Points</Text>

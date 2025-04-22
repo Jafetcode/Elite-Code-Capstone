@@ -51,7 +51,7 @@ function QsByCourse() {
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 40 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 40, marginBottom: 10 }}>
                     <Text category="s1"> Questions for course </Text>
                     <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
                         <Text appearance="hint">Create Question</Text>
@@ -75,11 +75,10 @@ function QsByCourse() {
                                                     <Text appearance="hint">{question.description}</Text>
                                                 </View>
                                             </View>
-                                            <View><Text category="s2">{question.type}</Text> </View>
+                                            <View><Text category="s2">Type: {question.type}</Text> </View>
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
+                                            <View><Text category="s2" >Worth: {question.pointVal} Points</Text> </View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                            <Text category="s2" >{question.pointVal} Points</Text>
-                                    
                                     </TouchableOpacity>
                                     </Card>
                                 )

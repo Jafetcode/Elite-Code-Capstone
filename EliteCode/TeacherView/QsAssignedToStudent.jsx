@@ -64,20 +64,16 @@ function QuestionsAssignedToStudent() {
                                 (question.classView === 1 || question.studentView === 1) && (
                                     <Card style={{ marginBottom: 10, borderRadius: 20 }} key={question.qid} >
                                         <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
-                                            <View style={{ flex: 1 }}>
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <Text style={{ paddingBottom: 10, paddingRight: 15 }}>{question.question}?</Text>
-                                    
-                                                </View>
+                                            <View style={{ flex: 1}}>
+                                                <Text style={{ paddingBottom: 10, paddingRight: 15 }}>{question.question}?</Text>
                                                 <Text appearance="hint">{question.description}</Text>
                                             </View>
                                         </View>
-                                        <View><Text category="s2">{question.type}</Text> </View>
+                                        <View> <Text category="s2">Type: {question.type}</Text> </View>
                                         <View><Text category="s2">Topic: {question.topic}</Text></View>
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                        <Text category="s2">{question.pointVal} Points</Text>
+                                        <View> <Text category="s2">Worth: {question.pointVal} Points</Text></View>
                                         {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
-
                                         {question.hasSubmitted ? (
                                             <View style={styles.container}>
                                                 <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
