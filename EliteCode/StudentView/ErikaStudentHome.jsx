@@ -16,20 +16,18 @@ const ErikaStudentHome = () => {
   const questionID = "74";
   const userID = "63887e"
   const [question, setQuestion] = useState({});
-  const responseData = async () => {
-    try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
-      const data = await res.json();
-      setQuestion(data[0]);
-    } catch (error) {
-      Alert.alert("Error", "Could not load your submission.", error);
-    }
-  };
+  
 
   useEffect(() => {
-    if (userID && questionID) {
-      responseData();
-    }
+    const responseData = async () => {
+      try {
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
+        const data = await res.json();
+        setQuestion(data[0]);
+      } catch (error) {
+        Alert.alert("Error", "Could not load your submission.", error);
+      }
+    };
   }, [userID, questionID]);
 
   const formatDate = (dateString) => {

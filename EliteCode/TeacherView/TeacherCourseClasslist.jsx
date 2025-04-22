@@ -11,6 +11,7 @@ const TeacherCourseClasslist = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const { cid } = route.params || {};
+    const courseName = route.params?.cName;
     const [classlist, setClasslist] = useState([])
     const { user } = useAuth();
 
@@ -43,17 +44,14 @@ const TeacherCourseClasslist = () => {
         fetchClasslist()
     }, [cid]);
     return (
-        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
+        <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B", paddingTop: 50 }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
+                <Text category='h6' style={styles.heading}> Classlist: {courseName}</Text>
+            </View>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
-
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                        <Text category="s1"> Course classlist </Text>
-
-                    </View>
-
                     {classlist.map((student) => (
-                        <Card key={student.userID} style={{ marginBottom: 10, borderRadius: 10 }}>
+                        <Card key={student.userID} style={{ marginBottom: 10, borderRadius: 30 }}>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <Image source={require("../assets/images/profile-picture.png")}
                                     style={{ width: 40, height: 40, borderRadius: 40, margin: 5, marginRight: 20 }} />
@@ -66,24 +64,24 @@ const TeacherCourseClasslist = () => {
                                 <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('QuestionsAssignedToStudent', { student: student, tid: user.userID })}>
                                     <Text>Assigned Questions</Text>
                                 </Button>
-                                <Button size="small" style={{ margin: 5, width: 140 }}status="danger" 
-                                onPress={() => 
-                                    Alert.alert(
-                                        "Remove Student",
-                                        `Are you sure you want to remove ${student.fname} ${student.lname}?`,
-                                        [
-                                            {
-                                                text: "Cancel",
-                                                style: "cancel"
-                                            },
-                                            {
-                                                text: "Remove Student",
-                                                style: "destructive",
-                                                onPress: () => handleRemoveStudent(student)
-                                              }
-                                        ]
-                                    )
-                                }
+                                <Button size="small" style={{ margin: 5, width: 140 }} status="danger"
+                                    onPress={() =>
+                                        Alert.alert(
+                                            "Remove Student",
+                                            `Are you sure you want to remove ${student.fname} ${student.lname}?`,
+                                            [
+                                                {
+                                                    text: "Cancel",
+                                                    style: "cancel"
+                                                },
+                                                {
+                                                    text: "Remove Student",
+                                                    style: "destructive",
+                                                    onPress: () => handleRemoveStudent(student)
+                                                }
+                                            ]
+                                        )
+                                    }
                                 >
                                     <Text>REMOVE STUDENT</Text>
                                 </Button>
@@ -99,6 +97,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
     },
+    heading: { marginBottom: 8, paddingTop: 10 },
+
 });
 
 export default TeacherCourseClasslist;

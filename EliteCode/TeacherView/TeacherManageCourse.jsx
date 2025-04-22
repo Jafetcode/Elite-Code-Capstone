@@ -68,25 +68,27 @@ function TeacherManageCourse() {
         );
     }
     return (
-        <Layout style={{ flex: 1, padding: 15 }}>
+        <Layout style={{ flex: 1, padding: 15, paddingTop: 50}}>
             <ScrollView>
-                <View style={{ marginBottom: 20 }}>
-                    <View >
-                        <Text category="h6">
+                <View style={{ marginBottom: 20, marginBottom: 15 }}>
+                    <View style= {{ padding: 10 }}>
+                        <Text category="h5" style= {{ marginBottom: 10 }}>
                             Edit Course
                         </Text>
-                        <Text> Course Name</Text>
+                        <Text style= {{ marginBottom: 10 }} >Course Name</Text>
                         <Input
                             value={courseName}
                             onChangeText={setCourseName}
                             style={styles.input}
                             placeholder="Enter New Course Name"
                         />
-                        <Text style={{ marginTop: 15 }}>Description</Text>
+                        <Text style={{ marginTop: 15, marginBottom: 10 }}>Description</Text>
                         <Input
                             value={description}
                             onChangeText={setDescription}
-                            style={styles.input}
+                            style={{height: 80, marginBottom: 30}}
+                            textStyle={{ minHeight: 80 }}
+                            multiline={true}
                             placeholder="Enter New Description"
                         />    
 
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
     },
+    
 });
 
 

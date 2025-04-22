@@ -413,13 +413,16 @@ router.get('/QsByStudent', (req, res) => {
   const sql = `SELECT DISTINCT 
   q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate,
   ats.viewable AS studentView,
-  atc.viewable AS classView
-  FROM Questions q
-  LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid AND ats.sid = ?
-  LEFT JOIN AssignedToClass atc ON q.qid = atc.qid 
+  atc.viewable AS classView,
+  s.submitted_on IS NOT NULL AS hasSubmitted
+FROM Questions q
+LEFT JOIN AssignedToStudent ats ON q.qid = ats.qid AND ats.sid = ?
+LEFT JOIN AssignedToClass atc ON q.qid = atc.qid 
   AND atc.cid IN (SELECT cid FROM Enrolled WHERE sid = ?)
-  WHERE q.tid = ?;`
-  db.query(sql, [sid, sid, tid], (err, response) => {
+LEFT JOIN Submissions s ON s.qid = q.qid AND s.sid = ?
+WHERE q.tid = ?;
+`
+  db.query(sql, [sid, sid, sid, tid], (err, response)  => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }

@@ -66,12 +66,12 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on } = req.body;
+  const { qid, sid, answer, progress, submitted_on, studentGrade } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   const sql = `
-    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath)
-    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
   db.query(
     sql,
     [qid, sid, answer, progress, submitted_on, fileName, filePath],

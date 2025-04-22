@@ -17,7 +17,7 @@ import TeacherManageCourse from './TeacherView/TeacherManageCourse';
 import TeacherManageQuestion from './TeacherView/TeacherManageQuestion';
 import EditProfile from './TeacherView/EditProfile';
 import ViewSubmission from './TeacherView/ViewSubmission';
-
+import MCQSubmission from './TeacherView/MCQSubmission';
 // import SubmitQuestion from './TeacherView/SubmitQuestion';
 
 const Stack = createNativeStackNavigator();
@@ -26,22 +26,22 @@ const TeacherStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Course Library">
     <Stack.Screen name="Course Library" component={TeacherHome} options={{ headerShown: false }}/>
     <Stack.Screen name="TeacherCourse" component={TeacherCourse} />
-    <Stack.Screen name="TeacherProfile" component={TeacherProfile} />
+    <Stack.Screen name="TeacherProfile" component={TeacherProfile} options={{ headerShown: false }} />
     <Stack.Screen name="Question" component={GradingScreen} />
-    <Stack.Screen name="TeacherSettings" component={TeacherSettings} />
+    <Stack.Screen name="TeacherSettings" component={TeacherSettings} options={{ headerShown: false }} />
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
-    <Stack.Screen name="Classlist" component={TeacherCourseClasslist} />
+    <Stack.Screen name="Classlist" component={TeacherCourseClasslist} options={{ headerShown: false }}/>
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}  options={{ headerShown: false }}/>
     <Stack.Screen name="QsByCourse" component={QsByCourse}  options={{ headerShown: false }}/>
     <Stack.Screen name="Questions Library" component={QuestionsLibrary} options={{ headerShown: false }}/>
     <Stack.Screen name="Assign a question" component={Assigning} options={{ headerShown: false }}/>
-    <Stack.Screen name="Manage Course" component={TeacherManageCourse}/>
+    <Stack.Screen name="Manage Course" component={TeacherManageCourse} options={{ headerShown: false }}/>
     <Stack.Screen name="TeacherManageQuestion" component={TeacherManageQuestion}/>
     <Stack.Screen name="EditProfile" component={EditProfile}/>
     {/* <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} /> */}
-    <Stack.Screen name="Submission" component={ViewSubmission}/>
-    {/* <Stack.Screen name="ResetPassword" component={ResetPassword} /> */}
+    <Stack.Screen name="Submission" component={ViewSubmission} options={{ headerShown: false }}/>
+    <Stack.Screen name="MCQSubmission" component={MCQSubmission} options={{headerShown: false}}/>    
 
   </Stack.Navigator>
 );
