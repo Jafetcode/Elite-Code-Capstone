@@ -96,10 +96,10 @@ function QuestionsLibrary() {
                                         />
                                     )} */}
                                     <View style={styles.container}>
-                                        <Button size="small" style={{ marginTop: 10, marginBotton: 10, width: 300, }} onPress={() => navigation.navigate('Assign a question', { assignTo: course, question: question })}>
+                                        <Button size="small" style={{ marginTop: 10, marginBotton: 10, width: 300, }} onPress={() => navigation.navigate('Assign a question', { question: question })}>
                                             Assign to class or student/students
                                         </Button>
-                                    </View>
+                                        </View>
                                 </Card>
 
                             )}

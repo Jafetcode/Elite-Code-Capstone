@@ -9,7 +9,6 @@ const Assigning = () => {
     const navigation = useNavigation();
     const { user } = useAuth();
     const { question } = route.params;
-
     const [classes, setClasses] = useState([]);
     const [selectedClasses, setSelectedClasses] = useState({});
     const [selectedStudents, setSelectedStudents] = useState({});
@@ -107,6 +106,12 @@ const Assigning = () => {
         }
 
         try {
+            console.log("Sending update:", {
+                qid: question.qid,
+                courses: selectedItems.classes,
+                students: selectedItems.students,
+                tid: user.userID
+              });
             const response = await fetch('https://elitecodecapstone24.onrender.com/instructor/updateAssignments', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -127,7 +132,6 @@ const Assigning = () => {
                 setMessage("Server error: invalid response");
                 return;
             }
-
             if (result.message === "Question assigned successfully.") {
                 setMessage("Assignments updated!");
                 setTimeout(() => {
@@ -137,6 +141,7 @@ const Assigning = () => {
             } else if (result.message === "No changes made") {
                 setMessage("No changes made.");
             } else {
+                console.log(result.message)
                 setMessage("Error: Failed to update assignments.");
             }
         } catch (error) {
