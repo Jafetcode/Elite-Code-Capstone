@@ -98,6 +98,7 @@ function SubmitQuestion() {
 
   const handleSubmit = async () => {
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
+    const calculatedGrade = type === "MCQ" && correctAns == answer ? questionData.pointVal : 0;
     try {
       const formData = new FormData();
       formData.append("qid", qid);
@@ -105,6 +106,7 @@ function SubmitQuestion() {
       formData.append("answer", answer.toString());
       formData.append("progress", "submitted");
       formData.append("submitted_on", submitted_on);
+      formData.append("grade", calculatedGrade);
       if (file) {
         formData.append("file", {
           uri: file.uri,
@@ -146,10 +148,6 @@ function SubmitQuestion() {
       if (formData.answer == null) {
         alert("Please enter an answer.");
       }
-      // else if (formData.progress === 'submitted') {
-      //   alert("Question already submitted.");
-      // }
-  
     }
   };
   return (
