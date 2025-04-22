@@ -99,21 +99,20 @@ function SubmitQuestion() {
       return;
     }
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
-    const calculatedGrade = type === "MCQ" && correctAns == answer ? questionData.pointVal : 0;
-  
+    currentDate = new Date().toISOString().slice(0, 19).replace("T", " ")
     try {
       const formData = new FormData();
-      setProgress("submitted")
+      const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
+
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
       formData.append("qType", type);
-      if(progress === "inprogress"){
-        
-        formData.append("progress", progress);
-      }
-      formData.append("submitted_on", submitted_on);
+      formData.append("progress", "submitted");
+      formData.append("submitted_on", currentDate);
+      
       formData.append("grade", calculatedGrade);
+
       if (file) {
         formData.append("file", {
           uri: file.uri,
@@ -145,8 +144,11 @@ function SubmitQuestion() {
 
       console.log("Response:", data);
       if (response.ok) {
+        setProgress("submitted");
+        setGrade(calculatedGrade); 
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
+    
       } else {
         setProgress("inprogress")
         alert("Failed to submit question.");
@@ -222,21 +224,17 @@ function SubmitQuestion() {
   <View style={styles.imageContainer}>
     <Text category="h6">{questionData?.question || item?.question}</Text>
     <Text category="h3">{questionData?.description || item?.description}</Text>
-    {(questionData?.imgFile || item?.imgFile) && (
-      <Image 
-        source={{ 
-          uri: questionData?.imgFile || item?.imgFile,
-          cache: 'reload'
-        }} 
-        style={styles.image}
-        resizeMode="contain"
-      />
-    )}
+    
     <View style={styles.radioGroup}>
-      <Text category="h6">Select the correct answer</Text>
+      <Text category="h6">Select your answer:</Text>
       <RadioGroup
-        selectedIndex={answer}
-        onChange={(index) => setAnswer(index)}
+        selectedIndex={answer ? parseInt(answer) - 1 : -1}
+        onChange={(index) => {
+          // Simply store the index + 1 as the answer (1, 2, or 3)
+          const selectedAnswer = (index + 1).toString();
+          setAnswer(selectedAnswer);
+          console.log('Selected answer:', selectedAnswer);
+        }}
       >
         <Radio>{questionData?.opt1 || item?.opt1}</Radio>
         <Radio>{questionData?.opt2 || item?.opt2}</Radio>

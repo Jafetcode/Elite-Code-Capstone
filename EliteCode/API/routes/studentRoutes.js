@@ -81,11 +81,11 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
   const filePath = req.file ? req.file.path : null;
   if (String(question.type) == "ShortAns") {
     const sql = `
-    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath)
+    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
     db.query(
       sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath],
+      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade || 0],
       (err, results) => {
         if (err) {
           return res.status(500).json({ error: err.message });

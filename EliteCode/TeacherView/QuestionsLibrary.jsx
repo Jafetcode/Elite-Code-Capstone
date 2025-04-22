@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } from "@ui-kitten/components";
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import {
+    ApplicationProvider,
+    IconRegistry,
+    Layout,
+    Button,
+    Text,
+    Icon,
+    Card,
+} from "@ui-kitten/components";
+import {
+    View,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    StyleSheet,
+} from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -26,13 +40,15 @@ function QuestionsLibrary() {
 
     const getQuestions = async () => {
         try {
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/allQuestions?tid=${user.userID}`);
+            const res = await fetch(
+                `https://elitecodecapstone24.onrender.com/instructor/allQuestions?tid=${user.userID}`
+            );
             const data = await res.json();
-            setQuestions(data.results)
+            setQuestions(data.results);
         } catch (error) {
-            console.log('Error occurred in get questions')
+            console.log("Error occurred in get questions");
         }
-    }
+    };
     useFocusEffect(
         React.useCallback(() => {
             if (user?.userID) {
@@ -40,7 +56,6 @@ function QuestionsLibrary() {
             }
         }, [user])
     );
-
 
     return (
         <Layout style={{ flex: 1, padding: 16, paddingTop: 50, backgroundColor: "#2C496B" }}>
@@ -97,16 +112,14 @@ function QuestionsLibrary() {
                 </View>
             </ScrollView>
         </Layout>
-
-
     );
 }
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
+        flexDirection: "row",
     },
     heading: { marginBottom: 8, paddingTop: 30 },
-    subHeading: { marginBottom: 8, },
+    subHeading: { marginBottom: 8 },
     badgeType: {
         backgroundColor: "#3A4B5C",
         borderRadius: 6,
@@ -114,7 +127,6 @@ const styles = StyleSheet.create({
         width: 80,
         marginLeft: 10,
         justifyContent: "center",
-
     },
     badgeStatus: {
         borderRadius: 6,
@@ -125,7 +137,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 12,
         padding: 4,
-    }
+    },
 });
 
 export default QuestionsLibrary;

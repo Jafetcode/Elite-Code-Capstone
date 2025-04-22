@@ -5,7 +5,7 @@ import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card } f
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
