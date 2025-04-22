@@ -6,7 +6,6 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Define your routes
 router.get('/', (req, res) => {
   res.send('Instructor route');
 });
@@ -166,13 +165,28 @@ router.put('/gradeSubmission', (req, res) => {
 
 router.get('/questions', (req, res) => {
   const cid = req.query.cid;
-  const sql = 'SELECT DISTINCT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, atc.viewable as classView ' +
-    'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid Where cid = ?';
+  const sql = 'SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.op3, atc.viewable as classView ' +
+    'From Questions q RIGHT JOIN AssignedToClass atc on q.qid = atc.qid' +
+    'LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE cid = ?';
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ results });
+    const updatedResults = results.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg'; 
+        const buffer = Buffer.from(row.imgFile); 
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    res.json({ results: updatedResults });
   });
 });
 
@@ -224,7 +238,7 @@ router.get('/allQuestions', (req, res) => {
 
 router.get('/getQuestion', (req, res) => {
   const qid = req.query.qid;
-  const sql = 'SELECT * FROM Questions WHERE qid = ?';
+  const sql = 'SELECT *, mcq.opt1, mcq.opt2, mcq.opt3 FROM Questions LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE qid = ?';
 
   db.query(sql, [qid], (err, results) => {
     if (err) {

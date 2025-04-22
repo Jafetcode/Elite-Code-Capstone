@@ -1,7 +1,5 @@
 const express = require("express");
-// const mysql = require('mysql2');
 const router = express.Router();
-// const cors = require('cors');
 const db = require("../db");
 const multer = require("multer");
 const path = require("path");
@@ -27,10 +25,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-// app.use(cors());
-// app.use(express.json());
 
-// Define your routes
 router.get("/", (req, res) => {
   res.send("Student route");
 });
