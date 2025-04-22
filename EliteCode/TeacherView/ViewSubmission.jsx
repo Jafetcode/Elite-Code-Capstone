@@ -23,7 +23,6 @@ function ViewSubmission() {
             Alert.alert("Error", "Could not load your submission.", error);
           }
     };
-
     fetchSubmission();
   }, [question, student]);
 

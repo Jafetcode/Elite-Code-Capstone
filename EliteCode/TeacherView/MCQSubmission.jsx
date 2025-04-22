@@ -1,27 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect}  from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const MCQSubmission = () => {
-  // Sample data - in a real app, this would come from props or a data store
-  const {question} = route.params?.q;
-  const {student} = route.params?.s;
+  const { question } = route.params?.q;
+  const { student } = route.params?.s;
+  const [submissionInfo, setInfo] = useState({});
   // Query from submission and MCQ TABLE query from 
+  useEffect(() => {
+    const fetchSubmission = async () => {
+      try {
+        console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${question.qid}&sid=${student.userID}`);
+        const data = await res.json();
+        console.log("getting submission", data[0].opt1)
+        setInfo(data[0]);
+      } catch (error) {
+        Alert.alert("Error", "Could not load your submission.", error);
+      }
+    };
+    fetchSubmission();
+  }, [question, student]);
+
   const questionData = {
-    question: "Which of the following is NOT a primary color in the RGB color model?",
+    question: question.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: "Red", isCorrect: false, studentSelected: false },
-      { id: "B", text: "Green", isCorrect: false, studentSelected: true },
-      { id: "C", text: "Yellow", isCorrect: true, studentSelected: false },
-      { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
+      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
+      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
+      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
+      // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
-    explanation: "In the RGB color model used for digital displays, the primary colors are Red, Green, and Blue. Yellow is a secondary color created by mixing Red and Green light.",
-    submittedAt: "2025-04-21T10:15:00",
+    explanation: submissionInfo.comment,
+    submittedAt: submissionInfo.submitted_on,
     score: {
-      points: 0,
-      total: 1,
-      percentage: 0
+      points: submissionInfo.grade,
+      total: question.pointVal,
     }
   };
 
@@ -47,10 +61,10 @@ const MCQSubmission = () => {
               <Text style={styles.scoreText}>
                 Score: <Text style={styles.scoreValue}>{questionData.score.points}/{questionData.score.total}</Text>
               </Text>
-              <Text style={[styles.percentageText, 
-                questionData.score.percentage === 100 ? styles.correctScore : 
-                questionData.score.percentage === 0 ? styles.incorrectScore : 
-                styles.partialScore]}>
+              <Text style={[styles.percentageText,
+              questionData.score.percentage === 100 ? styles.correctScore :
+                questionData.score.percentage === 0 ? styles.incorrectScore :
+                  styles.partialScore]}>
                 {questionData.score.percentage}%
               </Text>
             </View>
@@ -69,8 +83,8 @@ const MCQSubmission = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Options</Text>
             {questionData.options.map((option) => (
-              <View 
-                key={option.id} 
+              <View
+                key={option.id}
                 style={[
                   styles.optionContainer,
                   option.isCorrect ? styles.correctOption : null,
@@ -86,7 +100,7 @@ const MCQSubmission = () => {
                     {option.text}
                   </Text>
                 </View>
-                
+
                 <View style={styles.indicatorContainer}>
                   {option.isCorrect && (
                     <MaterialIcons name="check-circle" size={24} color="#4CAF50" />
