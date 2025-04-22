@@ -56,7 +56,9 @@ function StudentHome() {
           opt1: item.opt1,
           opt2: item.opt2,
           opt3: item.opt3,
-          hasSubmitted: item.hasSubmitted
+          hasSubmitted: item.hasSubmitted,
+          imgFile: item.imgFile
+
         })).slice(0, 50);
       };
 
@@ -117,8 +119,8 @@ function StudentHome() {
     <Card
       key={item.qid}
       style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }} >
-      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {
-        item: item, type: item.type
+      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {qid: item.qid,
+    cid: item.cid, item : item, type: item.type 
       })}>
 
         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>

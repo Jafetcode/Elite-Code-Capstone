@@ -1,7 +1,5 @@
 const express = require("express");
-// const mysql = require('mysql2');
 const router = express.Router();
-// const cors = require('cors');
 const db = require("../db");
 const multer = require("multer");
 const path = require("path");
@@ -27,10 +25,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-// app.use(cors());
-// app.use(express.json());
 
-// Define your routes
 router.get("/", (req, res) => {
   res.send("Student route");
 });
@@ -54,20 +49,34 @@ router.get("/questions", (req, res) => {
   const cid = req.query.cid;
   const sql =
     "SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3, atc.viewable as classView " +
-    "FROM Questions q " +
-    "LEFT JOIN AssignedToClass atc ON q.qid = atc.qid " + 
-    "LEFT JOIN MCQ mcq ON q.qid = mcq.qid " +
-    "WHERE atc.cid = ?";
+    "From Questions q " +
+    "LEFT JOIN AssignedToClass atc ON q.qid = atc.qid " +
+    "LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE cid = ?";
+  
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ results });
+    const updatedResults = results.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg'; 
+        const buffer = Buffer.from(row.imgFile); 
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    res.json({ results: updatedResults });
   });
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, studentGrade } = req.body;
+  const { qid, sid, answer, progress, submitted_on, grade } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   const sql = `
@@ -75,7 +84,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
   db.query(
     sql,
-    [qid, sid, answer, progress, submitted_on, fileName, filePath],
+    [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
     (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });

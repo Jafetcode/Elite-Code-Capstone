@@ -70,9 +70,9 @@ function SubmitQuestion() {
       }
 
       const data = await res.json();
-      setQuestionData(data.results[0] );
-      console.log(data.results[0])
-      setQuestionAnswer(data.results[0].correctAns)
+      const question = data.results.find(q => q.qid === qid);
+      setQuestionData(question);
+      setQuestionAnswer(question.correctAns)
     } catch (error) {
       console.error("Failed to fetch", error);
     }
@@ -80,35 +80,43 @@ function SubmitQuestion() {
 
   useFocusEffect(
     React.useCallback(() => {
+      if (cid && qid){
         fetchQuestionData();
-    }, [])
+      }
+    }, [cid, qid])
   );
   React.useEffect(() => {
     console.log('Current type:', type);
-    console.log('Current questionData:', questionData?.opt1, questionData?.opt2, questionData?.opt3);
-    console.log('MCQ options:',item?.opt1, item?.opt2, item?.opt3);
+    console.log('Question Data:', {
+      question: questionData,
+    });
 }, [type, questionData]);
 
   const handleSubmit = async () => {
+    if (progress === "submitted") {
+      alert("This question has already been submitted!");
+      return;
+    }
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
+    const calculatedGrade = type === "MCQ" && correctAns == answer ? questionData.pointVal : 0;
     try {
       const formData = new FormData();
+
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
-      formData.append("progress", "submitted");
+      if(progress === "inprogress"){
+        
+        formData.append("progress", progress);
+      }
       formData.append("submitted_on", submitted_on);
+      formData.append("grade", calculatedGrade);
       if (file) {
-        formData.append("file", 
-          Platform.OS === "android" || Platform.OS === "ios"
-          
-            ? file
-            : {
-                uri: file.uri,
-                name: file.name,
-                type: file.type,
-              }
-        );
+        formData.append("file", {
+          uri: file.uri,
+          name: file.name,
+          type: file.type,
+        });
       }
       if(correctAns == answer){
         setGrade(questionData.pointVal);
@@ -118,18 +126,14 @@ function SubmitQuestion() {
       }
       
   
-      const response = await fetch(
-        "https://elitecodecapstone24.onrender.com/student/submitQuestion",
-        {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json',
-            "Content-Type": "multipart/form-data",
-          },
-          body: formData, 
-          studentGrade: grade
-        }
-      );
+      const response = await fetch("https://elitecodecapstone24.onrender.com/student/submitQuestion", {
+        method: "POST",
+        headers: {
+          Accept: "application/json"
+        },
+        body: formData,
+      });
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -138,20 +142,16 @@ function SubmitQuestion() {
 
       console.log("Response:", data);
       if (response.ok) {
+        setProgress("submitted")
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
       } else {
+        setProgress("inprogress")
         alert("Failed to submit question.");
       }
     } catch (error) {
+      alert(error)
       console.error("Error submitting question:", error);
-      if (formData.answer == null) {
-        alert("Please enter an answer.");
-      }
-      // else if (formData.progress === 'submitted') {
-      //   alert("Question already submitted.");
-      // }
-  
     }
   };
   return (
@@ -178,7 +178,16 @@ function SubmitQuestion() {
           <View style={styles.imageContainer}>
             <Text category="h6"> {questionData?.question } {item?.question}</Text>
             <Text category="h3">{questionData?.description}{item?.description}</Text>
-            {item?.imgFile && <Image source={{ uri: item?.imgFile }} style={styles.image} />}
+            {(questionData?.imgFile || item?.imgFile) && (
+      <Image 
+        source={{ 
+          uri: questionData?.imgFile || item?.imgFile,
+          cache: 'reload'
+        }} 
+        style={styles.image} 
+        resizeMode="contain"
+      />
+    )}
 
             <Text style={styles.uploadFileText} category="h6">
               Upload a file?
@@ -207,25 +216,33 @@ function SubmitQuestion() {
           </View>
         )}
 
-        {type === "MCQ" && (
-
-          <View style={styles.imageContainer}>
-                <Text category="h6"> {questionData?.question}{item?.question}</Text>
-            <Text category="h3">{questionData?.description}{item?.description}</Text>
-            {item?.imgFile && <Image source={{ uri: item?.imgFile }} style={styles.image} />}
-          <View style={styles.radioGroup}>
-            <Text category="h6">Select the correct answer</Text>
-            <RadioGroup
-              selectedIndex={answer}
-              onChange={(index) => setAnswer(index)}
-            >
-              <Radio>{questionData?.opt1}{item?.opt1}</Radio>
-              <Radio>{questionData?.opt2}{item?.opt2}</Radio>
-              <Radio>{questionData?.opt3}{item?.opt3}</Radio>
-            </RadioGroup>
-          </View>
-         </View> 
-        )}
+{type === "MCQ" && (
+  <View style={styles.imageContainer}>
+    <Text category="h6">{questionData?.question || item?.question}</Text>
+    <Text category="h3">{questionData?.description || item?.description}</Text>
+    {(questionData?.imgFile || item?.imgFile) && (
+      <Image 
+        source={{ 
+          uri: questionData?.imgFile || item?.imgFile,
+          cache: 'reload'
+        }} 
+        style={styles.image}
+        resizeMode="contain"
+      />
+    )}
+    <View style={styles.radioGroup}>
+      <Text category="h6">Select the correct answer</Text>
+      <RadioGroup
+        selectedIndex={answer}
+        onChange={(index) => setAnswer(index)}
+      >
+        <Radio>{questionData?.opt1 || item?.opt1}</Radio>
+        <Radio>{questionData?.opt2 || item?.opt2}</Radio>
+        <Radio>{questionData?.opt3 || item?.opt3}</Radio>
+      </RadioGroup>
+    </View>
+  </View>
+)}
 
         <Button onPress={() => handleSubmit()} style={styles.submitButton}>
           Submit Question

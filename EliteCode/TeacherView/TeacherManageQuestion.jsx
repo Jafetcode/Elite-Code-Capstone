@@ -29,6 +29,10 @@ function TeacherManageQuestion() {
       const [topic, setTopic] = React.useState("");
       const [imgFile, setImgFile] = React.useState(null);
       const formattedDate = dueDate.toISOString().slice(0, 19).replace('T', ' ');
+      const [option1, setOption1] = React.useState("");
+const [option2, setOption2] = React.useState("");
+const [option3, setOption3] = React.useState("");
+const [correctAns, setCorrectAns] = React.useState("");
       const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const { qid } = route.params;
@@ -50,13 +54,17 @@ function TeacherManageQuestion() {
             }
 
             const q = data.results[0];
-            setQuestion(q.question || '');
-            setDescription(q.description || '');
-            setType(q.type || 'MCQ');
-            setDate(q.dueDate ? new Date(q.dueDate) : new Date());
-            setPointVal(String(q.pointVal || ''));
-            setTopic(q.topic || '');  
-            setImgFile(q.imgFile || null);
+            q.question && setQuestion(q.question);
+            q.description && setDescription(q.description);
+            q.type && setType(q.type);
+            q.dueDate && setDate(new Date(q.dueDate));
+            q.pointVal && setPointVal(String(q.pointVal));
+            q.topic && setTopic(q.topic);
+            q.imgFile && setImgFile(q.imgFile);
+            q.opt1 && setOption1(q.opt1);
+            q.opt2 && setOption2(q.opt2);
+            q.opt3 && setOption3(q.opt3);
+            q.correctAns && setCorrectAns(q.correctAns);
 
         } catch (error) {
             console.error("Error:", error.message);
@@ -74,36 +82,59 @@ function TeacherManageQuestion() {
     
 
     const handleUpdate = async () => {
-        try {
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/updateQuestion/?qid=${qid}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    question,
-                    description,
-                    type,
-                    dueDate: formattedDate,
-                    pointVal,
-                    topic,
-                    imgFile,
-                }),
-            });
+      try {
+          const formData = new FormData();
+          
+          // Add all required fields to FormData
+          formData.append("question", question);
+          formData.append("description", description);
+          formData.append("type", type);
+          formData.append("dueDate", formattedDate);
+          formData.append("pointVal", pointVal);
+          formData.append("topic", topic);
 
-            if (res.ok) {
-                const data = await res.json();
-                Alert.alert("Success", "Question updated successfully!");
-                navigation.goBack();
-            } else {
-                const errorData = await res.json();
-                Alert.alert("Error", errorData.message || "Failed to update question");
-            }
-        } catch (err) {
-            console.error("Update error:", err);
-            Alert.alert("Error", "Failed to connect to the server");
-        }
-    };
+          if (imgFile) {
+              if (typeof imgFile === 'string' && imgFile.startsWith('data:image')) {
+                  formData.append("imgFile", imgFile);
+              } 
+      
+              else if (imgFile.uri) {
+                  formData.append("imgFile", {
+                      uri: Platform.OS === 'ios' ? imgFile.uri.replace('file://', '') : imgFile.uri,
+                      type: 'image/jpeg',
+                      name: 'image.jpg'
+                  });
+              }
+          }
+  
+          if (type === "MCQ") {
+              formData.append("opt1", option1);
+              formData.append("opt2", option2);
+              formData.append("opt3", option3);
+              formData.append("correctAns", correctAns);
+          }
+  
+          const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/updateQuestion/${qid}`, {
+              method: "PUT",
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'multipart/form-data',
+              },
+              body: formData,
+          });
+  
+          if (res.ok) {
+              Alert.alert("Success", "Question updated successfully!");
+              navigation.goBack();
+          } else {
+              const errorData = await res.json();
+              Alert.alert("Error", errorData.message || "Failed to update question");
+          }
+      } catch (err) {
+          console.error("Update error:", err);
+          Alert.alert("Error", "Failed to connect to the server");
+      }
+  };
     const handleDelete = async () => {
         Alert.alert(
             "Course will be deleted",
@@ -118,10 +149,10 @@ function TeacherManageQuestion() {
                             method: "DELETE",
                         });
                         if (res.ok) {
-                            Alert.alert("Deleted", "Course deleted successfully!");
+                            Alert.alert("Deleted", "Question deleted successfully!");
                             navigation.goBack();
                         } else {
-                            Alert.alert("Error", "Failed to delete course.");
+                            Alert.alert("Error", "Failed to delete question.");
                         }
                     } catch (err) {
                         console.error(err);
@@ -241,7 +272,7 @@ function TeacherManageQuestion() {
                     <Radio>Short Answer</Radio>
                   </RadioGroup>
         
-                  {/* {type === "MCQ" && (
+                  {type === "MCQ" && (
                     
                     <View style={{  backgroundColor: '#526F8C',
                         borderRadius: 10,
@@ -269,7 +300,7 @@ function TeacherManageQuestion() {
                         value={option3}
                         onChangeText={(value) => setOption3(value)}
                         style={{ marginBottom: 5 }}
-                      /> */}
+                      />
                       {/* work on tommorow*/}
                       {/* <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
                         <Select
@@ -288,8 +319,8 @@ function TeacherManageQuestion() {
                          <SelectItem title={option2 || 'Option 2'} />
                          <SelectItem title={option3 || 'Option 3'} />
                         </Select> */}
-                    {/* </View> */}
-                  {/* )} */}
+                    </View>
+                  )}
                   <Input
                     placeholder="Point value"
                     value={pointVal}
