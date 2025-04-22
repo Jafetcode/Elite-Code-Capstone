@@ -56,7 +56,7 @@ function StudentHome() {
           opt1: item.opt1,
           opt2: item.opt2,
           opt3: item.opt3,
-
+          hasSubmitted: item.hasSubmitted
         })).slice(0, 50);
       };
 
@@ -117,7 +117,8 @@ function StudentHome() {
     <Card
       key={item.qid}
       style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }} >
-      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {item : item, type: item.type
+      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {
+        item: item, type: item.type
       })}>
 
         <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
@@ -136,6 +137,28 @@ function StudentHome() {
             <Text style={{ color: 'white', fontSize: 12 }}>{status}</Text>
           </View>
         </View>
+        {question.hasSubmitted || status === "Past Due" ? (
+          <View style={styles.container}>
+            <Button
+              size="small"
+              style={{ margin: 10 }}
+              onPress={() => {
+                const destination =
+                  question.type === "shortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
+                navigation.navigate(destination, {q: question, s: student, responseStatus: status, });
+              }} >
+              View submission
+            </Button>
+          </View>
+        ) : status === "Past Due" && !question.hasSubmitted ? (
+          <View>
+            <Text style={styles.waitingText}>Never Responded.</Text>
+          </View>
+        ) : (
+          <View>
+            <Text style={styles.waitingText}>Waiting for submission</Text>
+          </View>
+        )}
       </TouchableOpacity>
     </Card>
   );
@@ -169,7 +192,7 @@ function StudentHome() {
 
             <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
               <Card disabled={true} style={{
-                
+
                 width: 240,
                 alignSelf: 'center',
                 borderRadius: 10,

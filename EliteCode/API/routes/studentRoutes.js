@@ -131,33 +131,115 @@ router.get("/getCourseData", async (req, res) => {
   });
 });
 
+// router.get("/getAllPastDueQuestions", async (req, res) => {
+//   const { sid } = req.query;
+
+//   const classSql = `
+//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+//     FROM Questions q
+//     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+//     INNER JOIN Enrolled e ON atc.cid = e.cid
+//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+//     WHERE e.sid = ?
+//       AND DATE(q.dueDate) < CURDATE()
+//     ORDER BY q.dueDate ASC;
+//   `;
+
+//   const studentSql = `
+//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+//     FROM Questions q
+//     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+//     WHERE ats.sid = ?
+//       AND DATE(q.dueDate) < CURDATE()
+//     ORDER BY q.dueDate ASC;
+//   `;
+
+//   try {
+//     const [classResults] = await db.promise().query(classSql, [sid]);
+//     const [studentResults] = await db.promise().query(studentSql, [sid]);
+
+//     res.json({
+//       results: {
+//         pastDueClass: classResults || [],
+//         pastDueStudent: studentResults || [],
+//       },
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// router.get("/getAllUpcomingQuestions", async (req, res) => {
+//   const { sid } = req.query;
+
+//   const classSql = `
+//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+//     FROM Questions q
+//     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
+//     INNER JOIN Enrolled e ON atc.cid = e.cid
+//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+//     WHERE e.sid = ?
+//       AND DATE(q.dueDate) >= CURDATE()
+//     ORDER BY q.dueDate ASC;
+//   `;
+
+//   const studentSql = `
+//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+//     FROM Questions q
+//     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
+//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+//     WHERE ats.sid = ?
+//       AND DATE(q.dueDate) >= CURDATE()
+//     ORDER BY q.dueDate ASC;
+//   `;
+
+//   try {
+//     const [classResults] = await db.promise().query(classSql, [sid]);
+//     const [studentResults] = await db.promise().query(studentSql, [sid]);
+
+//     res.json({
+//       results: {
+//         upcomingClass: classResults || [],
+//         upcomingStudent: studentResults || [],
+//       },
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
 router.get("/getAllPastDueQuestions", async (req, res) => {
   const { sid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3,
+      s.submitted_on IS NOT NULL AS hasSubmitted
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+    LEFT JOIN Submissions s ON q.qid = s.qid AND s.sid = ?
     WHERE e.sid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3,
+      s.submitted_on IS NOT NULL AS hasSubmitted
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+    LEFT JOIN Submissions s ON q.qid = s.qid AND s.sid = ?
     WHERE ats.sid = ?
       AND DATE(q.dueDate) < CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   try {
-    const [classResults] = await db.promise().query(classSql, [sid]);
-    const [studentResults] = await db.promise().query(studentSql, [sid]);
+    const [classResults] = await db.promise().query(classSql, [sid, sid]);
+    const [studentResults] = await db.promise().query(studentSql, [sid, sid]);
 
     res.json({
       results: {
@@ -174,29 +256,33 @@ router.get("/getAllUpcomingQuestions", async (req, res) => {
   const { sid } = req.query;
 
   const classSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3,
+      s.submitted_on IS NOT NULL AS hasSubmitted
     FROM Questions q
     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
     INNER JOIN Enrolled e ON atc.cid = e.cid
     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+    LEFT JOIN Submissions s ON q.qid = s.qid AND s.sid = ?
     WHERE e.sid = ?
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   const studentSql = `
-    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
+    SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3,
+      s.submitted_on IS NOT NULL AS hasSubmitted
     FROM Questions q
     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
+    LEFT JOIN Submissions s ON q.qid = s.qid AND s.sid = ?
     WHERE ats.sid = ?
       AND DATE(q.dueDate) >= CURDATE()
     ORDER BY q.dueDate ASC;
   `;
 
   try {
-    const [classResults] = await db.promise().query(classSql, [sid]);
-    const [studentResults] = await db.promise().query(studentSql, [sid]);
+    const [classResults] = await db.promise().query(classSql, [sid, sid]);
+    const [studentResults] = await db.promise().query(studentSql, [sid, sid]);
 
     res.json({
       results: {
@@ -208,6 +294,7 @@ router.get("/getAllUpcomingQuestions", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
