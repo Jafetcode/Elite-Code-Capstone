@@ -57,11 +57,26 @@ router.get("/questions", (req, res) => {
     "From Questions q " +
     "LEFT JOIN AssignedToClass atc ON q.qid = atc.qid " +
     "LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE cid = ?";
+  
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ results });
+    const updatedResults = results.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg'; 
+        const buffer = Buffer.from(row.imgFile); 
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    res.json({ results: updatedResults });
   });
 });
 

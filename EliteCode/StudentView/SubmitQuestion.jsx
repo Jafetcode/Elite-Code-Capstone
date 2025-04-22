@@ -70,9 +70,10 @@ function SubmitQuestion() {
       }
 
       const data = await res.json();
-      setQuestionData(data.results[0] );
-      console.log(data.results[0])
-      setQuestionAnswer(data.results[0].correctAns)
+      const question = data.results.find(q => q.qid === qid);
+      setQuestionData(question);
+      console.log(question)
+      setQuestionAnswer(question.correctAns)
     } catch (error) {
       console.error("Failed to fetch", error);
     }
@@ -80,8 +81,10 @@ function SubmitQuestion() {
 
   useFocusEffect(
     React.useCallback(() => {
+      if (cid && qid){
         fetchQuestionData();
-    }, [])
+      }
+    }, [cid, qid])
   );
   React.useEffect(() => {
     console.log('Current type:', type);
@@ -103,16 +106,11 @@ function SubmitQuestion() {
       formData.append("progress", "submitted");
       formData.append("submitted_on", submitted_on);
       if (file) {
-        formData.append("file", 
-          Platform.OS === "android" || Platform.OS === "ios"
-          
-            ? file
-            : {
-                uri: file.uri,
-                name: file.name,
-                type: file.type,
-              }
-        );
+        formData.append("file", {
+          uri: file.uri,
+          name: file.name,
+          type: file.type,
+        });
       }
       if(correctAns == answer){
         setGrade(questionData.pointVal);
@@ -122,18 +120,14 @@ function SubmitQuestion() {
       }
       
   
-      const response = await fetch(
-        "https://elitecodecapstone24.onrender.com/student/submitQuestion",
-        {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json',
-            "Content-Type": "multipart/form-data",
-          },
-          body: formData, 
-          studentGrade: grade
-        }
-      );
+      const response = await fetch("https://elitecodecapstone24.onrender.com/student/submitQuestion", {
+        method: "POST",
+        headers: {
+          Accept: "application/json"
+        },
+        body: formData,
+      });
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -182,7 +176,16 @@ function SubmitQuestion() {
           <View style={styles.imageContainer}>
             <Text category="h6"> {questionData?.question } {item?.question}</Text>
             <Text category="h3">{questionData?.description}{item?.description}</Text>
-            {item?.imgFile && <Image source={{ uri: item?.imgFile }} style={styles.image} />}
+            {(questionData?.imgFile || item?.imgFile) && (
+      <Image 
+        source={{ 
+          uri: questionData?.imgFile || item?.imgFile,
+          cache: 'reload'
+        }} 
+        style={styles.image} 
+        resizeMode="contain"
+      />
+    )}
 
             <Text style={styles.uploadFileText} category="h6">
               Upload a file?
@@ -215,9 +218,16 @@ function SubmitQuestion() {
   <View style={styles.imageContainer}>
     <Text category="h6">{questionData?.question || item?.question}</Text>
     <Text category="h3">{questionData?.description || item?.description}</Text>
-    {(questionData?.imgFile || item?.imgFile) && 
-      <Image source={{ uri: questionData?.imgFile || item?.imgFile }} style={styles.image} />
-    }
+    {(questionData?.imgFile || item?.imgFile) && (
+      <Image 
+        source={{ 
+          uri: questionData?.imgFile || item?.imgFile,
+          cache: 'reload'
+        }} 
+        style={styles.image}
+        resizeMode="contain"
+      />
+    )}
     <View style={styles.radioGroup}>
       <Text category="h6">Select the correct answer</Text>
       <RadioGroup

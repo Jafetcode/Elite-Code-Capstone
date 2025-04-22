@@ -44,7 +44,7 @@ function StudentQuestion() {
   const fetchQuestions = async () => {
     try {
       const res = await fetch(
-        `https://elitecodecapstone24.onrender.com/student/questions?cid=${cid}`
+        `https://elitecodecapstone24.onrender.com/student/questions?tid=${tid}cid=${cid}`
       );
       const data = await res.json();
       setQuestions(data.results);
