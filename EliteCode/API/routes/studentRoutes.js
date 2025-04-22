@@ -85,7 +85,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
     db.query(
       sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
+      [qid, sid, answer, progress, submitted_on, fileName, filePath],
       (err, results) => {
         if (err) {
           return res.status(500).json({ error: err.message });
