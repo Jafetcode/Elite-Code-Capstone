@@ -3,21 +3,22 @@ import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const MCQStudentSubmission = () => {
+  const {question} = route.params?.q;
   const questionData = {
-    question: "Which of the following is NOT a primary color in the RGB color model?",
+    question: question.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: "Red", isCorrect: false, studentSelected: false },
-      { id: "B", text: "Green", isCorrect: false, studentSelected: true },
-      { id: "C", text: "Yellow", isCorrect: true, studentSelected: false },
-      { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
+      { id: "A", text: question.opt1, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.answer)  },
+      { id: "B", text: question.opt2, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.answer) },
+      { id: "C", text: question.opt3, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.answer)  },
+      // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
-    explanation: "In the RGB color model used for digital displays, the primary colors are Red, Green, and Blue. Yellow is a secondary color created by mixing Red and Green light.",
-    submittedAt: "2025-04-21T10:15:00",
+    comment: question.comment,
+    submittedAt: question.submitted_on,
     score: {
-      points: 0,
-      total: 1,
-      percentage: 0
+      points: question.grade,
+      total: question.pointVal,
+      // percentage: parseFloat(question.grade/question.pointVal*100).toFixed(2)%
     }
   };
 
@@ -101,7 +102,7 @@ const MCQStudentSubmission = () => {
           {/* Comment section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Comment</Text>
-            <Text style={styles.explanationText}>{questionData.explanation}</Text>
+            <Text style={styles.explanationText}>{questionData.comment}</Text>
           </View>
         </View>
       </ScrollView>
