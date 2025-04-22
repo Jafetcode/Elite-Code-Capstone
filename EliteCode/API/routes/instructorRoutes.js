@@ -162,7 +162,6 @@ router.put('/gradeSubmission', (req, res) => {
 
 });
 
-
 router.get('/questions', (req, res) => {
   const cid = req.query.cid;
   const sql = 'SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3, atc.viewable as classView ' +

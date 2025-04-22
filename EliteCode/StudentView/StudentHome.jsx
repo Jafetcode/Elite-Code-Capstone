@@ -139,20 +139,20 @@ function StudentHome() {
             <Text style={{ color: 'white', fontSize: 12 }}>{status}</Text>
           </View>
         </View>
-        {question.hasSubmitted || status === "Past Due" ? (
+        {item.hasSubmitted || status === "Past Due" ? (
           <View style={styles.container}>
             <Button
               size="small"
               style={{ margin: 10 }}
               onPress={() => {
                 const destination =
-                  question.type === "shortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
-                navigation.navigate(destination, {q: question, s: student, responseStatus: status, });
+                item.type === "shortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
+                navigation.navigate(destination, {q: item, s: student, responseStatus: status, });
               }} >
               View submission
             </Button>
           </View>
-        ) : status === "Past Due" && !question.hasSubmitted ? (
+        ) : status === "Past Due" && !item.hasSubmitted ? (
           <View>
             <Text style={styles.waitingText}>Never Responded.</Text>
           </View>

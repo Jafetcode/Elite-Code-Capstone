@@ -52,7 +52,7 @@ router.get("/questions", (req, res) => {
     "From Questions q " +
     "LEFT JOIN AssignedToClass atc ON q.qid = atc.qid " +
     "LEFT JOIN MCQ mcq ON q.qid = mcq.qid WHERE cid = ?";
-  
+
   db.query(sql, [cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -60,8 +60,8 @@ router.get("/questions", (req, res) => {
     const updatedResults = results.map(row => {
       let base64Image = null;
       if (row.imgFile) {
-        const mimeType = 'image/jpeg'; 
-        const buffer = Buffer.from(row.imgFile); 
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
         base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
       }
 
@@ -76,22 +76,39 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, grade } = req.body;
+  const { qid, sid, answer, progress, submitted_on, grade, type } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
-  const sql = `
+  if (type == "ShortAns") {
+    const sql = `
+    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    db.query(
+      sql,
+      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
+      (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        res.json({ message: `Successfully submitted shortAns question Response: ${progress}`, results, file: { name: fileName, path: filePath } });
+      }
+    );
+  }
+  else {
+    const sql = `
     INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-  db.query(
-    sql,
-    [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
-    (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
+    db.query(
+      sql,
+      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
+      (err, results) => {
+        if (err) {
+          return res.status(500).json({ error: err.message });
+        }
+        res.json({ message: `Successfully submitted MC question Response: ${progress}`, results, file: { name: fileName, path: filePath } });
       }
-      res.json({ message: "Successfully submitted question", results, file: { name: fileName, path: filePath } });
-    }
-  );
+    );
+  }
 });
 
 router.use("/uploads", express.static(path.join(__dirname, "uploads")));

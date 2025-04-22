@@ -105,6 +105,7 @@ function SubmitQuestion() {
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
+      formData.append("qType", type);
       if(progress === "inprogress"){
         
         formData.append("progress", progress);
