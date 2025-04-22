@@ -66,14 +66,13 @@ function QuestionsAssignedToStudent() {
                                         <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                             <View style={{ flex: 1 }}>
                                                 <View style={{ flexDirection: 'row' }}>
-                                                    <Text style={{ paddingBottom: 10, paddingRight: 15, width: 230 }}>{question.question}?</Text>
-                                                    <View style={styles.badgeType}>
-                                                        <Text style={styles.badgeText}>{question.type}</Text>
-                                                    </View>
+                                                    <Text style={{ paddingBottom: 10, paddingRight: 15 }}>{question.question}?</Text>
+                                    
                                                 </View>
                                                 <Text appearance="hint">{question.description}</Text>
                                             </View>
                                         </View>
+                                        <View><Text category="s2">{question.type}</Text> </View>
                                         <View><Text category="s2">Topic: {question.topic}</Text></View>
                                         <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                         <Text category="s2">{question.pointVal} Points</Text>

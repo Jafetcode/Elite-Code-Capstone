@@ -68,16 +68,14 @@ function QsByCourse() {
                                         onPress={() => navigation.navigate('TeacherManageQuestion', { 
                                             course: { cid },
                                             qid: question.qid 
-                                        })}
-                
-                                    >  
+                                        })} >  
                                             <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
                                                 <View style={{ flex: 1 }}>
                                                     <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
-                                                  
                                                     <Text appearance="hint">{question.description}</Text>
                                                 </View>
                                             </View>
+                                            <View><Text category="s2">{question.type}</Text> </View>
                                             <View><Text category="s2">Topic: {question.topic}</Text></View>
                                             <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
                                             <Text category="s2" >{question.pointVal} Points</Text>
