@@ -1,17 +1,20 @@
 import React, { useState, useEffect}  from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 
 const MCQSubmission = () => {
-  const { question } = route.params?.q;
-  const { student } = route.params?.s;
+  const route = useRoute();
+  const { q, s } = route.params;
   const [submissionInfo, setInfo] = useState({});
+  console.log(q.pointVal, s.fname)
+ 
   // Query from submission and MCQ TABLE query from 
   useEffect(() => {
     const fetchSubmission = async () => {
       try {
-        console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${question.qid}&sid=${student.userID}`);
+        console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${q.qid}&sid=${s.userID}`);
         const data = await res.json();
         console.log("getting submission", data[0].opt1)
         setInfo(data[0]);
@@ -20,10 +23,10 @@ const MCQSubmission = () => {
       }
     };
     fetchSubmission();
-  }, [question, student]);
-
+  }, [q.qid, s.sid]);
+  console.log("sub info", submissionInfo)
   const questionData = {
-    question: question.question,
+    question: q.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
       { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
@@ -35,7 +38,7 @@ const MCQSubmission = () => {
     submittedAt: submissionInfo.submitted_on,
     score: {
       points: submissionInfo.grade,
-      total: question.pointVal,
+      total: q.pointVal,
     }
   };
 
@@ -117,10 +120,13 @@ const MCQSubmission = () => {
           </View>
 
           {/* Explanation section */}
+          {questionData.explanation ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Explanation</Text>
+            <Text style={styles.sectionTitle}>Comments</Text>
             <Text style={styles.explanationText}>{questionData.explanation}</Text>
-          </View>
+          </View>) : (<View style={styles.section}>
+            <Text style={styles.sectionTitle}>No comments</Text>
+          </View>) }
         </View>
       </ScrollView>
     </SafeAreaView>

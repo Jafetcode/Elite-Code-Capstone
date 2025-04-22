@@ -6,6 +6,7 @@ import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
 import { useRoute } from '@react-navigation/native';
+
 // import { SlideInDown } from "react-native-reanimated";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -51,11 +52,11 @@ function QuestionsAssignedToStudent() {
     );
 
     return (
-        <Layout style={{ flex: 1, padding: 20, paddingTop: 45, backgroundColor: '#2C496B'}}>
+        <Layout style={{ flex: 1, padding: 20, paddingTop: 45, backgroundColor: '#2C496B' }}>
             <Text category='h5' style={styles.heading}>Questions Assgined To:</Text>
-                <Text category='s1' appearance='hint' style={styles.subHeading}>
-                    {student.fname} {student.lname}
-                </Text>
+            <Text category='s1' appearance='hint' style={styles.subHeading}>
+                {student.fname} {student.lname}
+            </Text>
             <ScrollView>
                 <View style={{ marginBottom: 20 }}>
                     {questions?.length > 0 ? (
@@ -63,16 +64,15 @@ function QuestionsAssignedToStudent() {
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
                                     <Card style={{ marginBottom: 10, borderRadius: 20 }} key={question.qid} >
-                                        <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
-                                            <View style={{ flex: 1}}>
-                                                <Text style={{ paddingBottom: 10, paddingRight: 15 }}>{question.question}?</Text>
+                                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                            <View style={{ flex: 1 }}>
+                                                <Text style={{ paddingRight: 15 }}>{question.question}?</Text>
                                                 <Text appearance="hint">{question.description}</Text>
                                             </View>
                                         </View>
-                                        <View> <Text category="s2">Type: {question.type}</Text> </View>
-                                        <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                        <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                        <View> <Text category="s2">Worth: {question.pointVal} Points</Text></View>
+                                        {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
+                                        <View><Text category="s2">Due: {String(formatDate(question.dueDate))}</Text></View>
+                                        <Text category="s2">Worth: {String(question.pointVal)} Points</Text>
                                         {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
                                         {question.hasSubmitted ? (
                                             <View style={styles.container}>
@@ -121,17 +121,17 @@ const styles = StyleSheet.create({
         width: 80,
         marginTop: 10,
         justifyContent: "center"
-      },
-      badgeStatus: {
+    },
+    badgeStatus: {
         borderRadius: 6,
         paddingHorizontal: 8,
         paddingVertical: 2,
-      },
-      badgeText: {
+    },
+    badgeText: {
         color: "white",
         fontSize: 12,
         padding: 4
-      }
+    }
 });
 
 export default () => (

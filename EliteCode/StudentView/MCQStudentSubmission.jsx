@@ -1,16 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 
 const MCQStudentSubmission = () => {
-  const {question} = route.params?.q;
+  
+  const route = useRoute();
+  const {question} = route.params?.q; // what i am sendning in
   const questionData = {
     question: question.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: question.opt1, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.answer)  },
-      { id: "B", text: question.opt2, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.answer) },
-      { id: "C", text: question.opt3, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.answer)  },
+      { id: "A", text: question.opt1, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.opt1 && question.answer)  },
+      { id: "B", text: question.opt2, isCorrect: (question.opt2 == question.correctAns), studentSelected: (question.correctAns == question.opt2 && question.answer) },
+      { id: "C", text: question.opt3, isCorrect: (question.opt3 == question.correctAns), studentSelected: (question.correctAns == question.opt3 && question.answer)  },
       // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
     comment: question.comment,

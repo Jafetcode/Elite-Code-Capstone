@@ -24,7 +24,7 @@ function QsByCourse() {
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-            hour12: true, 
+            hour12: true,
         });
     };
 
@@ -62,24 +62,23 @@ function QsByCourse() {
                         <>
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
-                                    <Card style={{marginBottom: "8"}}>
-                                    <TouchableOpacity 
-                                        key={question.qid}
-                                        onPress={() => navigation.navigate('TeacherManageQuestion', { 
-                                            course: { cid },
-                                            qid: question.qid 
-                                        })} >  
-                                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                    <Card style={{ marginBottom: 8 }}>
+                                        <TouchableOpacity
+                                            key={question.qid}
+                                            onPress={() => navigation.navigate('TeacherManageQuestion', {
+                                                course: { cid },
+                                                qid: question.qid
+                                            })} >
+                                            <View style={{ flexDirection: "row", alignItems: "center" }}>
                                                 <View style={{ flex: 1 }}>
-                                                    <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
+                                                    <Text style={{}}>{question.question}?</Text>
                                                     <Text appearance="hint">{question.description}</Text>
                                                 </View>
                                             </View>
-                                            <View><Text category="s2">Type: {question.type}</Text> </View>
-                                            <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                            <View><Text category="s2" >Worth: {question.pointVal} Points</Text> </View>
-                                            <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                    </TouchableOpacity>
+                                            {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
+                                            <View><Text category="s2">Due: {String(formatDate(question.dueDate))}</Text></View>
+                                            <Text category="s2">Worth: {String(question.pointVal)} Points</Text>
+                                        </TouchableOpacity>
                                     </Card>
                                 )
                             )}

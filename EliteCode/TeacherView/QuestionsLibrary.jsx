@@ -51,7 +51,7 @@ function QuestionsLibrary() {
             <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
                 <Text></Text>
                 <TouchableOpacity onPress={() => navigation.navigate('TeacherCreateQuestion')}>
-                    <Text style={{ marginBottom: 10,}} category='s1' appearance="hint">Create Question</Text>
+                    <Text style={{ marginBottom: 10, }} category='s1' appearance="hint">Create Question</Text>
                 </TouchableOpacity>
             </View>
             <ScrollView>
@@ -60,10 +60,10 @@ function QuestionsLibrary() {
                         <>
                             {questions.map((question) =>
                                 <Card key={question.qid} style={{ borderRadius: 10, borderWidth: 0, marginBottom: 10 }}>
-                                    <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 10 }}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", }}>
                                         <View style={{ flex: 1 }}>
                                             <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ paddingBottom: 10}}>{question.question}?</Text>
+                                                <Text style={{ paddingBottom: 10 }}>{question.question}?</Text>
                                             </View>
                                             {question.description &&
                                                 (<View>
@@ -71,10 +71,9 @@ function QuestionsLibrary() {
                                                 </View>)}
                                         </View>
                                     </View>
-                                    <View><Text category="s2">Type: {question.type}</Text> </View>
-                                    <View><Text category="s2">Topic: {question.topic}</Text></View>
-                                    <View><Text category="s2">Due: {formatDate(question.dueDate)}</Text></View>
-                                    <Text category="s2">{question.pointVal} Points</Text>
+                                    {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
+                                    <View><Text category="s2">Due: {String(formatDate(question.dueDate))}</Text></View>
+                                    <Text category="s2">Worth: {String(question.pointVal)} Points</Text>
                                     {/* {imageUri && (
                                         <Image
                                             source={{ uri: imageUri }}
@@ -82,7 +81,7 @@ function QuestionsLibrary() {
                                         />
                                     )} */}
                                     <View style={styles.container}>
-                                        <Button size="small" style={{ marginTop: 10, marginBotton: 10, width: 300, }} onPress={() => navigation.navigate('Assign a question', { assignTo: "course", question: question })}>
+                                        <Button size="small" style={{ marginTop: 10, marginBotton: 10, width: 300, }} onPress={() => navigation.navigate('Assign a question', { assignTo: course, question: question })}>
                                             Assign to class or student/students
                                         </Button>
                                     </View>

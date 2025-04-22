@@ -147,7 +147,7 @@ function StudentHome() {
               onPress={() => {
                 const destination =
                 item.type === "shortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
-                navigation.navigate(destination, {q: item, s: student, responseStatus: status, });
+                navigation.navigate(destination, {q: item, s: user.userID, responseStatus: status });
               }} >
               View submission
             </Button>
@@ -294,8 +294,8 @@ function StudentHome() {
                 pastDueStudent.map(item => renderAssignmentCard(item, "Past Due"))
               )}
             </View>
-          </View>
-          <Button onPress={() => navigation.navigate("ErikaStudentHome")} > Erika </Button>
+          </View> 
+          <Button onPress={() => navigation.navigate("ErikaStudentHome", {q: item, s : user.userID})} > Erika </Button>
 
           <View />
         </View>

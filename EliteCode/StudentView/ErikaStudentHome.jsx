@@ -13,11 +13,11 @@ import { ApplicationProvider, Button, Layout, Card, Modal, Input, } from "@ui-ki
 const ErikaStudentHome = () => {
   const navigation = useNavigation();
   const { user } = useAuth();
+
   const questionID = "74";
   const userID = "63887e"
   const [question, setQuestion] = useState({});
   
-
   useEffect(() => {
     const responseData = async () => {
       try {

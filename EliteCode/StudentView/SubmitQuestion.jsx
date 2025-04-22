@@ -100,6 +100,7 @@ function SubmitQuestion() {
     }
     setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
     const calculatedGrade = type === "MCQ" && correctAns == answer ? questionData.pointVal : 0;
+  
     try {
       const formData = new FormData();
       setProgress("submitted")
