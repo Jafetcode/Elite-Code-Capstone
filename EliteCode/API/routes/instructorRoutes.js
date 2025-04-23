@@ -161,7 +161,7 @@ router.get('/submission', (req, res) => {
       };
     });
 
-    res.json({ results });
+    res.json({ results:updatedResults });
   });
 });
 
