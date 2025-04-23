@@ -15,6 +15,7 @@ import {
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from 'expo-file-system';
+import { useAuth } from "../AuthContext";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />
 
@@ -34,6 +35,7 @@ const [option2, setOption2] = React.useState("");
 const [option3, setOption3] = React.useState("");
 const [correctAns, setCorrectAns] = React.useState("");
       const [selectedIndex, setSelectedIndex] = React.useState(0);
+      const { user } = useAuth()
 
     const { qid } = route.params;
     const { cid } = route.params || {};
@@ -85,13 +87,13 @@ const [correctAns, setCorrectAns] = React.useState("");
       try {
           const formData = new FormData();
           
-          // Add all required fields to FormData
           formData.append("question", question);
           formData.append("description", description);
           formData.append("type", type);
           formData.append("dueDate", formattedDate);
           formData.append("pointVal", pointVal);
           formData.append("topic", topic);
+          formData.append("tid", user.tid)
 
           if (imgFile) {
               if (typeof imgFile === 'string' && imgFile.startsWith('data:image')) {
@@ -173,10 +175,6 @@ const [correctAns, setCorrectAns] = React.useState("");
 
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
-                // mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                // allowsEditing: true,
-                // aspect: [1, 1],
-                // quality: 0.5
                 presentationStyle: 'fullScreen',
                 selectionLimit: 1,
                 allowsEditing: true,
@@ -356,8 +354,7 @@ const [correctAns, setCorrectAns] = React.useState("");
                   >
                     <Text category="h5">Image</Text>
                   </View>
-                  {/* <Text category="p1"> {`Selected image: ${imgFile}`} </Text> */}
-        
+
                   <View
                     style={{
                       flexDirection: "row",

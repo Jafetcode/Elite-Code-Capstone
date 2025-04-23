@@ -62,9 +62,8 @@ function QsByCourse() {
                         <>
                             {questions.map((question) =>
                                 (question.classView === 1 || question.studentView === 1) && (
-                                    <Card style={{ marginBottom: 8 }}>
+                                    <Card style={{ marginBottom: 8 }}   key={question.qid}>
                                         <TouchableOpacity
-                                            key={question.qid}
                                             onPress={() => navigation.navigate('TeacherManageQuestion', {
                                                 course: { cid },
                                                 qid: question.qid
