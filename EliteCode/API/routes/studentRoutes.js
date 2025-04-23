@@ -76,7 +76,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, grade } = req.body;
+  const { qid, sid, answer, progress, submitted_on, grade, type } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   if (type === "ShortAns") {

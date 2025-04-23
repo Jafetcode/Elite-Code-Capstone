@@ -114,7 +114,7 @@ function SubmitQuestion() {
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
-      formData.append("qType", type);
+      formData.append("type", type);
       formData.append("progress", "submitted");
       formData.append("submitted_on", currentDate);
       formData.append("grade", calculatedGrade);
