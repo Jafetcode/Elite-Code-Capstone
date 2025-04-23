@@ -111,10 +111,11 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
 
       const correctAnswer = results[0].correctAns;
       const total = results[0].pointVal;
-      const calculatedGrade = correctAnswer === answer ? total : 0;
+      console.log("total : ", total, "pointVal: ", results[0].pointVal);
+      const calculatedGrade = (correctAnswer === answer ? total : (0));
 
       const sql = `
-        INSERT INTO Submissions 
+        INSERT INTO Submissions
         (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 

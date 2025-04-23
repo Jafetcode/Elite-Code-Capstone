@@ -60,7 +60,7 @@ function ViewSubmission() {
                   {/* {calcPercent(question.grade, question.pointVal)}% */}
                   {parseFloat(question.grade / question.pointVal * 100).toFixed(2)}%
                 </Text></View>
-            ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting Grade </Text> </View>)}
+            ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting For A Grade </Text> </View>)}
             <Text style={styles.dateText}>
               Submitted: {formatDate(submission.submitted_on)}
             </Text>
