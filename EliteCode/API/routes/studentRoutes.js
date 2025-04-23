@@ -95,7 +95,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     );
   }
   else {
-    const gradesql = `SELECT mcq.correctAnswer, q.pointVal 
+    const gradesql = `SELECT mcq.correctAns, q.pointVal 
                       FROM Questions q 
                       JOIN MCQ mcq ON q.qid = mcq.qid 
                       WHERE q.qid = ?`;
