@@ -144,7 +144,7 @@ router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
 
-  const sql = "SELECT s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s JOIN Questions q ON s.qid = q.qid WHERE s.qid = ? AND s.sid = ?";
+  const sql = "SELECT * FROM Submissions s JOIN Questions q ON s.qid = q.qid WHERE s.qid = ? AND s.sid = ?";
   
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
