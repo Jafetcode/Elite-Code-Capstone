@@ -98,11 +98,11 @@ function SubmitQuestion() {
       console.log(answer)
       return;
     }
-    setSubmitted_on(new Date().toISOString().slice(0, 19).replace("T", " "));
-    currentDate = new Date().toISOString().slice(0, 19).replace("T", " ")
+
     try {
       const formData = new FormData();
       const currentDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+      setSubmitted_on(currentDate)
       const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
 
 
