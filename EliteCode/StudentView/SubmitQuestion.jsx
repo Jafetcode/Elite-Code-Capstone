@@ -228,10 +228,18 @@ function SubmitQuestion() {
     <View style={styles.radioGroup}>
       <Text category="h6">Select your answer:</Text>
       <RadioGroup
-        selectedIndex={answer ? parseInt(answer) - 1 : -1}
+        selectedIndex={[
+          questionData?.opt1 || item?.opt1,
+          questionData?.opt2 || item?.opt2,
+          questionData?.opt3 || item?.opt3
+        ].indexOf(answer)}
         onChange={(index) => {
-          // Simply store the index + 1 as the answer (1, 2, or 3)
-          const selectedAnswer = (index + 1).toString();
+          const options = [
+            questionData?.opt1 || item?.opt1,
+            questionData?.opt2 || item?.opt2,
+            questionData?.opt3 || item?.opt3
+          ];
+          const selectedAnswer = options[index];
           setAnswer(selectedAnswer);
           console.log('Selected answer:', selectedAnswer);
         }}
@@ -243,7 +251,6 @@ function SubmitQuestion() {
     </View>
   </View>
 )}
-
         <Button onPress={() => handleSubmit()} style={styles.submitButton}>
           Submit Question
         </Button>
