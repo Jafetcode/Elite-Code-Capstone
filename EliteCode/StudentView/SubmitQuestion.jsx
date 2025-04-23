@@ -220,7 +220,16 @@ function SubmitQuestion() {
   <View style={styles.imageContainer}>
     <Text category="h6">{questionData?.question || item?.question}</Text>
     <Text category="h3">{questionData?.description || item?.description}</Text>
-    
+    {(questionData?.imgFile || item?.imgFile) && (
+      <Image 
+        source={{ 
+          uri: questionData?.imgFile || item?.imgFile,
+          cache: 'reload'
+        }} 
+        style={styles.image} 
+        resizeMode="contain"
+      />
+    )}
     <View style={styles.radioGroup}>
       <Text category="h6">Select your answer:</Text>
       <RadioGroup

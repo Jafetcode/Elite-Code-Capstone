@@ -182,84 +182,6 @@ router.get("/getCourseData", async (req, res) => {
   });
 });
 
-// router.get("/getAllPastDueQuestions", async (req, res) => {
-//   const { sid } = req.query;
-
-//   const classSql = `
-//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-//     FROM Questions q
-//     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
-//     INNER JOIN Enrolled e ON atc.cid = e.cid
-//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-//     WHERE e.sid = ?
-//       AND DATE(q.dueDate) < CURDATE()
-//     ORDER BY q.dueDate ASC;
-//   `;
-
-//   const studentSql = `
-//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-//     FROM Questions q
-//     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-//     WHERE ats.sid = ?
-//       AND DATE(q.dueDate) < CURDATE()
-//     ORDER BY q.dueDate ASC;
-//   `;
-
-//   try {
-//     const [classResults] = await db.promise().query(classSql, [sid]);
-//     const [studentResults] = await db.promise().query(studentSql, [sid]);
-
-//     res.json({
-//       results: {
-//         pastDueClass: classResults || [],
-//         pastDueStudent: studentResults || [],
-//       },
-//     });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
-// router.get("/getAllUpcomingQuestions", async (req, res) => {
-//   const { sid } = req.query;
-
-//   const classSql = `
-//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-//     FROM Questions q
-//     INNER JOIN AssignedToClass atc ON q.qid = atc.qid
-//     INNER JOIN Enrolled e ON atc.cid = e.cid
-//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-//     WHERE e.sid = ?
-//       AND DATE(q.dueDate) >= CURDATE()
-//     ORDER BY q.dueDate ASC;
-//   `;
-
-//   const studentSql = `
-//     SELECT DISTINCT q.*, mcq.opt1, mcq.opt2, mcq.opt3
-//     FROM Questions q
-//     INNER JOIN AssignedToStudent ats ON q.qid = ats.qid
-//     LEFT JOIN MCQ mcq ON q.qid = mcq.qid
-//     WHERE ats.sid = ?
-//       AND DATE(q.dueDate) >= CURDATE()
-//     ORDER BY q.dueDate ASC;
-//   `;
-
-//   try {
-//     const [classResults] = await db.promise().query(classSql, [sid]);
-//     const [studentResults] = await db.promise().query(studentSql, [sid]);
-
-//     res.json({
-//       results: {
-//         upcomingClass: classResults || [],
-//         upcomingStudent: studentResults || [],
-//       },
-//     });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
-
 router.get("/getAllPastDueQuestions", async (req, res) => {
   const { sid } = req.query;
 
@@ -292,10 +214,36 @@ router.get("/getAllPastDueQuestions", async (req, res) => {
     const [classResults] = await db.promise().query(classSql, [sid, sid]);
     const [studentResults] = await db.promise().query(studentSql, [sid, sid]);
 
+    const processedClassResults = classResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    const processedStudentResults = studentResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
     res.json({
       results: {
-        pastDueClass: classResults || [],
-        pastDueStudent: studentResults || [],
+        pastDueClass: processedClassResults || [],
+        pastDueStudent: processedStudentResults || [],
       },
     });
   } catch (err) {
@@ -335,17 +283,42 @@ router.get("/getAllUpcomingQuestions", async (req, res) => {
     const [classResults] = await db.promise().query(classSql, [sid, sid]);
     const [studentResults] = await db.promise().query(studentSql, [sid, sid]);
 
+    const processedClassResults = classResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    const processedStudentResults = studentResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
     res.json({
       results: {
-        upcomingClass: classResults || [],
-        upcomingStudent: studentResults || [],
+        upcomingClass: processedClassResults || [],
+        upcomingStudent: processedStudentResults || [],
       },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
