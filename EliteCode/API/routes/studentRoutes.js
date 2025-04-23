@@ -104,7 +104,6 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-
       if (results.length === 0) {
         return res.status(404).json({ error: "Question not found" });
       }
