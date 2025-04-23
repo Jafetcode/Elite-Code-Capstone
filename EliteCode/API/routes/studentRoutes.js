@@ -76,7 +76,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, type, pointVal} = req.body;
+  const { qid, sid, answer, progress, submitted_on, type, pointVal } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   if (type == "ShortAns") {
@@ -95,36 +95,45 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     );
   }
   else {
-    const gradesql = `Select * from questions q join MCQ mcq on q.qid = MCQ.qid where q.qid = ?`
-    db.query(gradesql, qid, (err, results) => {
+    const gradesql = `SELECT mcq.correctAnswer, q.pointVal 
+                      FROM questions q 
+                      JOIN MCQ mcq ON q.qid = mcq.qid 
+                      WHERE q.qid = ?`;
+
+    db.query(gradesql, [qid], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
-      }}
-    )
-    const correctAnswer = results.correctAns;
-    const total = pointVal;
-    const calculatedGrade = correctAnswer === answer ? total : 0;
-    const sql = `
-      INSERT INTO Submissions 
-      (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    db.query(
-      sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath, calculatedGrade],
-      (err, insertResult) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.json({ 
-          message: `Successfully submitted MCQ response. Grade: ${calculatedGrade}`, 
-          results: insertResult, 
-          file: { name: fileName, path: filePath } 
-        });
       }
-    );
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Question not found" });
+      }
+
+      const correctAnswer = results[0].correctAnswer;
+      const total = results[0].pointVal;
+      const calculatedGrade = correctAnswer === answer ? total : 0;
+
+      const sql = `
+        INSERT INTO Submissions 
+        (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+      db.query(
+        sql,
+        [qid, sid, answer, progress, submitted_on, fileName, filePath, calculatedGrade],
+        (err, insertResult) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          res.json({
+            message: `Successfully submitted MCQ response. Grade: ${calculatedGrade}`,
+            results: insertResult,
+            file: { name: fileName, path: filePath }
+          });
+        }
+      );
+    });
   }
-});
 
 router.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
