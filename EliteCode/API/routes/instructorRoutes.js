@@ -325,7 +325,7 @@ router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
   const { qid } = req.params;
   const { question, description, pointVal, topic, type, dueDate, tid, correctAns, opt1, opt2, opt3} = req.body;
   const imgFile = req.file ? req.file.buffer : null;
-  if (!question || !description || !pointVal || !topic || !type || !dueDate) {
+  if (!question || !pointVal || !type || !dueDate) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   const sql = 'UPDATE Questions SET question = ?, description = ?, pointVal = ?, imgFile = ?, topic = ?, type = ?, dueDate = ?, tid = ? WHERE qid = ? and tid = ?';
