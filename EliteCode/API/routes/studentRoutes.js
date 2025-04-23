@@ -76,7 +76,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, grade, type } = req.body;
+  const { qid, sid, answer, progress, submitted_on, type, pointVal } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   if (type == "ShortAns") {
@@ -95,19 +95,44 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     );
   }
   else {
-    const sql = `
-    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    db.query(
-      sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
-      (err, results) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: `Successfully submitted MC question Response with ${grade}`, results, file: { name: fileName, path: filePath } });
+    const gradesql = `SELECT mcq.correctAns, q.pointVal 
+                      FROM Questions q 
+                      JOIN MCQ mcq ON q.qid = mcq.qid 
+                      WHERE q.qid = ?`;
+
+    db.query(gradesql, [qid], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
       }
-    );
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Question not found" });
+      }
+
+      const correctAnswer = results[0].correctAns;
+      const total = results[0].pointVal;
+      const calculatedGrade = correctAnswer === answer ? total : 0;
+
+      const sql = `
+        INSERT INTO Submissions 
+        (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+      db.query(
+        sql,
+        [qid, sid, answer, progress, submitted_on, fileName, filePath, calculatedGrade],
+        (err, insertResult) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          res.json({
+            message: `Successfully submitted MCQ response. Grade: ${calculatedGrade}`,
+            results: insertResult,
+            file: { name: fileName, path: filePath }
+          });
+        }
+      );
+    });
   }
 });
 

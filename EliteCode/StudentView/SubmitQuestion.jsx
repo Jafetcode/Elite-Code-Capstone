@@ -36,7 +36,7 @@ function SubmitQuestion() {
   const route = useRoute();
   const { user } = useAuth() || {};
   const [studentGrade, setGrade] = React.useState(0);
-  const { cid, qid, type, item } = route.params || {};
+  const { cid, qid, type, item} = route.params || {};
 
   const pickFile = async () => {
     try {
@@ -102,14 +102,11 @@ function SubmitQuestion() {
     try {
       const formData = new FormData();
       const currentDate = new Date().toISOString().slice(0, 19).replace("T", " ");
-      setSubmitted_on(currentDate)
-      const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
-
+      // const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
 
       console.log('Submitting answer:', answer);
       console.log('Correct answer:', correctAns);
       console.log('Question type:', type);
-      console.log(calculatedGrade);
 
       formData.append("qid", qid);
       formData.append("sid", user.userID);
@@ -117,7 +114,8 @@ function SubmitQuestion() {
       formData.append("type", type);
       formData.append("progress", "submitted");
       formData.append("submitted_on", currentDate);
-      formData.append("grade", calculatedGrade);
+      formData.append("pointVal", item.pointVal)
+      // formData.append("grade", calculatedGrade);
       if (file) {
         formData.append("file", {
           uri: file.uri,
@@ -125,13 +123,7 @@ function SubmitQuestion() {
           type: file.type,
         });
       }
-      if(correctAns == answer){
-        setGrade(questionData.pointVal);
-      }
-      else{
-        setGrade(0);
-      }
-      
+   
       const response = await fetch("https://elitecodecapstone24.onrender.com/student/submitQuestion", {
         method: "POST",
         headers: {
@@ -150,7 +142,7 @@ function SubmitQuestion() {
       console.log("Response:", data);
       if (response.ok) {
         setProgress("submitted");
-        setGrade(calculatedGrade); 
+        // setGrade(calculatedGrade); 
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
     
