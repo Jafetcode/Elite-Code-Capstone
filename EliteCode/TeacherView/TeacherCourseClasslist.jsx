@@ -45,10 +45,12 @@ const TeacherCourseClasslist = () => {
     }, [cid]);
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B", paddingTop: 50 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                <Text category='h6' style={styles.heading}> Classlist: {courseName}</Text>
+            <View style={{marginBottom: 5 }}>
+                <Text category='h4' style={styles.heading}> Classlist:</Text>
+                <Text category='h6' style={styles.subHeading}> {courseName} </Text>
             </View>
             <ScrollView>
+            {classlist.length > 0 ? (
                 <View style={{ marginBottom: 20 }}>
                     {classlist.map((student) => (
                         <Card key={student.userID} style={{ marginBottom: 10, borderRadius: 30 }}>
@@ -88,7 +90,7 @@ const TeacherCourseClasslist = () => {
                             </View>
                         </Card>
                     ))}
-                </View>
+                </View>) : (<View> <Text> No student enrolled. </Text></View>)}
             </ScrollView>
         </Layout>
     );
@@ -98,6 +100,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     heading: { marginBottom: 8, paddingTop: 10 },
+    subHeading: { marginBottom: 8 },
+
 
 });
 

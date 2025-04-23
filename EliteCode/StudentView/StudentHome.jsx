@@ -329,8 +329,6 @@ function StudentHome() {
               )}
             </View>
           </View> 
-          <Button onPress={() => navigation.navigate("ErikaStudentHome", {q: item, s : user.userID})} > Erika </Button>
-
           <View />
         </View>
       </ScrollView>
