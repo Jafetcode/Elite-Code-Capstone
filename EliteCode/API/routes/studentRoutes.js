@@ -134,6 +134,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
       );
     });
   }
+});
 
 router.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
