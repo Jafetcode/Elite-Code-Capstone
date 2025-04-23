@@ -46,35 +46,39 @@ const ErikaStudentHome = () => {
         <View style={styles.contentContainer}>
           {/* Header with score information */}
           <View style={styles.headerContainer}>
-              {question.grade ? (
-                <View style={styles.scoreSection}>
-                  <Text style={styles.scoreText}>
-                    Score: <Text style={styles.scoreValue}>{question.grade}/{question.pointVal}</Text>
-                  </Text>
-                  <Text style={styles.percentageText}>
-                    {/* {calcPercent(question.grade, question.pointVal)}% */}
-                    {parseFloat(question.grade / question.pointVal * 100).toFixed(2)}%
-                  </Text></View>
-              ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting For A Grade </Text> </View>)}
+            {question.grade ? (
+              <View style={styles.scoreSection}>
+                {question.pointVal
+                  && (<View>
+                    <Text style={styles.scoreText}>
+                      Score: <Text style={styles.scoreValue}>`{question.grade}/{question.pointVal}`</Text>
+                    </Text>
+                    <Text style={styles.percentageText}>
+                      {`${((question.grade / question.pointVal) * 100).toFixed(2)}%`}
+                    </Text>
+                  </View>)}          
+              </View>
+            ) : (<View style={styles.scoreSection}> 
+            <Text style={styles.scoreValue}> Waiting For A Grade </Text> 
+            </View>)}
             <Text style={styles.dateText}>
               Submitted: {formatDate(question.submitted_on)}
             </Text>
           </View>
 
-          {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{question.question}</Text>
 
-            {question.imgFile && (
+            {/* {question.imgFile && (
               <View style={styles.imageContainer}>
-                {/* <Image
+                <Image
                   source={{ uri: question.imgFile }}
                   style={styles.image}
                   resizeMode="cover"
                 /> */}
-              </View>
-            )}
+            {/* </View>
+            )} */}
           </View>
 
           {/* Student's Response section */}

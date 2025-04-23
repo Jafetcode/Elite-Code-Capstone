@@ -46,8 +46,8 @@ const MCQStudentSubmission = () => {
     submittedAt: submission.submitted_on,
     score: {
       points: submission.grade,
-      total: q.pointVal,
-      // percentage: parseFloat(question.grade/question.pointVal*100).toFixed(2)%
+      total: Number(q.pointVal).toFixed(2),
+      percentage: `${parseFloat(submission.grade / q.pointVal * 100).toFixed(2)}%`
     }
   };
 
@@ -78,7 +78,7 @@ const MCQStudentSubmission = () => {
               questionData.score.percentage === 100 ? styles.correctScore :
                 questionData.score.percentage === 0 ? styles.incorrectScore :
                   styles.partialScore]}>
-                {questionData.score.percentage}%
+                {questionData.score.percentage}
               </Text>
             </View>
             <Text style={styles.dateText}>
