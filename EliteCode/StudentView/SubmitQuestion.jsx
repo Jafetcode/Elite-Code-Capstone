@@ -166,7 +166,6 @@ function SubmitQuestion() {
   return (
     <Layout style={styles.container}>
       <View style={styles.header}>
-        {/* TODO::  */}
         <Button
           appearance="ghost"
           status="basic"
