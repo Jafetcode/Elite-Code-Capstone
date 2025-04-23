@@ -4,23 +4,42 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 
 const MCQStudentSubmission = () => {
-  
   const route = useRoute();
-  const {question} = route.params?.q; // what i am sendning in
+  const {q, sid} = route.params; // what i am sendning in
+  const [submission, setSub] = useState({});
+  
+  console.log(q.opt1)
+  console.log(q.correctAns)
+  console.log(q.pointVal)
+  useEffect(() => {
+      const fetchSubmission = async () => {
+        try {
+          console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
+          const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${q.qid}&sid=${s.userID}`);
+          const data = await res.json();
+          console.log("getting submission", data[0].opt1)
+          setSub(data[0]);
+        } catch (error) {
+          Alert.alert("Error", "Could not load your submission.", error);
+        }
+      };
+      fetchSubmission();
+    }, [q.qid, s.sid]);
+
   const questionData = {
-    question: question.question,
+    question: q.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: question.opt1, isCorrect: (question.opt1 == question.correctAns), studentSelected: (question.correctAns == question.opt1 && question.answer)  },
-      { id: "B", text: question.opt2, isCorrect: (question.opt2 == question.correctAns), studentSelected: (question.correctAns == question.opt2 && question.answer) },
-      { id: "C", text: question.opt3, isCorrect: (question.opt3 == question.correctAns), studentSelected: (question.correctAns == question.opt3 && question.answer)  },
+      { id: "A", text: q.opt1, isCorrect: (q.opt1 == q.correctAns), studentSelected: (q.correctAns == q.opt1 && q.answer)  },
+      { id: "B", text: q.opt2, isCorrect: (q.opt2 == q.correctAns), studentSelected: (q.correctAns == q.opt2 && q.answer) },
+      { id: "C", text: q.opt3, isCorrect: (q.opt3 == q.correctAns), studentSelected: (q.correctAns == q.opt3 && q.answer)  },
       // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
-    comment: question.comment,
-    submittedAt: question.submitted_on,
+    comment: submission.comment,
+    submittedAt: q.submitted_on,
     score: {
-      points: question.grade,
-      total: question.pointVal,
+      points: submission.grade,
+      total: q.pointVal,
       // percentage: parseFloat(question.grade/question.pointVal*100).toFixed(2)%
     }
   };
@@ -40,6 +59,7 @@ const MCQStudentSubmission = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
+        
         <View style={styles.contentContainer}>
           {/* Header with score information */}
           <View style={styles.headerContainer}>

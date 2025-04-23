@@ -147,7 +147,7 @@ function StudentHome() {
               onPress={() => {
                 const destination =
                 item.type === "shortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
-                navigation.navigate(destination, {q: item, s: user.userID, responseStatus: status });
+                navigation.navigate(destination, {q: item, s: user.userID});
               }} >
               View submission
             </Button>

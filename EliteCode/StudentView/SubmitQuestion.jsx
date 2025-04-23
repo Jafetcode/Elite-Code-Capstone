@@ -103,16 +103,14 @@ function SubmitQuestion() {
     try {
       const formData = new FormData();
       const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
-
+      console.log(calculatedGrade);
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
       formData.append("qType", type);
       formData.append("progress", "submitted");
       formData.append("submitted_on", currentDate);
-      
       formData.append("grade", calculatedGrade);
-
       if (file) {
         formData.append("file", {
           uri: file.uri,
