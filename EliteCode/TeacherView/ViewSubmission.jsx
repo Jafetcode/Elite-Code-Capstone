@@ -51,15 +51,15 @@ function ViewSubmission() {
         <View style={styles.contentContainer}>
           {/* Header with score information */}
           <View style={styles.headerContainer}>
-            {question.grade ? (
+            {submission.grade ? (
               <View style={styles.scoreSection}>
-                <Text style={styles.scoreText}>
-                  Score: <Text style={styles.scoreValue}>{question.grade}/{question.pointVal}</Text>
-                </Text>
-                <Text style={styles.percentageText}>
-                  {/* {calcPercent(question.grade, question.pointVal)}% */}
-                  {parseFloat(question.grade / question.pointVal * 100).toFixed(2)}%
-                </Text></View>
+                    <Text style={styles.scoreText}>
+                      Score: <Text style={styles.scoreValue}>{submission.grade}/{Number(question.pointVal.toFixed(2))}</Text>
+                    </Text>
+                    <Text style={styles.percentageText}>
+                      {`${((submission.grade / question.pointVal) * 100).toFixed(2)}%`}
+                    </Text>
+              </View>
             ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting For A Grade </Text> </View>)}
             <Text style={styles.dateText}>
               Submitted: {formatDate(submission.submitted_on)}

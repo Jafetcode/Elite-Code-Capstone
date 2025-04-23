@@ -48,15 +48,13 @@ const ErikaStudentHome = () => {
           <View style={styles.headerContainer}>
             {question.grade ? (
               <View style={styles.scoreSection}>
-                {question.pointVal
-                  && (<View>
+              
                     <Text style={styles.scoreText}>
-                      Score: <Text style={styles.scoreValue}>`{question.grade}/{question.pointVal}`</Text>
+                      Score: <Text style={styles.scoreValue}>{question.grade}/{Number(question.pointVal).toFixed(2)}</Text>
                     </Text>
                     <Text style={styles.percentageText}>
                       {`${((question.grade / question.pointVal) * 100).toFixed(2)}%`}
-                    </Text>
-                  </View>)}          
+                    </Text>    
               </View>
             ) : (<View style={styles.scoreSection}> 
             <Text style={styles.scoreValue}> Waiting For A Grade </Text> 

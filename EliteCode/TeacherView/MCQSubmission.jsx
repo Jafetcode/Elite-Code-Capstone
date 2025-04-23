@@ -25,20 +25,23 @@ const MCQSubmission = () => {
     fetchSubmission();
   }, [q.qid, s.sid]);
   console.log("sub info", submissionInfo)
+
   const questionData = {
     question: q.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (q.opt1 && submissionInfo.answer) },
-      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (q.opt2 && submissionInfo.answer) },
-      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (q.opt3 && submissionInfo.answer) },
+      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt1 == submissionInfo.answer) },
+      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt2 == submissionInfo.answer) },
+      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt3 == submissionInfo.answer) },
       // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
     explanation: submissionInfo.comment,
     submittedAt: submissionInfo.submitted_on,
     score: {
       points: submissionInfo.grade,
-      total: q.pointVal,
+      total: Number(q.pointVal).toFixed(2),
+      percentage: `${parseFloat(submissionInfo.grade / q.pointVal * 100).toFixed(2)}%`
+
     }
   };
 
@@ -68,7 +71,7 @@ const MCQSubmission = () => {
               questionData.score.percentage === 100 ? styles.correctScore :
                 questionData.score.percentage === 0 ? styles.incorrectScore :
                   styles.partialScore]}>
-                {questionData.score.percentage}%
+                {questionData.score.percentage}
               </Text>
             </View>
             <Text style={styles.dateText}>
