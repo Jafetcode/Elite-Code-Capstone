@@ -80,6 +80,17 @@ function ViewSubmission() {
                 />
               </View>
             )} */}
+
+               {(submission.imgFile) && (
+                  <Image 
+                    source={{ 
+                      uri: submission.imgFile,
+                      cache: 'reload'
+                    }} 
+                    style={styles.image} 
+                    resizeMode="contain"
+                  />
+                )}
           </View>
 
           {/* Student's Response section */}
