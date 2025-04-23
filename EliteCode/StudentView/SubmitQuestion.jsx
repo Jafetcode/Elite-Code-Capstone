@@ -143,7 +143,7 @@ function SubmitQuestion() {
       console.log("Response:", data);
       if (response.ok) {
         setProgress("submitted");
-        setGrade(calculatedGrade); 
+        // setGrade(calculatedGrade); 
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
     

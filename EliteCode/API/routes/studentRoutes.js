@@ -109,7 +109,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
         return res.status(404).json({ error: "Question not found" });
       }
 
-      const correctAnswer = results[0].correctAnswer;
+      const correctAnswer = results[0].correctAns;
       const total = results[0].pointVal;
       const calculatedGrade = correctAnswer === answer ? total : 0;
 
