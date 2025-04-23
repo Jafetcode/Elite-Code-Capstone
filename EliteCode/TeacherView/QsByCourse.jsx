@@ -71,7 +71,7 @@ function QsByCourse() {
                                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                                 <View style={{ flex: 1 }}>
                                                     <Text style={{}}>{question.question}?</Text>
-                                                    <Text appearance="hint">{question.description}</Text>
+                                                    {question.description && (<Text appearance="hint">{question.description}</Text>)}
                                                 </View>
                                             </View>
                                             {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
