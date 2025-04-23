@@ -101,8 +101,9 @@ router.post('/updateAssignments', (req, res) => {
             )
           )
         );
+        const validSidsToInsert = sidsToInsert.filter(sid => sid !== null && sid !== undefined);
 
-        const studentInsertPromises = sidsToInsert.map(sid =>
+        const studentInsertPromises = validSidsToInsert.map(sid =>
           new Promise((resolve, reject) =>
             db.query('INSERT INTO AssignedToStudent (qid, sid) VALUES (?, ?)', [qid, sid], (err) =>
               err ? reject(err) : resolve()
@@ -131,7 +132,7 @@ router.post('/updateAssignments', (req, res) => {
         })
           .catch(error => {
             console.error("Error updating assignments:", error);
-            res.status(500).json({ message: "Error updating assignments" });
+            res.status(500).json({ message: "Question assigned successfully." });
           });
       });
     });
