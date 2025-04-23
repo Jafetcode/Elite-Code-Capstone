@@ -36,7 +36,7 @@ function Question() {
             body: JSON.stringify({
                 qid: question.qid,
                 sid: student.sid,
-                grade,
+                grade: grade,
                 comment: feedback
             }),
         });

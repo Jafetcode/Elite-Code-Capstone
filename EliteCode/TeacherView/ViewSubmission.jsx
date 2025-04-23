@@ -54,7 +54,7 @@ function ViewSubmission() {
             {submission.grade ? (
               <View style={styles.scoreSection}>
                     <Text style={styles.scoreText}>
-                      Score: <Text style={styles.scoreValue}>{submission.grade}/{Number(question.pointVal.toFixed(2))}</Text>
+                      Score: <Text style={styles.scoreValue}>{submission.grade}/{Number(question.pointVal).toFixed(2)}</Text>
                     </Text>
                     <Text style={styles.percentageText}>
                       {`${((submission.grade / question.pointVal) * 100).toFixed(2)}%`}
