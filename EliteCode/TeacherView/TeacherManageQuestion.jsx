@@ -104,7 +104,7 @@ const [correctAns, setCorrectAns] = React.useState("");
             topic,
             tid: user.tid,
           });
-          
+
           if (imgFile) {
               if (typeof imgFile === 'string' && imgFile.startsWith('data:image')) {
                   formData.append("imgFile", imgFile);
@@ -210,6 +210,12 @@ const [correctAns, setCorrectAns] = React.useState("");
         setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
         console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
       };
+
+      const handleSelectChange = (index) => {
+        const options = [option1, option2, option3];
+        setSelectedIndex(index);
+        setCorrectAns(options[index.row]);
+      };
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }} on>
               <View
@@ -309,6 +315,16 @@ const [correctAns, setCorrectAns] = React.useState("");
                         onChangeText={(value) => setOption3(value)}
                         style={{ marginBottom: 5 }}
                       />
+                      <Select
+                                      selectedIndex={selectedIndex}
+                                      value={correctAns}
+                                      onSelect={handleSelectChange}
+                                      style={{ marginBottom: 5 }}
+                                    >
+                                      <SelectItem title={option1 || "Option 1"} />
+                                      <SelectItem title={option2 || "Option 2"} />
+                                      <SelectItem title={option3 || "Option 3"} />
+                                    </Select>
                       {/* work on tommorow*/}
                       {/* <Text category="h5" style={{ marginBottom: 5 }}>Select Correct Answer</Text>
                         <Select
