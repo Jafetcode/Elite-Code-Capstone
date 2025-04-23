@@ -13,7 +13,7 @@ import { ApplicationProvider, Button, Layout, Card, Modal, Input, } from "@ui-ki
 const ErikaStudentHome = () => {
   const navigation = useNavigation();
   const { user } = useAuth();
-
+  const {q, sid} = route.params;
   const questionID = "74";
   const userID = "63887e"
   const [question, setQuestion] = useState({});
@@ -21,7 +21,7 @@ const ErikaStudentHome = () => {
   useEffect(() => {
     const responseData = async () => {
       try {
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${questionID}&sid=${userID}`);
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${q.qid}&sid=${sid}`);
         const data = await res.json();
         setQuestion(data[0]);
       } catch (error) {
