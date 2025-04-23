@@ -76,7 +76,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, grade, type } = req.body;
+  const { qid, sid, answer, progress, submitted_on, type, pointVal} = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   if (type == "ShortAns") {
@@ -95,17 +95,32 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     );
   }
   else {
+    const gradesql = `Select * from questions q join MCQ mcq on q.qid = MCQ.qid where q.qid = ?`
+    db.query(gradesql, qid, (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }}
+    )
+    const correctAnswer = results.correctAns;
+    const total = pointVal;
+    const calculatedGrade = correctAnswer === answer ? total : 0;
     const sql = `
-    INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+      INSERT INTO Submissions 
+      (qid, sid, answer, progress, submitted_on, fileName, filePath, grade)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
     db.query(
       sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
-      (err, results) => {
+      [qid, sid, answer, progress, submitted_on, fileName, filePath, calculatedGrade],
+      (err, insertResult) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
-        res.json({ message: `Successfully submitted MC question Response with ${grade}`, results, file: { name: fileName, path: filePath } });
+        res.json({ 
+          message: `Successfully submitted MCQ response. Grade: ${calculatedGrade}`, 
+          results: insertResult, 
+          file: { name: fileName, path: filePath } 
+        });
       }
     );
   }

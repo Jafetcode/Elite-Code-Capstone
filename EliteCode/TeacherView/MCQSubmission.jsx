@@ -1,4 +1,4 @@
-import React, { useState, useEffect}  from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
@@ -8,7 +8,7 @@ const MCQSubmission = () => {
   const { q, s } = route.params;
   const [submissionInfo, setInfo] = useState({});
   console.log(q.pointVal, s.fname)
- 
+
   // Query from submission and MCQ TABLE query from 
   useEffect(() => {
     const fetchSubmission = async () => {
@@ -29,9 +29,9 @@ const MCQSubmission = () => {
     question: q.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.correctAns == q.opt1 && q.answer) },
-      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.correctAns == q.opt2 && q.answer) },
-      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (submissionInfo.correctAns == q.opt3 && q.answer) },
+      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (q.opt1 && submissionInfo.answer) },
+      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (q.opt2 && submissionInfo.answer) },
+      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (q.opt3 && submissionInfo.answer) },
       // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
     explanation: submissionInfo.comment,
@@ -105,15 +105,15 @@ const MCQSubmission = () => {
                 </View>
 
                 <View style={styles.indicatorContainer}>
-                  {option.isCorrect && (
+                  {option.studentSelected ? (
+                    option.isCorrect ? (
+                      <MaterialIcons name="check-circle" size={24} color="#4CAF50" />
+                    ) : (
+                      <MaterialIcons name="cancel" size={24} color="#F44336" />
+                    )
+                  ) : option.isCorrect ? (
                     <MaterialIcons name="check-circle" size={24} color="#4CAF50" />
-                  )}
-                  {option.studentSelected && !option.isCorrect && (
-                    <MaterialIcons name="cancel" size={24} color="#F44336" />
-                  )}
-                  {option.studentSelected && option.isCorrect && (
-                    <MaterialIcons name="check-circle" size={24} color="#4CAF50" />
-                  )}
+                  ) : null}
                 </View>
               </View>
             ))}
@@ -121,12 +121,12 @@ const MCQSubmission = () => {
 
           {/* Explanation section */}
           {questionData.explanation ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Comments</Text>
-            <Text style={styles.explanationText}>{questionData.explanation}</Text>
-          </View>) : (<View style={styles.section}>
-            <Text style={styles.sectionTitle}>No comments</Text>
-          </View>) }
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Comments</Text>
+              <Text style={styles.explanationText}>{questionData.explanation}</Text>
+            </View>) : (<View style={styles.section}>
+              <Text style={styles.sectionTitle}>No comments</Text>
+            </View>)}
         </View>
       </ScrollView>
     </SafeAreaView>
