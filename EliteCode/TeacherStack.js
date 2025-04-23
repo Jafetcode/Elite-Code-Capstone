@@ -28,7 +28,7 @@ const TeacherStack = () => (
     <Stack.Screen name="TeacherProfile" component={TeacherProfile} options={{ headerShown: false }} />
     <Stack.Screen name="Question" component={GradingScreen} />
     <Stack.Screen name="TeacherSettings" component={TeacherSettings} options={{ headerShown: false }} />
-    <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
+    <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} options={{ headerShown: false }}/>
     <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion } options={{ headerShown: false }} />
     <Stack.Screen name="Classlist" component={TeacherCourseClasslist} options={{ headerShown: false }}/>
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}  options={{ headerShown: false }}/>

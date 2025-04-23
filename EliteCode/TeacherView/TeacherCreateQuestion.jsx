@@ -20,6 +20,9 @@ import {
 import * as eva from "@eva-design/eva";
 
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -327,7 +330,9 @@ function TeacherCreateQuestion() {
           >
             <Text category="h5">Image</Text>
           </View>
-          <Text category="p1"> {`Selected image: ${imgFile}`} </Text>
+          <Text category="p1"> 
+          {/* {imgFile ? `Selected image: ${imgFile}` : "No Image Selected"} */}
+            </Text>
 
           <View
             style={{
@@ -341,7 +346,7 @@ function TeacherCreateQuestion() {
           <View>
             <Text category="p1">
               {" "}
-              {`Selected date: ${dueDate.toLocaleDateString()}`}{" "}
+              {`Selected date: ${dueDate.toLocaleDateString('en-GB')}`}{" "}
             </Text>
             <Datepicker date={dueDate} onSelect={(date) => setDate(date)} />
           </View>
