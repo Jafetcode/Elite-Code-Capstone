@@ -14,7 +14,7 @@ const MCQSubmission = () => {
     const fetchSubmission = async () => {
       try {
         console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${q.qid}&sid=${s.userID}`);
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/MCQsubmission?qid=${q.qid}&sid=${s.userID}`);
         const data = await res.json();
         console.log("getting submission", data[0].opt1)
         setInfo(data[0]);

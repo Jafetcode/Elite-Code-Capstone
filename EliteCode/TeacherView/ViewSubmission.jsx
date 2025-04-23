@@ -8,16 +8,16 @@ function ViewSubmission() {
   const navigation = useNavigation();
   const route = useRoute();
   const { user } = useAuth();
-  const student = route.params?.s;
-  const question = route.params?.q;
+  const { q, s } = route.params;
+
   const [submission, setSubmission] = useState({});
 
   console.log("grade", submission.grade)
   useEffect(() => {
     const fetchSubmission = async () => {
       try {
-        console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
+        console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/submission?qid=${q.qid}&sid=${s.userID}`);
         const data = await res.json();
         console.log("getting submission", data[0].question)
         setSubmission(data[0]);
@@ -26,7 +26,7 @@ function ViewSubmission() {
       }
     };
     fetchSubmission();
-  }, [question, student]);
+  }, [q.qid, s.sid]);
 
   //   useEffect(() => {
   //     if (student && question) {

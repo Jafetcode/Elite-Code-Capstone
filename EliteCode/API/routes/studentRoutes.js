@@ -378,7 +378,7 @@ router.get("/submission", (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
   const sql =
-    "SELECT * FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;";
+    "s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;";
 
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
@@ -399,7 +399,7 @@ router.get("/submission", (req, res) => {
     });
 
     console.log(results);
-    res.json({updatedResults});
+    res.json({results: updatedResults});
   });
 });
 
@@ -407,14 +407,26 @@ router.get("/MCQsubmission", (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
   const sql =
-    "SELECT * FROM Submissions s join MCQ mcq on s.qid = mcq.qid WHERE s.qid = ? and s.sid = ?;";
+    "SELECT s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s join MCQ mcq on s.qid = mcq.qid WHERE s.qid = ? and s.sid = ?;";
 
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    const updatedResults = results.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
     console.log(results);
-    res.json(results);
+    res.json({results: updatedResults});
   });
 })
 module.exports = router;
