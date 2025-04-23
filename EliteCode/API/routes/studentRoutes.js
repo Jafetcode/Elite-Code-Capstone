@@ -79,7 +79,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
   const { qid, sid, answer, progress, submitted_on, grade } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
-  if (String(question.type) == "ShortAns") {
+  if (type === "ShortAns") {
     const sql = `
     INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath)
     VALUES (?, ?, ?, ?, ?, ?, ?)`;

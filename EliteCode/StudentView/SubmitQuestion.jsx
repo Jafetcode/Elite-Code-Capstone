@@ -102,6 +102,7 @@ function SubmitQuestion() {
     currentDate = new Date().toISOString().slice(0, 19).replace("T", " ")
     try {
       const formData = new FormData();
+      const currentDate = new Date().toISOString().slice(0, 19).replace("T", " ");
       const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
 
 
@@ -109,7 +110,7 @@ function SubmitQuestion() {
       console.log('Correct answer:', correctAns);
       console.log('Question type:', type);
       console.log(calculatedGrade);
-      
+
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
@@ -131,11 +132,11 @@ function SubmitQuestion() {
         setGrade(0);
       }
       
-  
       const response = await fetch("https://elitecodecapstone24.onrender.com/student/submitQuestion", {
         method: "POST",
         headers: {
-          Accept: "application/json"
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data",
         },
         body: formData,
       });
