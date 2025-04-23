@@ -143,27 +143,12 @@ router.post('/updateAssignments', (req, res) => {
 router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
-
-  const sql = "SELECT * FROM Submissions s JOIN Questions q ON s.qid = q.qid WHERE s.qid = ? AND s.sid = ?";
-  
+  const sql = 'Select * from Submissions where qid= ? and sid = ?';
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    const updatedResults = results.map(row => {
-      let base64Image = null;
-      if (row.imgFile) {
-        const mimeType = 'image/jpeg';
-        const buffer = Buffer.from(row.imgFile);
-        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
-      }
-      return {
-        ...row,
-        imgFile: base64Image
-      };
-    });
-    
-    res.json({results: updatedResults});
+    res.json({ results });
   });
 });
 
