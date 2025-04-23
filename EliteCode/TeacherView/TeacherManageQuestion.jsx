@@ -95,6 +95,16 @@ const [correctAns, setCorrectAns] = React.useState("");
           formData.append("topic", topic);
           formData.append("tid", user.tid)
 
+          console.log("FormData values:", {
+            question,
+            description,
+            type,
+            dueDate: formattedDate,
+            pointVal,
+            topic,
+            tid: user.tid,
+          });
+          
           if (imgFile) {
               if (typeof imgFile === 'string' && imgFile.startsWith('data:image')) {
                   formData.append("imgFile", imgFile);
@@ -203,7 +213,7 @@ const [correctAns, setCorrectAns] = React.useState("");
     return (
         <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }} on>
               <View
-                style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}
+                style={{ flexDirection: "row", alignItems: "center", marginBottom: 10, marginTop: 40 }}
               >
                 <Button
                   appearance="ghost"
