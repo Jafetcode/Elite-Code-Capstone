@@ -119,25 +119,57 @@ function StudentHome() {
   const renderAssignmentCard = (item, status) => (
     <Card
       key={item.qid}
-      style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }} >
-      <TouchableOpacity onPress={() => navigation.navigate("SubmitQuestion", {qid: item.qid,
-    cid: item.cid, item : item, type: item.type 
-      })}>
-
-        <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 14, marginBottom: 3, color: 'white' }}>
-          {item.question}
-        </Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 3 }}>
+      style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}
+    >
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("SubmitQuestion", {
+            qid: item.qid,
+            cid: item.cid,
+            item: item,
+            type: item.type,
+          })
+        }
+      >
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{ fontSize: 14, marginBottom: 3, color: "white" }}
+          >
+            {item.question}
+          </Text>
+          <View
+            style={{
+              backgroundColor: "#3A4B5C",
+              borderRadius: 6,
+              paddingHorizontal: 8,
+              paddingVertical: 2,
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 12 }}>{item.type}</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: 3,
+          }}
+        >
           <Text appearance="hint" style={{ fontSize: 14 }}>
             Due: {new Date(item.dueDate).toLocaleDateString()}
           </Text>
-          <View style={{
-            backgroundColor: status === "Upcoming" ? '#D87D4A' : '#A94B4B',
-            borderRadius: 6,
-            paddingHorizontal: 8,
-            paddingVertical: 2,
-          }}>
-            <Text style={{ color: 'white', fontSize: 12 }}>{status}</Text>
+          <View
+            style={{
+              backgroundColor: status === "Upcoming" ? "#D87D4A" : "#A94B4B",
+              borderRadius: 6,
+              paddingHorizontal: 8,
+              paddingVertical: 2,
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 12 }}>{status}</Text>
           </View>
         </View>
         {item.hasSubmitted || status === "Past Due" ? (
@@ -147,9 +179,10 @@ function StudentHome() {
               style={{ margin: 10 }}
               onPress={() => {
                 const destination =
-                item.type === "ShortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
-                navigation.navigate(destination, {q: item, sid: user.userID});
-              }} >
+                  item.type === "ShortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
+                navigation.navigate(destination, { q: item, sid: user.userID });
+              }}
+            >
               View submission
             </Button>
           </View>
