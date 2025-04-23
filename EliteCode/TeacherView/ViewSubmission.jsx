@@ -10,27 +10,29 @@ function ViewSubmission() {
   const { user } = useAuth();
   const student = route.params?.s;
   const question = route.params?.q;
-    const [submission, setSubmission] = useState({});
+  const [submission, setSubmission] = useState({});
+
+  console.log("grade", submission.grade)
   useEffect(() => {
     const fetchSubmission = async () => {
-        try {
-            console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
-            const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
-            const data = await res.json();
-            console.log("getting submission", data[0].question)
-            setSubmission(data[0]);
-          } catch (error) {
-            Alert.alert("Error", "Could not load your submission.", error);
-          }
+      try {
+        console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
+        const data = await res.json();
+        console.log("getting submission", data[0].question)
+        setSubmission(data[0]);
+      } catch (error) {
+        Alert.alert("Error", "Could not load your submission.", error);
+      }
     };
     fetchSubmission();
   }, [question, student]);
 
-//   useEffect(() => {
-//     if (student && question) {
-//       responseData();
-//     }
-//   }, [userID, questionID]);
+  //   useEffect(() => {
+  //     if (student && question) {
+  //       responseData();
+  //     }
+  //   }, [userID, questionID]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -49,15 +51,16 @@ function ViewSubmission() {
         <View style={styles.contentContainer}>
           {/* Header with score information */}
           <View style={styles.headerContainer}>
-            <View style={styles.scoreSection}>
-              <Text style={styles.scoreText}>
-                Score: <Text style={styles.scoreValue}>{submission.grade}/{submission.pointVal}</Text>
-              </Text>
-              <Text style={styles.percentageText}>
-                {/* {calcPercent(submission.grade, submission.pointVal)}% */}
-                {parseFloat(submission.grade/submission.pointVal*100).toFixed(2)}%
-              </Text>
-            </View>
+            {question.grade ? (
+              <View style={styles.scoreSection}>
+                <Text style={styles.scoreText}>
+                  Score: <Text style={styles.scoreValue}>{question.grade}/{question.pointVal}</Text>
+                </Text>
+                <Text style={styles.percentageText}>
+                  {/* {calcPercent(question.grade, question.pointVal)}% */}
+                  {parseFloat(question.grade / question.pointVal * 100).toFixed(2)}%
+                </Text></View>
+            ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting Grade </Text> </View>)}
             <Text style={styles.dateText}>
               Submitted: {formatDate(submission.submitted_on)}
             </Text>
