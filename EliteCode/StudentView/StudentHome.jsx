@@ -56,6 +56,7 @@ function StudentHome() {
           opt1: item.opt1,
           opt2: item.opt2,
           opt3: item.opt3,
+          pointVal: item.pointVal,
           hasSubmitted: item.hasSubmitted,
           imgFile: item.imgFile
 
@@ -146,8 +147,8 @@ function StudentHome() {
               style={{ margin: 10 }}
               onPress={() => {
                 const destination =
-                item.type === "shortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
-                navigation.navigate(destination, {q: item, s: user.userID});
+                item.type === "ShortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
+                navigation.navigate(destination, {q: item, sid: user.userID});
               }} >
               View submission
             </Button>

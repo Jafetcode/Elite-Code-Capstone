@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
@@ -7,36 +7,39 @@ const MCQStudentSubmission = () => {
   const route = useRoute();
   const {q, sid} = route.params; // what i am sendning in
   const [submission, setSub] = useState({});
-  
+
   console.log(q.opt1)
-  console.log(q.correctAns)
-  console.log(q.pointVal)
+  console.log("coorectAns: ", submission.correctAns)
+  console.log("pointVal", q.pointVal)
+  console.log("grade", submission.grade)
   useEffect(() => {
+    console.log("fetching submission for :", q.qid, sid)
       const fetchSubmission = async () => {
         try {
-          console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
-          const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${q.qid}&sid=${s.userID}`);
+          console.log("getting submission", "question: ", q.qid, "studnet:", sid)
+          const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${q.qid}&sid=${sid}`);
           const data = await res.json();
-          console.log("getting submission", data[0].opt1)
+          console.log("getting submissionnnn", data[0])
           setSub(data[0]);
         } catch (error) {
+          console.log("error", error)
           Alert.alert("Error", "Could not load your submission.", error);
         }
       };
       fetchSubmission();
-    }, [q.qid, s.sid]);
+    }, [q.qid, sid]);
 
   const questionData = {
     question: q.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: q.opt1, isCorrect: (q.opt1 == q.correctAns), studentSelected: (q.correctAns == q.opt1 && q.answer)  },
-      { id: "B", text: q.opt2, isCorrect: (q.opt2 == q.correctAns), studentSelected: (q.correctAns == q.opt2 && q.answer) },
-      { id: "C", text: q.opt3, isCorrect: (q.opt3 == q.correctAns), studentSelected: (q.correctAns == q.opt3 && q.answer)  },
+      { id: "A", text: q.opt1, isCorrect: (q.opt1 == submission.correctAns), studentSelected: (submission.correctAns == q.opt1 && q.answer)  },
+      { id: "B", text: q.opt2, isCorrect: (q.opt2 == submission.correctAns), studentSelected: (submission.correctAns == q.opt2 && q.answer) },
+      { id: "C", text: q.opt3, isCorrect: (q.opt3 == submission.correctAns), studentSelected: (submission.correctAns == q.opt3 && q.answer)  },
       // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
     comment: submission.comment,
-    submittedAt: q.submitted_on,
+    submittedAt: submission.submitted_on,
     score: {
       points: submission.grade,
       total: q.pointVal,

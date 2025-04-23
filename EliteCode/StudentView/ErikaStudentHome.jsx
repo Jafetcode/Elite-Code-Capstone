@@ -1,23 +1,21 @@
-import * as React from "react";
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView, Text, Alert } from "react-native";
 import * as eva from "@eva-design/eva";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
 import { ApplicationProvider, Button, Layout, Card, Modal, Input, } from "@ui-kitten/components";
-
-// function ErikaStudentHome() {
-
+import { useRoute } from '@react-navigation/native';
 
 
 const ErikaStudentHome = () => {
   const navigation = useNavigation();
+  const route = useRoute();
   const { user } = useAuth();
-  const {q, sid} = route.params;
+  const { q, sid } = route.params;
   const questionID = "74";
   const userID = "63887e"
   const [question, setQuestion] = useState({});
-  
+
   useEffect(() => {
     const responseData = async () => {
       try {
@@ -28,6 +26,7 @@ const ErikaStudentHome = () => {
         Alert.alert("Error", "Could not load your submission.", error);
       }
     };
+    responseData();
   }, [userID, questionID]);
 
   const formatDate = (dateString) => {
@@ -47,15 +46,18 @@ const ErikaStudentHome = () => {
         <View style={styles.contentContainer}>
           {/* Header with score information */}
           <View style={styles.headerContainer}>
-            <View style={styles.scoreSection}>
-              <Text style={styles.scoreText}>
-                Score: <Text style={styles.scoreValue}>{question.grade}/{question.pointVal}</Text>
-              </Text>
-              <Text style={styles.percentageText}>
-                {/* {calcPercent(question.grade, question.pointVal)}% */}
-                {parseFloat(question.grade/question.pointVal*100).toFixed(2)}%
-              </Text>
-            </View>
+          
+              {question.grade ? (
+                <View style={styles.scoreSection}>
+                  <Text style={styles.scoreText}>
+                    Score: <Text style={styles.scoreValue}>{question.grade}/{question.pointVal}</Text>
+                  </Text>
+                  <Text style={styles.percentageText}>
+                    {/* {calcPercent(question.grade, question.pointVal)}% */}
+                    {parseFloat(question.grade / question.pointVal * 100).toFixed(2)}%
+                  </Text></View>
+              ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting Grade </Text> </View>)}
+            
             <Text style={styles.dateText}>
               Submitted: {formatDate(question.submitted_on)}
             </Text>
