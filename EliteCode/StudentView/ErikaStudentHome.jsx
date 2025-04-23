@@ -46,7 +46,6 @@ const ErikaStudentHome = () => {
         <View style={styles.contentContainer}>
           {/* Header with score information */}
           <View style={styles.headerContainer}>
-          
               {question.grade ? (
                 <View style={styles.scoreSection}>
                   <Text style={styles.scoreText}>
@@ -57,7 +56,6 @@ const ErikaStudentHome = () => {
                     {parseFloat(question.grade / question.pointVal * 100).toFixed(2)}%
                   </Text></View>
               ) : (<View style={styles.scoreSection}> <Text style={styles.scoreValue}> Waiting Grade </Text> </View>)}
-            
             <Text style={styles.dateText}>
               Submitted: {formatDate(question.submitted_on)}
             </Text>

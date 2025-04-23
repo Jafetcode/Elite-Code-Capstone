@@ -29,9 +29,9 @@ const MCQSubmission = () => {
     question: q.question,
     imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
-      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
-      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
-      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (submissionInfo.answer == submissionInfo.correctAns) },
+      { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.correctAns == q.opt1 && q.answer) },
+      { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.correctAns == q.opt2 && q.answer) },
+      { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (submissionInfo.correctAns == q.opt3 && q.answer) },
       // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
     explanation: submissionInfo.comment,

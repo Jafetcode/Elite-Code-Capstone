@@ -79,7 +79,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
   const { qid, sid, answer, progress, submitted_on, grade, type } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
-  if (type === "ShortAns") {
+  if (type == "ShortAns") {
     const sql = `
     INSERT INTO Submissions (qid, sid, answer, progress, submitted_on, fileName, filePath)
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
@@ -105,7 +105,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
-        res.json({ message: `Successfully submitted MC question Response: ${progress}`, results, file: { name: fileName, path: filePath } });
+        res.json({ message: `Successfully submitted MC question Response with ${grade}`, results, file: { name: fileName, path: filePath } });
       }
     );
   }

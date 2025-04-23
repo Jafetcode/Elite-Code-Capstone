@@ -79,7 +79,7 @@ function QuestionsAssignedToStudent() {
                                                 <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>
                                                 <Button size="small" style={{ margin: 10 }} onPress={() => {
                                                     const destination =
-                                                        question.type === "shortAns" ? "ViewSubmission" : "MCQSubmission";
+                                                        question.type === "ShortAns" ? "Submission" : "MCQSubmission";
                                                     navigation.navigate(destination, { q: question, s: student });
                                                 }} > View submission </Button>
                                             </View>)
