@@ -36,8 +36,7 @@ function TeacherSettings() {
   return (
     <Layout>
   
-      <ListItem title="Profile" description="Manage your account" />
-
+{/* 
       <ListItem title="Notifications" description="Turn on or off" />
 
       <ListItem title="Font-size" description="Change font size" />
@@ -50,7 +49,7 @@ function TeacherSettings() {
 
       <ListItem title="FAQ" description="Frequently asked questions" />
 
-      <ListItem title="About" description="App information" />
+      <ListItem title="About" description="App information" /> */}
 
       <ListItem title="Logout" onPress={handleLogout} />
 
