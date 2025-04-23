@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
-import { response } from 'express';
+// import { response } from 'express';
 
 const MCQStudentSubmission = () => {
   const route = useRoute();
