@@ -76,7 +76,7 @@ router.get("/questions", (req, res) => {
 });
 
 router.post("/submitQuestion", upload.single("file"), (req, res) => {
-  const { qid, sid, answer, progress, submitted_on, calculatedGrade, type } = req.body;
+  const { qid, sid, answer, progress, submitted_on, grade } = req.body;
   const fileName = req.file ? req.file.filename : null;
   const filePath = req.file ? req.file.path : null;
   if (String(question.type) == "ShortAns") {
@@ -85,7 +85,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
     db.query(
       sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade || 0],
+      [qid, sid, answer, progress, submitted_on, fileName, filePath],
       (err, results) => {
         if (err) {
           return res.status(500).json({ error: err.message });
@@ -100,7 +100,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     db.query(
       sql,
-      [qid, sid, answer, progress, submitted_on, fileName, filePath, calculatedGrade],
+      [qid, sid, answer, progress, submitted_on, fileName, filePath, grade],
       (err, results) => {
         if (err) {
           return res.status(500).json({ error: err.message });

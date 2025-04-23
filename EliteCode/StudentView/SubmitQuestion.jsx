@@ -103,7 +103,13 @@ function SubmitQuestion() {
     try {
       const formData = new FormData();
       const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
+
+
+      console.log('Submitting answer:', answer);
+      console.log('Correct answer:', correctAns);
+      console.log('Question type:', type);
       console.log(calculatedGrade);
+      
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
@@ -226,26 +232,26 @@ function SubmitQuestion() {
     <View style={styles.radioGroup}>
       <Text category="h6">Select your answer:</Text>
       <RadioGroup
-        selectedIndex={[
-          questionData?.opt1 || item?.opt1,
-          questionData?.opt2 || item?.opt2,
-          questionData?.opt3 || item?.opt3
-        ].indexOf(answer)}
-        onChange={(index) => {
-          const options = [
-            questionData?.opt1 || item?.opt1,
-            questionData?.opt2 || item?.opt2,
-            questionData?.opt3 || item?.opt3
-          ];
-          const selectedAnswer = options[index];
-          setAnswer(selectedAnswer);
-          console.log('Selected answer:', selectedAnswer);
-        }}
-      >
-        <Radio>{questionData?.opt1 || item?.opt1}</Radio>
-        <Radio>{questionData?.opt2 || item?.opt2}</Radio>
-        <Radio>{questionData?.opt3 || item?.opt3}</Radio>
-      </RadioGroup>
+  selectedIndex={[
+    questionData?.opt1 || item?.opt1,
+    questionData?.opt2 || item?.opt2,
+    questionData?.opt3 || item?.opt3
+  ].indexOf(answer)}
+  onChange={(index) => {
+    const options = [
+      questionData?.opt1 || item?.opt1,
+      questionData?.opt2 || item?.opt2,
+      questionData?.opt3 || item?.opt3
+    ];
+    const selectedAnswer = options[index];
+    setAnswer(selectedAnswer);
+    console.log('Selected answer:', selectedAnswer, 'index:', index);
+  }}
+>
+  <Radio>{questionData?.opt1 || item?.opt1}</Radio>
+  <Radio>{questionData?.opt2 || item?.opt2}</Radio>
+  <Radio>{questionData?.opt3 || item?.opt3}</Radio>
+</RadioGroup>
     </View>
   </View>
 )}
