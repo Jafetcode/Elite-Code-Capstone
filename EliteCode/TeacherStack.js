@@ -29,7 +29,7 @@ const TeacherStack = () => (
     <Stack.Screen name="Question" component={GradingScreen} />
     <Stack.Screen name="TeacherSettings" component={TeacherSettings} options={{ headerShown: false }} />
     <Stack.Screen name="TeacherCreateCourse" component={TeacherCreateCourse} />
-    <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion} />
+    <Stack.Screen name="TeacherCreateQuestion" component={TeacherCreateQuestion }options={{ headerShown: false }} />
     <Stack.Screen name="Classlist" component={TeacherCourseClasslist} options={{ headerShown: false }}/>
     <Stack.Screen name="QuestionsAssignedToStudent" component={QsAssginedToStudent}  options={{ headerShown: false }}/>
     <Stack.Screen name="QsByCourse" component={QsByCourse}  options={{ headerShown: false }}/>
