@@ -374,17 +374,16 @@ router.get("/getPastDueCourseQuestions", async (req, res) => {
   }
 });
 
-router.get("/submission", (req, res) => {
+router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
-  const sql =
-    "s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;";
-
+ 
+  const sql = "SELECT s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s JOIN Questions q ON s.qid = q.qid WHERE s.qid = ? AND s.sid = ?";
+  
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-
     const updatedResults = results.map(row => {
       let base64Image = null;
       if (row.imgFile) {
@@ -397,9 +396,8 @@ router.get("/submission", (req, res) => {
         imgFile: base64Image
       };
     });
-
-    console.log(results);
-    res.json({results: updatedResults});
+    
+    res.json({results:updatedResults});
   });
 });
 

@@ -143,7 +143,9 @@ router.post('/updateAssignments', (req, res) => {
 router.get('/submission', (req, res) => {
   const sid = req.query.sid;
   const qid = req.query.qid;
-  const sql = "SELECT s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s join Questions q on s.qid = q.qid WHERE s.qid = ? and s.sid = ?;";
+
+  const sql = "SELECT s.*, q.question, q.pointVal, q.imgFile, q.type FROM Submissions s JOIN Questions q ON s.qid = q.qid WHERE s.qid = ? AND s.sid = ?";
+  
   db.query(sql, [qid, sid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -160,6 +162,7 @@ router.get('/submission', (req, res) => {
         imgFile: base64Image
       };
     });
+    
     res.json({results: updatedResults});
   });
 });

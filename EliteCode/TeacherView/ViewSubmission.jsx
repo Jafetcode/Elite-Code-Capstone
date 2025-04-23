@@ -8,7 +8,8 @@ function ViewSubmission() {
   const navigation = useNavigation();
   const route = useRoute();
   const { user } = useAuth();
-  const { q, s } = route.params;
+  const {s} = route.params?.student;
+  const {q} = route.params?.question;
 
   const [submission, setSubmission] = useState({});
 
@@ -19,14 +20,14 @@ function ViewSubmission() {
         console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
         const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/submission?qid=${q.qid}&sid=${s.userID}`);
         const data = await res.json();
-        console.log("getting submission", data[0].question)
+        console.log("getting submission", data[0])
         setSubmission(data[0]);
       } catch (error) {
         Alert.alert("Error", "Could not load your submission.", error);
       }
     };
     fetchSubmission();
-  }, [q.qid, s.sid]);
+  }, [q?.qid, s?.sid]);
 
   //   useEffect(() => {
   //     if (student && question) {
