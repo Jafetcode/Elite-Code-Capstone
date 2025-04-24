@@ -282,7 +282,6 @@ function StudentHome() {
                 }
               >
                 <Text
-                  category="h6"
                   style={{
                     fontSize: 14,
                     marginBottom: 3,

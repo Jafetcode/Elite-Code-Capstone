@@ -28,6 +28,7 @@ function StudentProfile() {
   const [skills, setSkills] = useState([]);
   const [visible, setVisible] = useState(false);
   const [newSkill, setNewSkill] = useState("");
+  const [gradebook, setGradebook] = useState([]);
 
   if (!user) {
     Alert.alert("Unauthorized", "You need to log in first.", [
@@ -46,6 +47,19 @@ function StudentProfile() {
     } catch (error) {
       console.error("Failed to fetch skills:", error);
       Alert.alert("Error", "Could not load your skills.");
+    }
+  };
+
+  const fetchGradebook = async () => {
+    try {
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/getStudentGradebook?sid=${user.userID}`
+      );
+      const data = await res.json();
+      setGradebook(data.results || []);
+    } catch (error) {
+      console.error("Failed to fetch gradebook:", error);
+      Alert.alert("Error", "Could not load your grades.");
     }
   };
 
@@ -80,10 +94,12 @@ function StudentProfile() {
     }
   };
 
-
   useFocusEffect(
     React.useCallback(() => {
-      if (user.userID) fetchSkills();
+      if (user.userID) {
+        fetchSkills();
+        fetchGradebook();
+      }
     }, [user.userID])
   );
 
@@ -93,8 +109,7 @@ function StudentProfile() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Profile Card */}
-        <Card style={styles.cardContainer}>
+        <Layout style={{ backgroundColor: "transparent" }}>
           <Image
             source={require("../assets/images/profile-picture.png")}
             style={styles.profileImage}
@@ -109,14 +124,12 @@ function StudentProfile() {
           >
             Edit Profile
           </Button>
-        </Card>
+        </Layout>
 
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionHeader}>Skills</Text>
           <TouchableOpacity onPress={() => setVisible(true)}>
-            <Text appearance="hint">
-              Add Skill
-            </Text>
+            <Text appearance="hint">Add Skill</Text>
           </TouchableOpacity>
         </View>
 
@@ -131,6 +144,41 @@ function StudentProfile() {
             <Text appearance="hint">No skills added</Text>
           )}
         </Layout>
+
+        <View style={{ marginTop: 20 }}>
+          <Text style={styles.sectionHeader}>Your Courses & Grades</Text>
+          {gradebook.length > 0 ? (
+            gradebook.map((course) => (
+              <Card key={course.cid} style={styles.gradeCard}>
+                <View style={styles.cardHeader}>
+                  <Text numberOfLines={1} style={styles.questionText}>
+                    {course.courseName}
+                  </Text>
+                  <View style={styles.typeBadge}>
+                    <Text style={styles.badgeText}>{course.cid}</Text>
+                  </View>
+                </View>
+                <View
+                  style={[
+                    styles.cardHeader,
+                    { justifyContent: "space-between", marginTop: 6 },
+                  ]}
+                >
+                  <Text appearance="hint" style={{ fontSize: 14 }}>
+                    Total Score: {course.total_scored}/{course.total_possible}
+                  </Text>
+                  <View style={[styles.statusBadge, styles.gradeBadge]}>
+                    <Text style={styles.badgeText}>
+                      {((course.score_ratio || 0) * 100).toFixed(2)}%
+                    </Text>
+                  </View>
+                </View>
+              </Card>
+            ))
+          ) : (
+            <Text appearance="hint">No grades available yet.</Text>
+          )}
+        </View>
       </ScrollView>
 
       <Modal
@@ -176,27 +224,18 @@ const styles = StyleSheet.create({
   containerMain: {
     flex: 1,
     backgroundColor: "#2C496B",
-    padding: 40,
+    padding: 17,
   },
   scrollContent: {
     paddingBottom: 60,
-  },
-  cardContainer: {
-    alignItems: "center",
-    backgroundColor: "#1E2A38",
-    borderRadius: 15,
-    padding: 20,
-    marginTop: 50,
-    marginBottom: 20,
-    borderColor: "#334154",
   },
   profileImage: {
     width: 80,
     height: 80,
     borderRadius: 40,
     marginBottom: 10,
-    marginTop: -5,
-    marginLeft: 40,
+    marginTop: 55,
+    marginLeft: 142,
   },
   welcome: {
     color: "white",
@@ -218,21 +257,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingLeft: 0,
   },
-  // Header row for Skills + Add link
   sectionHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 10,
+    marginTop: 10,
   },
   sectionHeader: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-  },
-  addLink: {
-    color: "#A9B7C6",
-    textDecorationLine: "underline",
   },
   languageContainer: {
     flexDirection: "row",
@@ -241,10 +276,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     justifyContent: "space-evenly",
-    marginBottom: 20,
   },
   langButton: {
-    margin: 5,
+    margin: 6,
+    width: 80,
     backgroundColor: "#3A4B5C",
   },
   backdrop: {
@@ -272,20 +307,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#3A4B5C",
     borderRadius: 8,
   },
-  footerContainer: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
+  gradeCard: {
+    borderRadius: 10,
+    marginTop: 10,
+    backgroundColor: "#1E2A38",
+  },
+  cardHeader: {
+    flexDirection: "row",
     alignItems: "center",
   },
-  footerLine1: {
-    color: "#A9B7C6",
-    fontSize: 12,
+  questionText: {
+    flex: 1,
+    marginRight: 8,
+    fontSize: 14,
+    color: "white",
+    fontWeight: "600",
   },
-  footerLine2: {
-    color: "#A9B7C6",
+  typeBadge: {
+    backgroundColor: "#3A4B5C",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  statusBadge: {
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  gradeBadge: {
+    backgroundColor: "#4CAF50",
+  },
+  badgeText: {
+    color: "white",
     fontSize: 12,
-    opacity: 0.7,
   },
 });
