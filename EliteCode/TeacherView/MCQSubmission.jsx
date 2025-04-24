@@ -9,7 +9,7 @@ const MCQSubmission = () => {
   const [submissionInfo, setInfo] = useState({});
   console.log(q.pointVal, s.fname)
 
-  // Query from submission and MCQ TABLE query from 
+
   useEffect(() => {
     const fetchSubmission = async () => {
       try {
@@ -28,12 +28,12 @@ const MCQSubmission = () => {
 
   const questionData = {
     question: q.question,
-    imageUrl: "/api/placeholder/400/200", // Optional image
+    imageUrl: "/api/placeholder/400/200", 
     options: [
       { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt1 == submissionInfo.answer) },
       { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt2 == submissionInfo.answer) },
       { id: "C", text: submissionInfo.opt3, isCorrect: (submissionInfo.opt3 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt3 == submissionInfo.answer) },
-      // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
+
     ],
     explanation: submissionInfo.comment,
     submittedAt: submissionInfo.submitted_on,
@@ -45,7 +45,7 @@ const MCQSubmission = () => {
     }
   };
 
-  // Format date and time for display
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {

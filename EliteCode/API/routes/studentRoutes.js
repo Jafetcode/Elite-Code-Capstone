@@ -25,7 +25,6 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 });
 
-
 router.get("/", (req, res) => {
   res.send("Student route");
 });
@@ -57,17 +56,17 @@ router.get("/questions", (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    const updatedResults = results.map(row => {
+    const updatedResults = results.map((row) => {
       let base64Image = null;
       if (row.imgFile) {
-        const mimeType = 'image/jpeg';
+        const mimeType = "image/jpeg";
         const buffer = Buffer.from(row.imgFile);
-        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+        base64Image = `data:${mimeType};base64,${buffer.toString("base64")}`;
       }
 
       return {
         ...row,
-        imgFile: base64Image
+        imgFile: base64Image,
       };
     });
 
@@ -90,11 +89,14 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
-        res.json({ message: `Successfully submitted shortAns question Response: ${progress}`, results, file: { name: fileName, path: filePath } });
+        res.json({
+          message: `Successfully submitted shortAns question Response: ${progress}`,
+          results,
+          file: { name: fileName, path: filePath },
+        });
       }
     );
-  }
-  else {
+  } else {
     const gradesql = `SELECT mcq.correctAns, q.pointVal 
                       FROM Questions q 
                       JOIN MCQ mcq ON q.qid = mcq.qid 
@@ -111,7 +113,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
       const correctAnswer = results[0].correctAns;
       const total = results[0].pointVal;
       console.log("total : ", total, "pointVal: ", results[0].pointVal);
-      const calculatedGrade = (correctAnswer === answer ? total : (0));
+      const calculatedGrade = correctAnswer === answer ? total : 0;
 
       const sql = `
         INSERT INTO Submissions
@@ -120,7 +122,16 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
 
       db.query(
         sql,
-        [qid, sid, answer, progress, submitted_on, fileName, filePath, calculatedGrade],
+        [
+          qid,
+          sid,
+          answer,
+          progress,
+          submitted_on,
+          fileName,
+          filePath,
+          calculatedGrade,
+        ],
         (err, insertResult) => {
           if (err) {
             return res.status(500).json({ error: err.message });
@@ -128,7 +139,7 @@ router.post("/submitQuestion", upload.single("file"), (req, res) => {
           res.json({
             message: `Successfully submitted MCQ response. Grade: ${calculatedGrade}`,
             results: insertResult,
-            file: { name: fileName, path: filePath }
+            file: { name: fileName, path: filePath },
           });
         }
       );
@@ -346,7 +357,6 @@ router.get("/getAllUpcomingQuestions", async (req, res) => {
   }
 });
 
-
 router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
 
@@ -429,5 +439,67 @@ router.get("/MCQsubmission", (req, res) => {
     console.log(results);
     res.json(results);
   });
-})
+});
+
+router.get("/getSkills", async (req, res) => {
+  const { sid } = req.query;
+  const sql = "SELECT skill FROM StudentSkills WHERE sid = ?;";
+
+  db.query(sql, [sid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    console.log(results);
+    res.json(results);
+  });
+});
+
+router.post("/addSkill", async (req, res) => {
+  const { sid, skill } = req.body;
+  const sql = `
+    INSERT INTO StudentSkills (sid, skill)
+    VALUES (?, ?);`;
+  db.query(sql, [sid, skill.trim()], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ results });
+  });
+});
+
+router.get("/getGrade", (req, res) => {
+  const { sid, cid } = req.query;
+  const sql = `
+        SELECT
+  SUM(q.pointVal)               AS total_possible,
+  SUM(COALESCE(s.grade, 0))     AS total_scored,
+  SUM(COALESCE(s.grade, 0)) / SUM(q.pointVal) AS score_ratio
+FROM Enrolled e
+JOIN AssignedToClass atc
+  ON e.cid = atc.cid
+  AND e.sid = ?
+JOIN Questions q
+  ON atc.qid = q.qid
+LEFT JOIN Submissions s
+  ON q.qid = s.qid
+  AND s.sid = e.sid
+WHERE
+  e.cid = ?
+  AND (
+    s.grade IS NOT NULL 
+    OR q.dueDate < CURDATE();`;
+
+  db.query(sql, [sid, cid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    const gradeSummary = results[0] || {
+      total_possible: 0,
+      total_scored: 0,
+      percent_score: 0,
+    };
+    res.json(gradeSummary);
+  });
+});
+
 module.exports = router;

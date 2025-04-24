@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Alert, View} from 'react-native';
+import { Text, Alert, View, Image} from 'react-native';
 import { useNavigation, } from '@react-navigation/native';
 import { Button, Layout, ListItem } from '@ui-kitten/components';
 import { useEffect } from 'react';
@@ -35,9 +35,12 @@ function TeacherSettings() {
 
   return (
     <Layout>
+        <Image
+              source={require("../assets/images/FinalLogo2.png")}
+              style={{ width: 300, height: 150}}
+            />
   
-      <ListItem title="Profile" description="Manage your account" />
-
+{/* 
       <ListItem title="Notifications" description="Turn on or off" />
 
       <ListItem title="Font-size" description="Change font size" />
@@ -50,7 +53,7 @@ function TeacherSettings() {
 
       <ListItem title="FAQ" description="Frequently asked questions" />
 
-      <ListItem title="About" description="App information" />
+      <ListItem title="About" description="App information" /> */}
 
       <ListItem title="Logout" onPress={handleLogout} />
 

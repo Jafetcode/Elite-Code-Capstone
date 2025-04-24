@@ -91,6 +91,16 @@ const MCQStudentSubmission = () => {
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{questionData.question}</Text>
           </View>
+             {/* {(questionData?.imgFile || item?.imgFile) && (
+                <Image 
+                  source={{ 
+                    uri: questionData?.imgFile || item?.imgFile,
+                    cache: 'reload'
+                  }} 
+                  style={styles.image} 
+                  resizeMode="contain"
+                />
+              )} */}
 
           {/* Options section */}
           <View style={styles.section}>
