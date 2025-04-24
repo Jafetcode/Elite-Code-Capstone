@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Image, ScrollView, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import * as eva from "@eva-design/eva";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
@@ -11,13 +18,13 @@ import {
   Card,
   Modal,
   Input,
-  Icon
+  Icon,
 } from "@ui-kitten/components";
 
 function StudentHome() {
   const navigation = useNavigation();
   const [visible, setVisible] = React.useState(false);
-  const [classCode, setClassCode] = React.useState('');
+  const [classCode, setClassCode] = React.useState("");
   const { user } = useAuth();
   const [courses, setCourses] = React.useState([]);
   const [upcoming, setUpcoming] = React.useState([]);
@@ -27,7 +34,9 @@ function StudentHome() {
 
   const fetchCourses = async () => {
     try {
-      const res = await fetch(`https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`);
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/getCourses?sid=${user.userID}`
+      );
       const data = await res.json();
       setCourses(data.results || []);
     } catch (error) {
@@ -39,35 +48,24 @@ function StudentHome() {
   const fetchAssignments = async () => {
     try {
       const [upcomingRes, pastDueRes] = await Promise.all([
-        fetch(`https://elitecodecapstone24.onrender.com/student/getAllUpcomingQuestions?sid=${user.userID}`),
-        fetch(`https://elitecodecapstone24.onrender.com/student/getAllPastDueQuestions?sid=${user.userID}`)
+        fetch(
+          `https://elitecodecapstone24.onrender.com/student/getAllUpcomingQuestions?sid=${user.userID}`
+        ),
+        fetch(
+          `https://elitecodecapstone24.onrender.com/student/getAllPastDueQuestions?sid=${user.userID}`
+        ),
       ]);
 
       const upcomingData = await upcomingRes.json();
       const pastDueData = await pastDueRes.json();
 
-      const processAssignments = (assignments = []) => {
-        return assignments.map(item => ({
-          qid: item.qid,
-          cid: item.cid,
-          question: item.question,
-          type: item.type,
-          dueDate: item.dueDate,
-          opt1: item.opt1,
-          opt2: item.opt2,
-          opt3: item.opt3,
-          pointVal: item.pointVal,
-          hasSubmitted: item.hasSubmitted,
-          imgFile: item.imgFile
+      const process = (arr = []) =>
+        (arr.map((item) => ({ ...item })) || []).slice(0, 50);
 
-        })).slice(0, 50);
-      };
-
-      setUpcoming(processAssignments(upcomingData.results?.upcomingClass || []));
-      setPastDue(processAssignments(pastDueData.results?.pastDueClass || []));
-      setUpcomingStudent(processAssignments(upcomingData.results?.upcomingStudent || []));
-      setPastDueStudent(processAssignments(pastDueData.results?.pastDueStudent || []));
-
+      setUpcoming(process(upcomingData.results?.upcomingClass));
+      setPastDue(process(pastDueData.results?.pastDueClass));
+      setUpcomingStudent(process(upcomingData.results?.upcomingStudent));
+      setPastDueStudent(process(pastDueData.results?.pastDueStudent));
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
       Alert.alert("Error", "Could not load your assignments.");
@@ -75,27 +73,25 @@ function StudentHome() {
   };
 
   const handleJoinClass = async () => {
-
     if (!classCode.trim()) {
       Alert.alert("Error", "Please enter a class code.");
       return;
     }
     try {
-      const response = await fetch('https://elitecodecapstone24.onrender.com/student/joinCourse', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cid: classCode.trim(),
-          sid: user.userID,
-        }),
-      });
-
+      const response = await fetch(
+        "https://elitecodecapstone24.onrender.com/student/joinCourse",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            cid: classCode.trim(),
+            sid: user.userID,
+          }),
+        }
+      );
       const data = await response.json();
-
       if (response.ok) {
-        setClassCode('');
+        setClassCode("");
         Alert.alert("Success", data.message || "You joined the course!");
       } else {
         Alert.alert("Error", JSON.stringify(data));
@@ -104,7 +100,6 @@ function StudentHome() {
       console.error("Error joining course:", error);
       Alert.alert("Error", "Something went wrong.");
     }
-
   };
 
   useFocusEffect(
@@ -119,80 +114,78 @@ function StudentHome() {
   const renderAssignmentCard = (item, status) => (
     <Card
       key={item.qid}
-      style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}
+      style={{ borderRadius: 10, marginBottom: 10, backgroundColor: "#1E2A38" }}
     >
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("SubmitQuestion", {
             qid: item.qid,
             cid: item.cid,
-            item: item,
+            item,
             type: item.type,
           })
         }
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <View style={styles.cardHeader}>
           <Text
             numberOfLines={1}
             ellipsizeMode="tail"
-            style={{ fontSize: 14, marginBottom: 3, color: "white" }}
+            style={styles.questionText}
           >
             {item.question}
           </Text>
-          <View
-            style={{
-              backgroundColor: "#3A4B5C",
-              borderRadius: 6,
-              paddingHorizontal: 8,
-              paddingVertical: 2,
-            }}
-          >
-            <Text style={{ color: "white", fontSize: 12 }}>{item.type}</Text>
+          <View style={styles.typeBadge}>
+            <Text style={styles.badgeText}>{item.type}</Text>
           </View>
         </View>
+
         <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 3,
-          }}
+          style={[
+            styles.cardHeader,
+            { justifyContent: "space-between", marginTop: 6 },
+          ]}
         >
           <Text appearance="hint" style={{ fontSize: 14 }}>
             Due: {new Date(item.dueDate).toLocaleDateString()}
           </Text>
           <View
-            style={{
-              backgroundColor: status === "Upcoming" ? "#D87D4A" : "#A94B4B",
-              borderRadius: 6,
-              paddingHorizontal: 8,
-              paddingVertical: 2,
-            }}
+            style={[
+              styles.statusBadge,
+              status === "Upcoming"
+                ? styles.upcomingBadge
+                : styles.pastDueBadge,
+            ]}
           >
-            <Text style={{ color: "white", fontSize: 12 }}>{status}</Text>
+            <Text style={styles.badgeText}>{status}</Text>
           </View>
         </View>
+
+        {/* Submission / Waiting */}
         {item.hasSubmitted || status === "Past Due" ? (
-          <View style={styles.container}>
+          <View style={styles.waitingContainer}>
             <Button
-              size="small"
-              style={{ margin: 10 }}
-              onPress={() => {
-                const destination =
-                  item.type === "ShortAns" ? "ErikaStudentHome" : "MCQStudentSubmission";
-                navigation.navigate(destination, { q: item, sid: user.userID });
-              }}
-            >
-              View submission
-            </Button>
-          </View>
-        ) : status === "Past Due" && !item.hasSubmitted ? (
-          <View>
-            <Text style={styles.waitingText}>Never Responded.</Text>
+            style={styles.submissionButton}
+            onPress={() => {
+              const dest =
+                item.type === "ShortAns"
+                  ? "ErikaStudentHome"
+                  : "MCQStudentSubmission";
+              navigation.navigate(dest, {
+                q: item,
+                sid: user.userID,
+              });
+            }}
+          >
+            View submission
+          </Button>
           </View>
         ) : (
-          <View>
-            <Text style={styles.waitingText}>Waiting for submission</Text>
+          <View style={styles.waitingContainer}>
+            <Text style={styles.waitingText}>
+              {status === "Past Due"
+                ? "Never Responded."
+                : "Waiting for submission"}
+            </Text>
           </View>
         )}
       </TouchableOpacity>
@@ -210,23 +203,21 @@ function StudentHome() {
               height: 150,
               marginTop: -10,
               marginBottom: -25,
-              alignSelf: 'center',
-              resizeMode: 'cover',
+              alignSelf: "center",
+              resizeMode: "cover",
             }}
           />
 
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, width: '100%' }}>
-              <Text category="s1" style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-              }}>Course Library</Text>
-              <TouchableOpacity onPress={() => setVisible(true)}>
-                <Text appearance="hint">Join Course</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
+          {/* Course Library header */}
+          <View style={styles.sectionHeaderRow}>
+            <Text category="s1" style={styles.sectionTitle}>
+              Course Library
+            </Text>
+            <TouchableOpacity onPress={() => setVisible(true)}>
+              <Text appearance="hint">Join Course</Text>
+            </TouchableOpacity>
+          </View>
+          <Modal visible={visible} backdropStyle={styles.backdrop} onBackdropPress={() => setVisible(false)}>
               <Card disabled={true} style={{
 
                 width: 240,
@@ -271,18 +262,48 @@ function StudentHome() {
                 </Button>
               </Card>
             </Modal>
-          </View>
 
-          {courses.map(course => (
-            <Card key={course.cid} style={{ borderRadius: 10, marginBottom: 10, backgroundColor: '#1E2A38' }}>
-              <TouchableOpacity onPress={() => navigation.navigate('StudentCourse', { cid: course.cid, courseName: course.courseName })}>
-                <Text category="h6" style={{ fontSize: 14, marginBottom: 3, marginTop: -6, color: 'white' }}>
+          {/* Courses list */}
+          {courses.map((course) => (
+            <Card
+              key={course.cid}
+              style={{
+                borderRadius: 10,
+                marginBottom: 10,
+                backgroundColor: "#1E2A38",
+              }}
+            >
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("StudentCourse", {
+                    cid: course.cid,
+                    courseName: course.courseName,
+                  })
+                }
+              >
+                <Text
+                  category="h6"
+                  style={{
+                    fontSize: 14,
+                    marginBottom: 3,
+                    marginTop: -6,
+                    color: "white",
+                  }}
+                >
                   {course.courseName}
                 </Text>
-                <Text appearance="hint" numberOfLines={1} ellipsizeMode="tail" style={{ marginBottom: 3, color: '#A9B7C6' }}>
+                <Text
+                  appearance="hint"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ marginBottom: 3, color: "#A9B7C6" }}
+                >
                   {course.description}
                 </Text>
-                <Text category="c1" style={{ color: '#6C8AA6', marginBottom: -4 }}>
+                <Text
+                  category="c1"
+                  style={{ color: "#6C8AA6", marginBottom: -4 }}
+                >
                   Code: {course.cid}
                 </Text>
               </TouchableOpacity>
@@ -291,52 +312,56 @@ function StudentHome() {
 
           {/* Class Assignments */}
           <View style={{ marginTop: 20 }}>
-            <Text category="s1" style={styles.sectionTitle}>Class Assignments</Text>
+            <Text category="s1" style={styles.sectionTitle}>
+              Class Assignments
+            </Text>
             <View style={styles.assignmentBlock}>
               {upcoming.length === 0 ? (
                 <Text appearance="hint">No upcoming questions!</Text>
               ) : (
-                upcoming.map(item => renderAssignmentCard(item, "Upcoming"))
+                upcoming.map((item) => renderAssignmentCard(item, "Upcoming"))
               )}
             </View>
-
             <View style={styles.assignmentBlock}>
               {pastDue.length === 0 ? (
                 <Text appearance="hint">No past due questions!</Text>
               ) : (
-                pastDue.map(item => renderAssignmentCard(item, "Past Due"))
+                pastDue.map((item) => renderAssignmentCard(item, "Past Due"))
               )}
             </View>
           </View>
 
           {/* Personal Assignments */}
           <View>
-            <Text category="s1" style={styles.sectionTitle}>Personal Assignments</Text>
-
+            <Text category="s1" style={styles.sectionTitle}>
+              Personal Assignments
+            </Text>
             <View style={styles.assignmentBlock}>
               {upcomingStudent.length === 0 ? (
                 <Text appearance="hint">No upcoming questions!</Text>
               ) : (
-                upcomingStudent.map(item => renderAssignmentCard(item, "Upcoming"))
+                upcomingStudent.map((item) =>
+                  renderAssignmentCard(item, "Upcoming")
+                )
               )}
             </View>
-
             <View style={styles.assignmentBlock}>
               {pastDueStudent.length === 0 ? (
                 <Text appearance="hint">No past due questions!</Text>
               ) : (
-                pastDueStudent.map(item => renderAssignmentCard(item, "Past Due"))
+                pastDueStudent.map((item) =>
+                  renderAssignmentCard(item, "Past Due")
+                )
               )}
             </View>
-          </View> 
-          <View />
+          </View>
         </View>
       </ScrollView>
     </Layout>
   );
 }
 
-function AppWrapper(props = {}) {
+function AppWrapper() {
   return (
     <Layout style={{ flex: 1 }}>
       <StudentHome />
@@ -350,13 +375,65 @@ const styles = StyleSheet.create({
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
+  sectionHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 5,
+  },
   sectionTitle: {
-    color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontWeight: "bold",
+    color: "white",
+    paddingBottom: 10,
   },
   assignmentBlock: {
     marginBottom: 15,
   },
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  questionText: {
+    flex: 1,
+    marginRight: 8,
+    fontSize: 14,
+    color: "white",
+  },
+  typeBadge: {
+    backgroundColor: "#3A4B5C",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  statusBadge: {
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  upcomingBadge: {
+    backgroundColor: "#D87D4A",
+  },
+  pastDueBadge: {
+    backgroundColor: "#A94B4B",
+  },
+  badgeText: {
+    color: "white",
+    fontSize: 12,
+  },
+  waitingContainer: {
+    alignItems: "center",
+    marginTop: 5,
+  },
+  waitingText: {
+    color: "#A9B7C6",
+    fontSize: 14,
+  },
+  submissionButton: {
+    backgroundColor: "#3A4B5C",
+    borderRadius: 10,
+    width: 320,
+    height: 40,
+  },
+
 });
