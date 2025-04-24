@@ -452,7 +452,7 @@ router.get('/QsByStudent', (req, res) => {
   const tid = req.query.tid;
   const sid = req.query.sid;
   const sql = `SELECT DISTINCT 
-  q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate,
+  q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, s.sid
   ats.viewable AS studentView,
   atc.viewable AS classView,
   s.submitted_on IS NOT NULL AS hasSubmitted

@@ -10,16 +10,17 @@ function Question() {
   const { user } = useAuth();
   const student = route.params?.s;
   const question = route.params?.q;
-  const [submission, setSubmission] = useState(null);
+  const [submission, setSubmission] = useState({});
   const [feedback, setFeedback] = useState("");
   const [grade, setGrade] = useState("");
 
   useEffect(() => {
     const fetchSubmission = async () => {
       try {
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/submission?qid=${question.qid}&sid=${student.sid}`);
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.sid}`);
         const data = await res.json();
-        setSubmission(data.submission);
+        console.log("getting submission", data[0])
+        setSubmission(data[0]);
       } catch (error) {
         console.error("Error fetching submission", error);
       }

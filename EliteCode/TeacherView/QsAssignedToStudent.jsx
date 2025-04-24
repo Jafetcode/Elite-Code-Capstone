@@ -26,6 +26,7 @@ function QuestionsAssignedToStudent() {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/QsByStudent?tid=${tid}&sid=${student.userID}`);
             const data = await res.json();
             setQuestions(data.QsByStudnet);
+            console.log(data.QsByStudnet)
         } catch (error) {
             console.error("Failed to fetch", error);
         }
