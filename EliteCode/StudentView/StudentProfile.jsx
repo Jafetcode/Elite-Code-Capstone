@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -16,7 +16,6 @@ import {
   Text,
   Icon,
   Card,
-  Divider,
 } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -25,6 +24,7 @@ import { useAuth } from "../AuthContext";
 function StudentProfile() {
   const navigation = useNavigation();
   const { user } = useAuth();
+  const [skills, setSkills] = useState([]);
 
   if (!user) {
     Alert.alert("Unauthorized", "You need to log in first.", [
@@ -33,9 +33,18 @@ function StudentProfile() {
     return null;
   }
 
+  useEffect(() => {
+    fetch(`https://elitecodecapstone24.onrender.com/student/getSkills?sid=${user.userID}`)
+      .then((res) => res.json())
+      .then((data) => setSkills(data.map((item) => item.skill)))
+      .catch((err) => {
+        console.error("Failed to load skills:", err);
+        Alert.alert("Error", "Could not load your skills.");
+      });
+  }, [user.userID]);
+
   return (
     <Layout style={styles.containerMain}>
-
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -43,9 +52,9 @@ function StudentProfile() {
         {/* Profile Card */}
         <Card style={styles.cardContainer}>
           <Image
-                      source={require("../assets/images/profile-picture.png")}
-                      style={{ width: 80, height: 80, borderRadius: 40, marginBottom: 10, marginTop: -5, marginLeft: 40 }}
-                    />
+            source={require("../assets/images/profile-picture.png")}
+            style={styles.profileImage}
+          />
           <Text style={styles.welcome}>
             {user.fname} {user.lname}
           </Text>
@@ -53,17 +62,23 @@ function StudentProfile() {
           <Button
             style={styles.button}
             onPress={() => navigation.navigate("EditProfile")}
-          >{'Edit Profile'}</Button>
+          >
+            {'Edit Profile'}
+          </Button>
         </Card>
 
-        {/* Languages Section */}
-        <Text style={styles.sectionHeader}>Languages</Text>
+        {/* Skills Section */}
+        <Text style={styles.sectionHeader}>Skills</Text>
         <Layout style={styles.languageContainer}>
-          {["Java", "Python", "C", "Swift", "SQL"].map((lang) => (
-            <Button key={lang} size="tiny" style={styles.langButton}>
-              {lang}
-            </Button>
-          ))}
+          {skills.length > 0 ? (
+            skills.map((skill) => (
+              <Button key={skill} size="tiny" style={styles.langButton}>
+                {skill}
+              </Button>
+            ))
+          ) : (
+            <Text appearance="hint">No skills added</Text>
+          )}
         </Layout>
       </ScrollView>
 
@@ -93,16 +108,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#2C496B",
     padding: 40,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    color: "white",
-  },
   scrollContent: {
     paddingBottom: 60,
   },
@@ -116,16 +121,19 @@ const styles = StyleSheet.create({
     borderColor: "#334154",
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 15,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10,
+    marginTop: -5,
+    marginLeft: 40,
   },
   welcome: {
     color: "white",
     fontSize: 24,
     fontWeight: "700",
     textAlign: "center",
+    marginBottom: 10,
   },
   tagline: {
     color: "#A9B7C6",
@@ -133,53 +141,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
-  divider: {
-    backgroundColor: "#334154",
-    width: "80%",
-    marginVertical: 15,
-  },
   button: {
     backgroundColor: "#3A4B5C",
     borderRadius: 10,
     width: "60%",
     alignSelf: "center",
-    paddingLeft: 0, 
+    paddingLeft: 0,
   },
   sectionHeader: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-  },
-  cardSmall: {
-    backgroundColor: "#1E2A38",
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  cardContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-  },
-  courseImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 6,
-    backgroundColor: "#ccc",
-    marginRight: 10,
-  },
-  courseName: {
-    color: "white",
-    fontSize: 14,
-    marginBottom: 2,
-  },
-  courseDesc: {
-    color: "#A9B7C6",
-    fontSize: 12,
-  },
-  courseGrade: {
-    color: "white",
-    fontSize: 12,
   },
   languageContainer: {
     flexDirection: "row",

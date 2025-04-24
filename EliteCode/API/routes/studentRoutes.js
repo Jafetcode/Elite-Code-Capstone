@@ -430,4 +430,21 @@ router.get("/MCQsubmission", (req, res) => {
     res.json(results);
   });
 })
+
+router.get("/getSkills", (req, res) => {
+  const { sid } = req.query;
+  const sql =
+    "SELECT skill FROM StudentSkills WHERE sid = ?;";
+
+  db.query(sql, [sid], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    console.log(results);
+    res.json(results);
+  });
+});
+
+
+
 module.exports = router;
