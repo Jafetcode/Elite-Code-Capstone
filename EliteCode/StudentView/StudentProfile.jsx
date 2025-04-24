@@ -14,7 +14,6 @@ import {
   Layout,
   Button,
   Text,
-  Icon,
   Card,
   Modal,
   Input,
@@ -80,6 +79,7 @@ function StudentProfile() {
       Alert.alert("Error", "Could not add skill.");
     }
   };
+
 
   useFocusEffect(
     React.useCallback(() => {

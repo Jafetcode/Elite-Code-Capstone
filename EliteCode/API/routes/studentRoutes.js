@@ -560,24 +560,26 @@ router.post("/addSkill", async (req, res) => {
 router.get("/getGrade", (req, res) => {
   const { sid, cid } = req.query;
   const sql = `
-        SELECT
-  SUM(q.pointVal)               AS total_possible,
-  SUM(COALESCE(s.grade, 0))     AS total_scored,
-  SUM(COALESCE(s.grade, 0)) / SUM(q.pointVal) AS score_ratio
-FROM Enrolled e
-JOIN AssignedToClass atc
-  ON e.cid = atc.cid
-  AND e.sid = ?
-JOIN Questions q
-  ON atc.qid = q.qid
-LEFT JOIN Submissions s
-  ON q.qid = s.qid
-  AND s.sid = e.sid
-WHERE
-  e.cid = ?
-  AND (
-    s.grade IS NOT NULL 
-    OR q.dueDate < CURDATE();`;
+  SELECT
+    SUM(q.pointVal)               AS total_possible,
+    SUM(COALESCE(s.grade, 0))     AS total_scored,
+    SUM(COALESCE(s.grade, 0)) / SUM(q.pointVal) AS score_ratio
+  FROM Enrolled e
+  JOIN AssignedToClass atc
+    ON e.cid = atc.cid
+    AND e.sid = ?
+  JOIN Questions q
+    ON atc.qid = q.qid
+  LEFT JOIN Submissions s
+    ON q.qid = s.qid
+    AND s.sid = e.sid
+  WHERE
+    e.cid = ?
+    AND (
+      s.grade IS NOT NULL 
+      OR q.dueDate < CURDATE()
+    )
+`;
 
   db.query(sql, [sid, cid], (err, results) => {
     if (err) {
