@@ -153,6 +153,7 @@ router.get('/submission', (req, res) => {
 });
 
 router.put('/gradeSubmission', (req, res) => {
+  const { qid, sid, grade, comment } = req.body;
   const sql = 'UPDATE Submissions set grade= ?, comment = ? where qid = ? and sid = ?';
   db.query(sql, [grade, comment, qid, sid], (err, results) => {
     if (err) {

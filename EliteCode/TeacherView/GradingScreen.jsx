@@ -30,7 +30,7 @@ function Question() {
 
   const handleSubmitGrade = async () => {
     try {
-        await fetch("https://elitecodecapstone24.onrender.com/instructorgradeSubmission", {
+        await fetch("https://elitecodecapstone24.onrender.com/instructor/gradeSubmission", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
