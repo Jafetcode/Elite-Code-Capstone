@@ -19,7 +19,7 @@ function ViewSubmission() {
         console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
         const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
         const data = await res.json();
-        console.log("getting submission", data[0].question)
+        console.log("getting submission", data.results[0].question)
         setSubmission(data.results[0]);
       } catch (error) {
         Alert.alert("Error", "Could not load your submission.", error);
@@ -69,7 +69,7 @@ function ViewSubmission() {
           {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
-            <Text style={styles.questionText}>{submission.question}</Text>
+            <Text style={styles.questionText}>{question.question}</Text>
 
             {submission.imgFile && (
               <View style={styles.imageContainer}>

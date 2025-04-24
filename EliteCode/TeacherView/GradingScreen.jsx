@@ -14,14 +14,14 @@ function Question() {
   const [feedback, setFeedback] = useState("");
   const [grade, setGrade] = useState("");
 
-  useEffect(() => {
+useEffect(() => {
     const fetchSubmission = async () => {
       try {
         console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
         const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
         const data = await res.json();
-        console.log("getting submission", data[0].question)
-        setSubmission(data[0]);
+        console.log("getting submission", data.results[0].question)
+        setSubmission(data.results[0]);
       } catch (error) {
         Alert.alert("Error", "Could not load your submission.", error);
       }
