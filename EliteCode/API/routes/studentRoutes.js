@@ -592,5 +592,36 @@ router.get("/getGrade", (req, res) => {
     res.json(gradeSummary);
   });
 });
+router.get("/getStudentGradebook", (req, res) => {
+  const { sid } = req.query;
+
+  const sql = `
+    SELECT
+      c.cid,
+      c.courseName,
+      c.description,
+      SUM(q.pointVal) AS total_possible,
+      SUM(COALESCE(s.grade, 0)) AS total_scored,
+      SUM(COALESCE(s.grade, 0)) / NULLIF(SUM(q.pointVal), 0) AS score_ratio
+    FROM Enrolled e
+    JOIN Classes c ON e.cid = c.cid
+    JOIN AssignedToClass atc ON e.cid = atc.cid
+    JOIN Questions q ON atc.qid = q.qid
+    LEFT JOIN Submissions s ON s.qid = q.qid AND s.sid = e.sid
+    WHERE e.sid = ?
+      AND (
+        s.grade IS NOT NULL
+        OR q.dueDate < CURDATE()
+      )
+    GROUP BY c.cid, c.courseName, c.description
+    ORDER BY c.courseName;
+  `;
+
+  db.query(sql, [sid], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ results });
+  });
+});
+
 
 module.exports = router;
