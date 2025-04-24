@@ -53,7 +53,7 @@ useEffect(() => {
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
-                <Card style={{ marginBottom: 20 }}>
+                <Card style={{ marginBottom: 20, marginTop: 50}}>
                     <Text category="h5">Grading for {student.fname} {student.lname}</Text>
                 </Card>
 
