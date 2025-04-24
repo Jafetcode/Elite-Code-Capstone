@@ -203,7 +203,7 @@ const Assigning = () => {
     };
 
     return (
-        <Layout style={{ flex: 1, padding: 16 }}>
+        <Layout style={{ flex: 1, padding: 36 }}>
             <Text category='h4' style={styles.heading}>Assign Question</Text>
             <Text category='s1' appearance='hint' style={styles.subHeading}>
                 Select classes or specific students
