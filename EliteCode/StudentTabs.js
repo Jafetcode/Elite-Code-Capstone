@@ -53,13 +53,17 @@ const StudentTabs = () => (
     />
     <Tab.Screen 
       name="Profile" 
-      component={ProfileStack} 
-      options={{ tabBarIcon: ({ color }) => <ProfileIcon color={color} /> }}
+      component={StudentProfile} 
+      options={{ tabBarIcon: ({ color }) => <ProfileIcon color={color} />,
+      headerShown: false  
+    }}
     />
     <Tab.Screen 
       name="Settings" 
       component={StudentSettings} 
-      options={{ tabBarIcon: ({ color }) => <SettingsIcon color={color} /> }}
+      options={{ tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
+      headerShown: false 
+     }}
     />
   </Tab.Navigator>
 );
