@@ -14,7 +14,7 @@ import {
   IconRegistry,
   Layout,
   Text,
-  Card
+  Card, Button
 } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import * as eva from "@eva-design/eva";
@@ -65,27 +65,27 @@ function StudentCourse() {
         setGrade("N/A");
         return;
       }
-  
+
       const data = JSON.parse(text);
       const {
         total_possible = 0,
         total_scored = 0,
         score_ratio = 0,
       } = data.results || {};
-  
+
       const pct = total_possible > 0
         ? (score_ratio * 100).toFixed(2)
         : "0.00";
-  
+
       setGrade(`${pct}% (${total_scored}/${total_possible})`);
     } catch (error) {
       console.error("Failed to fetch Grade", error);
       setGrade("N/A");
     }
   };
-  
-  
-  
+
+
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -94,76 +94,112 @@ function StudentCourse() {
     }, [user, cid])
   );
 
-  const renderAssignmentCard = (question) => (
-    <Card key={question.qid} style={styles.card}>
+  const renderAssignmentCard = (item) => (
+    <Card
+      key={item.qid}
+      style={{
+        borderRadius: 10,
+        marginBottom: 10,
+        backgroundColor: "#1E2A38",
+      }}
+    >
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("SubmitQuestion", {
-            qid: question.qid,
-              opt1: question.opt1,
-              opt2: question.opt2,
-              opt3: question.opt3,
+            qid: item.qid,
             cid: cid,
-            type: question.type
+            item,
+            type: item.type,
           })
         }
       >
         <View style={styles.cardHeader}>
-          <Text numberOfLines={1} style={styles.cardTopic}>
-            {question.topic}
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.questionText}>
+            {item.question}
           </Text>
-          <View style={styles.badgeType}>
-            <Text style={styles.badgeText}>{question.type}</Text>
+          <View style={styles.typeBadge}>
+            <Text style={styles.badgeText}>{item.type}</Text>
           </View>
         </View>
 
-        <Text numberOfLines={2} appearance="hint" style={styles.cardQuestion}>
-          {question.question}
-        </Text>
-
-        <View style={styles.cardFooter}>
-          <View style={{ flexDirection: "row", gap: 10 }}>
-            <Text appearance="hint">Due: {new Date(question.dueDate).toLocaleDateString()}</Text>
-            <Text appearance="hint">Points: {question.pointVal}</Text>
-          </View>
+        <View
+          style={[
+            styles.cardHeader,
+            { justifyContent: "space-between", marginTop: 6 },
+          ]}
+        >
+          <Text appearance="hint" style={{ fontSize: 14 }}>
+            Due: {new Date(item.dueDate).toLocaleDateString()}
+          </Text>
           <View
             style={[
-              styles.badgeStatus,
-              { backgroundColor: question.status === "Upcoming" ? "#D87D4A" : "#A94B4B" }
+              styles.statusBadge,
+              item.status === "Upcoming" ? styles.upcomingBadge : styles.pastDueBadge,
             ]}
           >
-            <Text style={styles.badgeText}>{question.status}</Text>
+            <Text style={styles.badgeText}>{item.status}</Text>
           </View>
+        </View>
+
+        <View style={styles.waitingContainer}>
+          {item.hasSubmitted || item.status === "Past Due" ? (
+            <Button
+              style={styles.submissionButton}
+              onPress={() => {
+                const dest =
+                  item.type === "ShortAns"
+                    ? "ErikaStudentHome"
+                    : "MCQStudentSubmission";
+                navigation.navigate(dest, {
+                  q: item,
+                  sid: user.userID,
+                });
+              }}
+            >
+              View submission
+            </Button>
+          ) : (
+            <Text style={styles.waitingText}>
+              {item.status === "Past Due"
+                ? "Never Responded."
+                : "Waiting for submission"}
+            </Text>
+          )}
         </View>
       </TouchableOpacity>
     </Card>
   );
+
 
   return (
     <Layout style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <Image
-                      source={require("../assets/images/FinalLogo2.png")}
-                      style={{
-                        width: 300,
-                        height: 150,
-                        marginTop: -10,
-                        marginBottom: -25,
-                        alignSelf: "center",
-                        resizeMode: "cover",
-                      }}
-                    />
+            source={require("../assets/images/FinalLogo2.png")}
+            style={{
+              width: 300,
+              height: 150,
+              marginTop: -10,
+              marginBottom: -25,
+              alignSelf: "center",
+              resizeMode: "cover",
+            }}
+          />
 
-          <Text category="h6" style={styles.courseTitle}>
-            {courseName}
-          </Text>
-          <Text appearance="hint" style={styles.courseCode}>
-            Course ID: {cid}
-          </Text>
-          <Text appearance="hint" style={styles.courseCode}>
-            Grade: {grade}
-          </Text>
+          <View style={styles.courseHeader}>
+            <Text style={styles.courseName}>{courseName}</Text>
+            <View style={styles.courseInfoRow}>
+              <Text style={styles.courseLabel}>Course ID:</Text>
+              <Text style={styles.courseValue}>{cid}</Text>
+            </View>
+            <View style={styles.courseInfoRow}>
+              <Text style={styles.courseLabel}>Grade:</Text>
+              <Text style={styles.courseValue}>{grade}</Text>
+            </View>
+          </View>
+
+
 
           <Text category="s1" style={styles.sectionHeader}>Class Assignments</Text>
           <View style={styles.assignmentBlock}>
@@ -226,7 +262,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     alignSelf: "flex-start",
-    marginTop: 20,
     marginBottom: 12,
   },
   assignmentBlock: {
@@ -276,6 +311,85 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
   },
+  questionText: {
+    flex: 1,
+    marginRight: 8,
+    fontSize: 14,
+    color: "white",
+  },
+  typeBadge: {
+    backgroundColor: "#3A4B5C",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  statusBadge: {
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  upcomingBadge: {
+    backgroundColor: "#D87D4A",
+  },
+  pastDueBadge: {
+    backgroundColor: "#A94B4B",
+  },
+  badgeText: {
+    color: "white",
+    fontSize: 12,
+  },
+  waitingContainer: {
+    alignItems: "center",
+    marginTop: 5,
+  },
+  waitingText: {
+    color: "#A9B7C6",
+    fontSize: 14,
+  },
+  submissionButton: {
+    backgroundColor: "#3A4B5C",
+    borderRadius: 10,
+    width: 320,
+    height: 40,
+  },
+  courseHeader: {
+    width: "100%",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 4,
+    marginTop: -20,
+  },
+  courseName: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    textAlign: "center",
+    marginBottom: 6,
+  },
+  courseInfoRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 4,
+  },
+  courseLabel: {
+    fontSize: 14,
+    color: "#94A3B8",
+    fontWeight: "600",
+    marginRight: 4,
+  },
+  courseValue: {
+    fontSize: 14,
+    color: "#E2E8F0",
+    fontWeight: "500",
+  },
+  
+
+
 });
 
 
