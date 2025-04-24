@@ -153,7 +153,7 @@ router.get('/submission', (req, res) => {
 });
 
 router.put('/gradeSubmission', (req, res) => {
-  const { qid, sid, grade, comment } = req.body;
+   const { qid, sid, grade, comment } = req.body;
   const sql = 'UPDATE Submissions set grade= ?, comment = ? where qid = ? and sid = ?';
   db.query(sql, [grade, comment, qid, sid], (err, results) => {
     if (err) {
@@ -452,7 +452,7 @@ router.get('/QsByStudent', (req, res) => {
   const tid = req.query.tid;
   const sid = req.query.sid;
   const sql = `SELECT DISTINCT 
-  q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate, s.sid
+  q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate,
   ats.viewable AS studentView,
   atc.viewable AS classView,
   s.submitted_on IS NOT NULL AS hasSubmitted
