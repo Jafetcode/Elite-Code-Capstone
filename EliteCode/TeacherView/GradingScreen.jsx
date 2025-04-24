@@ -17,15 +17,15 @@ function Question() {
   useEffect(() => {
     const fetchSubmission = async () => {
       try {
-        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.sid}`);
+        console.log("getting submission", "question: ", question.qid, "studnet:", student.userID)
+        const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
         const data = await res.json();
-        console.log("getting submission", data[0])
+        console.log("getting submission", data[0].question)
         setSubmission(data[0]);
       } catch (error) {
-        console.error("Error fetching submission", error);
+        Alert.alert("Error", "Could not load your submission.", error);
       }
     };
-
     fetchSubmission();
   }, [question, student]);
 
@@ -36,7 +36,7 @@ function Question() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 qid: question.qid,
-                sid: student.sid,
+                sid: student.userID,
                 grade: grade,
                 comment: feedback
             }),
