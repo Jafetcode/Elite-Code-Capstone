@@ -302,11 +302,36 @@ router.get("/getAllPastDueQuestions", async (req, res) => {
   try {
     const [classResults] = await db.promise().query(classSql, [sid, sid]);
     const [studentResults] = await db.promise().query(studentSql, [sid, sid]);
+    const processedClassResults = classResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    const processedStudentResults = studentResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
 
     res.json({
       results: {
-        pastDueClass: classResults || [],
-        pastDueStudent: studentResults || [],
+        pastDueClass: processedClassResults || [],
+        pastDueStudent: processedStudentResults || [],
       },
     });
   } catch (err) {
@@ -345,18 +370,43 @@ router.get("/getAllUpcomingQuestions", async (req, res) => {
   try {
     const [classResults] = await db.promise().query(classSql, [sid, sid]);
     const [studentResults] = await db.promise().query(studentSql, [sid, sid]);
+    
+    const processedClassResults = classResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
+    const processedStudentResults = studentResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
 
     res.json({
       results: {
-        upcomingClass: classResults || [],
-        upcomingStudent: studentResults || [],
+        upcomingClass: processedClassResults || [],
+        upcomingStudent: processedStudentResults || [],
       },
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 router.get("/getUpcomingCourseQuestions", async (req, res) => {
   const { sid, cid } = req.query;
@@ -374,7 +424,19 @@ router.get("/getUpcomingCourseQuestions", async (req, res) => {
 
   try {
     const [classResults] = await db.promise().query(classSql, [sid, cid]);
+    const results = results.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg'; 
+        const buffer = Buffer.from(row.imgFile); 
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
 
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
     res.json({
       results: {
         upcomingClass: classResults || [],
@@ -422,8 +484,21 @@ router.get("/submission", (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    const updatedResults = classResults.map(row => {
+      let base64Image = null;
+      if (row.imgFile) {
+        const mimeType = 'image/jpeg';
+        const buffer = Buffer.from(row.imgFile);
+        base64Image = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      }
+      return {
+        ...row,
+        imgFile: base64Image
+      };
+    });
+
     console.log(results);
-    res.json(results);
+    res.json({results: updatedResults });
   });
 });
 

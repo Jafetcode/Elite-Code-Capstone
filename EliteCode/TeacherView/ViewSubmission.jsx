@@ -71,7 +71,7 @@ function ViewSubmission() {
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{submission.question}</Text>
 
-            {/* {submission.imgFile && (
+            {submission.imgFile && (
               <View style={styles.imageContainer}>
                 <Image
                   source={{ uri: submission.imgFile }}
@@ -79,7 +79,7 @@ function ViewSubmission() {
                   resizeMode="cover"
                 />
               </View>
-            )} */}
+            )}
           </View>
 
           {/* Student's Response section */}
