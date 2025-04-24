@@ -20,7 +20,7 @@ function ViewSubmission() {
         const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${question.qid}&sid=${student.userID}`);
         const data = await res.json();
         console.log("getting submission", data[0].question)
-        setSubmission(data[0]);
+        setSubmission(data.results[0]);
       } catch (error) {
         Alert.alert("Error", "Could not load your submission.", error);
       }

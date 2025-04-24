@@ -21,7 +21,7 @@ const ErikaStudentHome = () => {
       try {
         const res = await fetch(`https://elitecodecapstone24.onrender.com/student/submission?qid=${q.qid}&sid=${sid}`);
         const data = await res.json();
-        setQuestion(data[0]);
+        setQuestion(data.results[0]);
       } catch (error) {
         Alert.alert("Error", "Could not load your submission.", error);
       }
