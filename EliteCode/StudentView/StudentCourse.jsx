@@ -26,6 +26,7 @@ function StudentCourse() {
   const route = useRoute();
   const { cid, courseName } = route.params;
   const { user } = useAuth();
+  const [grade, setGrade] = React.useState("");
 
   const [allAssignments, setAllAssignments] = React.useState([]);
 
@@ -53,9 +54,43 @@ function StudentCourse() {
     }
   };
 
+  const fetchGrade = async () => {
+    try {
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/getGrade?sid=${user.userID}&cid=${cid}`
+      );
+      const text = await res.text();
+      if (!res.ok) {
+        console.error("Grade fetch failed:", res.status, text);
+        setGrade("N/A");
+        return;
+      }
+  
+      const data = JSON.parse(text);
+      const {
+        total_possible = 0,
+        total_scored = 0,
+        score_ratio = 0,
+      } = data.results || {};
+  
+      const pct = total_possible > 0
+        ? (score_ratio * 100).toFixed(2)
+        : "0.00";
+  
+      setGrade(`${pct}% (${total_scored}/${total_possible})`);
+    } catch (error) {
+      console.error("Failed to fetch Grade", error);
+      setGrade("N/A");
+    }
+  };
+  
+  
+  
+
   useFocusEffect(
     React.useCallback(() => {
       fetchAssignments();
+      fetchGrade();
     }, [user, cid])
   );
 
@@ -109,15 +144,25 @@ function StudentCourse() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <Image
-            source={require("../assets/images/FinalLogo2.png")}
-            style={styles.logo}
-          />
+                      source={require("../assets/images/FinalLogo2.png")}
+                      style={{
+                        width: 300,
+                        height: 150,
+                        marginTop: -10,
+                        marginBottom: -25,
+                        alignSelf: "center",
+                        resizeMode: "cover",
+                      }}
+                    />
 
           <Text category="h6" style={styles.courseTitle}>
             {courseName}
           </Text>
           <Text appearance="hint" style={styles.courseCode}>
             Course ID: {cid}
+          </Text>
+          <Text appearance="hint" style={styles.courseCode}>
+            Grade: {grade}
           </Text>
 
           <Text category="s1" style={styles.sectionHeader}>Class Assignments</Text>
@@ -148,76 +193,89 @@ export default () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#2C496B"
+    backgroundColor: "#2C496B",
+    paddingHorizontal: 20,
   },
   content: {
-    marginTop: 40
+    marginTop: 70,
+    paddingBottom: 40,
+    alignItems: "center",
   },
   logo: {
     width: 300,
     height: 150,
     alignSelf: "center",
     resizeMode: "cover",
-    marginBottom: -10
+    marginBottom: -10,
   },
   courseTitle: {
-    color: "white",
     fontSize: 18,
     fontWeight: "600",
+    color: "white",
     textAlign: "center",
-    marginTop: 10
+    marginTop: 10,
   },
   courseCode: {
+    fontSize: 14,
+    color: "#A9B7C6",
     textAlign: "center",
-    marginBottom: 20
+    marginBottom: 4,
   },
   sectionHeader: {
-    marginTop: 20,
-    marginBottom: 10,
-    color: "white",
+    fontSize: 16,
     fontWeight: "bold",
-    fontSize: 16
+    color: "white",
+    alignSelf: "flex-start",
+    marginTop: 20,
+    marginBottom: 12,
   },
   assignmentBlock: {
-    marginBottom: 15
+    width: "100%",
+    marginBottom: 15,
   },
   card: {
+    backgroundColor: "#1E2A38",
     borderRadius: 10,
+    padding: 16,
     marginBottom: 10,
-    backgroundColor: "#1E2A38"
   },
   cardHeader: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
-    alignItems: "center"
   },
   cardTopic: {
     fontSize: 14,
-    color: "white"
+    color: "white",
+    flex: 1,
+    marginRight: 8,
   },
   cardQuestion: {
-    marginVertical: 4,
-    color: "#A9B7C6"
+    color: "#A9B7C6",
+    fontSize: 14,
+    marginVertical: 6,
   },
   cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 6,
   },
   badgeType: {
     backgroundColor: "#3A4B5C",
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 2
+    paddingVertical: 2,
   },
   badgeStatus: {
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 2
+    paddingVertical: 2,
   },
   badgeText: {
     color: "white",
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 });
+
+
