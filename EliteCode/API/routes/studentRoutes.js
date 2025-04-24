@@ -561,9 +561,9 @@ router.get("/getGrade", (req, res) => {
   const { sid, cid } = req.query;
   const sql = `
   SELECT
-    SUM(q.pointVal)               AS total_possible,
-    SUM(COALESCE(s.grade, 0))     AS total_scored,
-    SUM(COALESCE(s.grade, 0)) / SUM(q.pointVal) AS score_ratio
+    SUM(q.pointVal) AS total_possible,
+    SUM(COALESCE(s.grade, 0)) AS total_scored,
+    SUM(COALESCE(s.grade, 0)) / NULLIF(SUM(q.pointVal), 0) AS score_ratio
   FROM Enrolled e
   JOIN AssignedToClass atc
     ON e.cid = atc.cid
@@ -580,7 +580,6 @@ router.get("/getGrade", (req, res) => {
       OR q.dueDate < CURDATE()
     )
 `;
-
   db.query(sql, [sid, cid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
