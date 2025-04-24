@@ -431,7 +431,7 @@ router.get("/MCQsubmission", (req, res) => {
   });
 })
 
-router.get("/getSkills", (req, res) => {
+router.get("/getSkills", async (req, res) => {
   const { sid } = req.query;
   const sql =
     "SELECT skill FROM StudentSkills WHERE sid = ?;";
@@ -445,6 +445,18 @@ router.get("/getSkills", (req, res) => {
   });
 });
 
+router.post("/addSkill", async (req, res) => {
+  const { sid, skill } = req.body;
+  const sql = `
+    INSERT INTO StudentSkills (sid, skill)
+    VALUES (?, ?);`;
+  db.query(sql, [sid, skill.trim()], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({results});
+  });
+});
 
 
 module.exports = router;

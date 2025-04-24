@@ -3,9 +3,9 @@ import {
   View,
   Image,
   ScrollView,
-  TouchableOpacity,
   Alert,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
@@ -16,6 +16,8 @@ import {
   Text,
   Icon,
   Card,
+  Modal,
+  Input,
 } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
@@ -25,6 +27,8 @@ function StudentProfile() {
   const navigation = useNavigation();
   const { user } = useAuth();
   const [skills, setSkills] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [newSkill, setNewSkill] = useState("");
 
   if (!user) {
     Alert.alert("Unauthorized", "You need to log in first.", [
@@ -39,20 +43,47 @@ function StudentProfile() {
         `https://elitecodecapstone24.onrender.com/student/getSkills?sid=${user.userID}`
       );
       const data = await res.json();
-      setSkills(data.results || []);
-      console.log(skills);
-      console.log(user.userID);
+      setSkills(data.map((item) => item.skill));
     } catch (error) {
       console.error("Failed to fetch skills:", error);
       Alert.alert("Error", "Could not load your skills.");
     }
   };
 
+  const handleAddSkill = async () => {
+    if (!newSkill.trim()) {
+      Alert.alert("Error", "Please enter a skill.");
+      return;
+    }
+    try {
+      const res = await fetch(
+        "https://elitecodecapstone24.onrender.com/student/addSkill",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sid: user.userID,
+            skill: newSkill.trim(),
+          }),
+        }
+      );
+      const data = await res.json();
+      if (res.ok) {
+        Alert.alert("Success", data.message || "Skill added!");
+        setNewSkill("");
+        fetchSkills();
+      } else {
+        Alert.alert("Error", data.error || JSON.stringify(data));
+      }
+    } catch (err) {
+      console.error("Failed to add skill:", err);
+      Alert.alert("Error", "Could not add skill.");
+    }
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      if (user?.userID) {
-        fetchSkills();
-      }
+      if (user.userID) fetchSkills();
     }, [user.userID])
   );
 
@@ -76,17 +107,24 @@ function StudentProfile() {
             style={styles.button}
             onPress={() => navigation.navigate("EditProfile")}
           >
-            {'Edit Profile'}
+            Edit Profile
           </Button>
         </Card>
 
-        {/* Skills Section */}
-        <Text style={styles.sectionHeader}>Skills</Text>
+        <View style={styles.sectionHeaderRow}>
+          <Text style={styles.sectionHeader}>Skills</Text>
+          <TouchableOpacity onPress={() => setVisible(true)}>
+            <Text appearance="hint">
+              Add Skill
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <Layout style={styles.languageContainer}>
           {skills.length > 0 ? (
-            skills.map((item) => (
-              <Button key={item.skill} size="tiny" style={styles.langButton}>
-                {item.skill}
+            skills.map((skill) => (
+              <Button key={skill} size="tiny" style={styles.langButton}>
+                {skill}
               </Button>
             ))
           ) : (
@@ -95,13 +133,32 @@ function StudentProfile() {
         </Layout>
       </ScrollView>
 
-      {/* Footer */}
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerLine1}>Stay curious. Stay coding.</Text>
-        <Text style={styles.footerLine2}>
-          EliteCode © 2025 — Red Panda Studios
-        </Text>
-      </View>
+      <Modal
+        visible={visible}
+        backdropStyle={styles.backdrop}
+        onBackdropPress={() => setVisible(false)}
+      >
+        <Card disabled style={styles.modalCard}>
+          <Text category="s1" style={styles.modalTitle}>
+            Add New Skill
+          </Text>
+          <Input
+            placeholder="Skill name"
+            value={newSkill}
+            onChangeText={setNewSkill}
+            style={styles.modalInput}
+          />
+          <Button
+            style={styles.modalButton}
+            onPress={() => {
+              handleAddSkill();
+              setVisible(false);
+            }}
+          >
+            Add
+          </Button>
+        </Card>
+      </Modal>
     </Layout>
   );
 }
@@ -129,8 +186,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#1E2A38",
     borderRadius: 15,
     padding: 20,
-    marginBottom: 20,
     marginTop: 50,
+    marginBottom: 20,
     borderColor: "#334154",
   },
   profileImage: {
@@ -151,8 +208,8 @@ const styles = StyleSheet.create({
   tagline: {
     color: "#A9B7C6",
     fontSize: 16,
-    marginBottom: 10,
     textAlign: "center",
+    marginBottom: 10,
   },
   button: {
     backgroundColor: "#3A4B5C",
@@ -161,11 +218,21 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingLeft: 0,
   },
+  // Header row for Skills + Add link
+  sectionHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
   sectionHeader: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
+  },
+  addLink: {
+    color: "#A9B7C6",
+    textDecorationLine: "underline",
   },
   languageContainer: {
     flexDirection: "row",
@@ -179,6 +246,31 @@ const styles = StyleSheet.create({
   langButton: {
     margin: 5,
     backgroundColor: "#3A4B5C",
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalCard: {
+    width: 240,
+    alignSelf: "center",
+    borderRadius: 10,
+    backgroundColor: "#1E2A38",
+    borderColor: "#334154",
+    padding: 20,
+  },
+  modalTitle: {
+    textAlign: "center",
+    color: "white",
+    marginBottom: 10,
+  },
+  modalInput: {
+    marginBottom: 15,
+    backgroundColor: "#253243",
+    borderRadius: 8,
+  },
+  modalButton: {
+    backgroundColor: "#3A4B5C",
+    borderRadius: 8,
   },
   footerContainer: {
     position: "absolute",
