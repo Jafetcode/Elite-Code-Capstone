@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Image,
@@ -7,7 +7,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
   ApplicationProvider,
   IconRegistry,
@@ -33,15 +33,28 @@ function StudentProfile() {
     return null;
   }
 
-  useEffect(() => {
-    fetch(`https://elitecodecapstone24.onrender.com/student/getSkills?sid=${user.userID}`)
-      .then((res) => res.json())
-      .then((data) => setSkills(data.map((item) => item.skill)))
-      .catch((err) => {
-        console.error("Failed to load skills:", err);
-        Alert.alert("Error", "Could not load your skills.");
-      });
-  }, [user.userID]);
+  const fetchSkills = async () => {
+    try {
+      const res = await fetch(
+        `https://elitecodecapstone24.onrender.com/student/getSkills?sid=${user.userID}`
+      );
+      const data = await res.json();
+      setSkills(data.results || []);
+      console.log(skills);
+      console.log(user.userID);
+    } catch (error) {
+      console.error("Failed to fetch skills:", error);
+      Alert.alert("Error", "Could not load your skills.");
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user?.userID) {
+        fetchSkills();
+      }
+    }, [user.userID])
+  );
 
   return (
     <Layout style={styles.containerMain}>
@@ -71,9 +84,9 @@ function StudentProfile() {
         <Text style={styles.sectionHeader}>Skills</Text>
         <Layout style={styles.languageContainer}>
           {skills.length > 0 ? (
-            skills.map((skill) => (
-              <Button key={skill} size="tiny" style={styles.langButton}>
-                {skill}
+            skills.map((item) => (
+              <Button key={item.skill} size="tiny" style={styles.langButton}>
+                {item.skill}
               </Button>
             ))
           ) : (
