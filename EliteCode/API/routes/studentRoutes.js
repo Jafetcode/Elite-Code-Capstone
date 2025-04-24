@@ -498,7 +498,7 @@ router.get("/submission", (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    const updatedResults = classResults.map(row => {
+    const updatedResults = results.map(row => {
       let base64Image = null;
       if (row.imgFile) {
         const mimeType = 'image/jpeg';
