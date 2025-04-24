@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, ScrollView, Image, KeyboardAvoidingView, Platform} from "react-native";
+import { View, TextInput, ScrollView, Image} from "react-native";
 import { Layout, Button, Text, Card, Input } from "@ui-kitten/components";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useAuth } from "../AuthContext";
@@ -53,7 +53,7 @@ useEffect(() => {
   return (
     <Layout style={{ flex: 1, padding: 20, backgroundColor: "#2C496B" }}>
             <ScrollView>
-                <Card style={{ marginBottom: 20, marginTop: 50}}>
+                <Card style={{ marginBottom: 20 }}>
                     <Text category="h5">Grading for {student.fname} {student.lname}</Text>
                 </Card>
 
@@ -75,9 +75,6 @@ useEffect(() => {
                 )}
 
                 <Card style={{ marginBottom: 20 }}>
-                <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
                     <Text category="h6">Enter Grade:</Text>
                     <Input
                         placeholder="e.g. 20/30"
@@ -86,7 +83,6 @@ useEffect(() => {
                         keyboardType="numeric"
                         style={{ marginTop: 10 }}
                     />
-                    </KeyboardAvoidingView>
                 </Card>
 
                 <Card style={{ marginBottom: 20 }}>
