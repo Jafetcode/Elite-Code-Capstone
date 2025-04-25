@@ -33,8 +33,6 @@ function QsByCourse() {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/questions?cid=${cid}`);
             const data = await res.json();
             setQuestions(data.results);
-            console.log("questions", data.results)
-
         } catch (error) {
             console.error("Failed to fetch", error);
         }

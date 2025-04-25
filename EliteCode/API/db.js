@@ -19,7 +19,6 @@ db.connect((err) => {
     }
     console.log('Connected to database');
     
-    // Log the current database
     db.query('SELECT DATABASE()', (err, results) => {
       if (err) {
         console.error('Error fetching database name:', err);

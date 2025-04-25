@@ -34,7 +34,6 @@ function TeacherCreateQuestion() {
   const [question, setQuestion] = React.useState("");
   const [pointVal, setPointVal] = React.useState("");
   const [topic, setTopic] = React.useState("");
-  // const [] = React.useState(null);
   const [imgFile, setImgFile] = React.useState(null);
   const [option1, setOption1] = React.useState("");
   const [option2, setOption2] = React.useState("");
@@ -161,7 +160,6 @@ function TeacherCreateQuestion() {
 
   const handleTypeChange = (selectedIndex) => {
     setType(selectedIndex === 0 ? "MCQ" : "ShortAns");
-    console.log("Selected type:", selectedIndex === 0 ? "MCQ" : "ShortAns");
   };
   const handleSelectChange = (index) => {
     const options = [option1, option2, option3];

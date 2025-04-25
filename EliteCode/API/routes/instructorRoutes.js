@@ -191,19 +191,6 @@ router.get('/questions', (req, res) => {
   });
 });
 
-// router.get('/allQuestions', (req, res) => {
-//   const tid = req.query.tid;
-//   const sql = 'SELECT q.qid, q.question, q.description, q.pointVal, q.imgFile, q.topic, q.type, q.dueDate ' +
-//     'From Questions q Where tid = ?';
-//   db.query(sql, [tid], (err, results) => {
-//     if (err) {
-//       return res.status(500).json({ error: err.message });
-//     }
-//     res.json({ results });
-
-//   });
-// });
-
 router.get('/allQuestions', (req, res) => {
   const tid = req.query.tid;
 
@@ -476,5 +463,4 @@ WHERE q.tid = ?;
 
 
 
-// Export the router
 module.exports = router;
