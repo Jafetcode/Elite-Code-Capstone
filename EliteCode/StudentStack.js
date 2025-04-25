@@ -4,7 +4,7 @@ import StudentCourse from './StudentView/StudentCourse';
 import StudentProfile from './StudentView/StudentProfile';
 import StudentQuestion from './StudentView/StudentQuestion';
 import StudentSettings from './StudentView/StudentSettings';
-import ErikaStudentHome from './StudentView/ErikaStudentHome';
+import ErikaStudentHome from './StudentView/StudentViewSubmssion';
 import AndryStudentHome from './StudentView/AndryStudentHome';
 import JafetStudentHome from './StudentView/JafetStudentHome';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

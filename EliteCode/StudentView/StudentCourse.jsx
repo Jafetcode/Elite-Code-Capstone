@@ -148,7 +148,7 @@ function StudentCourse() {
               onPress={() => {
                 const dest =
                   item.type === "ShortAns"
-                    ? "ErikaStudentHome"
+                    ? "StudentViewSubmission"
                     : "MCQStudentSubmission";
                 navigation.navigate(dest, {
                   q: item,

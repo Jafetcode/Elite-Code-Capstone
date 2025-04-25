@@ -7,8 +7,6 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { useAuth } from "../AuthContext";
 import { useRoute } from '@react-navigation/native';
 
-// import { SlideInDown } from "react-native-reanimated";
-
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 function QuestionsAssignedToStudent() {
@@ -73,7 +71,6 @@ function QuestionsAssignedToStudent() {
                                         {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
                                         <View><Text category="s2">Due: {String(formatDate(question.dueDate))}</Text></View>
                                         <Text category="s2">Worth: {String(question.pointVal)} Points</Text>
-                                        {/* <View><Text category="s2">{question.imgFile}</Text></View> */}
                                         {question.hasSubmitted ? (
                                             <View style={styles.container}>
                                                 <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("Question", { q: question, s: student })} > Grade question </Button>

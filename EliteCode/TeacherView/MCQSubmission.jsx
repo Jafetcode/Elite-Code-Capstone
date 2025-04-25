@@ -28,7 +28,6 @@ const MCQSubmission = () => {
 
   const questionData = {
     question: q.question,
-    imageUrl: "/api/placeholder/400/200", 
     options: [
       { id: "A", text: submissionInfo.opt1, isCorrect: (submissionInfo.opt1 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt1 == submissionInfo.answer) },
       { id: "B", text: submissionInfo.opt2, isCorrect: (submissionInfo.opt2 == submissionInfo.correctAns), studentSelected: (submissionInfo.opt2 == submissionInfo.answer) },
@@ -61,7 +60,7 @@ const MCQSubmission = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.contentContainer}>
-          {/* Header with score information */}
+
           <View style={styles.headerContainer}>
             <View style={styles.scoreSection}>
               <Text style={styles.scoreText}>
@@ -79,13 +78,11 @@ const MCQSubmission = () => {
             </Text>
           </View>
 
-          {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{questionData.question}</Text>
           </View>
 
-          {/* Options section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Options</Text>
             {questionData.options.map((option) => (
@@ -122,7 +119,6 @@ const MCQSubmission = () => {
             ))}
           </View>
 
-          {/* Explanation section */}
           {questionData.explanation ? (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Comments</Text>

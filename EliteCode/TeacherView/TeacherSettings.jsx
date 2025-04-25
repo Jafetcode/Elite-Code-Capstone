@@ -14,10 +14,8 @@ function TeacherSettings() {
   const handleLogout = async () => {
     try {
       await logout();
-      // Changed: Using template literal to display email in the alert
       Alert.alert('Logout successful!');
     } catch (error) {
-      // Changed: Using error.message instead of error object for the Alert
       Alert.alert('Invalid Logout');
     }
   };
@@ -40,20 +38,6 @@ function TeacherSettings() {
               style={{ width: 300, height: 150}}
             />
   
-{/* 
-      <ListItem title="Notifications" description="Turn on or off" />
-
-      <ListItem title="Font-size" description="Change font size" />
-
-      <ListItem title="Security" description="Change your password" />
-
-      <ListItem title="Brightness" description="Light or dark mode" />
-
-      <ListItem title="Language" description="Change language" />
-
-      <ListItem title="FAQ" description="Frequently asked questions" />
-
-      <ListItem title="About" description="App information" /> */}
 
       <ListItem title="Logout" onPress={handleLogout} />
 
@@ -65,8 +49,7 @@ export default () => (
   <Layout style={
     {
       flex: 1,
-      // justifyContent: 'center', 
-      // alignItems: 'center' 
+
     }
   }>
     <TeacherSettings />

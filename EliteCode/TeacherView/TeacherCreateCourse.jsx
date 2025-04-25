@@ -7,8 +7,6 @@ import { ApplicationProvider, IconRegistry, Layout, Button, Text, Icon, Card, In
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 
-
-
 function TeacherCreateCourse() {
     const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
     const navigation = useNavigation();
@@ -74,11 +72,6 @@ function TeacherCreateCourse() {
                     </View>
                     <Input placeholder='Type Description Here' value={description} onChangeText={setDescription} maxLength={200}/>
 
-                    {/* <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5 }}>
-                                    <Text category="h5">Course Code *</Text>
-                                </View>
-                                <Input placeholder='Write the code for the course here. This is what your students will type to join your course' 
-                                value={courseCode} onChangeText={setCourseCode} /> */}
                 </View>
                 <Button onPress={handleCreateCourse} disabled={!courseName}> Create Course</Button>
             </ScrollView>

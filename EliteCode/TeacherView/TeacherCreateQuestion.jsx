@@ -34,7 +34,6 @@ function TeacherCreateQuestion() {
   const [question, setQuestion] = React.useState("");
   const [pointVal, setPointVal] = React.useState("");
   const [topic, setTopic] = React.useState("");
-  // const [] = React.useState(null);
   const [imgFile, setImgFile] = React.useState(null);
   const [option1, setOption1] = React.useState("");
   const [option2, setOption2] = React.useState("");
@@ -276,7 +275,7 @@ function TeacherCreateQuestion() {
                 style={{ marginBottom: 5 }}
                 maxLength={200}
               />
-              {/* work on tommorow*/}
+
               <Text category="h5" style={{ marginBottom: 5 }}>
                 Select Correct Answer
               </Text>

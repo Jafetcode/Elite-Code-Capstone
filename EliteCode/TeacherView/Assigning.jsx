@@ -64,7 +64,6 @@ const Assigning = () => {
         setSelectedStudents(prev => {
             const newSelection = { ...prev, [studentId]: !prev[studentId] };
 
-            // If a student is unchecked, also uncheck the class
             if (!newSelection[studentId]) {
                 setSelectedClasses(prevClasses => ({
                     ...prevClasses,

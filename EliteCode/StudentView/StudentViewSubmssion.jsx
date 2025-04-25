@@ -7,7 +7,7 @@ import { ApplicationProvider, Button, Layout, Card, Modal, Input, } from "@ui-ki
 import { useRoute } from '@react-navigation/native';
 
 
-const ErikaStudentHome = () => {
+const StudentViewSubmission = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { user } = useAuth();
@@ -44,7 +44,7 @@ const ErikaStudentHome = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.contentContainer}>
-          {/* Header with score information */}
+
           <View style={styles.headerContainer}>
             {question.grade ? (
               <View style={styles.scoreSection}>
@@ -79,13 +79,11 @@ const ErikaStudentHome = () => {
             )} */}
           </View>
 
-          {/* Student's Response section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Your Response</Text>
             <Text style={styles.responseText}>{question.answer}</Text>
           </View>
 
-          {/* Teacher's Comments section */}
           {question.comment && (
             <View style={[styles.section, styles.commentsSection]}>
               <Text style={styles.sectionTitle}>Teacher's Comments</Text>
@@ -199,7 +197,7 @@ const styles = StyleSheet.create({
 function AppWrapper(props = {}) {
   return (
     <Layout style={{ flex: 1, padding: 16 }}>
-      <ErikaStudentHome />
+      <StudentViewSubmission />
     </Layout>
   );
 }
