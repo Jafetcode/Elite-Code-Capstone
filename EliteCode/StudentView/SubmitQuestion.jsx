@@ -102,18 +102,20 @@ function SubmitQuestion() {
     try {
       const formData = new FormData();
       const currentDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+      // const calculatedGrade = type === "MCQ" && correctAns === answer ? questionData?.pointVal : 0;
 
       console.log('Submitting answer:', answer);
       console.log('Correct answer:', correctAns);
       console.log('Question type:', type);
+
       formData.append("qid", qid);
       formData.append("sid", user.userID);
       formData.append("answer", answer.toString());
       formData.append("type", type);
       formData.append("progress", "submitted");
       formData.append("submitted_on", currentDate);
-      formData.append("pointVal", item.pointVal);
-      
+      formData.append("pointVal", item.pointVal)
+      // formData.append("grade", calculatedGrade);
       if (file) {
         formData.append("file", {
           uri: file.uri,
@@ -140,6 +142,7 @@ function SubmitQuestion() {
       console.log("Response:", data);
       if (response.ok) {
         setProgress("submitted");
+        // setGrade(calculatedGrade); 
         alert("Question submitted successfully!");
         navigation.navigate("StudentHome");
     
@@ -244,11 +247,11 @@ function SubmitQuestion() {
     const selectedAnswer = options[index];
     setAnswer(selectedAnswer);
     console.log('Selected answer:', selectedAnswer, 'index:', index);
-  }}>
+  }}
+>
   <Radio>{questionData?.opt1 || item?.opt1}</Radio>
   <Radio>{questionData?.opt2 || item?.opt2}</Radio>
   <Radio>{questionData?.opt3 || item?.opt3}</Radio>
-
 </RadioGroup>
     </View>
   </View>

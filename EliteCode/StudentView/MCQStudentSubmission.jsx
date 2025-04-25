@@ -35,10 +35,12 @@ const MCQStudentSubmission = () => {
 
   const questionData = {
     question: q.question,
+    imageUrl: "/api/placeholder/400/200", // Optional image
     options: [
       { id: "A", text: q.opt1, isCorrect: (q.opt1 == submission.correctAns), studentSelected: (q.opt1 == submission.answer) },
       { id: "B", text: q.opt2, isCorrect: (q.opt2 == submission.correctAns), studentSelected: (q.opt2 == submission.answer) },
       { id: "C", text: q.opt3, isCorrect: (q.opt3 == submission.correctAns), studentSelected: (q.opt3 == submission.answer) },
+      // { id: "D", text: "Blue", isCorrect: false, studentSelected: false }
     ],
     comment: submission.comment,
     submittedAt: submission.submitted_on,
@@ -49,6 +51,7 @@ const MCQStudentSubmission = () => {
     }
   };
 
+  // Format date and time for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -65,8 +68,7 @@ const MCQStudentSubmission = () => {
       <ScrollView style={styles.scrollView}>
 
         <View style={styles.contentContainer}>
-   
-
+          {/* Header with score information */}
           <View style={styles.headerContainer}>
             <View style={styles.scoreSection}>
               <Text style={styles.scoreText}>
@@ -84,7 +86,7 @@ const MCQStudentSubmission = () => {
             </Text>
           </View>
 
-
+          {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{questionData.question}</Text>
@@ -137,7 +139,7 @@ const MCQStudentSubmission = () => {
             ))}
           </View>
 
-
+          {/* Comment section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Comment</Text>
             <Text style={styles.explanationText}>{questionData.comment}</Text>

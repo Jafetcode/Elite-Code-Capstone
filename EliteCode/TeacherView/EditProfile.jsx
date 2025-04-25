@@ -10,6 +10,7 @@ import { useAuth } from "../AuthContext";
 function EditProfile() {
     const navigation = useNavigation();
     const { user, setUser } = useAuth();
+  
     const [fname, setfName] = React.useState(user.fname);
     const [lname, setlName] = React.useState(user.lname);
     const [bio, setBio] = React.useState(user.bio);

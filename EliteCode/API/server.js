@@ -10,6 +10,8 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const fs = require("fs");
+
+
 require('dotenv').config();
 
 app.use(cors());
@@ -21,7 +23,7 @@ app.use("/instructor", instructorRoutes);
 app.get('/api/welcome', (req, res) => {
   res.status(200).send({ message: "Welcome to elitecode API" });
 })
-
+// get user role 
 app.get('/userRole', (req, res) => {
   const { email } = req.query;
   if (!email) {
@@ -136,7 +138,7 @@ app.put('/user/:userID', (req, res) => {
   });
 });
 
-app.listen(port, '0.0.0.0', () => { 
+app.listen(port, '0.0.0.0', () => {  // Ensure it listens on all network interfaces
   console.log(`Server running on port ${port}`);
 });
 

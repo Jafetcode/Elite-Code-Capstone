@@ -40,6 +40,8 @@ function TeacherCreateCourse() {
                 alert('Error: ' + JSON.stringify(data));
             }
         } catch (error) {
+            console.log(courseName);
+            console.log(description);
             alert("Network error: " + error.message);
         }
 

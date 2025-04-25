@@ -78,7 +78,7 @@ function TeacherHome() {
                                 <View>
                                     <Text category="s2">Enrolled: {course.NumEnrolled}      Course Code: {course.cid}  </Text>
                                 </View>
-
+                                {/* </TouchableOpacity> */}
                                 <View style={styles.container}>
                                     <Button size="small" style={{ margin: 5, width: 140 }} onPress={() => navigation.navigate('Classlist', { cid: course.cid,  cName: course.courseName})}>
                                         Classlist

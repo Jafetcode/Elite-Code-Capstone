@@ -7,12 +7,16 @@ const MCQSubmission = () => {
   const route = useRoute();
   const { q, s } = route.params;
   const [submissionInfo, setInfo] = useState({});
+  console.log(q.pointVal, s.fname)
+
 
   useEffect(() => {
     const fetchSubmission = async () => {
       try {
+        console.log("getting submission", "question: ", q.qid, "studnet:", s.userID)
         const res = await fetch(`https://elitecodecapstone24.onrender.com/student/MCQsubmission?qid=${q.qid}&sid=${s.userID}`);
         const data = await res.json();
+        console.log("getting submission", data[0].opt1)
         setInfo(data[0]);
       } catch (error) {
         Alert.alert("Error", "Could not load your submission.", error);
@@ -20,6 +24,7 @@ const MCQSubmission = () => {
     };
     fetchSubmission();
   }, [q.qid, s.sid]);
+  console.log("sub info", submissionInfo)
 
   const questionData = {
     question: q.question,
@@ -56,7 +61,7 @@ const MCQSubmission = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.contentContainer}>
-
+          {/* Header with score information */}
           <View style={styles.headerContainer}>
             <View style={styles.scoreSection}>
               <Text style={styles.scoreText}>
@@ -74,11 +79,13 @@ const MCQSubmission = () => {
             </Text>
           </View>
 
+          {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{questionData.question}</Text>
           </View>
 
+          {/* Options section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Options</Text>
             {questionData.options.map((option) => (
@@ -115,6 +122,7 @@ const MCQSubmission = () => {
             ))}
           </View>
 
+          {/* Explanation section */}
           {questionData.explanation ? (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Comments</Text>

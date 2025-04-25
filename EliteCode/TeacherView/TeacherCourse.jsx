@@ -15,6 +15,7 @@ function TeacherCourse(){
     const getQuestions = async() => {
         try {
             setCourses =  await fetch(`https://elitecodecapstone24.onrender.com/instructor/courses?tid=${user.uid}`);
+            console.log(courses)
         } catch(error){
             console.log('Error occurred')
         }

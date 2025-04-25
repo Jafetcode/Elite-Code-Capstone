@@ -24,7 +24,9 @@ const Assigning = () => {
         try {
             const res = await fetch(`https://elitecodecapstone24.onrender.com/instructor/${user.userID}/courses`);
             const courses = await res.json();
+            console.log("course, ", courses)
             setClasses(courses);
+
             const assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
             const assignmentData = await assignmentRes.json();
 
@@ -62,6 +64,7 @@ const Assigning = () => {
         setSelectedStudents(prev => {
             const newSelection = { ...prev, [studentId]: !prev[studentId] };
 
+            // If a student is unchecked, also uncheck the class
             if (!newSelection[studentId]) {
                 setSelectedClasses(prevClasses => ({
                     ...prevClasses,

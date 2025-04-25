@@ -38,6 +38,7 @@ const TeacherStack = () => (
     <Stack.Screen name="Manage Course" component={TeacherManageCourse} options={{ headerShown: false }}/>
     <Stack.Screen name="TeacherManageQuestion" component={TeacherManageQuestion} options={{ headerShown: false }}/>
     <Stack.Screen name="EditProfile" component={EditProfile}/>
+    {/* <Stack.Screen name="SubmitQuestion" component={SubmitQuestion} /> */}
     <Stack.Screen name="Submission" component={ViewSubmission} options={{ headerShown: false }}/>
     <Stack.Screen name="MCQSubmission" component={MCQSubmission} options={{headerShown: false}}/>    
 

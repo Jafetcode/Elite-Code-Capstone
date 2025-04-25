@@ -14,8 +14,10 @@ function TeacherSettings() {
   const handleLogout = async () => {
     try {
       await logout();
+      // Changed: Using template literal to display email in the alert
       Alert.alert('Logout successful!');
     } catch (error) {
+      // Changed: Using error.message instead of error object for the Alert
       Alert.alert('Invalid Logout');
     }
   };
@@ -63,7 +65,8 @@ export default () => (
   <Layout style={
     {
       flex: 1,
-     
+      // justifyContent: 'center', 
+      // alignItems: 'center' 
     }
   }>
     <TeacherSettings />

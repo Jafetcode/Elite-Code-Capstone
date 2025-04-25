@@ -89,6 +89,12 @@ function QuestionsLibrary() {
                                     {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
                                     <View><Text category="s2">Due: {String(formatDate(question.dueDate))}</Text></View>
                                     <Text category="s2">Worth: {String(question.pointVal)} Points</Text>
+                                    {/* {imageUri && (
+                                        <Image
+                                            source={{ uri: imageUri }}
+                                            style={{ width: 200, height: 200 }}
+                                        />
+                                    )} */}
                                     <View style={styles.container}>
                                         <Button size="small" style={{ marginTop: 10, marginBotton: 10, width: 300, }} onPress={() => navigation.navigate('Assign a question', { question: question })}>
                                             Assign to class or student/students
