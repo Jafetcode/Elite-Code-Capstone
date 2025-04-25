@@ -17,7 +17,6 @@ import TeacherManageQuestion from './TeacherView/TeacherManageQuestion';
 import EditProfile from './TeacherView/EditProfile';
 import ViewSubmission from './TeacherView/ViewSubmission';
 import MCQSubmission from './TeacherView/MCQSubmission';
-// import SubmitQuestion from './TeacherView/SubmitQuestion';
 
 const Stack = createNativeStackNavigator();
 
