@@ -28,11 +28,6 @@ function ViewSubmission() {
     fetchSubmission();
   }, [question, student]);
 
-  //   useEffect(() => {
-  //     if (student && question) {
-  //       responseData();
-  //     }
-  //   }, [userID, questionID]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -49,7 +44,7 @@ function ViewSubmission() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.contentContainer}>
-          {/* Header with score information */}
+
           <View style={styles.headerContainer}>
             {submission.grade ? (
               <View style={styles.scoreSection}>
@@ -66,7 +61,6 @@ function ViewSubmission() {
             </Text>
           </View>
 
-          {/* Question section */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Question</Text>
             <Text style={styles.questionText}>{question.question}</Text>
@@ -82,13 +76,13 @@ function ViewSubmission() {
             )}
           </View>
 
-          {/* Student's Response section */}
+
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Students Response</Text>
             <Text style={styles.responseText}>{submission.answer}</Text>
           </View>
 
-          {/* Teacher's Comments section */}
+
           {submission.comment && (
             <View style={[styles.section, styles.commentsSection]}>
               <Text style={styles.sectionTitle}>Teacher's Comments</Text>
