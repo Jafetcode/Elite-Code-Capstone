@@ -54,11 +54,9 @@ router.get('/getCourses', (req, res) => {
 
 router.post('/updateAssignments', (req, res) => {
   const { qid, courses = [], students = [], tid } = req.body;
-
   const fetchClassAssignments = 'SELECT cid FROM AssignedToClass WHERE qid = ?';
   db.query(fetchClassAssignments, [qid], (err, classResults) => {
     if (err) return res.status(500).json({ message: "Error fetching class assignments" });
-
     const existingCids = classResults.map(r => r.cid);
     const cidsToDelete = existingCids.filter(cid => !courses.includes(cid));
     const cidsToInsert = courses.filter(cid => !existingCids.includes(cid));
@@ -70,7 +68,6 @@ router.post('/updateAssignments', (req, res) => {
         )
       )
     );
-
     const classInsertPromises = cidsToInsert.map(cid =>
       new Promise((resolve, reject) =>
         db.query('INSERT INTO AssignedToClass (qid, cid, tid) VALUES (?, ?, ?)', [qid, cid, tid], (err) =>
@@ -78,7 +75,6 @@ router.post('/updateAssignments', (req, res) => {
         )
       )
     );
-
     const fetchStudentsInClasses = 'SELECT sid FROM Enrolled WHERE cid IN (?)';
     const courseIdsToCheck = courses.length > 0 ? courses : [-1];
     db.query(fetchStudentsInClasses, [courseIdsToCheck], (err, classStudentResults) => {

@@ -26,16 +26,12 @@ const Assigning = () => {
             const courses = await res.json();
             console.log("course, ", courses)
             setClasses(courses);
-
             const assignmentRes = await fetch(`https://elitecodecapstone24.onrender.com/instructor/assignments?qid=${question.qid}`);
             const assignmentData = await assignmentRes.json();
-
             const classSelection = {};
             assignmentData.classes?.forEach(c => classSelection[c.cid] = true);
-
             const studentSelection = {};
             assignmentData.students?.forEach(s => studentSelection[s.sid] = true);
-
             setSelectedClasses(classSelection);
             setSelectedStudents(studentSelection);
         } catch (error) {
@@ -47,7 +43,6 @@ const Assigning = () => {
         setSelectedClasses(prev => {
             const newClassSelection = { ...prev, [classId]: !prev[classId] };
             const classStudents = classes.find(c => c.cid === classId)?.students || [];
-
             setSelectedStudents(prevStudents => {
                 const newStudentSelection = { ...prevStudents };
                 classStudents.forEach(student => {
@@ -55,7 +50,6 @@ const Assigning = () => {
                 });
                 return newStudentSelection;
             });
-
             return newClassSelection;
         });
     };
@@ -63,14 +57,12 @@ const Assigning = () => {
     const toggleStudentSelection = (studentId, classId) => {
         setSelectedStudents(prev => {
             const newSelection = { ...prev, [studentId]: !prev[studentId] };
-
             if (!newSelection[studentId]) {
                 setSelectedClasses(prevClasses => ({
                     ...prevClasses,
                     [classId]: false
                 }));
             }
-
             return newSelection;
         });
     };
@@ -183,8 +175,7 @@ const Assigning = () => {
                         <TouchableOpacity onPress={() => toggleClassExpansion(classItem.cid)}>
                             <Icon {...props} name={isExpanded ? 'arrow-up-outline' : 'arrow-down-outline'} />
                         </TouchableOpacity>
-                    )}
-                />
+                    )}/>
                 {isExpanded && (
                     <View style={{ paddingLeft: 32 }}>
                         {classItem.students?.filter(s => s && s.userID).length > 0 ? (
@@ -200,7 +191,6 @@ const Assigning = () => {
             </View>
         );
     };
-
     return (
         <Layout style={{ flex: 1, padding: 36 }}>
             <Text category='h4' style={styles.heading}>Assign Question</Text>

@@ -65,7 +65,7 @@ function QuestionsAssignedToStudent() {
                                         <View style={{ flexDirection: "row", alignItems: "center" }}>
                                             <View style={{ flex: 1 }}>
                                                 <Text style={{ paddingRight: 15 }}>{question.question}?</Text>
-                                                    {question.description && (<Text appearance="hint">{question.description}</Text>)}
+                                                {question.description && (<Text appearance="hint">{question.description}</Text>)}
                                             </View>
                                         </View>
                                         {question.topic && (<View><Text category="s2">Topic: {question.topic}</Text></View>)}
@@ -83,10 +83,7 @@ function QuestionsAssignedToStudent() {
                                             : (<View>
                                                 <Text style={styles.waitingText}>Waiting for submission </Text>
                                             </View>)}
-
                                     </Card>
-
-
                                 )
                             )}
                             <Button size="small" style={{ margin: 10 }} onPress={() => navigation.navigate("MCQSubmission",)} > Grade question </Button>
