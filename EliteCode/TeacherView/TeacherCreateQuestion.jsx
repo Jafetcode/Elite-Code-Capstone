@@ -305,17 +305,6 @@ function TeacherCreateQuestion() {
             style={{ marginBottom: 5 }}
             maxLength={200}
           />
-          {/* <Button onPress={() => {
-                        console.log('Add Image');
-                    }}>
-                        Add Image
-                    </Button> */}
-          {/* <Input
-            placeholder="ImgFile"
-            value={imgFile}
-            onChangeText={(value) => setImgFile(value)}
-            style={{ marginBottom: 5 }}
-          /> */}
           <Button title="Pick an image from camera roll" onPress={pickImage}>
             Choose a image to upload
           </Button>
@@ -329,9 +318,6 @@ function TeacherCreateQuestion() {
           >
             <Text category="h5">Image</Text>
           </View>
-          <Text category="p1"> 
-          {/* {imgFile ? `Selected image: ${imgFile}` : "No Image Selected"} */}
-            </Text>
 
           <View
             style={{

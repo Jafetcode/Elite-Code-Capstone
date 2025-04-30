@@ -320,30 +320,38 @@ router.put('/course/:cid', (req, res) => {
 });
 router.put('/updateQuestion/:qid', upload.single('imgFile'), (req, res) => {
   const { qid } = req.params;
-  const { question, description, pointVal, topic, type, dueDate, tid, correctAns, opt1, opt2, opt3} = req.body;
+  const { question, description, pointVal, topic, type, dueDate, tid, correctAns, opt1, opt2, opt3 } = req.body;
   const imgFile = req.file ? req.file.buffer : null;
-  if (!question || !pointVal || !type || !dueDate) {
+
+  if (!question || !pointVal || !type || !dueDate || !tid) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  const sql = 'UPDATE Questions SET question = ?, description = ?, pointVal = ?, imgFile = ?, topic = ?, type = ?, dueDate = ?, tid = ? WHERE qid = ? and tid = ?';
-  const mcqSql = 'UPDATE MCQ SET correctAns = ?, opt1 = ?, opt2 = ?, opt3 = ? WHERE qid = ?'
-  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate, qid, tid ], (err, results) => {
+
+  if (type === "MCQ" && (!correctAns || !opt1 || !opt2 || !opt3)) {
+    return res.status(400).json({ error: 'Missing required MCQ fields' });
+  }
+
+  const sql = 'UPDATE Questions SET question = ?, description = ?, pointVal = ?, imgFile = ?, topic = ?, type = ?, dueDate = ?, tid = ? WHERE qid = ? AND tid = ?';
+  
+  db.query(sql, [question, description, pointVal, imgFile, topic, type, dueDate, tid, qid, tid], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ results });
-  });
-  if (type === "MCQ"){
-    if (!correctAns || !opt1 || !opt2 || !opt3) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    
+    if (type !== "MCQ") {
+      return res.json({ success: true, message: 'Question updated successfully' });
     }
-    db.query(mcqSql, [correctAns, opt1, opt2, opt3, qid], (err, results) => {
+    
+    const mcqSql = 'UPDATE MCQ SET correctAns = ?, opt1 = ?, opt2 = ?, opt3 = ? WHERE qid = ?';
+    
+    db.query(mcqSql, [correctAns, opt1, opt2, opt3, qid], (err, mcqResults) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ results });
+
+      res.json({ success: true, message: 'Question and MCQ options updated successfully' });
     });
-  }
+  });
 });
 
 router.delete('/question/:qid', (req, res) => {

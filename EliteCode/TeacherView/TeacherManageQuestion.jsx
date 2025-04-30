@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Image, ScrollView, StyleSheet, Alert } from "react-native";
+import { View, Image, ScrollView, StyleSheet, Alert, Platform} from "react-native";
 import {
   Layout,
   Button,
@@ -98,7 +98,7 @@ function TeacherManageQuestion() {
       formData.append("dueDate", formattedDate);
       formData.append("pointVal", pointVal);
       formData.append("topic", topic);
-      formData.append("tid", user.tid);
+      formData.append("tid", user.userID);
 
       console.log("FormData values:", {
         question,
@@ -107,23 +107,37 @@ function TeacherManageQuestion() {
         dueDate: formattedDate,
         pointVal,
         topic,
-        tid: user.tid,
+        tid: user.userID,
       });
 
+      // if (imgFile) {
+      //   if (typeof imgFile === "string" && imgFile.startsWith("data:image")) {
+      //     formData.append("imgFile", imgFile);
+      //   } else if (imgFile.uri) {
+      //     formData.append("imgFile", {
+      //       uri:
+      //         Platform.OS === "ios"
+      //           ? imgFile.uri.replace("file://", "")
+      //           : imgFile.uri,
+      //       type: "image/jpeg",
+      //       name: "image.jpg",
+      //     });
+      //   }
+      // }
       if (imgFile) {
+
         if (typeof imgFile === "string" && imgFile.startsWith("data:image")) {
           formData.append("imgFile", imgFile);
-        } else if (imgFile.uri) {
+        } 
+        else if (typeof imgFile === "string") {
           formData.append("imgFile", {
-            uri:
-              Platform.OS === "ios"
-                ? imgFile.uri.replace("file://", "")
-                : imgFile.uri,
-            type: "image/jpeg",
+            uri: imgFile,
             name: "image.jpg",
+            type: "image/jpeg",
           });
         }
       }
+  
 
       if (type === "MCQ") {
         formData.append("opt1", option1);
